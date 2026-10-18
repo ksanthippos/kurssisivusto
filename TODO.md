@@ -9,4 +9,5 @@ b) Yhteiset tyylipaketit ja pohjat (Pohjat/):
 c) Kertausmateriaalien laajennus:
     Nyt kun pohjat ja synkronointi ovat valmiina, aina kun laadit uusia kertaustehtäviä vaikkapa kursseille MA_72, MA_73, MA_92 tai FY_91, riittää että käännät ne nimellä [KURSSI]_kertaus_v1.pdf ja [KURSSI]_kertaus_mallit_v1.pdf. Ne siirtyvät suoraan sivuston käyttöön!
 
-3. Kurssiportaaliin yhdenmukaiset tyylit kurssisivusto-newin kanssa, on tyylikkäämpi. Ainoa jonka muuttaisin, on lämmittelytehtävien oranssi ulkoasu, tumman harmaa parempi?
+[x] 3. Kurssiportaaliin yhdenmukaiset tyylit kurssisivusto-newin kanssa, on tyylikkäämpi. Ainoa jonka muuttaisin, on lämmittelytehtävien oranssi ulkoasu, tumman harmaa parempi?
+    -> Valmis! Molemmat sivustot jakavat nyt yhtenäisen design-järjestelmän (väripaletti, pyöristykset, varjot, yläpalkki, pillerilinkit, dropdownit, kortit sekä siisti 'Alkuun'-nappi). Lämmittelytehtävät on päivitetty hillityn tumman harmaiksi molemmissa (#475569).
