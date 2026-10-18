@@ -8,3 +8,5 @@ b) Yhteiset tyylipaketit ja pohjat (Pohjat/):
     Pohjakansiossa Pohjat/POHJA.tex on hyvä runko. Jos huomaat toistavasi samoja \usepackage-määrittelyjä ja geometrioita eri kokeissa, voisimme tehdä pienen oman tyylitiedoston (esim. rauh-koe.sty), jota kaikki kurssit voivat hyödyntää \usepackage{rauh-koe} -komennolla.
 c) Kertausmateriaalien laajennus:
     Nyt kun pohjat ja synkronointi ovat valmiina, aina kun laadit uusia kertaustehtäviä vaikkapa kursseille MA_72, MA_73, MA_92 tai FY_91, riittää että käännät ne nimellä [KURSSI]_kertaus_v1.pdf ja [KURSSI]_kertaus_mallit_v1.pdf. Ne siirtyvät suoraan sivuston käyttöön!
+
+3. Kurssiportaaliin yhdenmukaiset tyylit kurssisivusto-newin kanssa, on tyylikkäämpi. Ainoa jonka muuttaisin, on lämmittelytehtävien oranssi ulkoasu, tumman harmaa parempi?
