@@ -443,7 +443,7 @@ function renderTasks(tasks) {
   const taskDefs = [
     { key: "research", label: "Tutkimus", className: "research" },
     { key: "theory", label: "Työkirja", className: "theory" },
-    { key: "warmup", label: "Lämmittely", className: "warmup" },
+    { key: "warmup", label: "Yhteiset", className: "warmup" },
     { key: "blue", label: "Siniset", className: "blue" },
     { key: "red", label: "Punaiset", className: "red" }
   ];
