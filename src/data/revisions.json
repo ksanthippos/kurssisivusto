@@ -14,8 +14,8 @@
         "id": "ma71-k1",
         "title": "Kertaustehtävät 1",
         "description": "Peruslaskutoimitukset, laskujärjestys, murtoluvut ja sanalliset tehtävät.",
-        "taskPdf": "kertaus_tehtavat/MA_71 k1.pdf",
-        "solutionPdf": "kertaus_tehtavat/MA_71 m1.pdf"
+        "taskPdf": "kertaus_tehtavat/MA_71_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_71_kertaus_mallit_v1.pdf"
       }
     ]
   },
@@ -36,15 +36,15 @@
         "id": "ma74-k1",
         "title": "Kertaustehtävät 1: Potenssi ja neliöjuuri",
         "description": "Potenssilaskennan perussäännöt, saman kantaluvun potenssit ja neliöjuuret.",
-        "taskPdf": "kertaus_tehtavat/MA_74 k1.pdf",
-        "solutionPdf": "kertaus_tehtavat/MA_74 k1M.pdf"
+        "taskPdf": "kertaus_tehtavat/MA_74_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_74_kertaus_mallit_v1.pdf"
       },
       {
         "id": "ma74-k2",
         "title": "Kertaustehtävät 2: Polynomit ja yhtälöt",
         "description": "Polynomien yhteen- ja vähennyslasku, sulkeiden poisto ja yhtälönratkaisu.",
-        "taskPdf": "kertaus_tehtavat/MA_74 k2.pdf",
-        "solutionPdf": "kertaus_tehtavat/MA_74 k2M.pdf"
+        "taskPdf": "kertaus_tehtavat/MA_74_kertaus_v2.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_74_kertaus_mallit_v2.pdf"
       }
     ]
   },
@@ -63,8 +63,8 @@
         "id": "ma81-k1",
         "title": "Kertaustehtävät 1",
         "description": "Sulkeet yhtälöissä, nimittäjien poisto ja epäyhtälöt.",
-        "taskPdf": "kertaus_tehtavat/MA_81 k1.pdf",
-        "solutionPdf": "kertaus_tehtavat/MA_81 k1M.pdf"
+        "taskPdf": "kertaus_tehtavat/MA_81_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_81_kertaus_mallit_v1.pdf"
       }
     ]
   },
@@ -141,4 +141,3 @@
     "sets": []
   }
 ]
-
