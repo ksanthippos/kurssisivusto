@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+
+    <!-- Golden Highlight Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+
+    <!-- Pages Gradient -->
+    <linearGradient id="pageGradLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cbd5e1" />
+      <stop offset="25%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+    <linearGradient id="pageGradRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="75%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+
+    <!-- Soft Drop Shadow -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Squircle App Icon Background -->
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#bgGrad)" filter="url(#dropShadow)" />
+
+  <!-- Subtle Border Glow -->
+  <rect x="17" y="17" width="478" height="478" rx="107" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="3" />
+
+  <!-- Orbit Rings for Physics (Atom / Orbit) -->
+  <g transform="translate(256, 195)" filter="url(#glow)">
+    <!-- Orbit Ellipse 1 (rotated 35 deg) -->
+    <ellipse cx="0" cy="0" rx="145" ry="46" fill="none" stroke="rgba(147, 197, 253, 0.45)" stroke-width="4" transform="rotate(-30)" />
+    <!-- Orbit Ellipse 2 (rotated -35 deg) -->
+    <ellipse cx="0" cy="0" rx="145" ry="46" fill="none" stroke="rgba(147, 197, 253, 0.45)" stroke-width="4" transform="rotate(30)" />
+
+    <!-- Orbiting Electron Particles -->
+    <circle cx="115" cy="-68" r="7.5" fill="#60a5fa" filter="url(#glow)" />
+    <circle cx="-115" cy="-68" r="7.5" fill="#93c5fd" filter="url(#glow)" />
+    <circle cx="0" cy="46" r="7" fill="#fbbf24" />
+  </g>
+
+  <!-- Central Science & Math Sparkle / Star (Golden) -->
+  <g transform="translate(256, 175)">
+    <!-- 4-point star -->
+    <path d="M 0,-42 Q 0,0 42,0 Q 0,0 0,42 Q 0,0 -42,0 Q 0,0 0,-42 Z" fill="url(#goldGrad)" filter="url(#glow)" />
+    <!-- Center white core -->
+    <circle cx="0" cy="0" r="8" fill="#ffffff" />
+  </g>
+
+  <!-- Open Book (Geometry / Knowledge) -->
+  <g transform="translate(0, 35)">
+    <!-- Book Base / Cover Rim (Dark navy) -->
+    <path d="M 108,348 Q 256,388 256,398 Q 256,388 404,348 L 404,334 Q 256,374 256,384 Q 256,374 108,334 Z" fill="#0c1a3a" opacity="0.8" />
+
+    <!-- Left Page -->
+    <path d="M 254,374 C 210,344 140,342 114,348 C 110,349 108,345 108,340 L 108,235 C 108,230 112,226 117,225 C 145,220 215,224 254,250 Z" 
+          fill="url(#pageGradLeft)" filter="url(#dropShadow)" />
+
+    <!-- Right Page -->
+    <path d="M 258,374 C 302,344 372,342 398,348 C 402,349 404,345 404,340 L 404,235 C 404,230 400,226 395,225 C 367,220 297,224 258,250 Z" 
+          fill="url(#pageGradRight)" filter="url(#dropShadow)" />
+
+    <!-- Book Spine Center Fold -->
+    <path d="M 254,250 L 258,250 L 258,374 L 254,374 Z" fill="#94a3b8" />
+
+    <!-- Math & Physics Glyphs on Left Page (f(x), Delta, integral) -->
+    <!-- Geometric Compass / Delta triangle -->
+    <polygon points="175,260 205,310 145,310" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linejoin="round" />
+    <line x1="158" y1="295" x2="192" y2="295" stroke="#2563eb" stroke-width="4" />
+
+    <!-- Right Page: Wave / Sine curve and coordinate axes -->
+    <line x1="305" y1="312" x2="375" y2="312" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+    <line x1="315" y1="322" x2="315" y2="260" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+    <!-- Sine wave -->
+    <path d="M 315,286 Q 330,266 345,286 T 375,286" fill="none" stroke="#3b82f6" stroke-width="4.5" stroke-linecap="round" />
+  </g>
+
+  <!-- Bottom Accent Ribbon / Badge text: "RAUH" -->
+  <g transform="translate(256, 442)">
+    <rect x="-65" y="-18" width="130" height="34" rx="17" fill="#ffffff" filter="url(#dropShadow)" />
+    <text x="0" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+          font-size="17" font-weight="900" fill="#1e3a8a" text-anchor="middle" letter-spacing="3.5">RAUH</text>
+  </g>
+</svg>

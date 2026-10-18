@@ -6,6 +6,13 @@
   <title>RAUH - Kurssisivusto</title>
   <link rel="stylesheet" href="src/style.css">
   
+  <!-- PWA ja kuvakkeet -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  
   <!-- KaTeX kaavatuki -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -16,11 +23,12 @@
     <div class="container header-inner">
       <div class="brand-group">
         <p class="eyebrow">Pasilan peruskoulu · Rauhala</p>
-        <h1 class="site-title"><a href="#/">RAUH Kurssisivusto</a></h1>
+        <h1 class="site-title"><a href="#/koti">RAUH Kurssisivusto</a></h1>
       </div>
 
       <nav id="main-navigation" class="main-nav" aria-label="Päävalikko">
-        <button type="button" class="nav-tab active" data-nav="grade" data-grade="7">7. lk</button>
+        <button type="button" class="nav-tab active" data-nav="view" data-view="home">🏠 Koti</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="7">7. lk</button>
         <button type="button" class="nav-tab" data-nav="grade" data-grade="8">8. lk</button>
         <button type="button" class="nav-tab" data-nav="grade" data-grade="9">9. lk</button>
         <button type="button" class="nav-tab" data-nav="grade" data-grade="valinnainen">Valinnainen</button>
@@ -96,6 +104,15 @@
         </div>
       </div>
 
+      <!-- Omat suosikit sivupalkissa -->
+      <div class="sidebar-section sidebar-favorites-section">
+        <div class="sidebar-section-header">
+          <h3 class="sidebar-heading">⭐ Omat suosikit</h3>
+          <span class="sidebar-badge" id="sidebar-fav-count">0 / 3</span>
+        </div>
+        <div id="sidebar-favorites-list" class="sidebar-favorites-list"></div>
+      </div>
+
       <!-- Pikalinkit alakerrassa -->
       <div class="sidebar-section sidebar-quick-links">
         <h4 class="sidebar-subheading">Pikaohjeet & aineistot</h4>
@@ -111,11 +128,100 @@
     <!-- Pääsisältöalue -->
     <main class="main-content" id="main-content">
       
+      <!-- 0. KOTINÄKYMÄ -->
+      <article class="view-panel" id="view-home">
+        <!-- Hero / Esittelykortti -->
+        <section class="home-hero-card">
+          <div class="home-hero-badge">Pasilan peruskoulu · Mikael Rauhala (RAUH)</div>
+          <h2 class="home-hero-title">Tervetuloa kurssisivustolle!</h2>
+          <p class="home-hero-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
+          <div class="home-hero-body">
+            <p>
+              <strong>Pasilan peruskoululainen ✋</strong> Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset GeoGebra- ja PhET-työkalut, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät ratkaisuineen.
+            </p>
+            <p>
+              Oman opetusryhmäsi ajankohtaisen tuntiaikataulun, läksyt ja kokeiden päivämäärät löydät 
+              <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="home-inline-link">Kurssiportaalista ↗</a>. Portaali toimii myös puhelimessa ilman koulun tunnuksia.
+            </p>
+          </div>
+        </section>
+
+        <!-- Suosikkikurssit & Aloitusasetus -->
+        <section class="home-favorites-container">
+          <div class="home-section-header">
+            <div>
+              <h3 class="home-section-title">⭐ Omat suosikkikurssit</h3>
+              <p class="home-section-subtitle">Valitse enintään 3 kurssia suosikeiksi. Pääset niihin käsiksi suoraan kotisivulta ja sivupalkista.</p>
+            </div>
+            <span class="favorites-badge" id="favorites-counter">0 / 3 valittu</span>
+          </div>
+
+          <!-- Suosikkikorttien ruudukko -->
+          <div class="home-favorites-grid" id="home-favorites-grid"></div>
+
+          <!-- Aloitusnäkymän valinta-asetus -->
+          <div class="home-default-setting-box" id="home-default-setting-box">
+            <div class="setting-box-header">
+              <span class="setting-box-icon">🚀</span>
+              <div>
+                <h4 class="setting-box-title">Sivuston aloitusnäkymä</h4>
+                <p class="setting-box-desc">Valitse mikä sivu aukeaa oletuksena, kun tulet sivustolle:</p>
+              </div>
+            </div>
+            <div class="setting-options-group" id="default-setting-options"></div>
+          </div>
+        </section>
+
+        <!-- Pikalinkit aineistoihin -->
+        <section class="home-quick-materials">
+          <h3 class="home-section-title">📚 Oppimateriaalit ja aineistot</h3>
+          <div class="home-materials-grid">
+            <a href="#/kirjat" class="material-card">
+              <span class="material-card-icon">📚</span>
+              <h4>Avoin matematiikka</h4>
+              <p>10 virallista CC BY 3.0 oppikirjaa (7.–9. lk) selaimessa luettavana tai ladattavana.</p>
+              <span class="material-card-link">Selaa kirjoja →</span>
+            </a>
+
+            <a href="#/kertaus" class="material-card">
+              <span class="material-card-icon">📝</span>
+              <h4>Kertaustehtävät & mallit</h4>
+              <p>Koekertaukset, tärppilistat ja vaiheittaiset malliratkaisut kokeisiin valmistautumiseen.</p>
+              <span class="material-card-link">Avaa kertausmateriaalit →</span>
+            </a>
+
+            <a href="#/arviointi" class="material-card">
+              <span class="material-card-icon">ℹ️</span>
+              <h4>Arviointi & periaatteet</h4>
+              <p>Kurssikoe 50 %, tuntityöskentely ja läksyt (-1, 0, +1), viikkoraportit ja opiskeluohjeet.</p>
+              <span class="material-card-link">Lue arvioinnista →</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- Kaikki kurssit luokka-asteittain -->
+        <section class="home-all-courses-container">
+          <div class="home-section-header">
+            <div>
+              <h3 class="home-section-title">📖 Kaikki kurssit luokka-asteittain</h3>
+              <p class="home-section-subtitle">Klikkaa tähteä (☆) kurssin kohdalla lisätäksesi tai poistaaksesi suosikin.</p>
+            </div>
+          </div>
+          <div class="home-courses-grades-grid" id="home-courses-grades-grid"></div>
+        </section>
+      </article>
+
       <!-- 1. OPPITUNTINÄKYMÄ -->
-      <article class="view-panel" id="view-lesson">
+      <article class="view-panel" id="view-lesson" hidden>
         <header class="lesson-article-header">
           <div class="breadcrumbs" id="breadcrumbs"></div>
-          <p class="lesson-badge" id="lesson-badge">Oppitunti #1</p>
+          <div class="lesson-header-top-row">
+            <p class="lesson-badge" id="lesson-badge">Oppitunti #1</p>
+            <button type="button" class="favorite-star-btn" id="favorite-toggle-btn" aria-label="Lisää kurssi suosikkeihin" title="Lisää suosikkeihin">
+              <span class="star-icon" id="star-icon">☆</span>
+              <span class="star-label" id="star-label">Lisää suosikkeihin</span>
+            </button>
+          </div>
           <h2 class="lesson-heading" id="lesson-heading">Ladataan oppituntia…</h2>
           <div class="lesson-summary-box" id="lesson-summary-box"></div>
         </header>
@@ -261,6 +367,9 @@
   <button id="back-to-top" class="back-to-top" type="button" aria-label="Siirry sivun alkuun">
     ↑ Alkuun
   </button>
+
+  <!-- Toast-ilmoitus -->
+  <div id="toast" class="toast" role="alert" aria-live="polite" hidden></div>
 
   <script type="module" src="src/app.js"></script>
 </body>
