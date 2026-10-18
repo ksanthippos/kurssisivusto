@@ -1,0 +1,53 @@
+{
+  "title": "Tiedote koteihin MAFYKE-arvioinnista",
+  "subtitle": "Pasilan peruskoulu · Versio RAUH",
+  "period": "2. jakso (19.10.2026 - 18.12.2026)",
+  "sections": [
+    {
+      "id": "koe",
+      "heading": "1. Kurssikoe",
+      "badge": "50 % kurssiarvosanasta",
+      "points": [
+        "Ilmoitetaan Wilmassa hyvissä ajoin etukäteen, mukaan lukien koealue.",
+        "Tehdään aina koepäivänä oppitunnilla.",
+        "Jos kokeesta on poissa terveydellisestä syystä, se suoritetaan seuraavan keskiviikon läksyklubissa.",
+        "Jos kokeesta on poissa luvatta tai jää kiinni lunttauksesta, arvosana on 4.",
+        "Kokeita tehdään sekä paperilla että sähköisenä (Google Forms) – ota kokeisiin aina mukaan oma tietokone.",
+        "Kurssikokeen voi perustellusta syystä suorittaa erityisopettajan (EO) kanssa pienryhmässä."
+      ]
+    },
+    {
+      "id": "tuntityoskentely",
+      "heading": "2. Tuntityöskentely ja kotitehtävät",
+      "badge": "50 % kurssiarvosanasta",
+      "points": [
+        "Tuntityöskentely kattaa kaiken sen työn, mitä 90 minuutin oppitunneilla näytetään: laadukkaat välivaiheet, selkeät ratkaisut, aktiivisuus ja muiden auttaminen.",
+        "Tehtävätasot: lämmittelyt, siniset perustehtävät (tähtäävät arvosanaan 8) ja punaiset syventävät tehtävät (arvosana 9–10).",
+        "Kotitehtävämerkinnät jokaiselta kerralta: -1 (tekemättä/puutteellinen), 0 (perustasolla tehty), +1 (tehty ekstraa laadukkailla välivaiheilla).",
+        "Kotitehtävämerkintä vaikuttaa suoraan tuntityöskentelyn arvosanaan (esim. tuntityö 8 ja läksyt -1 → 7; tuntityö 10 ja läksyt +1 → 10,25 / 10+)."
+      ]
+    },
+    {
+      "id": "viikkoraportit",
+      "heading": "3. Viikkoraportit sähköpostiin",
+      "badge": "Perjantaisin klo 14",
+      "points": [
+        "Oppilaat saavat viikoittain koonnin suoraan omaan edu.hel.fi -sähköpostiinsa.",
+        "Raportista näkyy pvm, tuntikohtainen arvosana (4–10), kotitehtävämerkintä (-1/0/+1) ja mahdolliset opettajan tekemät lisämuistiinpanot.",
+        "Värikoodit: Harmaa = luvallinen poissaolo, Sininen = Urhea-urheilutreeni, Purppura = kurssikoe."
+      ]
+    },
+    {
+      "id": "muistilista",
+      "heading": "4. Oppilaan muistilista",
+      "badge": "Vinkit menestykseen",
+      "points": [
+        "Käytä monipuolisesti tarjolla olevia materiaaleja: vihko, kurssisivusto, Avoin matematiikka -kirjat ja videot.",
+        "Läksyjä tulee joka kerta ja ne tarkistetaan joka kerta – jos et osaa, kysy heti apua!",
+        "Valmistaudu kokeisiin ajoissa: kertaa, tee muistiinpanoja ja harjoittele yhdessä kaverin kanssa.",
+        "Toisten opettaminen ja auttaminen on yksi parhaista tavoista oppia asia itsekin."
+      ]
+    }
+  ]
+}
+

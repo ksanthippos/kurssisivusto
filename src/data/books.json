@@ -1,0 +1,103 @@
+[
+  {
+    "id": "am-7-1",
+    "grade": "7",
+    "part": "Osio 1",
+    "title": "Reaaliluvut ja laskutoimitukset",
+    "file": "avoin_matematiikka/AM 7. lk osio 1_ Reaaliluvut ja laskutoimitukset.pdf",
+    "courses": ["MA_71"],
+    "description": "Kokonaisluvut, laskujärjestys, murtoluvut, desimaaliluvut ja peruslaskutoimitukset.",
+    "pages": 207
+  },
+  {
+    "id": "am-7-2",
+    "grade": "7",
+    "part": "Osio 2",
+    "title": "Tasogeometria I",
+    "file": "avoin_matematiikka/AM 7. lk osio 2_ Tasogeometria I.pdf",
+    "courses": ["MA_72"],
+    "description": "Pisteet, janat, suorat, kulmat, kolmiot, nelikulmiot sekä piiri ja pinta-ala.",
+    "pages": 158
+  },
+  {
+    "id": "am-7-3",
+    "grade": "7",
+    "part": "Osio 3",
+    "title": "Potenssit ja polynomit",
+    "file": "avoin_matematiikka/AM 7. lk osio 3_ Potenssit ja polynomit.pdf",
+    "courses": ["MA_73", "MA_74"],
+    "description": "Potenssilaskenta, neliöjuuri, kirjainlausekkeet, polynomien yhteen- ja vähennyslasku sekä yhtälönratkaisun alkeet.",
+    "pages": 190
+  },
+  {
+    "id": "am-8-1",
+    "grade": "8",
+    "part": "Osio 1",
+    "title": "Yhtälöt ja prosentit",
+    "file": "avoin_matematiikka/AM 8. lk osio 1_ Yhtälöt ja prosentit.pdf",
+    "courses": ["MA_81", "MA_83"],
+    "description": "Ensimmäisen asteen yhtälöt, sulkeet yhtälöissä, nimittäjien poisto ja monipuolinen prosenttilaskenta.",
+    "pages": 138
+  },
+  {
+    "id": "am-8-2",
+    "grade": "8",
+    "part": "Osio 2",
+    "title": "Suorat ja verrannollisuudet",
+    "file": "avoin_matematiikka/AM 8. lk osio 2_ Suorat ja verrannollisuudet.pdf",
+    "courses": ["MA_81"],
+    "description": "Koordinaatisto, suoran yhtälö, kulmakerroin, suorien leikkauspiste sekä suora ja kääntäen verrannollisuus.",
+    "pages": 138
+  },
+  {
+    "id": "am-8-3",
+    "grade": "8",
+    "part": "Osio 3",
+    "title": "Tasogeometria II",
+    "file": "avoin_matematiikka/AM 8. lk osio 3_ Tasogeometria II.pdf",
+    "courses": ["MA_82"],
+    "description": "Yhdenmuotoisuus, mittakaava, suorakulmainen kolmio, Pythagoraan lause ja ympyrän geometria.",
+    "pages": 146
+  },
+  {
+    "id": "am-9-1",
+    "grade": "9",
+    "part": "Osio 1",
+    "title": "Funktiot ja yhtälöparit",
+    "file": "avoin_matematiikka/AM 9. lk osio 1_ Funktiot ja yhtälöparit.pdf",
+    "courses": ["MA_91", "MA_93"],
+    "description": "Funktion käsite ja kuvaaja, lineaarinen funktio sekä yhtälöparin graafinen ja algebrallinen ratkaiseminen.",
+    "pages": 150
+  },
+  {
+    "id": "am-9-2",
+    "grade": "9",
+    "part": "Osio 2",
+    "title": "Trigonometria ja avaruusgeometria",
+    "file": "avoin_matematiikka/AM 9. lk osio 2_ Trigonometria ja avaruusgeometria.pdf",
+    "courses": ["MA_92", "MA_94"],
+    "description": "Trigonometriset funktiot (sini, kosini, tangentti), suorakulmaisen särmiön, lieriön, kartion ja pallon tilavuus ja pinta-ala.",
+    "pages": 187
+  },
+  {
+    "id": "am-9-3",
+    "grade": "9",
+    "part": "Osio 3",
+    "title": "Yläkoulun matikan kertausta",
+    "file": "avoin_matematiikka/AM 9. lk osio 3_ Yläkoulun matikan kertausta.pdf",
+    "courses": ["MA_94"],
+    "description": "Koko yläkoulun keskeisten matematiikan sisältöjen laaja kertauspaketti päättöarviointiin valmistautumiseen.",
+    "pages": 208
+  },
+  {
+    "id": "am-9-4",
+    "grade": "9",
+    "part": "Osio 4",
+    "title": "Todennäköisyys ja tilastot",
+    "file": "avoin_matematiikka/AM 9. lk osio x_ Todennäköisyys ja tilastot.pdf",
+    "courses": ["MA_94", "VMA_01"],
+    "description": "Tilastolliset tunnusluvut, diagrammit, klassinen todennäköisyys, tulosääntö ja puukaavio.",
+    "pages": 166
+  }
+]
+

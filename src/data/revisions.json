@@ -1,0 +1,144 @@
+[
+  {
+    "code": "MA_71",
+    "title": "Laskuoppi",
+    "grade": "7",
+    "subject": "matematiikka",
+    "reminders": [
+      "Tarkista aina laskujärjestys: sulkeet, kerto- ja jakolaskut, yhteen- ja vähennyslaskut.",
+      "Merkitse välivaiheet selkeästi näkyviin myös suoraviivaisissa laskuissa.",
+      "Murtolukujen yhteen- ja vähennyslaskussa muista aina laventaa samaan nimittäjään."
+    ],
+    "sets": [
+      {
+        "id": "ma71-k1",
+        "title": "Kertaustehtävät 1",
+        "description": "Peruslaskutoimitukset, laskujärjestys, murtoluvut ja sanalliset tehtävät.",
+        "taskPdf": "kertaus_tehtavat/MA_71 k1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_71 m1.pdf"
+      }
+    ]
+  },
+  {
+    "code": "MA_74",
+    "title": "Potenssit ja polynomit",
+    "grade": "7",
+    "subject": "matematiikka",
+    "reminders": [
+      "Laskulla on vastaus, lauseketta sievennetään ja se saa jäädä myös 'kesken' (esim. 2a + 3).",
+      "Lausekkeen arvon saa laskea vain, jos muuttuja(t) tunnetaan (esim. a = 4).",
+      "Ykkösen ja kertomerkin saa piilottaa, jos kyseessä on kertolasku.",
+      "Pidemmissä lausekkeissa oltava ainakin yksi selkeä välivaihe.",
+      "Yhtälöissä oltava aina välivaiheet ja ratkaisutekniikat – älä pelkästään arvaa ratkaisuja!"
+    ],
+    "sets": [
+      {
+        "id": "ma74-k1",
+        "title": "Kertaustehtävät 1: Potenssi ja neliöjuuri",
+        "description": "Potenssilaskennan perussäännöt, saman kantaluvun potenssit ja neliöjuuret.",
+        "taskPdf": "kertaus_tehtavat/MA_74 k1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_74 k1M.pdf"
+      },
+      {
+        "id": "ma74-k2",
+        "title": "Kertaustehtävät 2: Polynomit ja yhtälöt",
+        "description": "Polynomien yhteen- ja vähennyslasku, sulkeiden poisto ja yhtälönratkaisu.",
+        "taskPdf": "kertaus_tehtavat/MA_74 k2.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_74 k2M.pdf"
+      }
+    ]
+  },
+  {
+    "code": "MA_81",
+    "title": "Yhtälöt ja epäyhtälöt",
+    "grade": "8",
+    "subject": "matematiikka",
+    "reminders": [
+      "Tee yhtälönratkaisussa aina samat operaatiot yhtälön kummallekin puolelle.",
+      "Muista vaihtaa epäyhtälömerkin suunta, jos kerrot tai jaat negatiivisella luvulla!",
+      "Tarkista vastaus sijoittamalla saatu arvo alkuperäiseen yhtälöön."
+    ],
+    "sets": [
+      {
+        "id": "ma81-k1",
+        "title": "Kertaustehtävät 1",
+        "description": "Sulkeet yhtälöissä, nimittäjien poisto ja epäyhtälöt.",
+        "taskPdf": "kertaus_tehtavat/MA_81 k1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_81 k1M.pdf"
+      }
+    ]
+  },
+  {
+    "code": "MA_72",
+    "title": "Geometria I: Tasogeometria",
+    "grade": "7",
+    "subject": "matematiikka",
+    "reminders": [
+      "Käytä koordinaatistotehtävissä aina viivoitinta ja ruutupaperia.",
+      "Normaali on kohtisuorassa suoraa vastaan (90 asteen kulmassa).",
+      "Muista kolmion kulmien summa 180° ja nelikulmion 360°."
+    ],
+    "sets": []
+  },
+  {
+    "code": "MA_73",
+    "title": "Lausekkeet ja yhtälöt",
+    "grade": "7",
+    "subject": "matematiikka",
+    "reminders": [
+      "Yhtälössä pyritään saamaan tuntematon x yksin yhtälön toiselle puolelle.",
+      "Poista sulkeet huolellisesti: muista etumerkkisäännöt, jos sulkeiden edessä on miinus.",
+      "Pidemmissä yhtälöissä merkitse selkeästi pystyviivalla tehdyt laskutoimitukset (| - 5)."
+    ],
+    "sets": []
+  },
+  {
+    "code": "MA_92",
+    "title": "Geometria III: Avaruusgeometria",
+    "grade": "9",
+    "subject": "matematiikka",
+    "reminders": [
+      "Tilavuuden yksikkömuunnoksissa suhdeluku on 1000: suuremmasta pienempään kerro 1000:lla, pienemmästä suurempaan jaa 1000:lla.",
+      "Avaruuskappaleiden pinta-aloissa tee huolellinen kirjanpito (esim. laatikossa jaa tahkoihin A, B, C).",
+      "Ympyrän pinta-alassa muista pii kertaa säde TOISEEN (A = π·r²), älä sekoita kehän pituuteen!"
+    ],
+    "sets": []
+  },
+  {
+    "code": "MA_93",
+    "title": "Funktiot",
+    "grade": "9",
+    "subject": "matematiikka",
+    "reminders": [
+      "Funktio f(x): merkintä f(3) tarkoittaa, että muuttujan x paikalle sijoitetaan luku 3.",
+      "Yhtälö f(x) = g(x) ratkaisee muuttujan arvon, jolla funktiot saavat saman arvon (kuvaajien leikkauspiste)."
+    ],
+    "sets": []
+  },
+  {
+    "code": "FY_71",
+    "title": "Lämpöoppi ja aaltoliike",
+    "grade": "7",
+    "subject": "fysiikka",
+    "reminders": [
+      "Muista fysiikan tutkimussykli: havainto → tutkimuskysymys → koejärjestely → mittaus → johtopäätös/laki.",
+      "Käytä fysiikan vakiintuneita suure- ja yksikkömerkintöjä."
+    ],
+    "sets": []
+  },
+  {
+    "code": "FY_91",
+    "title": "Sähkömagnetismi",
+    "grade": "9",
+    "subject": "fysiikka",
+    "reminders": [
+      "Käytä laskutehtävissä aina oikeita perusyksiköitä!",
+      "mA → A: jaa 1000:lla (esim. 250 mA = 0,25 A).",
+      "W → kW: jaa 1000:lla (esim. 1500 W = 1,5 kW).",
+      "min → h: jaa 60:llä (esim. 30 min = 0,5 h).",
+      "Energia: E = P · t (esim. kWh = kW · h)."
+    ],
+    "sets": []
+  }
+]
+

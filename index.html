@@ -19,11 +19,18 @@
         <h1 class="site-title"><a href="#/">RAUH Kurssisivusto</a></h1>
       </div>
 
-      <nav id="main-navigation" class="main-nav" aria-label="Luokka-asteet">
-        <button type="button" class="nav-tab active" data-grade="7">7. lk</button>
-        <button type="button" class="nav-tab" data-grade="8">8. lk</button>
-        <button type="button" class="nav-tab" data-grade="9">9. lk</button>
-        <button type="button" class="nav-tab" data-grade="valinnainen">Valinnainen</button>
+      <nav id="main-navigation" class="main-nav" aria-label="Päävalikko">
+        <button type="button" class="nav-tab active" data-nav="grade" data-grade="7">7. lk</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="8">8. lk</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="9">9. lk</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="valinnainen">Valinnainen</button>
+        
+        <span class="nav-divider" aria-hidden="true"></span>
+
+        <button type="button" class="nav-tab" data-nav="view" data-view="kirjat">📚 Kirjat (AM)</button>
+        <button type="button" class="nav-tab" data-nav="view" data-view="kertaus">📝 Kertaus</button>
+        <button type="button" class="nav-tab" data-nav="view" data-view="arviointi">ℹ️ Arviointi</button>
+
         <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="portal-pill-link">
           Kurssiportaali ↗
         </a>
@@ -38,22 +45,74 @@
   </header>
 
   <div class="container app-layout">
-    <!-- Vasen sivupalkki: Kurssit ja oppitunnit -->
+    <!-- Vasen sivupalkki -->
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-section">
-        <label for="course-select" class="sidebar-label">Valitse kurssi</label>
-        <select id="course-select" class="course-select"></select>
+      <!-- Kurssin ja tuntien valinta (oppituntinäkymässä) -->
+      <div id="sidebar-lesson-controls">
+        <div class="sidebar-section">
+          <label for="course-select" class="sidebar-label">Valitse kurssi</label>
+          <select id="course-select" class="course-select"></select>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading" id="course-outline-heading">Oppitunnit</h3>
+          <nav id="lesson-nav" class="lesson-nav" aria-label="Oppituntilista"></nav>
+        </div>
       </div>
 
-      <div class="sidebar-section">
-        <h3 class="sidebar-heading" id="course-outline-heading">Oppitunnit</h3>
-        <nav id="lesson-nav" class="lesson-nav" aria-label="Oppituntilista"></nav>
+      <!-- Kirjaston sivupalkki (kirjanäkymässä) -->
+      <div id="sidebar-books-controls" hidden>
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading">Avoin matematiikka</h3>
+          <p class="sidebar-caption">CC BY 3.0 lisensoidut oppikirjat</p>
+          <div class="sidebar-pill-filters" id="books-filter-pills">
+            <button type="button" class="filter-pill active" data-filter="all">Kaikki</button>
+            <button type="button" class="filter-pill" data-filter="7">7. lk</button>
+            <button type="button" class="filter-pill" data-filter="8">8. lk</button>
+            <button type="button" class="filter-pill" data-filter="9">9. lk</button>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading">Kirjaluettelo</h3>
+          <nav id="books-quick-nav" class="lesson-nav" aria-label="Kirjat"></nav>
+        </div>
+      </div>
+
+      <!-- Kertauksen sivupalkki (kertausnäkymässä) -->
+      <div id="sidebar-revision-controls" hidden>
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading">Kertaustehtävät</h3>
+          <p class="sidebar-caption">Kenraaliharjoitukset ja mallit</p>
+          <div class="sidebar-pill-filters" id="revision-filter-pills">
+            <button type="button" class="filter-pill active" data-filter="all">Kaikki</button>
+            <button type="button" class="filter-pill" data-filter="7">7. lk</button>
+            <button type="button" class="filter-pill" data-filter="8">8. lk</button>
+            <button type="button" class="filter-pill" data-filter="9">9. lk</button>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading">Kurssit</h3>
+          <nav id="revision-quick-nav" class="lesson-nav" aria-label="Kertauskurssit"></nav>
+        </div>
+      </div>
+
+      <!-- Pikalinkit alakerrassa -->
+      <div class="sidebar-section sidebar-quick-links">
+        <h4 class="sidebar-subheading">Pikaohjeet & aineistot</h4>
+        <ul class="quick-links-list">
+          <li><a href="#/kirjat">📚 Avoin matematiikka -kirjat</a></li>
+          <li><a href="#/kertaus">📝 Kertaustehtävät ja mallit</a></li>
+          <li><a href="#/arviointi">ℹ️ Arviointiperusteet & info</a></li>
+          <li><a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer">↗ Avaa kurssiportaali</a></li>
+        </ul>
       </div>
     </aside>
 
-    <!-- Pääsisältöalue (Lukutila) -->
+    <!-- Pääsisältöalue -->
     <main class="main-content" id="main-content">
-      <article class="lesson-article" id="lesson-article">
+      
+      <!-- 1. OPPITUNTINÄKYMÄ -->
+      <article class="view-panel" id="view-lesson">
         <header class="lesson-article-header">
           <div class="breadcrumbs" id="breadcrumbs"></div>
           <p class="lesson-badge" id="lesson-badge">Oppitunti #1</p>
@@ -78,6 +137,9 @@
           <div class="task-cards-grid" id="task-cards-grid"></div>
         </section>
 
+        <!-- Kurssikohtaiset pikalinkit kirjaan ja kertaukseen -->
+        <section class="lesson-context-links" id="lesson-context-links"></section>
+
         <!-- Navigaatio edellinen / seuraava tunti -->
         <footer class="lesson-footer-nav">
           <button type="button" id="prev-lesson-btn" class="nav-btn prev-btn">← Edellinen tunti</button>
@@ -87,6 +149,86 @@
           <button type="button" id="next-lesson-btn" class="nav-btn next-btn">Seuraava tunti →</button>
         </footer>
       </article>
+
+      <!-- 2. AVOIN MATEMATIIKKA -KIRJANÄKYMÄ -->
+      <article class="view-panel" id="view-books" hidden>
+        <header class="view-header">
+          <div class="view-eyebrow">Materiaalipankki</div>
+          <h2 class="view-title">Avoin matematiikka</h2>
+          <p class="view-description">
+            Avoimen <strong>Creative Commons CC BY 3.0</strong> -lisenssin matematiikan kirjasarja yläkoulun luokka-asteille 7–9. Voit lukea kirjoja suoraan selaimessa tai ladata PDF-tiedostot talteen.
+          </p>
+        </header>
+
+        <!-- Upotettu PDF-lukija (aktivoituu klikatessa kirjaa) -->
+        <section class="pdf-viewer-container" id="books-pdf-viewer" hidden>
+          <div class="pdf-viewer-header">
+            <div class="pdf-viewer-info">
+              <span class="viewer-tag">Lukutila</span>
+              <h3 id="books-viewer-title">Kirjan nimi</h3>
+            </div>
+            <div class="pdf-viewer-actions">
+              <a href="#" id="books-viewer-external-link" target="_blank" rel="noopener noreferrer" class="viewer-action-btn">
+                Avaa erilliseen ikkunaan ↗
+              </a>
+              <button type="button" id="books-viewer-close-btn" class="viewer-close-btn" aria-label="Sulje lukutila">
+                ✕ Sulje lukutila
+              </button>
+            </div>
+          </div>
+          <iframe id="books-pdf-frame" src="" title="PDF-lukija" loading="lazy"></iframe>
+        </section>
+
+        <!-- Kirjakorttien ruudukko -->
+        <div class="books-grid" id="books-grid"></div>
+      </article>
+
+      <!-- 3. KERTAUSTEHTÄVÄNÄKYMÄ -->
+      <article class="view-panel" id="view-revision" hidden>
+        <header class="view-header">
+          <div class="view-eyebrow">Kokeisiin valmistautuminen</div>
+          <h2 class="view-title">Kertaustehtävät & malliratkaisut</h2>
+          <p class="view-description">
+            Kokeiden kenraaliharjoitukset, keskeiset muistilistat ja vaiheittaiset malliratkaisut matematiikan ja fysiikan kursseille.
+          </p>
+        </header>
+
+        <!-- Upotettu PDF-lukija kertaustehtäville -->
+        <section class="pdf-viewer-container" id="revision-pdf-viewer" hidden>
+          <div class="pdf-viewer-header">
+            <div class="pdf-viewer-info">
+              <span class="viewer-tag" id="revision-viewer-tag">Kertauspaketti</span>
+              <h3 id="revision-viewer-title">Tehtävän otsikko</h3>
+            </div>
+            <div class="pdf-viewer-actions">
+              <a href="#" id="revision-viewer-external-link" target="_blank" rel="noopener noreferrer" class="viewer-action-btn">
+                Avaa erilliseen ikkunaan ↗
+              </a>
+              <button type="button" id="revision-viewer-close-btn" class="viewer-close-btn" aria-label="Sulje lukutila">
+                ✕ Sulje lukutila
+              </button>
+            </div>
+          </div>
+          <iframe id="revision-pdf-frame" src="" title="Kertaus PDF" loading="lazy"></iframe>
+        </section>
+
+        <!-- Kurssikohtaiset kertaustehtäväkortit -->
+        <div class="revision-cards-list" id="revision-cards-list"></div>
+      </article>
+
+      <!-- 4. ARVIOINTI JA INFO -NÄKYMÄ -->
+      <article class="view-panel" id="view-arviointi" hidden>
+        <header class="view-header">
+          <div class="view-eyebrow">Info ja ohjeistus</div>
+          <h2 class="view-title" id="info-main-title">Tiedote koteihin MAFYKE-arvioinnista</h2>
+          <p class="view-description" id="info-subtitle">
+            Pasilan peruskoulu · Versio RAUH · 2. jakso (19.10.2026 - 18.12.2026)
+          </p>
+        </header>
+
+        <div class="info-sections-container" id="info-sections-container"></div>
+      </article>
+
     </main>
   </div>
 
@@ -100,4 +242,3 @@
   <script type="module" src="src/app.js"></script>
 </body>
 </html>
-
