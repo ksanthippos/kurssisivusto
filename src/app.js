@@ -423,9 +423,13 @@ function renderActiveLesson() {
 
   // Edellinen / Seuraava -painikkeet
   if (prevLessonBtn) prevLessonBtn.disabled = current.lesson <= 1;
-  if (nextLessonBtn) nextLessonBtn.disabled = current.lesson >= lessons.length;
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // Vieritys oppitunnin alkuun (huomioiden kiinnitetty yläpalkki)
+  const contentTarget = document.querySelector("#main-content");
+  if (contentTarget) {
+    contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 function renderTasks(tasks) {
@@ -760,6 +764,18 @@ function escapeHtml(str) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+// Sivun alkuun -painike
+const backToTopBtn = document.querySelector("#back-to-top");
+if (backToTopBtn) {
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  window.addEventListener("scroll", () => {
+    backToTopBtn.classList.toggle("is-visible", window.scrollY > 400);
+  });
 }
 
 // Käynnistetään sovellus
