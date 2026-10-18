@@ -324,3 +324,4 @@ function escapeHtml(str) {
 
 // Käynnistetään sovellus
 init();
+

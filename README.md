@@ -8,3 +8,4 @@ Tämä sivusto toimii modernina, mobiiliystävällisenä korvaajana aiemmalle Go
 - **KaTeX-kaavatuki**: Matemaattiset ja fysikaaliset kaavat renderöityvät nopeasti ja veitsenterävästi.
 - **Interaktiiviset simulaatiot**: PhET- ja Geogebra-upotukset toimivat suoraan oppitunneilla.
 - **Yhteensopivuus kurssiportaaliin**: Oppitunnit ja aiheet vastaavat suoraan RAUH-kurssiportaalia.
+
