@@ -23,6 +23,8 @@ const lessonSummaryBox = document.querySelector("#lesson-summary-box");
 const lessonBody = document.querySelector("#lesson-body");
 const lessonEmbedSection = document.querySelector("#lesson-embed-section");
 const embedTitle = document.querySelector("#embed-title");
+const embedTag = document.querySelector("#embed-tag");
+const embedExternalLink = document.querySelector("#embed-external-link");
 const embedWrapper = document.querySelector("#embed-wrapper");
 const lessonDeepDiveSection = document.querySelector("#lesson-deep-dive-section");
 const deepDiveCard = document.querySelector("#deep-dive-card");
@@ -403,12 +405,24 @@ function renderActiveLesson() {
   if (lessonEmbedSection) {
     if (current.simulation?.url) {
       lessonEmbedSection.hidden = false;
-      if (embedTitle) embedTitle.textContent = current.simulation.title || "Interaktiivinen simulaatio";
+      if (embedTitle) embedTitle.textContent = current.simulation.title || "Interaktiivinen sovellus";
+      if (embedExternalLink) {
+        embedExternalLink.href = current.simulation.url;
+      }
+      if (embedTag) {
+        if (current.simulation.url.includes("geogebra")) {
+          embedTag.textContent = "GeoGebra";
+        } else if (current.simulation.url.includes("phet")) {
+          embedTag.textContent = "PhET / HTML5";
+        } else {
+          embedTag.textContent = "Interaktiivinen";
+        }
+      }
       if (embedWrapper) {
         embedWrapper.innerHTML = `
           <iframe 
             src="${current.simulation.url}" 
-            title="${escapeHtml(current.simulation.title || "Simulaatio")}"
+            title="${escapeHtml(current.simulation.title || "Sovellus")}"
             allowfullscreen 
             loading="lazy"
           ></iframe>

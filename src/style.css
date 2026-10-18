@@ -403,6 +403,12 @@ a:hover {
   color: var(--color-primary);
 }
 
+.embed-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .embed-tag {
   background: #dcfce7;
   color: #15803d;
@@ -410,6 +416,23 @@ a:hover {
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 4px;
+}
+
+.embed-external-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary-light);
+  text-decoration: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  border: 1px solid var(--color-border);
+  transition: all 0.15s ease;
+}
+
+.embed-external-link:hover {
+  background: #e2e8f0;
+  color: var(--color-primary);
 }
 
 .embed-wrapper {
