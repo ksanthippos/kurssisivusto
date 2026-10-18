@@ -1,0 +1,601 @@
+:root {
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f1f5f9;
+  --color-border: #e2e8f0;
+  
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-light: #94a3b8;
+  
+  --color-primary: #17324d;
+  --color-primary-light: #2563eb;
+  --color-primary-soft: #eff6ff;
+  
+  --color-task-research: #059669;
+  --color-task-theory: #334155;
+  --color-task-warmup: #d97706;
+  --color-task-blue: #2563eb;
+  --color-task-red: #dc2626;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-primary-light);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* Yläpalkki */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-primary);
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+.brand-group .eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #93c5fd;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.site-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.site-title a {
+  color: white;
+}
+.site-title a:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+/* Navigaatiovälilehdet */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-tab {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid transparent;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nav-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.nav-tab.active {
+  background: white;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.portal-pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.2s ease;
+}
+
+.portal-pill-link:hover {
+  background: white;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+}
+
+/* Sovellusasettelu */
+.app-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  margin-top: 28px;
+  margin-bottom: 48px;
+  align-items: start;
+}
+
+/* Sivupalkki */
+.sidebar {
+  position: sticky;
+  top: 86px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+}
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.course-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  background-color: var(--color-surface-subtle);
+  color: var(--color-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+.course-select:focus {
+  outline: 2px solid var(--color-primary-light);
+  background-color: white;
+}
+
+.sidebar-heading {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  font-weight: 800;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lesson-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lesson-nav-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.35;
+}
+
+.lesson-nav-btn .num {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-text-light);
+  min-width: 20px;
+}
+
+.lesson-nav-btn:hover {
+  background-color: var(--color-surface-subtle);
+}
+
+.lesson-nav-btn.active {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-light);
+  font-weight: 700;
+}
+.lesson-nav-btn.active .num {
+  color: var(--color-primary-light);
+}
+
+/* Lukutila / Artikkelialue */
+.main-content {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.lesson-article-header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+
+.breadcrumbs {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.lesson-badge {
+  display: inline-block;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-light);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  margin-bottom: 10px;
+}
+
+.lesson-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.lesson-summary-box {
+  background-color: var(--color-surface-subtle);
+  border-left: 4px solid var(--color-primary-light);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: 1rem;
+  color: var(--color-text);
+  font-style: italic;
+}
+
+/* Teoriateksti */
+.lesson-body {
+  font-size: 1.06rem;
+  line-height: 1.8;
+  color: #334155;
+  max-width: 780px;
+}
+
+.lesson-body p {
+  margin-bottom: 1.25rem;
+}
+
+.lesson-body h3, .lesson-body h4 {
+  color: var(--color-primary);
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.3;
+}
+
+.lesson-body h3 {
+  font-size: 1.45rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 6px;
+}
+
+.lesson-body h4 {
+  font-size: 1.18rem;
+}
+
+.lesson-body ul, .lesson-body ol {
+  margin: 1rem 0 1.5rem 1.6rem;
+}
+
+.lesson-body li {
+  margin-bottom: 0.5rem;
+}
+
+/* KaTeX esityskorostus */
+.katex-display {
+  background: var(--color-surface-subtle);
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin: 1.5rem 0 !important;
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+/* Simulaatio- ja video-upotukset */
+.lesson-embed-section {
+  margin-top: 36px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 28px;
+}
+
+.embed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.embed-header h3 {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+}
+
+.embed-tag {
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.embed-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 60%; /* 16:9 -suhde */
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  background: black;
+}
+
+.embed-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Tehtäväkortit */
+.lesson-tasks-section {
+  margin-top: 40px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 28px;
+}
+
+.lesson-tasks-section h3 {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  color: var(--color-primary);
+}
+
+.task-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  font-size: 0.95rem;
+}
+
+.task-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  min-width: 86px;
+  text-align: center;
+}
+
+.task-badge.research { background-color: var(--color-task-research); }
+.task-badge.theory { background-color: var(--color-task-theory); }
+.task-badge.warmup { background-color: var(--color-task-warmup); }
+.task-badge.blue { background-color: var(--color-task-blue); }
+.task-badge.red { background-color: var(--color-task-red); }
+
+/* Sivun alalaidan navigaatio */
+.lesson-footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  background: var(--color-surface-subtle);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.nav-btn:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.portal-check-btn {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-primary-light);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+}
+.portal-check-btn:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.site-footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 32px 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.footer-inner p {
+  margin-bottom: 4px;
+}
+
+.footer-note {
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+}
+
+/* Mobiiliresponsiivisuus */
+@media (max-width: 900px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .main-content {
+    padding: 24px 20px;
+  }
+
+  .lesson-heading {
+    font-size: 1.65rem;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-primary);
+    flex-direction: column;
+    padding: 16px;
+    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .main-nav.is-open {
+    display: flex;
+  }
+
+  .nav-tab {
+    width: 100%;
+    text-align: left;
+  }
+
+  .portal-pill-link {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .lesson-footer-nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .lesson-footer-nav .portal-check-btn {
+    text-align: center;
+  }
+}

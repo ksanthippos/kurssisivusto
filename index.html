@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAUH - Kurssisivusto</title>
+  <link rel="stylesheet" href="src/style.css">
+  
+  <!-- KaTeX kaavatuki -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand-group">
+        <p class="eyebrow">Pasilan peruskoulu · Rauhala</p>
+        <h1 class="site-title"><a href="#/">RAUH Kurssisivusto</a></h1>
+      </div>
+
+      <nav id="main-navigation" class="main-nav" aria-label="Luokka-asteet">
+        <button type="button" class="nav-tab active" data-grade="7">7. lk</button>
+        <button type="button" class="nav-tab" data-grade="8">8. lk</button>
+        <button type="button" class="nav-tab" data-grade="9">9. lk</button>
+        <button type="button" class="nav-tab" data-grade="valinnainen">Valinnainen</button>
+        <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="portal-pill-link">
+          Kurssiportaali ↗
+        </a>
+      </nav>
+
+      <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Avaa valikko" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="container app-layout">
+    <!-- Vasen sivupalkki: Kurssit ja oppitunnit -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <label for="course-select" class="sidebar-label">Valitse kurssi</label>
+        <select id="course-select" class="course-select"></select>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading" id="course-outline-heading">Oppitunnit</h3>
+        <nav id="lesson-nav" class="lesson-nav" aria-label="Oppituntilista"></nav>
+      </div>
+    </aside>
+
+    <!-- Pääsisältöalue (Lukutila) -->
+    <main class="main-content" id="main-content">
+      <article class="lesson-article" id="lesson-article">
+        <header class="lesson-article-header">
+          <div class="breadcrumbs" id="breadcrumbs"></div>
+          <p class="lesson-badge" id="lesson-badge">Oppitunti #1</p>
+          <h2 class="lesson-heading" id="lesson-heading">Ladataan oppituntia…</h2>
+          <div class="lesson-summary-box" id="lesson-summary-box"></div>
+        </header>
+
+        <section class="lesson-body" id="lesson-body"></section>
+
+        <!-- Upotettu simulaatio / video -->
+        <section class="lesson-embed-section" id="lesson-embed-section" hidden>
+          <div class="embed-header">
+            <h3 id="embed-title">Interaktiivinen simulaatio</h3>
+            <span class="embed-tag">PhET / HTML5</span>
+          </div>
+          <div class="embed-wrapper" id="embed-wrapper"></div>
+        </section>
+
+        <!-- Tuntitehtävät -->
+        <section class="lesson-tasks-section" id="lesson-tasks-section" hidden>
+          <h3>Oppitunnin tehtävät</h3>
+          <div class="task-cards-grid" id="task-cards-grid"></div>
+        </section>
+
+        <!-- Navigaatio edellinen / seuraava tunti -->
+        <footer class="lesson-footer-nav">
+          <button type="button" id="prev-lesson-btn" class="nav-btn prev-btn">← Edellinen tunti</button>
+          <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="portal-check-btn">
+            Tarkista ryhmäsi aikataulu kurssiportaalista ↗
+          </a>
+          <button type="button" id="next-lesson-btn" class="nav-btn next-btn">Seuraava tunti →</button>
+        </footer>
+      </article>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Mikael Rauhala · Pasilan peruskoulu · 2026–2027</p>
+      <p class="footer-note">Oppimateriaalit on tarkoitettu opetuskäyttöön. Toimii kaikilla laitteilla ilman kirjautumista.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

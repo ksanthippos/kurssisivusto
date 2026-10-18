@@ -1,0 +1,115 @@
+{
+  "code": "FY_81",
+  "title": "Liike, voima ja energia",
+  "lessons": [
+    {
+      "lesson": 1,
+      "topic": "Tasainen liike, osa 1",
+      "content": "KS aihe 1 / kirjan kpl 11. Tutustutaan tasaisen liikkeen käsitteeseen ja siihen liittyviin suureisiin, kuten nopeuteen ja matkaan. Nopeuden kuvaaja.",
+      "tasks": {
+        "research": "s. 51 - 52: Työt 1 ja 2",
+        "theory": "s. 54 - 55: T1 - 7"
+      },
+      "substituteNote": ""
+    },
+      {
+      "lesson": 2,
+      "topic": "Tasainen liike, osa 2",
+      "content": "KS aihe 1 / kirjan kpl 11. Aiheen käsittely jatkuu, kuvaajien piirtäminen mittausdatasta.",
+      "tasks": {
+        "theory": "s. 54 - 555: T1 - 7"
+      },
+      "substituteNote": ""
+    },
+  {
+      "lesson": 3,
+      "topic": "Kiihtyvä liike",
+      "content": "KS aihe 2 / kirjan kpl 12. Nopeuden muutos ajan funktiona ja kiihtyvyyden käsite. Kiihtyvän liikkeen kuvaaja eri koordinaatistoissa.",
+      "tasks": {
+        "research": "s. 57: Työ 2",
+        "theory": "s. 58: T1 - 6, 8"
+      },
+      "substituteNote": ""
+    },
+    {
+      "lesson": 4,
+      "topic": "Vuorovaikutus ja voima",
+      "content": "KS aihe 3 / kirjan kpl 13. Erilaiset vuorovaikutustyypit, voiman määritelmä, mittaaminen ja yksikkö. Kokonaisvoiman käsite ja Newtonin lait.",
+      "tasks": {
+        "research": "s. 61: Työ 2",
+        "theory": "s. 62: T1 - 7"
+      },
+      "substituteNote": ""
+    },
+    {
+      "lesson": 5,
+      "topic": "Massa, paino ja hitaus",
+      "content": "KS aihe 4 / kirjan kpl 13. Massan ja painon ero, hitauden käsite. Painovoiman laskeminen.",  
+      "tasks": {
+        "research": "Simulaatiot ja putoamiskiihtyvyyden määrittäminen anturilla"
+      },
+      "substituteNote": ""
+    },
+    {
+      "lesson": 6,
+      "topic": "Kitka ja noste",
+      "content": "KS aihe 5 / kirjan kpl 14. Kitkan määritelmä ja kitkavoiman merkitys liikkeessä. Nosteen laskeminen ja vaikutus kokonaisvoimaan.",
+      "tasks": {
+        "research": "Simulaatiot",
+        "theory": "s. 66: T1 - 7"
+      },
+      "substituteNote": ""
+    },
+     {
+      "lesson": 7,
+      "topic": "Paine",
+      "content": "KS aihe 6 / kirjan kpl 15. Paineen määritelmä ja laskeminen. Ilmanpaine ja hydrostaattinen paine.",
+      "tasks": {
+        "research": "s. 68: Työt 1 ja 2",
+        "theory": "s. 70-71: T1 - 7"
+      },
+      "substituteNote": ""
+    },
+    {
+      "lesson": 8,
+      "topic": "Energian eri muodot",
+      "content": "KS aihe 7 / kirjan kpl 16. Energian muuntuminen ja energian säilymisen periaate.",
+      "tasks": {
+        "research": "Simulaatio",
+        "theory": "s. 74: T2 ja 3, s. 76 - 77: T1  7"
+      },
+      "substituteNote": ""
+    },
+    {
+      "lesson": 9,
+      "topic": "Työ ja energia",
+      "content": "PÄIVITÄ NÄMÄ!! Fysikaalisen työn määritelmä. Työn ja energian yhteys.",
+      "tasks": {
+        "research": "",
+        "theory": ""
+      },  
+      "substituteNote": ""
+    },
+    {
+      "lesson": 10,
+      "topic": "Nostotyö ja potentiaalienergia",
+      "content": "PÄIVITÄ NÄMÄ!! Tehon määritelmä ja yksikkö, työn ja tehon yhteys.",
+      "tasks": {
+        "research": "",
+        "theory": ""
+      },
+      "substituteNote": ""
+    },
+    {
+      "lesson": 11,
+      "topic": "Teho ja hyötysuhde",
+      "content": "PÄIVITÄ NÄMÄ!! Tehon määritelmä ja laskeminen.",
+      "tasks": {
+        "research": "",
+        "theory": ""
+      },
+      "substituteNote": ""
+    }
+    
+  ]
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "grade": "7",
+    "subject": "fysiikka",
+    "code": "FY_71",
+    "title": "Lämpöoppi ja aaltoliike"
+  },
+  {
+    "grade": "8",
+    "subject": "fysiikka",
+    "code": "FY_81",
+    "title": "Liike, voima ja energia"
+  },
+  {
+    "grade": "9",
+    "subject": "fysiikka",
+    "code": "FY_91",
+    "title": "Sähkömagnetismi"
+  },
+  {
+    "grade": "9",
+    "subject": "fysiikka",
+    "code": "FY_92",
+    "title": "Maapallolta maailmankaikkeuteen"
+  },
+  {
+    "grade": "7",
+    "subject": "matematiikka",
+    "code": "MA_71",
+    "title": "Laskuoppi"
+  },
+  {
+    "grade": "7",
+    "subject": "matematiikka",
+    "code": "MA_72",
+    "title": "Geometria I: Tasogeometria"
+  },
+  {
+    "grade": "7",
+    "subject": "matematiikka",
+    "code": "MA_73",
+    "title": "Lausekkeet ja yhtälöt"
+  },
+  {
+    "grade": "7",
+    "subject": "matematiikka",
+    "code": "MA_74",
+    "title": "Potenssit ja polynomit"
+  },
+  {
+    "grade": "8",
+    "subject": "matematiikka",
+    "code": "MA_81",
+    "title": "Yhtälöt ja epäyhtälöt"
+  },
+  {
+    "grade": "8",
+    "subject": "matematiikka",
+    "code": "MA_82",
+    "title": "Geometria II: Syventävä geometria"
+  },
+  {
+    "grade": "8",
+    "subject": "matematiikka",
+    "code": "MA_83",
+    "title": "Prosenttilaskenta"
+  },
+  {
+    "grade": "9",
+    "subject": "matematiikka",
+    "code": "MA_91",
+    "title": "Yhtälöparit"
+  },
+  {
+    "grade": "9",
+    "subject": "matematiikka",
+    "code": "MA_92",
+    "title": "Geometria III: Avaruusgeometria"
+  },
+  {
+    "grade": "9",
+    "subject": "matematiikka",
+    "code": "MA_93",
+    "title": "Funktiot"
+  },
+  {
+    "grade": "9",
+    "subject": "matematiikka",
+    "code": "MA_94",
+    "title": "Trigonometria ja kertaus"
+  },
+  {
+    "grade": "valinnainen",
+    "subject": "valinnainen",
+    "code": "VMA_01",
+    "title": "Matematiikan valinnaiskurssi"
+  }
+]
