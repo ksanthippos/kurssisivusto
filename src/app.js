@@ -24,6 +24,10 @@ const lessonBody = document.querySelector("#lesson-body");
 const lessonEmbedSection = document.querySelector("#lesson-embed-section");
 const embedTitle = document.querySelector("#embed-title");
 const embedWrapper = document.querySelector("#embed-wrapper");
+const lessonDeepDiveSection = document.querySelector("#lesson-deep-dive-section");
+const deepDiveCard = document.querySelector("#deep-dive-card");
+const deepDiveHeading = document.querySelector("#deep-dive-heading");
+const deepDiveBody = document.querySelector("#deep-dive-body");
 const lessonTasksSection = document.querySelector("#lesson-tasks-section");
 const taskCardsGrid = document.querySelector("#task-cards-grid");
 const lessonContextLinks = document.querySelector("#lesson-context-links");
@@ -325,6 +329,7 @@ async function loadCourse(courseCode, lessonNumber) {
       `;
     }
     if (lessonEmbedSection) lessonEmbedSection.hidden = true;
+    if (lessonDeepDiveSection) lessonDeepDiveSection.hidden = true;
     if (lessonTasksSection) lessonTasksSection.hidden = true;
     renderLessonContextLinks();
   }
@@ -412,6 +417,26 @@ function renderActiveLesson() {
     } else {
       lessonEmbedSection.hidden = true;
       if (embedWrapper) embedWrapper.innerHTML = "";
+    }
+  }
+
+  // Syventävä osio (avattava kortti)
+  if (lessonDeepDiveSection) {
+    if (current.deepDive && current.deepDive.content) {
+      lessonDeepDiveSection.hidden = false;
+      if (deepDiveHeading) {
+        deepDiveHeading.innerHTML = current.deepDive.title || "Syvennä osaamistasi";
+      }
+      if (deepDiveBody) {
+        deepDiveBody.innerHTML = current.deepDive.content;
+      }
+      if (deepDiveCard) {
+        renderKaTeX(deepDiveCard);
+        deepDiveCard.open = false; // Oletuksena suljettu, jotta perusnäkymä säilyy tiiviinä
+      }
+    } else {
+      lessonDeepDiveSection.hidden = true;
+      if (deepDiveBody) deepDiveBody.innerHTML = "";
     }
   }
 
