@@ -105,23 +105,12 @@
       </div>
 
       <!-- Omat suosikit sivupalkissa -->
-      <div class="sidebar-section sidebar-favorites-section">
-        <div class="sidebar-section-header">
-          <h3 class="sidebar-heading">⭐ Omat suosikit</h3>
-          <span class="sidebar-badge" id="sidebar-fav-count">0 / 3</span>
-        </div>
+      <div class="sidebar-section sidebar-favorites-section" id="sidebar-favorites-section">
+        <h3 class="sidebar-heading sidebar-collapsible-heading" id="sidebar-fav-heading" title="Klikkaa piilottaaksesi tai avataksesi suosikit" role="button" tabindex="0">
+          <span>Omat suosikit</span>
+          <span class="sidebar-collapsible-arrow" id="sidebar-fav-arrow">▼</span>
+        </h3>
         <div id="sidebar-favorites-list" class="sidebar-favorites-list"></div>
-      </div>
-
-      <!-- Pikalinkit alakerrassa -->
-      <div class="sidebar-section sidebar-quick-links">
-        <h4 class="sidebar-subheading">Pikaohjeet & aineistot</h4>
-        <ul class="quick-links-list">
-          <li><a href="#/kirjat">📚 Avoin matematiikka -kirjat</a></li>
-          <li><a href="#/kertaus">📝 Kertaustehtävät ja mallit</a></li>
-          <li><a href="#/arviointi">ℹ️ Arviointiperusteet & info</a></li>
-          <li><a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer">↗ Avaa kurssiportaali</a></li>
-        </ul>
       </div>
     </aside>
 
@@ -130,14 +119,26 @@
       
       <!-- 0. KOTINÄKYMÄ -->
       <article class="view-panel" id="view-home">
-        <!-- Hero / Esittelykortti -->
-        <section class="home-hero-card">
-          <div class="home-hero-badge">Pasilan peruskoulu · Mikael Rauhala (RAUH)</div>
-          <h2 class="home-hero-title">Tervetuloa kurssisivustolle!</h2>
-          <p class="home-hero-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
-          <div class="home-hero-body">
+        <!-- Tervetulokortti (normaali vaalea ilme, ei sinistä pohjaa) -->
+        <section class="home-welcome-card">
+          <div class="home-welcome-top-row">
+            <span class="home-welcome-badge">Pasilan peruskoulu · Mikael Rauhala (RAUH)</span>
+            <button 
+              type="button" 
+              class="home-settings-gear-btn" 
+              id="home-settings-gear-btn" 
+              title="Muokkaa kotinäkymää ja suosikkeja" 
+              aria-label="Muokkaa kotinäkymää ja suosikkeja"
+            >
+              <span class="gear-icon" aria-hidden="true">⚙️</span>
+              <span class="gear-label">Muokkaa kotinäkymää</span>
+            </button>
+          </div>
+          <h2 class="home-welcome-title">Tervetuloa kurssisivustolle!</h2>
+          <p class="home-welcome-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
+          <div class="home-welcome-body">
             <p>
-              <strong>Pasilan peruskoululainen ✋</strong> Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset GeoGebra- ja PhET-työkalut, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät ratkaisuineen.
+              <strong>Pasilan peruskoululainen ✋</strong> Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset simulaatiot, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät ratkaisuineen.
             </p>
             <p>
               Oman opetusryhmäsi ajankohtaisen tuntiaikataulun, läksyt ja kokeiden päivämäärät löydät 
@@ -146,68 +147,61 @@
           </div>
         </section>
 
-        <!-- Suosikkikurssit & Aloitusasetus -->
-        <section class="home-favorites-container">
-          <div class="home-section-header">
-            <div>
-              <h3 class="home-section-title">⭐ Omat suosikkikurssit</h3>
-              <p class="home-section-subtitle">Valitse enintään 3 kurssia suosikeiksi. Pääset niihin käsiksi suoraan kotisivulta ja sivupalkista.</p>
-            </div>
-            <span class="favorites-badge" id="favorites-counter">0 / 3 valittu</span>
-          </div>
-
-          <!-- Suosikkikorttien ruudukko -->
-          <div class="home-favorites-grid" id="home-favorites-grid"></div>
-
-          <!-- Aloitusnäkymän valinta-asetus -->
-          <div class="home-default-setting-box" id="home-default-setting-box">
-            <div class="setting-box-header">
-              <span class="setting-box-icon">🚀</span>
+        <!-- Asetuskortti / Muokkausnäkymä (aukeaa ratasta painamalla) -->
+        <section class="home-settings-modal-card" id="home-settings-panel" hidden>
+          <div class="settings-modal-header">
+            <div class="settings-modal-title-group">
+              <span class="settings-modal-icon">⚙️</span>
               <div>
-                <h4 class="setting-box-title">Sivuston aloitusnäkymä</h4>
-                <p class="setting-box-desc">Valitse mikä sivu aukeaa oletuksena, kun tulet sivustolle:</p>
+                <h3 class="settings-modal-heading">Kotinäkymän ja suosikkien asetukset</h3>
+                <p class="settings-modal-desc">Valitse aloitussivu, järjestele sivupalkin suosikit tai lisää uusia kohteita.</p>
               </div>
             </div>
-            <div class="setting-options-group" id="default-setting-options"></div>
+            <button type="button" class="settings-modal-close-btn" id="home-settings-close-btn" aria-label="Sulje asetukset">✕</button>
           </div>
-        </section>
 
-        <!-- Pikalinkit aineistoihin -->
-        <section class="home-quick-materials">
-          <h3 class="home-section-title">📚 Oppimateriaalit ja aineistot</h3>
-          <div class="home-materials-grid">
-            <a href="#/kirjat" class="material-card">
-              <span class="material-card-icon">📚</span>
-              <h4>Avoin matematiikka</h4>
-              <p>10 virallista CC BY 3.0 oppikirjaa (7.–9. lk) selaimessa luettavana tai ladattavana.</p>
-              <span class="material-card-link">Selaa kirjoja →</span>
-            </a>
-
-            <a href="#/kertaus" class="material-card">
-              <span class="material-card-icon">📝</span>
-              <h4>Kertaustehtävät & mallit</h4>
-              <p>Koekertaukset, tärppilistat ja vaiheittaiset malliratkaisut kokeisiin valmistautumiseen.</p>
-              <span class="material-card-link">Avaa kertausmateriaalit →</span>
-            </a>
-
-            <a href="#/arviointi" class="material-card">
-              <span class="material-card-icon">ℹ️</span>
-              <h4>Arviointi & periaatteet</h4>
-              <p>Kurssikoe 50 %, tuntityöskentely ja läksyt (-1, 0, +1), viikkoraportit ja opiskeluohjeet.</p>
-              <span class="material-card-link">Lue arvioinnista →</span>
-            </a>
+          <!-- Osa 1: Aloitusnäkymän valinta -->
+          <div class="settings-section">
+            <h4 class="settings-section-title">🚀 Sivuston aloitusnäkymä</h4>
+            <p class="settings-section-desc">Valitse mikä sivu avautuu oletuksena, kun tulet sivustolle ilman suoraa linkkiä:</p>
+            <div class="default-view-options-group" id="settings-default-options"></div>
           </div>
-        </section>
 
-        <!-- Kaikki kurssit luokka-asteittain -->
-        <section class="home-all-courses-container">
-          <div class="home-section-header">
-            <div>
-              <h3 class="home-section-title">📖 Kaikki kurssit luokka-asteittain</h3>
-              <p class="home-section-subtitle">Klikkaa tähteä (☆) kurssin kohdalla lisätäksesi tai poistaaksesi suosikin.</p>
+          <!-- Osa 2: Suosikkien hallinta ja järjestys -->
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <div>
+                <h4 class="settings-section-title">⭐ Omat suosikit sivupalkissa</h4>
+                <p class="settings-section-desc">Muuta suosikkien järjestystä nuolipainikkeilla tai poista kohteita listalta:</p>
+              </div>
+            </div>
+            <div class="settings-favorites-list" id="settings-favorites-list"></div>
+
+            <!-- Lisää uusi suosikki -->
+            <div class="settings-add-favorite-box">
+              <label for="settings-add-fav-select" class="settings-add-label">Lisää uusi suosikki:</label>
+              <div class="settings-add-fav-row">
+                <select id="settings-add-fav-select" class="settings-add-fav-select">
+                  <option value="">-- Valitse kohde listalta --</option>
+                  <optgroup label="Sivuston aineistot">
+                    <option value="kirjat">📚 Avoin matematiikka -kirjat</option>
+                    <option value="kertaus">📝 Kertaustehtävät & mallit</option>
+                    <option value="arviointi">ℹ️ Arviointiperusteet & info</option>
+                  </optgroup>
+                  <optgroup label="7. luokan kurssit" id="optgroup-grade-7"></optgroup>
+                  <optgroup label="8. luokan kurssit" id="optgroup-grade-8"></optgroup>
+                  <optgroup label="9. luokan kurssit" id="optgroup-grade-9"></optgroup>
+                  <optgroup label="Valinnaiskurssit" id="optgroup-grade-val"></optgroup>
+                </select>
+                <button type="button" class="btn-add-fav" id="btn-add-fav">+ Lisää suosikkeihin</button>
+              </div>
             </div>
           </div>
-          <div class="home-courses-grades-grid" id="home-courses-grades-grid"></div>
+
+          <!-- Tallenna ja sulje -->
+          <div class="settings-modal-footer">
+            <button type="button" class="btn-save-settings" id="btn-save-settings">✓ Tallenna ja sulje</button>
+          </div>
         </section>
       </article>
 
@@ -277,7 +271,13 @@
       <!-- 2. AVOIN MATEMATIIKKA -KIRJANÄKYMÄ -->
       <article class="view-panel" id="view-books" hidden>
         <header class="view-header">
-          <div class="view-eyebrow">Materiaalipankki</div>
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">Materiaalipankki</div>
+            <button type="button" class="favorite-star-btn" data-toggle-view-fav="kirjat" id="fav-btn-kirjat" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
+              <span class="star-icon">☆</span>
+              <span class="star-label">Lisää suosikkeihin</span>
+            </button>
+          </div>
           <h2 class="view-title">Avoin matematiikka</h2>
           <p class="view-description">
             Avoimen <strong>Creative Commons CC BY 3.0</strong> -lisenssin matematiikan kirjasarja yläkoulun luokka-asteille 7–9. Voit lukea kirjoja suoraan selaimessa tai ladata PDF-tiedostot talteen.
@@ -310,7 +310,13 @@
       <!-- 3. KERTAUSTEHTÄVÄNÄKYMÄ -->
       <article class="view-panel" id="view-revision" hidden>
         <header class="view-header">
-          <div class="view-eyebrow">Kokeisiin valmistautuminen</div>
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">Kokeisiin valmistautuminen</div>
+            <button type="button" class="favorite-star-btn" data-toggle-view-fav="kertaus" id="fav-btn-kertaus" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
+              <span class="star-icon">☆</span>
+              <span class="star-label">Lisää suosikkeihin</span>
+            </button>
+          </div>
           <h2 class="view-title">Kertaustehtävät & malliratkaisut</h2>
           <p class="view-description">
             Kokeiden kenraaliharjoitukset, keskeiset muistilistat ja vaiheittaiset malliratkaisut matematiikan ja fysiikan kursseille.
@@ -343,7 +349,13 @@
       <!-- 4. ARVIOINTI JA INFO -NÄKYMÄ -->
       <article class="view-panel" id="view-arviointi" hidden>
         <header class="view-header">
-          <div class="view-eyebrow">Info ja ohjeistus</div>
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">Info ja ohjeistus</div>
+            <button type="button" class="favorite-star-btn" data-toggle-view-fav="arviointi" id="fav-btn-arviointi" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
+              <span class="star-icon">☆</span>
+              <span class="star-label">Lisää suosikkeihin</span>
+            </button>
+          </div>
           <h2 class="view-title" id="info-main-title">Tiedote koteihin MAFYKE-arvioinnista</h2>
           <p class="view-description" id="info-subtitle">
             Pasilan peruskoulu · Versio RAUH · 2. jakso (19.10.2026 - 18.12.2026)

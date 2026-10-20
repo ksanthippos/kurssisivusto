@@ -4,8 +4,9 @@ const state = {
   books: [],
   revisions: [],
   info: null,
-  favorites: [], // Kurssikoodit, esim. ["FY_91", "MA_72"], max 3
-  defaultView: "home", // "home" tai kurssikoodi esim. "FY_91"
+  favorites: [], // Esim. ["MA_81", "kertaus", "kirjat"]
+  defaultView: "home", // "home" | "kirjat" | "kertaus" | "arviointi" | kurssikoodi esim. "MA_81"
+  favoritesCollapsed: false,
   activeView: "home", // "home" | "lesson" | "kirjat" | "kertaus" | "arviointi"
   activeGrade: "7",
   activeCourse: null,
@@ -50,7 +51,8 @@ const sidebarLessonControls = document.querySelector("#sidebar-lesson-controls")
 const sidebarBooksControls = document.querySelector("#sidebar-books-controls");
 const sidebarRevisionControls = document.querySelector("#sidebar-revision-controls");
 const sidebarFavoritesList = document.querySelector("#sidebar-favorites-list");
-const sidebarFavCount = document.querySelector("#sidebar-fav-count");
+const sidebarFavHeading = document.querySelector("#sidebar-fav-heading");
+const sidebarFavArrow = document.querySelector("#sidebar-fav-arrow");
 const booksQuickNav = document.querySelector("#books-quick-nav");
 const revisionQuickNav = document.querySelector("#revision-quick-nav");
 const booksFilterPills = document.querySelectorAll("#books-filter-pills .filter-pill");
@@ -63,11 +65,15 @@ const viewBooks = document.querySelector("#view-books");
 const viewRevision = document.querySelector("#view-revision");
 const viewArviointi = document.querySelector("#view-arviointi");
 
-// Kotinäkymän elementit
-const homeFavoritesGrid = document.querySelector("#home-favorites-grid");
-const favoritesCounter = document.querySelector("#favorites-counter");
-const defaultSettingOptions = document.querySelector("#default-setting-options");
-const homeCoursesGradesGrid = document.querySelector("#home-courses-grades-grid");
+// Kotinäkymän ja asetusten elementit
+const homeSettingsGearBtn = document.querySelector("#home-settings-gear-btn");
+const homeSettingsPanel = document.querySelector("#home-settings-panel");
+const homeSettingsCloseBtn = document.querySelector("#home-settings-close-btn");
+const settingsDefaultOptions = document.querySelector("#settings-default-options");
+const settingsFavoritesList = document.querySelector("#settings-favorites-list");
+const settingsAddFavSelect = document.querySelector("#settings-add-fav-select");
+const btnAddFav = document.querySelector("#btn-add-fav");
+const btnSaveSettings = document.querySelector("#btn-save-settings");
 
 // Kirjanäkymän elementit
 const booksGrid = document.querySelector("#books-grid");
@@ -138,6 +144,82 @@ function setupEventListeners() {
       if (state.activeCourse) {
         toggleFavorite(state.activeCourse.code);
       }
+    });
+  }
+
+  // Suosikkitähdet muissa osionäkymissä (kirjat, kertaus, arviointi)
+  document.querySelectorAll("[data-toggle-view-fav]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.toggleViewFav;
+      if (key) {
+        toggleFavorite(key);
+      }
+    });
+  });
+
+  // Sivupalkin suosikkien kokoon taitto
+  if (sidebarFavHeading) {
+    const handleCollapseToggle = () => {
+      state.favoritesCollapsed = !state.favoritesCollapsed;
+      try {
+        localStorage.setItem("rauh_fav_collapsed", state.favoritesCollapsed ? "true" : "false");
+      } catch (err) {}
+      applyFavoritesCollapseState();
+    };
+
+    sidebarFavHeading.addEventListener("click", handleCollapseToggle);
+    sidebarFavHeading.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCollapseToggle();
+      }
+    });
+  }
+
+  // Kotinäkymän asetukset: rataspainike
+  if (homeSettingsGearBtn && homeSettingsPanel) {
+    homeSettingsGearBtn.addEventListener("click", () => {
+      const willOpen = homeSettingsPanel.hidden;
+      homeSettingsPanel.hidden = !willOpen;
+      homeSettingsGearBtn.classList.toggle("active", willOpen);
+      if (willOpen) {
+        renderHomeSettingsPanel();
+      }
+    });
+  }
+
+  // Asetusten sulkupainike (✕)
+  if (homeSettingsCloseBtn && homeSettingsPanel) {
+    homeSettingsCloseBtn.addEventListener("click", () => {
+      homeSettingsPanel.hidden = true;
+      if (homeSettingsGearBtn) homeSettingsGearBtn.classList.remove("active");
+    });
+  }
+
+  // Asetusten Tallenna ja sulje -painike
+  if (btnSaveSettings && homeSettingsPanel) {
+    btnSaveSettings.addEventListener("click", () => {
+      homeSettingsPanel.hidden = true;
+      if (homeSettingsGearBtn) homeSettingsGearBtn.classList.remove("active");
+      showToast("✓ Kotinäkymän asetukset tallennettu!");
+    });
+  }
+
+  // Uuden suosikin lisäys asetuspaneelista
+  if (btnAddFav && settingsAddFavSelect) {
+    btnAddFav.addEventListener("click", () => {
+      const val = settingsAddFavSelect.value;
+      if (!val) {
+        showToast("Valitse ensin kohde pudotusvalikosta.");
+        return;
+      }
+      if (state.favorites.includes(val)) {
+        showToast("Tämä kohde on jo suosikeissasi.");
+        return;
+      }
+      toggleFavorite(val);
+      settingsAddFavSelect.value = "";
+      renderHomeSettingsPanel();
     });
   }
 
@@ -213,11 +295,11 @@ function parseRoute() {
   if (mainNav) mainNav.classList.remove("is-open");
 
   if (!hash) {
-    // Jos käyttäjä on valinnut oletukseksi suosikkikurssin, siirrytään suoraan siihen
-    if (state.defaultView && state.defaultView !== "home" && state.favorites.includes(state.defaultView)) {
-      const found = state.courses.find((c) => c.code.toLowerCase() === state.defaultView.toLowerCase());
-      if (found) {
-        navigateTo(found.code, 1);
+    // Jos käyttäjä on asettanut oletussivun, ohjataan siihen
+    if (state.defaultView && state.defaultView !== "home") {
+      const meta = getFavoriteMeta(state.defaultView);
+      if (meta && meta.hash) {
+        window.location.hash = meta.hash;
         return;
       }
     }
@@ -293,6 +375,9 @@ function switchView(viewName) {
   } else if (viewName === "arviointi") {
     renderInfo();
   }
+
+  renderSidebarFavorites();
+  updateFavoriteToggleBtn();
 }
 
 function updateNavTabsUI() {
@@ -340,13 +425,87 @@ function populateCourseSelect(grade, selectedCode) {
 // SUOSIKIT JA ASETUKSET (LOCALSTORAGE)
 // --------------------------------------------------------------------------
 
+function getFavoriteMeta(key) {
+  if (!key) return null;
+  const lower = String(key).toLowerCase();
+
+  if (lower === "home" || lower === "koti") {
+    return {
+      key: "home",
+      type: "section",
+      title: "Kotinäkymä",
+      label: "🏠 Kotinäkymä (oletus)",
+      hash: "#/koti",
+      icon: "🏠"
+    };
+  }
+  if (lower === "kirjat" || lower === "avoin-matematiikka") {
+    return {
+      key: "kirjat",
+      type: "section",
+      title: "Avoin matematiikka -kirjat",
+      label: "📚 Avoin matematiikka -kirjat",
+      hash: "#/kirjat",
+      icon: "📚"
+    };
+  }
+  if (lower === "kertaus" || lower === "kertaustehtavat") {
+    return {
+      key: "kertaus",
+      type: "section",
+      title: "Kertaustehtävät & mallit",
+      label: "📝 Kertaustehtävät & mallit",
+      hash: "#/kertaus",
+      icon: "📝"
+    };
+  }
+  if (lower === "arviointi" || lower === "info") {
+    return {
+      key: "arviointi",
+      type: "section",
+      title: "Arviointiperusteet & info",
+      label: "ℹ️ Arviointiperusteet & info",
+      hash: "#/arviointi",
+      icon: "ℹ️"
+    };
+  }
+
+  // Kurssikohde
+  const course = (state.courses || []).find((c) => c.code.toUpperCase() === String(key).toUpperCase());
+  const code = course ? course.code : String(key).toUpperCase();
+  const title = course ? course.title : code;
+  const isPhysics = course?.subject === "fysiikka";
+  const icon = isPhysics ? "⚡" : "📐";
+
+  return {
+    key: code,
+    type: "course",
+    title: title,
+    label: `${icon} ${code}: ${title}`,
+    hash: `#/${code}/1`,
+    icon: icon
+  };
+}
+
+function applyFavoritesCollapseState() {
+  if (sidebarFavoritesList) {
+    sidebarFavoritesList.hidden = state.favoritesCollapsed;
+  }
+  if (sidebarFavArrow) {
+    sidebarFavArrow.textContent = state.favoritesCollapsed ? "▶" : "▼";
+  }
+  if (sidebarFavHeading) {
+    sidebarFavHeading.setAttribute("aria-expanded", state.favoritesCollapsed ? "false" : "true");
+  }
+}
+
 function loadPreferences() {
   try {
     const rawFavs = localStorage.getItem("rauh_favorites");
     if (rawFavs) {
       const parsed = JSON.parse(rawFavs);
       if (Array.isArray(parsed)) {
-        state.favorites = parsed.slice(0, 3);
+        state.favorites = parsed;
       }
     }
   } catch (err) {
@@ -361,49 +520,65 @@ function loadPreferences() {
   } catch (err) {
     console.warn("Virhe oletusnäkymän latauksessa:", err);
   }
+
+  try {
+    state.favoritesCollapsed = localStorage.getItem("rauh_fav_collapsed") === "true";
+  } catch (err) {
+    console.warn("Virhe suosikkien taiton latauksessa:", err);
+  }
 }
 
 function savePreferences() {
   try {
     localStorage.setItem("rauh_favorites", JSON.stringify(state.favorites));
     localStorage.setItem("rauh_default_view", state.defaultView);
+    localStorage.setItem("rauh_fav_collapsed", state.favoritesCollapsed ? "true" : "false");
   } catch (err) {
     console.warn("Virhe tallennuksessa:", err);
   }
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
+  if (homeSettingsPanel && !homeSettingsPanel.hidden) {
+    renderHomeSettingsPanel();
+  }
 }
 
-function toggleFavorite(courseCode) {
-  const code = courseCode.toUpperCase();
-  const idx = state.favorites.indexOf(code);
+function toggleFavorite(rawKey) {
+  if (!rawKey) return;
+  const isSection = ["kirjat", "kertaus", "arviointi"].includes(String(rawKey).toLowerCase());
+  const key = isSection ? rawKey.toLowerCase() : rawKey.toUpperCase();
+
+  const idx = state.favorites.indexOf(key);
+  const meta = getFavoriteMeta(key);
 
   if (idx !== -1) {
     state.favorites.splice(idx, 1);
-    if (state.defaultView === code) {
+    if (state.defaultView === key) {
       state.defaultView = "home";
     }
     savePreferences();
-    if (state.activeView === "home") renderHome();
-    showToast(`Poistettu suosikeista: ${code}`);
+    showToast(`Poistettu suosikeista: ${meta?.title || key}`);
   } else {
-    if (state.favorites.length >= 3) {
-      showToast("⚠️ Enintään 3 suosikkikurssia! Poista jokin aiemmista ensin.");
-      return;
-    }
-    state.favorites.push(code);
+    state.favorites.push(key);
     savePreferences();
-    if (state.activeView === "home") renderHome();
-    showToast(`⭐ Lisätty suosikkeihin: ${code}!`);
+    showToast(`⭐ Lisätty suosikkeihin: ${meta?.title || key}!`);
   }
+}
+
+function moveFavorite(index, direction) {
+  const targetIndex = index + direction;
+  if (targetIndex < 0 || targetIndex >= state.favorites.length) return;
+
+  const item = state.favorites.splice(index, 1)[0];
+  state.favorites.splice(targetIndex, 0, item);
+  savePreferences();
 }
 
 function setDefaultView(viewKey) {
   state.defaultView = viewKey;
   savePreferences();
-  if (state.activeView === "home") renderDefaultSettingUI();
-  const label = viewKey === "home" ? "Kotinäkymä (oletus)" : `Kurssi ${viewKey}`;
-  showToast(`🚀 Aloitusnäkymäksi tallennettu: ${label}`);
+  const meta = getFavoriteMeta(viewKey);
+  showToast(`🚀 Aloitusnäkymäksi tallennettu: ${meta?.label || viewKey}`);
 }
 
 let toastTimeout = null;
@@ -423,44 +598,62 @@ function showToast(message) {
 }
 
 function updateFavoriteToggleBtn() {
-  if (!favoriteToggleBtn || !starIcon || !starLabel) return;
-  if (!state.activeCourse) {
-    favoriteToggleBtn.hidden = true;
-    return;
+  // 1. Oppituntinäkymän tähtipainike
+  if (favoriteToggleBtn && starIcon && starLabel) {
+    if (!state.activeCourse || state.activeView !== "lesson") {
+      favoriteToggleBtn.hidden = true;
+    } else {
+      favoriteToggleBtn.hidden = false;
+      const isFav = state.favorites.includes(state.activeCourse.code);
+      favoriteToggleBtn.classList.toggle("is-favorite", isFav);
+      favoriteToggleBtn.setAttribute("aria-pressed", isFav ? "true" : "false");
+      starIcon.textContent = isFav ? "★" : "☆";
+      starLabel.textContent = isFav ? "Suosikeissa" : "Lisää suosikkeihin";
+      favoriteToggleBtn.title = isFav ? "Poista suosikeista" : "Lisää suosikkeihin";
+    }
   }
-  favoriteToggleBtn.hidden = false;
-  const isFav = state.favorites.includes(state.activeCourse.code);
 
-  favoriteToggleBtn.classList.toggle("is-favorite", isFav);
-  favoriteToggleBtn.setAttribute("aria-pressed", isFav ? "true" : "false");
-  starIcon.textContent = isFav ? "★" : "☆";
-  starLabel.textContent = isFav ? "Suosikeissa" : "Lisää suosikkeihin";
-  favoriteToggleBtn.title = isFav ? "Poista suosikeista" : "Lisää suosikkeihin";
+  // 2. Muiden osioiden (kirjat, kertaus, arviointi) tähtipainikkeet
+  document.querySelectorAll("[data-toggle-view-fav]").forEach((btn) => {
+    const key = btn.dataset.toggleViewFav;
+    const isFav = state.favorites.includes(key);
+    btn.classList.toggle("is-favorite", isFav);
+    btn.setAttribute("aria-pressed", isFav ? "true" : "false");
+
+    const icon = btn.querySelector(".star-icon");
+    const label = btn.querySelector(".star-label");
+    if (icon) icon.textContent = isFav ? "★" : "☆";
+    if (label) label.textContent = isFav ? "Suosikeissa" : "Lisää suosikkeihin";
+    btn.title = isFav ? "Poista suosikeista" : "Lisää suosikkeihin";
+  });
 }
 
 function renderSidebarFavorites() {
-  if (sidebarFavCount) {
-    sidebarFavCount.textContent = `${state.favorites.length} / 3`;
-  }
+  applyFavoritesCollapseState();
   if (!sidebarFavoritesList) return;
 
   if (state.favorites.length === 0) {
     sidebarFavoritesList.innerHTML = `
-      <p class="sidebar-fav-empty">Ei suosikkeja vielä. Lisää kurssi tähdellä (☆)!</p>
+      <p class="sidebar-fav-empty">Ei suosikkeja vielä. Lisää kohteita tähdellä (☆) tai asetuksista!</p>
     `;
     return;
   }
 
   sidebarFavoritesList.innerHTML = state.favorites
-    .map((code) => {
-      const course = state.courses.find((c) => c.code === code);
-      const title = course ? course.title : code;
-      const isActive = state.activeView === "lesson" && state.activeCourse?.code === code;
+    .map((key) => {
+      const meta = getFavoriteMeta(key);
+      if (!meta) return "";
+
+      const isActive =
+        meta.type === "course"
+          ? state.activeView === "lesson" && state.activeCourse?.code.toUpperCase() === key.toUpperCase()
+          : state.activeView === meta.key;
+
       return `
-        <a href="#/${code}/1" class="sidebar-fav-pill ${isActive ? "active" : ""}">
-          <span class="fav-pill-star">★</span>
-          <span class="fav-pill-code">${code}</span>
-          <span class="fav-pill-title">${escapeHtml(title)}</span>
+        <a href="${meta.hash}" class="sidebar-fav-pill ${isActive ? "active" : ""}">
+          <span class="fav-pill-icon">${meta.icon}</span>
+          <span class="fav-pill-code">${escapeHtml(meta.key)}</span>
+          <span class="fav-pill-title">${escapeHtml(meta.title)}</span>
         </a>
       `;
     })
@@ -468,159 +661,163 @@ function renderSidebarFavorites() {
 }
 
 // --------------------------------------------------------------------------
-// 0. KOTINÄKYMÄN LOGIIKKA
+// 0. KOTINÄKYMÄN LOGIIKKA JA ASETUKSET
 // --------------------------------------------------------------------------
 
 function renderHome() {
-  renderHomeFavorites();
-  renderDefaultSettingUI();
-  renderHomeCoursesList();
   renderSidebarFavorites();
+  updateFavoriteToggleBtn();
+  if (homeSettingsPanel && !homeSettingsPanel.hidden) {
+    renderHomeSettingsPanel();
+  }
 }
 
-function renderHomeFavorites() {
-  if (favoritesCounter) {
-    favoritesCounter.textContent = `${state.favorites.length} / 3 valittu`;
-  }
-  if (!homeFavoritesGrid) return;
+function populateSettingsAddDropdown() {
+  const g7 = document.querySelector("#optgroup-grade-7");
+  const g8 = document.querySelector("#optgroup-grade-8");
+  const g9 = document.querySelector("#optgroup-grade-9");
+  const gVal = document.querySelector("#optgroup-grade-val");
 
-  if (state.favorites.length === 0) {
-    homeFavoritesGrid.innerHTML = `
-      <div class="favorites-empty">
-        <span class="empty-star">⭐</span>
-        <p>
-          Et ole vielä valinnut suosikkikursseja. Voit lisätä eniten käyttämäsi kurssit (max 3) suosikkeihin alla olevasta kurssilistasta tai kurssisivun tähdestä (☆)!
+  if (!g7 || !state.courses || state.courses.length === 0) return;
+
+  if (g7.children.length === 0) {
+    const mapping = {
+      "7": g7,
+      "8": g8,
+      "9": g9,
+      "valinnainen": gVal
+    };
+
+    state.courses.forEach((c) => {
+      const targetGroup = mapping[c.grade] || gVal;
+      if (targetGroup) {
+        const opt = document.createElement("option");
+        opt.value = c.code;
+        opt.textContent = `${c.code}: ${c.title}`;
+        targetGroup.appendChild(opt);
+      }
+    });
+  }
+}
+
+function renderHomeSettingsPanel() {
+  if (!homeSettingsPanel) return;
+
+  populateSettingsAddDropdown();
+
+  // 1. Aloitusnäkymävaihtoehdot (#settings-default-options)
+  if (settingsDefaultOptions) {
+    const options = [{ key: "home", label: "🏠 Kotinäkymä (oletus)" }];
+
+    state.favorites.forEach((key) => {
+      const meta = getFavoriteMeta(key);
+      if (meta) {
+        options.push({
+          key: meta.key,
+          label: meta.label
+        });
+      }
+    });
+
+    if (state.defaultView !== "home" && !state.favorites.includes(state.defaultView)) {
+      state.defaultView = "home";
+      savePreferences();
+    }
+
+    settingsDefaultOptions.innerHTML = options
+      .map(
+        (opt) => `
+        <button
+          type="button"
+          class="default-view-option-btn ${state.defaultView === opt.key ? "active" : ""}"
+          data-set-default="${escapeHtml(opt.key)}"
+        >
+          <span class="option-check">${state.defaultView === opt.key ? "✓" : "○"}</span>
+          <span class="option-label">${escapeHtml(opt.label)}</span>
+        </button>
+      `
+      )
+      .join("");
+
+    settingsDefaultOptions.querySelectorAll(".default-view-option-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setDefaultView(btn.dataset.setDefault);
+      });
+    });
+  }
+
+  // 2. Suosikkilistan järjestely & poisto (#settings-favorites-list)
+  if (settingsFavoritesList) {
+    if (state.favorites.length === 0) {
+      settingsFavoritesList.innerHTML = `
+        <p class="settings-fav-empty">
+          Ei suosikkeja valittuna. Voit lisätä kohteita alla olevasta valikosta tai sivujen tähdestä (☆).
         </p>
-      </div>
-    `;
-    return;
-  }
-
-  homeFavoritesGrid.innerHTML = state.favorites
-    .map((code) => {
-      const course = state.courses.find((c) => c.code === code);
-      const title = course ? course.title : code;
-      const grade = course ? `${course.grade}. luokka` : "";
-      const subject = course?.subject ? course.subject.toUpperCase() : "";
-
-      return `
-        <div class="home-fav-card">
-          <div class="home-fav-card-header">
-            <span class="home-fav-badge">${grade} · ${subject}</span>
-            <span style="color: #eab308; font-size: 1.1rem;">★</span>
-          </div>
-          <div class="home-fav-card-code">${code}</div>
-          <div class="home-fav-card-title">${escapeHtml(title)}</div>
-          <div class="home-fav-card-actions">
-            <a href="#/${code}/1" class="fav-card-open-btn">Avaa kurssi →</a>
-            <button type="button" class="fav-card-remove-btn" data-remove="${code}" title="Poista suosikeista">
-              Poista
-            </button>
-          </div>
-        </div>
       `;
-    })
-    .join("");
+    } else {
+      settingsFavoritesList.innerHTML = state.favorites
+        .map((key, i) => {
+          const meta = getFavoriteMeta(key);
+          const isFirst = i === 0;
+          const isLast = i === state.favorites.length - 1;
 
-  homeFavoritesGrid.querySelectorAll(".fav-card-remove-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      toggleFavorite(btn.dataset.remove);
-    });
-  });
-}
+          return `
+            <div class="settings-fav-item" data-fav-key="${escapeHtml(key)}">
+              <div class="settings-fav-drag-info">
+                <span class="settings-fav-badge">${meta.icon} ${escapeHtml(meta.key)}</span>
+                <span class="settings-fav-title">${escapeHtml(meta.title)}</span>
+              </div>
+              <div class="settings-fav-actions">
+                <button
+                  type="button"
+                  class="settings-action-btn btn-move-up"
+                  data-index="${i}"
+                  title="Siirrä ylemmäs"
+                  aria-label="Siirrä ylemmäs"
+                  ${isFirst ? "disabled" : ""}
+                >▲</button>
+                <button
+                  type="button"
+                  class="settings-action-btn btn-move-down"
+                  data-index="${i}"
+                  title="Siirrä alemmas"
+                  aria-label="Siirrä alemmas"
+                  ${isLast ? "disabled" : ""}
+                >▼</button>
+                <button
+                  type="button"
+                  class="settings-action-btn btn-remove-fav"
+                  data-key="${escapeHtml(key)}"
+                  title="Poista suosikeista"
+                  aria-label="Poista suosikeista"
+                >✕</button>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
 
-function renderDefaultSettingUI() {
-  if (!defaultSettingOptions) return;
+      settingsFavoritesList.querySelectorAll(".btn-move-up").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          moveFavorite(idx, -1);
+        });
+      });
 
-  const options = [{ key: "home", label: "🏠 Kotinäkymä (oletus)" }];
+      settingsFavoritesList.querySelectorAll(".btn-move-down").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          moveFavorite(idx, 1);
+        });
+      });
 
-  state.favorites.forEach((code) => {
-    const course = state.courses.find((c) => c.code === code);
-    const title = course ? course.title : code;
-    options.push({ key: code, label: `⭐ ${code}: ${title}` });
-  });
-
-  if (state.defaultView !== "home" && !state.favorites.includes(state.defaultView)) {
-    state.defaultView = "home";
-    savePreferences();
+      settingsFavoritesList.querySelectorAll(".btn-remove-fav").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          toggleFavorite(btn.dataset.key);
+        });
+      });
+    }
   }
-
-  defaultSettingOptions.innerHTML = options
-    .map(
-      (opt) => `
-      <button 
-        type="button" 
-        class="setting-option-btn ${state.defaultView === opt.key ? "active" : ""}" 
-        data-set-default="${opt.key}"
-      >
-        <span>${state.defaultView === opt.key ? "✓" : "○"}</span>
-        <span>${escapeHtml(opt.label)}</span>
-      </button>
-    `
-    )
-    .join("");
-
-  defaultSettingOptions.querySelectorAll(".setting-option-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      setDefaultView(btn.dataset.setDefault);
-    });
-  });
-}
-
-function renderHomeCoursesList() {
-  if (!homeCoursesGradesGrid || !state.courses) return;
-
-  const grades = [
-    { id: "7", label: "7. luokka" },
-    { id: "8", label: "8. luokka" },
-    { id: "9", label: "9. luokka" },
-    { id: "valinnainen", label: "Valinnaiskurssit" }
-  ];
-
-  homeCoursesGradesGrid.innerHTML = grades
-    .map((g) => {
-      const coursesInGrade = state.courses.filter((c) => c.grade === g.id);
-      return `
-        <div class="home-grade-column">
-          <div class="home-grade-title">
-            <span>${g.label}</span>
-            <span style="font-size: 0.75rem; color: #64748b; font-weight: normal;">${coursesInGrade.length} kurssia</span>
-          </div>
-          <div class="home-courses-list">
-            ${coursesInGrade
-              .map((c) => {
-                const isFav = state.favorites.includes(c.code);
-                return `
-                <div class="home-course-item">
-                  <a href="#/${c.code}/1" class="home-course-link">
-                    <span class="home-course-code-badge">${c.code}</span>
-                    <span>${escapeHtml(c.title)}</span>
-                  </a>
-                  <button 
-                    type="button" 
-                    class="home-item-star-btn ${isFav ? "is-favorite" : ""}" 
-                    data-toggle-fav="${c.code}" 
-                    title="${isFav ? "Poista suosikeista" : "Lisää suosikkeihin"}"
-                    aria-label="${isFav ? "Poista suosikeista" : "Lisää suosikkeihin"}"
-                  >
-                    ${isFav ? "★" : "☆"}
-                  </button>
-                </div>
-              `;
-              })
-              .join("")}
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-
-  homeCoursesGradesGrid.querySelectorAll(".home-item-star-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleFavorite(btn.dataset.toggleFav);
-    });
-  });
 }
 
 // --------------------------------------------------------------------------
