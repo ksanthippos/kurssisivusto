@@ -731,28 +731,53 @@ function renderActiveLesson() {
   if (lessonEmbedSection) {
     if (current.simulation?.url) {
       lessonEmbedSection.hidden = false;
-      if (embedTitle) embedTitle.textContent = current.simulation.title || "Interaktiivinen sovellus";
+      const simUrl = current.simulation.url;
+      const isGeogebra = simUrl.includes("geogebra");
+      const isPhet = simUrl.includes("phet");
+      const simType = isGeogebra ? "GeoGebra" : isPhet ? "PhET / HTML5" : "Interaktiivinen";
+      const simIcon = isGeogebra ? "📐" : isPhet ? "🔬" : "⚡";
+      const simTitle = current.simulation.title || `${simType}-sovellus`;
+
+      if (embedTitle) embedTitle.textContent = simTitle;
       if (embedExternalLink) {
-        embedExternalLink.href = current.simulation.url;
+        embedExternalLink.href = simUrl;
       }
       if (embedTag) {
-        if (current.simulation.url.includes("geogebra")) {
-          embedTag.textContent = "GeoGebra";
-        } else if (current.simulation.url.includes("phet")) {
-          embedTag.textContent = "PhET / HTML5";
-        } else {
-          embedTag.textContent = "Interaktiivinen";
-        }
+        embedTag.textContent = simType;
       }
       if (embedWrapper) {
+        // Luodaan siisti käynnistyskortti: iframe ladataan vasta kun käyttäjä klikkaa käynnistyspainiketta.
+        // Tämä estää GeoGebran ja muiden ulkoisten sivujen automaattisen focus-hypyn
+        // ja pitää näkymän vakaasti oppitunnin otsikon ja teorian kohdalla.
         embedWrapper.innerHTML = `
-          <iframe 
-            src="${current.simulation.url}" 
-            title="${escapeHtml(current.simulation.title || "Sovellus")}"
-            allowfullscreen 
-            loading="lazy"
-          ></iframe>
+          <div class="sim-launcher-card" id="sim-launcher-card">
+            <span class="sim-launcher-icon">${simIcon}</span>
+            <h4 class="sim-launcher-title">${escapeHtml(simTitle)}</h4>
+            <p class="sim-launcher-desc">Interaktiivinen ${simType}-sovellus oppitunnin tueksi. Käynnistä sovellus tähän näkymään tai avaa koko ruutuun.</p>
+            <div class="sim-launcher-actions">
+              <button type="button" class="sim-launch-btn" id="btn-launch-sim">
+                <span>▶</span> Käynnistä simulaatio
+              </button>
+              <a href="${escapeHtml(simUrl)}" target="_blank" rel="noopener" class="sim-launch-ext">
+                Avaa koko ruudussa ↗
+              </a>
+            </div>
+          </div>
         `;
+
+        const launchBtn = embedWrapper.querySelector("#btn-launch-sim");
+        if (launchBtn) {
+          launchBtn.addEventListener("click", () => {
+            embedWrapper.innerHTML = `
+              <iframe 
+                src="${simUrl}" 
+                title="${escapeHtml(simTitle)}"
+                allowfullscreen 
+                loading="lazy"
+              ></iframe>
+            `;
+          });
+        }
       }
     } else {
       lessonEmbedSection.hidden = true;
@@ -792,9 +817,9 @@ function renderActiveLesson() {
   // Vieritys oppitunnin alkuun (huomioiden kiinnitetty yläpalkki)
   const contentTarget = document.querySelector("#main-content");
   if (contentTarget) {
-    contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+    contentTarget.scrollIntoView({ behavior: "instant", block: "start" });
   } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
 }
 
@@ -1143,6 +1168,34 @@ if (backToTopBtn) {
     backToTopBtn.classList.toggle("is-visible", window.scrollY > 400);
   });
 }
+
+// Estetään ulkoisten upotusten (kuten GeoGebra) ei-toivottu automaattinen focus-vieritys
+let isUserScrolling = false;
+let userInteractionTimeout = null;
+const registerUserInteraction = () => {
+  isUserScrolling = true;
+  clearTimeout(userInteractionTimeout);
+  userInteractionTimeout = setTimeout(() => {
+    isUserScrolling = false;
+  }, 1200);
+};
+
+["wheel", "touchmove", "keydown", "mousedown", "pointerdown"].forEach((ev) => {
+  window.addEventListener(ev, registerUserInteraction, { passive: true, capture: true });
+});
+
+window.addEventListener("scroll", () => {
+  if (!isUserScrolling && document.activeElement && document.activeElement.tagName === "IFRAME") {
+    // Jos iframe varasti fokuksen ja selain yritti vierittää sivua automaattisesti
+    // ilman käyttäjän omaa kosketusta/rullausta, palautetaan näkymä heti ylös.
+    const contentTarget = document.querySelector("#main-content");
+    if (contentTarget) {
+      contentTarget.scrollIntoView({ behavior: "instant", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }
+});
 
 // Käynnistetään sovellus
 init();

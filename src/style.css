@@ -456,6 +456,99 @@ a:hover {
   border: none;
 }
 
+/* Simulaation käynnistyskortti (estää GeoGebran ym. automaattisen focus-hypyn) */
+.sim-launcher-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f8fafc;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.sim-launcher-icon {
+  font-size: 2.75rem;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.sim-launcher-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  max-width: 600px;
+  line-height: 1.4;
+}
+
+.sim-launcher-desc {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin-bottom: 20px;
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+.sim-launcher-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sim-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary-light);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s ease;
+}
+
+.sim-launch-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
+}
+
+.sim-launch-btn:active {
+  transform: translateY(0);
+}
+
+.sim-launch-ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sim-launch-ext:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+}
+
 /* Syventävä osio (avattava kortti) */
 .lesson-deep-dive-section {
   margin-top: 36px;
@@ -1514,6 +1607,39 @@ a:hover {
     right: 14px;
     bottom: 14px;
     padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .sim-launcher-card {
+    padding: 16px 12px;
+  }
+
+  .sim-launcher-icon {
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+
+  .sim-launcher-title {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .sim-launcher-desc {
+    font-size: 0.78rem;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .sim-launch-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .sim-launch-ext {
+    padding: 8px 12px;
     font-size: 0.8rem;
   }
 }
