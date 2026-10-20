@@ -133,7 +133,11 @@ function setupEventListeners() {
         setGrade(grade);
       } else if (navType === "view") {
         const targetView = tab.dataset.view;
-        window.location.hash = `#/${targetView}`;
+        if (targetView === "home" || targetView === "koti") {
+          window.location.hash = "#/koti";
+        } else {
+          window.location.hash = `#/${targetView}`;
+        }
       }
     });
   });
@@ -283,36 +287,50 @@ function setupEventListeners() {
     });
   }
 
-  // Reititys hashchange-tapahtumalla
+  // Reititys hashchange- ja popstate-tapahtumilla
   window.addEventListener("hashchange", parseRoute);
+  window.addEventListener("popstate", parseRoute);
 }
+
+// Lipuke, jolla tunnistetaan sivuston ensiavaus (uusi välilehti, kirjanmerkki tai sivun päivitys)
+let isInitialLoad = true;
 
 // Reititys
 function parseRoute() {
-  const hash = window.location.hash.replace(/^#\/?/, "");
+  const rawHash = window.location.hash.replace(/^#\/?/, "");
+  const hash = rawHash.toLowerCase();
 
   // Suljetaan mobiilivalikko jos auki
   if (mainNav) mainNav.classList.remove("is-open");
 
-  if (!hash) {
-    // Jos käyttäjä on asettanut oletussivun, ohjataan siihen
-    if (state.defaultView && state.defaultView !== "home") {
-      const meta = getFavoriteMeta(state.defaultView);
-      if (meta && meta.hash) {
-        window.location.hash = meta.hash;
-        return;
+  const isHomeRoute = !hash || hash === "koti" || hash === "home";
+
+  if (isInitialLoad) {
+    isInitialLoad = false;
+    // Kun sivusto avataan kirjanmerkistä, osoiteriviltä tai perusosoitteella:
+    // Jos saavutaan aloitussivulle ja käyttäjä on asettanut oletusaloitussivuksi suosikin:
+    if (isHomeRoute) {
+      if (state.defaultView && state.defaultView !== "home") {
+        const meta = getFavoriteMeta(state.defaultView);
+        if (meta && meta.hash) {
+          window.location.replace(meta.hash);
+          return;
+        }
       }
+      switchView("home");
+      return;
     }
+  }
+
+  if (isHomeRoute) {
     switchView("home");
     return;
   }
 
-  const parts = hash.split("/");
+  const parts = rawHash.split("/");
   const firstPart = parts[0].toLowerCase();
 
-  if (firstPart === "koti" || firstPart === "home") {
-    switchView("home");
-  } else if (firstPart === "kirjat" || firstPart === "avoin-matematiikka") {
+  if (firstPart === "kirjat" || firstPart === "avoin-matematiikka") {
     switchView("kirjat");
     const bookId = parts[1];
     if (bookId) {
@@ -368,6 +386,13 @@ function switchView(viewName) {
 
   if (viewName === "home") {
     renderHome();
+    // Siistitään osoitepalkki kotinäkymässä: poistetaan #/home tai #/koti,
+    // jotta käyttäjän selaimeen mahdollisesti tallentama kirjanmerkki osoittaa puhtaaseen perusosoitteeseen!
+    if (window.location.hash && (window.location.hash === "#/home" || window.location.hash === "#/koti" || window.location.hash === "#/")) {
+      try {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      } catch (err) {}
+    }
   } else if (viewName === "kirjat") {
     renderBooks();
   } else if (viewName === "kertaus") {
@@ -386,7 +411,8 @@ function updateNavTabsUI() {
     if (navType === "grade") {
       tab.classList.toggle("active", state.activeView === "lesson" && tab.dataset.grade === state.activeGrade);
     } else if (navType === "view") {
-      tab.classList.toggle("active", state.activeView === tab.dataset.view);
+      const isHome = state.activeView === "home" && (tab.dataset.view === "home" || tab.dataset.view === "koti");
+      tab.classList.toggle("active", isHome || state.activeView === tab.dataset.view);
     }
   });
 }
