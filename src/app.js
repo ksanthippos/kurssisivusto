@@ -954,7 +954,7 @@ function renderActiveLesson() {
   if (lessonEmbedSection) {
     if (current.simulation?.url) {
       lessonEmbedSection.hidden = false;
-      const simUrl = current.simulation.url;
+      const simUrl = formatSimulationUrl(current.simulation.url);
       const isGeogebra = simUrl.includes("geogebra");
       const isPhet = simUrl.includes("phet");
       const simType = isGeogebra ? "GeoGebra" : isPhet ? "PhET / HTML5" : "Interaktiivinen";
@@ -995,6 +995,7 @@ function renderActiveLesson() {
               <iframe 
                 src="${simUrl}" 
                 title="${escapeHtml(simTitle)}"
+                allow="fullscreen; autoplay; encrypted-media"
                 allowfullscreen 
                 loading="lazy"
               ></iframe>
@@ -1357,6 +1358,31 @@ function renderInfo() {
 }
 
 // Apufunktiot
+function formatSimulationUrl(rawUrl) {
+  if (!rawUrl) return "";
+  let url = String(rawUrl).trim();
+
+  // PhET: varmistetaan suora HTML5-upotusosoite (estää X-Frame-Options -eston ja parantaa mobiilitoimivuutta)
+  if (url.includes("phet.colorado.edu")) {
+    if (url.includes("/sims/html/") || url.includes("/sims/cheerpj/")) {
+      return url;
+    }
+    const cleanUrl = url.split("?")[0].split("#")[0].replace(/\/+$/, "");
+    const parts = cleanUrl.split("/");
+    let slug = parts[parts.length - 1];
+
+    if (slug === "expression-evaluator") {
+      slug = "expression-exchange";
+    } else if (slug === "nuclear-fission") {
+      return "https://phet.colorado.edu/sims/cheerpj/nuclear-physics/latest/nuclear-physics.html?simulation=nuclear-fission";
+    }
+
+    return `https://phet.colorado.edu/sims/html/${slug}/latest/${slug}_all.html?locale=fi`;
+  }
+
+  return url;
+}
+
 function renderKaTeX(container) {
   if (typeof renderMathInElement === "function" && container) {
     renderMathInElement(container, {

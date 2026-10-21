@@ -1636,6 +1636,11 @@ a:hover {
     font-size: 0.8rem;
   }
 
+  .embed-wrapper {
+    padding-bottom: 80%;
+    min-height: 380px;
+  }
+
   .sim-launcher-card {
     padding: 16px 12px;
   }
