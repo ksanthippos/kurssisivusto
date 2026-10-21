@@ -13,7 +13,10 @@ const state = {
   activeCourseData: null,
   activeLessonNumber: 1,
   activeBooksFilter: "all",
-  activeRevisionFilter: "all"
+  activeRevisionFilter: "all",
+  theme: "system", // "system" | "light" | "dark"
+  autoDateLesson: false, // boolean
+  lessonScope: "normal" // "compact" | "normal" | "deep"
 };
 
 // DOM-elementit
@@ -65,15 +68,16 @@ const viewBooks = document.querySelector("#view-books");
 const viewRevision = document.querySelector("#view-revision");
 const viewArviointi = document.querySelector("#view-arviointi");
 
-// Kotinäkymän ja asetusten elementit
-const homeSettingsGearBtn = document.querySelector("#home-settings-gear-btn");
-const homeSettingsPanel = document.querySelector("#home-settings-panel");
-const homeSettingsCloseBtn = document.querySelector("#home-settings-close-btn");
+// Yläpalkin ja asetusten elementit
+const headerSettingsBtn = document.querySelector("#header-settings-btn");
+const settingsPopover = document.querySelector("#settings-popover");
+const settingsPopoverCloseBtn = document.querySelector("#settings-popover-close-btn");
+const btnSavePopover = document.querySelector("#btn-save-popover");
 const settingsDefaultOptions = document.querySelector("#settings-default-options");
 const settingsFavoritesList = document.querySelector("#settings-favorites-list");
-const settingsAddFavSelect = document.querySelector("#settings-add-fav-select");
-const btnAddFav = document.querySelector("#btn-add-fav");
-const btnSaveSettings = document.querySelector("#btn-save-settings");
+const themeSelectorGroup = document.querySelector("#theme-selector-group");
+const settingAutoDateLesson = document.querySelector("#setting-auto-date-lesson");
+const scopeSelectorGroup = document.querySelector("#scope-selector-group");
 
 // Kirjanäkymän elementit
 const booksGrid = document.querySelector("#books-grid");
@@ -180,50 +184,59 @@ function setupEventListeners() {
     });
   }
 
-  // Kotinäkymän asetukset: rataspainike
-  if (homeSettingsGearBtn && homeSettingsPanel) {
-    homeSettingsGearBtn.addEventListener("click", () => {
-      const willOpen = homeSettingsPanel.hidden;
-      homeSettingsPanel.hidden = !willOpen;
-      homeSettingsGearBtn.classList.toggle("active", willOpen);
-      if (willOpen) {
-        renderHomeSettingsPanel();
-      }
+  // Sivuston asetukset (yläpalkin rataspainike ja leijuva popover)
+  if (headerSettingsBtn && settingsPopover) {
+    headerSettingsBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleSettingsPopover();
     });
   }
 
-  // Asetusten sulkupainike (✕)
-  if (homeSettingsCloseBtn && homeSettingsPanel) {
-    homeSettingsCloseBtn.addEventListener("click", () => {
-      homeSettingsPanel.hidden = true;
-      if (homeSettingsGearBtn) homeSettingsGearBtn.classList.remove("active");
+  if (settingsPopoverCloseBtn) {
+    settingsPopoverCloseBtn.addEventListener("click", () => {
+      closeSettingsPopover();
     });
   }
 
-  // Asetusten Tallenna ja sulje -painike
-  if (btnSaveSettings && homeSettingsPanel) {
-    btnSaveSettings.addEventListener("click", () => {
-      homeSettingsPanel.hidden = true;
-      if (homeSettingsGearBtn) homeSettingsGearBtn.classList.remove("active");
-      showToast("✓ Kotinäkymän asetukset tallennettu!");
+  if (btnSavePopover) {
+    btnSavePopover.addEventListener("click", () => {
+      closeSettingsPopover();
+      showToast("✓ Asetukset tallennettu!");
     });
   }
 
-  // Uuden suosikin lisäys asetuspaneelista
-  if (btnAddFav && settingsAddFavSelect) {
-    btnAddFav.addEventListener("click", () => {
-      const val = settingsAddFavSelect.value;
-      if (!val) {
-        showToast("Valitse ensin kohde pudotusvalikosta.");
-        return;
-      }
-      if (state.favorites.includes(val)) {
-        showToast("Tämä kohde on jo suosikeissasi.");
-        return;
-      }
-      toggleFavorite(val);
-      settingsAddFavSelect.value = "";
-      renderHomeSettingsPanel();
+  // Teeman valintapainikkeet popoverissa
+  if (themeSelectorGroup) {
+    themeSelectorGroup.querySelectorAll(".theme-opt-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const choice = btn.dataset.themeChoice;
+        if (choice) setTheme(choice);
+      });
+    });
+  }
+
+  // Päivämääräperusteinen tuntiohjaus -valintaruutu
+  if (settingAutoDateLesson) {
+    settingAutoDateLesson.addEventListener("change", () => {
+      state.autoDateLesson = settingAutoDateLesson.checked;
+      try {
+        localStorage.setItem("rauh_auto_date_lesson", state.autoDateLesson ? "true" : "false");
+      } catch (err) {}
+      showToast(
+        state.autoDateLesson
+          ? "📅 Päivämääräohjaus aktivoitu (käytössä Kurssiportaali-integraation valmistuttua)"
+          : "Päivämääräohjaus kytketty pois"
+      );
+    });
+  }
+
+  // Oppituntien laajuus -valitsin
+  if (scopeSelectorGroup) {
+    scopeSelectorGroup.querySelectorAll(".scope-opt-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const scope = btn.dataset.scope;
+        if (scope) setLessonScope(scope);
+      });
     });
   }
 
@@ -280,10 +293,45 @@ function setupEventListeners() {
     });
   });
 
-  // Mobiilivalikon avaus
+  // Mobiilivalikon avaus ja sulku hampurilaisesta
   if (menuToggle && mainNav) {
-    menuToggle.addEventListener("click", () => {
-      mainNav.classList.toggle("is-open");
+    menuToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleMobileMenu();
+    });
+  }
+
+  // Klikkaus dokumentin ulkopuolelle sulkee mobiilivalikon tai leijuvan asetusvalikon
+  document.addEventListener("click", (e) => {
+    // 1. Mobiilivalikon sulkeminen kun klikataan ohi
+    if (mainNav && mainNav.classList.contains("is-open")) {
+      if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+        closeMobileMenu();
+      }
+    }
+
+    // 2. Leijuvan asetusvalikon sulkeminen kun klikataan ohi
+    if (settingsPopover && !settingsPopover.hidden) {
+      if (!settingsPopover.contains(e.target) && !headerSettingsBtn.contains(e.target)) {
+        closeSettingsPopover();
+      }
+    }
+  });
+
+  // Sulkeminen Escape-näppäimellä
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeMobileMenu();
+      closeSettingsPopover();
+    }
+  });
+
+  // Kuunnellaan järjestelmän teeman vaihtumista reaaliajassa
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (state.theme === "system") {
+        document.documentElement.setAttribute("data-theme", e.matches ? "dark" : "light");
+      }
     });
   }
 
@@ -300,8 +348,9 @@ function parseRoute() {
   const rawHash = window.location.hash.replace(/^#\/?/, "");
   const hash = rawHash.toLowerCase();
 
-  // Suljetaan mobiilivalikko jos auki
-  if (mainNav) mainNav.classList.remove("is-open");
+  // Suljetaan mobiilivalikko ja asetukset siirtymissä
+  closeMobileMenu();
+  closeSettingsPopover();
 
   const isHomeRoute = !hash || hash === "koti" || hash === "home";
 
@@ -552,6 +601,20 @@ function loadPreferences() {
   } catch (err) {
     console.warn("Virhe suosikkien taiton latauksessa:", err);
   }
+
+  try {
+    state.theme = localStorage.getItem("rauh_theme") || "system";
+  } catch (err) {}
+
+  try {
+    state.autoDateLesson = localStorage.getItem("rauh_auto_date_lesson") === "true";
+  } catch (err) {}
+
+  try {
+    state.lessonScope = localStorage.getItem("rauh_lesson_scope") || "normal";
+  } catch (err) {}
+
+  applyTheme(state.theme, false);
 }
 
 function savePreferences() {
@@ -564,8 +627,109 @@ function savePreferences() {
   }
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
-  if (homeSettingsPanel && !homeSettingsPanel.hidden) {
-    renderHomeSettingsPanel();
+  if (settingsPopover && !settingsPopover.hidden) {
+    renderSettingsPopover();
+  }
+}
+
+function setTheme(theme) {
+  state.theme = theme;
+  try {
+    localStorage.setItem("rauh_theme", theme);
+  } catch (err) {}
+  applyTheme(theme, true);
+}
+
+function applyTheme(theme, showNotice = false) {
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  } else if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+  } else {
+    // "system"
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
+  }
+  updateThemeSelectorButtons();
+  if (showNotice) {
+    const labels = {
+      system: "Järjestelmän asetus",
+      light: "Vaalea tila",
+      dark: "Tumma tila"
+    };
+    showToast(`🌓 Teemaksi valittu: ${labels[theme] || theme}`);
+  }
+}
+
+function updateThemeSelectorButtons() {
+  if (!themeSelectorGroup) return;
+  themeSelectorGroup.querySelectorAll(".theme-opt-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.themeChoice === state.theme);
+  });
+}
+
+function setLessonScope(scope) {
+  state.lessonScope = scope;
+  try {
+    localStorage.setItem("rauh_lesson_scope", scope);
+  } catch (err) {}
+  updateScopeSelectorButtons();
+  const labels = {
+    compact: "Tiivistetty (vain ydinteoria)",
+    normal: "Peruslaajuus (normaali teoria & tehtävät)",
+    deep: "Syventävä (kaikki lisämateriaalit)"
+  };
+  showToast(`📖 Oppituntien oletuslaajuus: ${labels[scope] || scope}`);
+}
+
+function updateScopeSelectorButtons() {
+  if (!scopeSelectorGroup) return;
+  scopeSelectorGroup.querySelectorAll(".scope-opt-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.scope === state.lessonScope);
+  });
+}
+
+function toggleMobileMenu(forceState) {
+  if (!mainNav || !menuToggle) return;
+  const willOpen = typeof forceState === "boolean" ? forceState : !mainNav.classList.contains("is-open");
+  mainNav.classList.toggle("is-open", willOpen);
+  menuToggle.classList.toggle("is-active", willOpen);
+  menuToggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
+  if (willOpen) {
+    closeSettingsPopover();
+  }
+}
+
+function closeMobileMenu() {
+  toggleMobileMenu(false);
+}
+
+function openSettingsPopover() {
+  if (!settingsPopover) return;
+  closeMobileMenu();
+  settingsPopover.hidden = false;
+  if (headerSettingsBtn) {
+    headerSettingsBtn.classList.add("is-active");
+    headerSettingsBtn.setAttribute("aria-expanded", "true");
+  }
+  renderSettingsPopover();
+}
+
+function closeSettingsPopover() {
+  if (!settingsPopover) return;
+  settingsPopover.hidden = true;
+  if (headerSettingsBtn) {
+    headerSettingsBtn.classList.remove("is-active");
+    headerSettingsBtn.setAttribute("aria-expanded", "false");
+  }
+}
+
+function toggleSettingsPopover() {
+  if (!settingsPopover) return;
+  if (settingsPopover.hidden) {
+    openSettingsPopover();
+  } else {
+    closeSettingsPopover();
   }
 }
 
@@ -693,43 +857,10 @@ function renderSidebarFavorites() {
 function renderHome() {
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
-  if (homeSettingsPanel && !homeSettingsPanel.hidden) {
-    renderHomeSettingsPanel();
-  }
 }
 
-function populateSettingsAddDropdown() {
-  const g7 = document.querySelector("#optgroup-grade-7");
-  const g8 = document.querySelector("#optgroup-grade-8");
-  const g9 = document.querySelector("#optgroup-grade-9");
-  const gVal = document.querySelector("#optgroup-grade-val");
-
-  if (!g7 || !state.courses || state.courses.length === 0) return;
-
-  if (g7.children.length === 0) {
-    const mapping = {
-      "7": g7,
-      "8": g8,
-      "9": g9,
-      "valinnainen": gVal
-    };
-
-    state.courses.forEach((c) => {
-      const targetGroup = mapping[c.grade] || gVal;
-      if (targetGroup) {
-        const opt = document.createElement("option");
-        opt.value = c.code;
-        opt.textContent = `${c.code}: ${c.title}`;
-        targetGroup.appendChild(opt);
-      }
-    });
-  }
-}
-
-function renderHomeSettingsPanel() {
-  if (!homeSettingsPanel) return;
-
-  populateSettingsAddDropdown();
+function renderSettingsPopover() {
+  if (!settingsPopover) return;
 
   // 1. Aloitusnäkymävaihtoehdot (#settings-default-options)
   if (settingsDefaultOptions) {
@@ -777,7 +908,7 @@ function renderHomeSettingsPanel() {
     if (state.favorites.length === 0) {
       settingsFavoritesList.innerHTML = `
         <p class="settings-fav-empty">
-          Ei suosikkeja valittuna. Voit lisätä kohteita alla olevasta valikosta tai sivujen tähdestä (☆).
+          Ei suosikkeja vielä. Voit lisätä kohteita tähdellä (☆) kurssien tai aineistojen sivulla.
         </p>
       `;
     } else {
@@ -844,6 +975,17 @@ function renderHomeSettingsPanel() {
       });
     }
   }
+
+  // 3. Teemapainikkeiden tila
+  updateThemeSelectorButtons();
+
+  // 4. Päivämääräohjaus -valintaruutu
+  if (settingAutoDateLesson) {
+    settingAutoDateLesson.checked = !!state.autoDateLesson;
+  }
+
+  // 5. Oppituntien laajuus -valitsimet
+  updateScopeSelectorButtons();
 }
 
 // --------------------------------------------------------------------------

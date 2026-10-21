@@ -17,6 +17,20 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Teeman alustus heti (estää välähdyksen tummassa tilassa) -->
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem("rauh_theme") || "system";
+        if (t === "dark" || (t === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -44,11 +58,122 @@
         </a>
       </nav>
 
-      <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Avaa valikko" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div class="header-actions">
+        <button 
+          id="header-settings-btn" 
+          class="header-settings-btn" 
+          type="button" 
+          aria-label="Sivuston asetukset" 
+          title="Sivuston asetukset" 
+          aria-expanded="false" 
+          aria-haspopup="dialog"
+        >
+          <span class="gear-icon" aria-hidden="true">⚙️</span>
+        </button>
+
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Avaa valikko" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <!-- Leijuva asetusvalikko / Popover -->
+      <div 
+        id="settings-popover" 
+        class="settings-floating-popover" 
+        role="dialog" 
+        aria-modal="false" 
+        aria-labelledby="settings-popover-title" 
+        hidden
+      >
+        <div class="settings-popover-header">
+          <div class="settings-popover-title-group">
+            <span class="settings-popover-icon" aria-hidden="true">⚙️</span>
+            <div>
+              <h3 id="settings-popover-title" class="settings-popover-heading">Sivuston asetukset</h3>
+              <p class="settings-popover-caption">Aloitusnäkymä, suosikit ja ulkoasu</p>
+            </div>
+          </div>
+          <button type="button" class="settings-popover-close-btn" id="settings-popover-close-btn" aria-label="Sulje asetukset">✕</button>
+        </div>
+
+        <div class="settings-popover-content">
+          <!-- 1. Aloitusnäkymän valinta -->
+          <div class="settings-group">
+            <h4 class="settings-group-title">🚀 Sivuston aloitusnäkymä</h4>
+            <p class="settings-group-desc">Valitse mikä sivu avautuu oletuksena sivustolle tultaessa:</p>
+            <div class="default-view-options-group" id="settings-default-options"></div>
+          </div>
+
+          <!-- 2. Suosikkien muokkaus -->
+          <div class="settings-group">
+            <h4 class="settings-group-title">⭐ Omat suosikit</h4>
+            <p class="settings-group-desc">Muuta suosikkien järjestystä nuolilla tai poista kohteita listalta:</p>
+            <div class="settings-favorites-list" id="settings-favorites-list"></div>
+          </div>
+
+          <!-- 3. Tumman tilan valinta -->
+          <div class="settings-group">
+            <h4 class="settings-group-title">🌓 Ulkoasu ja teema</h4>
+            <p class="settings-group-desc">Valitse sivuston väritystila:</p>
+            <div class="theme-selector-group" id="theme-selector-group">
+              <button type="button" class="theme-opt-btn" data-theme-choice="system">
+                <span class="theme-opt-icon">💻</span>
+                <span class="theme-opt-label">Järjestelmä</span>
+              </button>
+              <button type="button" class="theme-opt-btn" data-theme-choice="light">
+                <span class="theme-opt-icon">☀️</span>
+                <span class="theme-opt-label">Vaalea</span>
+              </button>
+              <button type="button" class="theme-opt-btn" data-theme-choice="dark">
+                <span class="theme-opt-icon">🌙</span>
+                <span class="theme-opt-label">Tumma</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Päivämääräperusteinen tuntiohjaus -->
+          <div class="settings-group">
+            <div class="settings-group-header-with-badge">
+              <h4 class="settings-group-title">📅 Tuntiohjaus päivämäärän mukaan</h4>
+              <span class="settings-future-badge">Valmius kytketty</span>
+            </div>
+            <p class="settings-group-desc">Ohjaa suosikkikurssilla automaattisesti kuluvan päivän oppitunnille Kurssiportaalin aikataulun mukaisesti.</p>
+            <label class="settings-toggle-row">
+              <input type="checkbox" id="setting-auto-date-lesson" class="settings-checkbox">
+              <span class="settings-toggle-label">Aktivoi päivämääräohjaus suosikkikursseilla</span>
+            </label>
+          </div>
+
+          <!-- 5. Oppituntien laajuus -->
+          <div class="settings-group">
+            <div class="settings-group-header-with-badge">
+              <h4 class="settings-group-title">📖 Oppituntien laajuus</h4>
+              <span class="settings-future-badge">Valmius kytketty</span>
+            </div>
+            <p class="settings-group-desc">Määrittää oppitunneilla näytettävän sisällön oletuslaajuuden:</p>
+            <div class="scope-selector-group" id="scope-selector-group">
+              <button type="button" class="scope-opt-btn" data-scope="compact">
+                <span class="scope-opt-title">⚡ Tiivistetty</span>
+                <span class="scope-opt-sub">Vain ydinteoria</span>
+              </button>
+              <button type="button" class="scope-opt-btn active" data-scope="normal">
+                <span class="scope-opt-title">📖 Peruslaajuus</span>
+                <span class="scope-opt-sub">Normaali sisältö</span>
+              </button>
+              <button type="button" class="scope-opt-btn" data-scope="deep">
+                <span class="scope-opt-title">🔬 Syventävä</span>
+                <span class="scope-opt-sub">Kaikki lisäosiot</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-popover-footer">
+          <button type="button" class="btn-save-popover" id="btn-save-popover">✓ Tallenna ja sulje</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -121,19 +246,6 @@
       <article class="view-panel" id="view-home">
         <!-- Tervetulokortti (normaali vaalea ilme, ei sinistä pohjaa) -->
         <section class="home-welcome-card">
-          <div class="home-welcome-top-row">
-            <span class="home-welcome-badge">Pasilan peruskoulu · Mikael Rauhala (RAUH)</span>
-            <button 
-              type="button" 
-              class="home-settings-gear-btn" 
-              id="home-settings-gear-btn" 
-              title="Muokkaa kotinäkymää ja suosikkeja" 
-              aria-label="Muokkaa kotinäkymää ja suosikkeja"
-            >
-              <span class="gear-icon" aria-hidden="true">⚙️</span>
-              <span class="gear-label">Muokkaa kotinäkymää</span>
-            </button>
-          </div>
           <h2 class="home-welcome-title">Tervetuloa kurssisivustolle!</h2>
           <p class="home-welcome-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
           <div class="home-welcome-body">
@@ -147,60 +259,29 @@
           </div>
         </section>
 
-        <!-- Asetuskortti / Muokkausnäkymä (aukeaa ratasta painamalla) -->
-        <section class="home-settings-modal-card" id="home-settings-panel" hidden>
-          <div class="settings-modal-header">
-            <div class="settings-modal-title-group">
-              <span class="settings-modal-icon">⚙️</span>
+        <!-- Kurssiportaalin aikataululaatikko (tulee myöhemmin) -->
+        <section class="home-schedule-card" id="home-schedule-card">
+          <div class="home-schedule-header">
+            <div class="home-schedule-title-group">
+              <span class="home-schedule-icon" aria-hidden="true">📅</span>
               <div>
-                <h3 class="settings-modal-heading">Kotinäkymän ja suosikkien asetukset</h3>
-                <p class="settings-modal-desc">Valitse aloitussivu, järjestele sivupalkin suosikit tai lisää uusia kohteita.</p>
+                <h3 class="home-schedule-heading">Kurssiportaalin aikataulu & läksyt</h3>
+                <p class="home-schedule-sub">Opetusryhmäkohtainen tuntiohjelma, kotitehtävät ja koepäivät</p>
               </div>
             </div>
-            <button type="button" class="settings-modal-close-btn" id="home-settings-close-btn" aria-label="Sulje asetukset">✕</button>
+            <span class="home-schedule-badge">Integraatio tulossa</span>
           </div>
-
-          <!-- Osa 1: Aloitusnäkymän valinta -->
-          <div class="settings-section">
-            <h4 class="settings-section-title">🚀 Sivuston aloitusnäkymä</h4>
-            <p class="settings-section-desc">Valitse mikä sivu avautuu oletuksena, kun tulet sivustolle ilman suoraa linkkiä:</p>
-            <div class="default-view-options-group" id="settings-default-options"></div>
-          </div>
-
-          <!-- Osa 2: Suosikkien hallinta ja järjestys -->
-          <div class="settings-section">
-            <div class="settings-section-header">
-              <div>
-                <h4 class="settings-section-title">⭐ Omat suosikit sivupalkissa</h4>
-                <p class="settings-section-desc">Muuta suosikkien järjestystä nuolipainikkeilla tai poista kohteita listalta:</p>
-              </div>
+          <div class="home-schedule-body">
+            <p class="home-schedule-text">
+              Tähän osioon kytketään reaaliaikainen opetusryhmän aikataulu Kurssiportaalista. Näet suoraan viikon aiheet, kotitehtävät ja linkit kunkin päivän oppituntiin.
+            </p>
+            <div class="home-schedule-footer-row">
+              <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="home-schedule-cta-btn">
+                <span>Siirry Kurssiportaaliin</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+              <span class="home-schedule-hint">Toimii puhelimessa ja tietokoneella ilman kirjautumista</span>
             </div>
-            <div class="settings-favorites-list" id="settings-favorites-list"></div>
-
-            <!-- Lisää uusi suosikki -->
-            <div class="settings-add-favorite-box">
-              <label for="settings-add-fav-select" class="settings-add-label">Lisää uusi suosikki:</label>
-              <div class="settings-add-fav-row">
-                <select id="settings-add-fav-select" class="settings-add-fav-select">
-                  <option value="">-- Valitse kohde listalta --</option>
-                  <optgroup label="Sivuston aineistot">
-                    <option value="kirjat">📚 Avoin matematiikka -kirjat</option>
-                    <option value="kertaus">📝 Kertaustehtävät & mallit</option>
-                    <option value="arviointi">ℹ️ Arviointiperusteet & info</option>
-                  </optgroup>
-                  <optgroup label="7. luokan kurssit" id="optgroup-grade-7"></optgroup>
-                  <optgroup label="8. luokan kurssit" id="optgroup-grade-8"></optgroup>
-                  <optgroup label="9. luokan kurssit" id="optgroup-grade-9"></optgroup>
-                  <optgroup label="Valinnaiskurssit" id="optgroup-grade-val"></optgroup>
-                </select>
-                <button type="button" class="btn-add-fav" id="btn-add-fav">+ Lisää suosikkeihin</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tallenna ja sulje -->
-          <div class="settings-modal-footer">
-            <button type="button" class="btn-save-settings" id="btn-save-settings">✓ Tallenna ja sulje</button>
           </div>
         </section>
       </article>
