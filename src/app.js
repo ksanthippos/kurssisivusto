@@ -192,6 +192,13 @@ function setupEventListeners() {
     });
   }
 
+  if (settingsPopover) {
+    settingsPopover.addEventListener("click", (e) => {
+      // Estetään valikon sisäisten klikkausten kupliminen dokumentille
+      e.stopPropagation();
+    });
+  }
+
   if (settingsPopoverCloseBtn) {
     settingsPopoverCloseBtn.addEventListener("click", () => {
       closeSettingsPopover();
@@ -303,16 +310,22 @@ function setupEventListeners() {
 
   // Klikkaus dokumentin ulkopuolelle sulkee mobiilivalikon tai leijuvan asetusvalikon
   document.addEventListener("click", (e) => {
+    const path = e.composedPath ? e.composedPath() : [];
+
     // 1. Mobiilivalikon sulkeminen kun klikataan ohi
     if (mainNav && mainNav.classList.contains("is-open")) {
-      if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+      const isInsideNav = mainNav.contains(e.target) || path.includes(mainNav);
+      const isInsideToggle = menuToggle.contains(e.target) || path.includes(menuToggle);
+      if (!isInsideNav && !isInsideToggle) {
         closeMobileMenu();
       }
     }
 
     // 2. Leijuvan asetusvalikon sulkeminen kun klikataan ohi
     if (settingsPopover && !settingsPopover.hidden) {
-      if (!settingsPopover.contains(e.target) && !headerSettingsBtn.contains(e.target)) {
+      const isInsidePopover = settingsPopover.contains(e.target) || path.includes(settingsPopover);
+      const isInsideGear = headerSettingsBtn.contains(e.target) || path.includes(headerSettingsBtn);
+      if (!isInsidePopover && !isInsideGear) {
         closeSettingsPopover();
       }
     }
@@ -897,7 +910,8 @@ function renderSettingsPopover() {
       .join("");
 
     settingsDefaultOptions.querySelectorAll(".default-view-option-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
         setDefaultView(btn.dataset.setDefault);
       });
     });
@@ -955,21 +969,24 @@ function renderSettingsPopover() {
         .join("");
 
       settingsFavoritesList.querySelectorAll(".btn-move-up").forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
           const idx = parseInt(btn.dataset.index, 10);
           moveFavorite(idx, -1);
         });
       });
 
       settingsFavoritesList.querySelectorAll(".btn-move-down").forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
           const idx = parseInt(btn.dataset.index, 10);
           moveFavorite(idx, 1);
         });
       });
 
       settingsFavoritesList.querySelectorAll(".btn-remove-fav").forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
           toggleFavorite(btn.dataset.key);
         });
       });
