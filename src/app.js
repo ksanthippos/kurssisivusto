@@ -16,7 +16,7 @@ const state = {
   activeRevisionFilter: "all",
   theme: "system", // "system" | "light" | "dark"
   autoDateLesson: false, // boolean
-  lessonScope: "normal" // "compact" | "normal" | "deep"
+  lessonScope: "extended" // "compact" | "extended"
 };
 
 // DOM-elementit
@@ -634,7 +634,12 @@ function loadPreferences() {
   } catch (err) {}
 
   try {
-    state.lessonScope = localStorage.getItem("rauh_lesson_scope") || "normal";
+    const savedScope = localStorage.getItem("rauh_lesson_scope");
+    if (savedScope === "compact") {
+      state.lessonScope = "compact";
+    } else {
+      state.lessonScope = "extended";
+    }
   } catch (err) {}
 
   applyTheme(state.theme, false);
@@ -692,9 +697,10 @@ function updateThemeSelectorButtons() {
 }
 
 function setLessonScope(scope) {
-  state.lessonScope = scope;
+  const cleanScope = scope === "compact" ? "compact" : "extended";
+  state.lessonScope = cleanScope;
   try {
-    localStorage.setItem("rauh_lesson_scope", scope);
+    localStorage.setItem("rauh_lesson_scope", cleanScope);
   } catch (err) {}
   updateScopeSelectorButtons();
 
@@ -705,10 +711,9 @@ function setLessonScope(scope) {
 
   const labels = {
     compact: "Tiivistetty (vain ydinteoria)",
-    normal: "Perustaso (opettajan materiaali ja kuvat)",
-    deep: "Laaja (tiivistelmä ja koko sisältö)"
+    extended: "Laaja (koko oppimateriaali ja kuvat)"
   };
-  showToast(`📖 Oppituntien laajuus: ${labels[scope] || scope}`);
+  showToast(`📖 Oppituntien laajuus: ${labels[cleanScope] || cleanScope}`);
 }
 
 function updateScopeSelectorButtons() {
@@ -1119,10 +1124,8 @@ function renderActiveLesson() {
     }
   }
 
-  // Teoria (Oppituntien laajuus: compact, normal, deep)
+  // Teoria (Oppituntien laajuus: compact vs extended)
   if (lessonBody) {
-    const hasExtended = Boolean(current.extendedTheory);
-
     if (state.lessonScope === "compact") {
       // 1. Tiivistetty (vain ydinteoria)
       if (current.theory) {
@@ -1132,25 +1135,9 @@ function renderActiveLesson() {
       } else {
         lessonBody.innerHTML = "<p>Oppitunnin teoriamateriaali lisätään pian.</p>";
       }
-    } else if (state.lessonScope === "deep" && hasExtended) {
-      // 3. Laaja (kaikki sisältö: tiivistelmä + opettajan teksti ja kuvat)
-      let summaryHtml = "";
-      if (current.theory) {
-        summaryHtml = `
-          <div class="theory-summary-banner">
-            <div class="theory-summary-banner-title">
-              <span>⚡</span> <span>Ydinteorian pähkinänkuori</span>
-            </div>
-            <div class="theory-summary-banner-body">
-              ${current.theory}
-            </div>
-          </div>
-        `;
-      }
-      lessonBody.innerHTML = summaryHtml + current.extendedTheory;
     } else {
-      // 2. Perustaso (opettajan kirjoittama PDF-sisältö ja kuvat, tai fallback tiivistettyyn)
-      if (hasExtended) {
+      // 2. Laaja (opettajan kirjoittama koko PDF-sisältö ja kuvat, tai fallback tiivistettyyn)
+      if (current.extendedTheory) {
         lessonBody.innerHTML = current.extendedTheory;
       } else if (current.theory) {
         lessonBody.innerHTML = current.theory;
