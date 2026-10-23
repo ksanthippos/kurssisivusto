@@ -99,10 +99,32 @@ const revisionPdfFrame = document.querySelector("#revision-pdf-frame");
 // Info-näkymän elementit
 const infoSectionsContainer = document.querySelector("#info-sections-container");
 
+// Lukuvuoden ja versionumeron automaattinen päivitys
+function getSchoolYear(date = new Date()) {
+  const year = date.getFullYear();
+  const month = date.getMonth(); // 0-based: 0 = tammi, 7 = elo
+  return month >= 7 ? `${year}–${year + 1}` : `${year - 1}–${year}`;
+}
+
+function updateFooterInfo() {
+  const schoolYearEl = document.getElementById("footer-school-year");
+  const versionEl = document.getElementById("footer-version");
+  const schoolYear = getSchoolYear();
+  const version = (typeof window !== "undefined" && window.APP_VERSION) ? window.APP_VERSION : "0.11";
+
+  if (schoolYearEl) {
+    schoolYearEl.textContent = schoolYear;
+  }
+  if (versionEl) {
+    versionEl.textContent = `(${version})`;
+  }
+}
+
 // Alustus
 async function init() {
   try {
     loadPreferences();
+    updateFooterInfo();
 
     // Ladataan rinnakkain perusdata
     const [coursesRes, booksRes, revisionsRes, infoRes] = await Promise.all([

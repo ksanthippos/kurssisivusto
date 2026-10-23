@@ -144,6 +144,21 @@ def sync():
         else:
             skipped_count += 1
 
+    # Synkronoidaan versiotiedostot (version.js ja version.json)
+    try:
+        ver_files = [
+            ("src/version.js", "src/version.js"),
+            ("src/data/version.json", "src/data/version.json")
+        ]
+        for src_rel, dst_rel in ver_files:
+            src_f = os.path.join(SITE_DIR, src_rel) if mode != "portaali_to_new" else os.path.join(PORTAALI_DIR, dst_rel)
+            dst_f = os.path.join(PORTAALI_DIR, dst_rel) if mode != "portaali_to_new" else os.path.join(SITE_DIR, src_rel)
+            if os.path.exists(src_f):
+                os.makedirs(os.path.dirname(dst_f), exist_ok=True)
+                shutil.copy2(src_f, dst_f)
+    except Exception as err:
+        print(f"  ⚠️  Versiotiedostojen synkronointivirhe: {err}")
+
     print("--------------------------------------------------")
     print(f"✨ Valmis: {updated_count} päivitettyä kurssia, {skipped_count} jo ajan tasalla.")
     print("==================================================")

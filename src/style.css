@@ -945,6 +945,11 @@ a:hover {
   margin-bottom: 4px;
 }
 
+.footer-version {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.88;
+}
+
 .footer-note {
   font-size: 0.78rem;
   color: var(--color-text-light);
