@@ -96,6 +96,14 @@ const revisionViewerExternalLink = document.querySelector("#revision-viewer-exte
 const revisionViewerCloseBtn = document.querySelector("#revision-viewer-close-btn");
 const revisionPdfFrame = document.querySelector("#revision-pdf-frame");
 
+// Tuntitehtävien PDF-lukijan elementit
+const lessonTaskPdfViewer = document.querySelector("#lesson-task-pdf-viewer");
+const lessonTaskViewerTag = document.querySelector("#lesson-task-viewer-tag");
+const lessonTaskViewerTitle = document.querySelector("#lesson-task-viewer-title");
+const lessonTaskViewerExternalLink = document.querySelector("#lesson-task-viewer-external-link");
+const lessonTaskViewerCloseBtn = document.querySelector("#lesson-task-viewer-close-btn");
+const lessonTaskPdfFrame = document.querySelector("#lesson-task-pdf-frame");
+
 // Info-näkymän elementit
 const infoSectionsContainer = document.querySelector("#info-sections-container");
 
@@ -311,6 +319,9 @@ function setupEventListeners() {
   }
   if (revisionViewerCloseBtn) {
     revisionViewerCloseBtn.addEventListener("click", closeRevisionViewer);
+  }
+  if (lessonTaskViewerCloseBtn) {
+    lessonTaskViewerCloseBtn.addEventListener("click", closeLessonTaskViewer);
   }
 
   // Sivupalkin suodatinpainikkeet
@@ -1255,7 +1266,8 @@ function renderActiveLesson() {
   }
 
   // Tehtävät
-  renderTasks(current.tasks);
+  closeLessonTaskViewer();
+  renderTasks(current.tasks, current.taskSheets || current.taskSheet);
 
   // Kontekstilinkit oppikirjaan ja kertaustehtäviin
   renderLessonContextLinks();
@@ -1272,13 +1284,15 @@ function renderActiveLesson() {
   }
 }
 
-function renderTasks(tasks) {
+function renderTasks(tasks, taskSheets) {
   if (!lessonTasksSection || !taskCardsGrid) return;
 
-  if (!tasks || typeof tasks !== "object") {
-    lessonTasksSection.hidden = true;
-    return;
-  }
+  const hasTasks = tasks && typeof tasks === "object";
+  const normalizedSheets = Array.isArray(taskSheets)
+    ? taskSheets
+    : taskSheets
+    ? [taskSheets]
+    : [];
 
   const taskDefs = [
     { key: "research", label: "Tutkimus", className: "research" },
@@ -1288,24 +1302,78 @@ function renderTasks(tasks) {
     { key: "red", label: "Punaiset", className: "red" }
   ];
 
-  const rows = taskDefs
-    .filter((def) => tasks[def.key] && tasks[def.key].trim() !== "")
-    .map(
-      (def) => `
-        <div class="task-card-row">
-          <span class="task-badge ${def.className}">${def.label}</span>
-          <span class="task-desc">${escapeHtml(tasks[def.key])}</span>
-        </div>
-      `
-    )
-    .join("");
+  let rows = "";
+  if (hasTasks) {
+    rows = taskDefs
+      .filter((def) => tasks[def.key] && tasks[def.key].trim() !== "")
+      .map(
+        (def) => `
+          <div class="task-card-row">
+            <span class="task-badge ${def.className}">${def.label}</span>
+            <span class="task-desc">${escapeHtml(tasks[def.key])}</span>
+          </div>
+        `
+      )
+      .join("");
+  }
 
-  if (rows) {
-    taskCardsGrid.innerHTML = rows;
+  let sheetsHtml = "";
+  if (normalizedSheets.length > 0) {
+    sheetsHtml = `
+      <div class="lesson-task-sheets-container">
+        ${normalizedSheets
+          .map(
+            (sheet) => `
+              <div class="task-sheet-box">
+                <div class="task-sheet-info">
+                  <div class="task-sheet-badge-group">
+                    <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tuntitehtävä")}</span>
+                    <h4 class="task-sheet-title">${escapeHtml(sheet.title)}</h4>
+                  </div>
+                  ${sheet.description ? `<p class="task-sheet-desc">${escapeHtml(sheet.description)}</p>` : ""}
+                </div>
+                <div class="task-sheet-btns">
+                  <button type="button" class="rev-btn rev-btn-tasks task-sheet-open-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}">
+                    Avaa tehtävänanto (PDF) 📄
+                  </button>
+                </div>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  if (rows || sheetsHtml) {
+    taskCardsGrid.innerHTML = rows + sheetsHtml;
     lessonTasksSection.hidden = false;
+
+    taskCardsGrid.querySelectorAll(".task-sheet-open-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openLessonTaskViewer(btn.dataset.title, btn.dataset.url);
+      });
+    });
   } else {
     lessonTasksSection.hidden = true;
   }
+}
+
+function openLessonTaskViewer(title, pdfUrl) {
+  if (!lessonTaskPdfViewer || !lessonTaskPdfFrame) return;
+
+  if (lessonTaskViewerTitle) lessonTaskViewerTitle.textContent = title;
+  if (lessonTaskViewerExternalLink) lessonTaskViewerExternalLink.href = pdfUrl;
+  lessonTaskPdfFrame.src = pdfUrl;
+  lessonTaskPdfViewer.hidden = false;
+
+  lessonTaskPdfViewer.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeLessonTaskViewer() {
+  if (!lessonTaskPdfViewer) return;
+  lessonTaskPdfViewer.hidden = true;
+  if (lessonTaskPdfFrame) lessonTaskPdfFrame.src = "";
 }
 
 function renderLessonContextLinks() {

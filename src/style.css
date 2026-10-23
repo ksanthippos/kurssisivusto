@@ -885,6 +885,94 @@ a:hover {
 .task-badge.warmup { background-color: var(--color-task-warmup); }
 .task-badge.blue { background-color: var(--color-task-blue); }
 .task-badge.red { background-color: var(--color-task-red); }
+.task-badge.task-sheet-badge { background-color: #0284c7; }
+
+/* Tuntitehtäväkortit oppitunnilla */
+.lesson-task-sheets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.task-sheet-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.task-sheet-box:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.task-sheet-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.task-sheet-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.task-badge.task-sheet-badge {
+  min-width: unset;
+  padding: 3px 9px;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.task-sheet-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.task-sheet-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.task-sheet-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-sheet-open-btn {
+  padding: 8px 14px;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .task-sheet-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .task-sheet-btns {
+    width: 100%;
+  }
+  .task-sheet-open-btn {
+    width: 100%;
+  }
+}
 
 /* Sivun alalaidan navigaatio */
 .lesson-footer-nav {

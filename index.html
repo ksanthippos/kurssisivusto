@@ -338,6 +338,25 @@
         <section class="lesson-tasks-section" id="lesson-tasks-section" hidden>
           <h3>Oppitunnin tehtävät</h3>
           <div class="task-cards-grid" id="task-cards-grid"></div>
+
+          <!-- Upotettu PDF-lukija tuntitehtäville -->
+          <div class="pdf-viewer-container" id="lesson-task-pdf-viewer" hidden>
+            <div class="pdf-viewer-header">
+              <div class="pdf-viewer-info">
+                <span class="viewer-tag" id="lesson-task-viewer-tag">Tuntitehtävä</span>
+                <h3 id="lesson-task-viewer-title">Tehtävän otsikko</h3>
+              </div>
+              <div class="pdf-viewer-actions">
+                <a href="#" id="lesson-task-viewer-external-link" target="_blank" rel="noopener noreferrer" class="viewer-action-btn">
+                  Avaa erilliseen ikkunaan ↗
+                </a>
+                <button type="button" id="lesson-task-viewer-close-btn" class="viewer-close-btn" aria-label="Sulje lukutila">
+                  ✕ Sulje lukutila
+                </button>
+              </div>
+            </div>
+            <iframe id="lesson-task-pdf-frame" src="" title="Tuntitehtävä PDF" loading="lazy"></iframe>
+          </div>
         </section>
 
         <!-- Kurssikohtaiset pikalinkit kirjaan ja kertaukseen -->
