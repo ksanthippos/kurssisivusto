@@ -8,3 +8,4 @@ if [ -f "$SCRIPT" ]; then
   python3 "$SCRIPT"
   git -C "$REPO_DIR" add "$REPO_DIR/src/version.js" "$REPO_DIR/src/data/version.json" 2>/dev/null || true
 fi
+

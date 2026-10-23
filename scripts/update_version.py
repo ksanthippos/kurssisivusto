@@ -62,3 +62,4 @@ if __name__ == "__main__":
     v = compute_version(offset)
     write_version(v)
     print(f"[{REPO_NAME}] Versio asetettu: {v}")
+
