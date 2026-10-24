@@ -271,6 +271,13 @@
 
                   <div class="settings-favorites-list" id="settings-favorites-list"></div>
                 </div>
+
+                <!-- Oletusryhmän valinta kun suosikkiryhmiä on useampia -->
+                <div id="settings-default-group-section" class="settings-group" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border);" hidden>
+                  <h4 class="settings-group-title">👥 Oletusryhmä ryhmänäkymässä</h4>
+                  <p class="settings-group-desc">Valitse mikä ryhmä avataan ja kohdistetaan oletuksena ryhmänäkymässä:</p>
+                  <div class="default-view-options-group" id="settings-default-group-options"></div>
+                </div>
               </div>
             </details>
 
@@ -778,10 +785,6 @@
         <header class="view-header">
           <div class="view-header-top-row">
             <div class="view-eyebrow">Viikkonäkymä · Pasilan peruskoulu</div>
-            <button type="button" class="favorite-star-btn" data-toggle-view-fav="lukujarjestys" id="fav-btn-lukujarjestys" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
-              <span class="star-icon">☆</span>
-              <span class="star-label">Lisää suosikkeihin</span>
-            </button>
           </div>
           <h2 class="view-title">Lukujärjestys (RAUH)</h2>
           <p class="view-description" id="lukujarjestys-sub-desc">
@@ -799,14 +802,10 @@
         <header class="view-header">
           <div class="view-header-top-row">
             <div class="view-eyebrow">2. jakso (19.10.2026 – 18.12.2026)</div>
-            <div class="aikataulu-header-actions" style="display: flex; gap: 8px;">
-              <button type="button" class="favorite-star-btn" id="fav-btn-current-group" title="Lisää opetusryhmä suosikkeihin" aria-label="Lisää opetusryhmä suosikkeihin">
+            <div class="aikataulu-header-actions">
+              <button type="button" class="favorite-star-btn" id="fav-btn-current-group" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
                 <span class="star-icon">☆</span>
-                <span class="star-label" id="fav-group-star-label">Ryhmä suosikkeihin</span>
-              </button>
-              <button type="button" class="favorite-star-btn" data-toggle-view-fav="aikataulu" id="fav-btn-aikataulu" title="Lisää ryhmät suosikkeihin" aria-label="Lisää suosikkeihin">
-                <span class="star-icon">☆</span>
-                <span class="star-label">Ryhmät suosikkeihin</span>
+                <span class="star-label" id="fav-group-star-label">Lisää suosikkeihin</span>
               </button>
             </div>
           </div>

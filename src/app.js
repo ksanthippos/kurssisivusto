@@ -10,6 +10,7 @@ const state = {
   _courseDataMap: {},
   favorites: [], // Esim. ["MA_81", "kertaus", "kirjat"]
   defaultView: "home", // "home" | "kirjat" | "kertaus" | "arviointi" | kurssikoodi esim. "MA_81"
+  defaultScheduleGroup: null, // Käyttäjän valitsema ensisijainen opetusryhmä ryhmänäkymässä
   favoritesCollapsed: false,
   activeView: "home", // "home" | "lesson" | "kirjat" | "kertaus" | "arviointi"
   activeGrade: "7",
@@ -624,6 +625,15 @@ function parseRoute() {
   } else if (firstPart === "aikataulu" || firstPart === "ryhmat" || firstPart === "portaali") {
     if (parts[1]) {
       state.activeScheduleGroup = parts[1];
+    } else {
+      const allGroups = getAllScheduleGroups();
+      const favGroups = allGroups.filter((g) => state.favorites.includes(g.groupCode));
+      if (favGroups.length > 0) {
+        const pref = favGroups.find((g) => g.groupCode === state.defaultScheduleGroup);
+        state.activeScheduleGroup = pref ? pref.groupCode : favGroups[0].groupCode;
+      } else {
+        state.activeScheduleGroup = allGroups.length ? allGroups[0].groupCode : null;
+      }
     }
     switchView("aikataulu");
   } else if (firstPart === "sijaiselle" || firstPart === "substitute") {
@@ -887,7 +897,10 @@ function loadPreferences() {
     if (rawFavs) {
       const parsed = JSON.parse(rawFavs);
       if (Array.isArray(parsed)) {
-        state.favorites = parsed;
+        // Suodatetaan pois lukujärjestys ja ryhmät yleisnäkyminä, koska ne on poistettu suosikeista
+        state.favorites = parsed.filter(
+          (k) => k !== "lukujarjestys" && k !== "aikataulu" && k !== "ryhmat"
+        );
       }
     }
   } catch (err) {
@@ -897,11 +910,19 @@ function loadPreferences() {
   try {
     const rawDef = localStorage.getItem("rauh_default_view");
     if (rawDef) {
-      state.defaultView = rawDef;
+      if (rawDef === "lukujarjestys" || rawDef === "aikataulu" || rawDef === "ryhmat") {
+        state.defaultView = "home";
+      } else {
+        state.defaultView = rawDef;
+      }
     }
   } catch (err) {
     console.warn("Virhe oletusnäkymän latauksessa:", err);
   }
+
+  try {
+    state.defaultScheduleGroup = localStorage.getItem("rauh_default_schedule_group") || null;
+  } catch (err) {}
 
   try {
     state.favoritesCollapsed = localStorage.getItem("rauh_fav_collapsed") === "true";
@@ -992,6 +1013,11 @@ function savePreferences() {
     localStorage.setItem("rauh_home_config", JSON.stringify(state.homeConfig));
     localStorage.setItem("rauh_mobile_nav_order", JSON.stringify(state.mobileNavOrder));
     localStorage.setItem("rauh_settings_accordion_mode", state.settingsAccordionMode);
+    if (state.defaultScheduleGroup) {
+      localStorage.setItem("rauh_default_schedule_group", state.defaultScheduleGroup);
+    } else {
+      localStorage.removeItem("rauh_default_schedule_group");
+    }
   } catch (err) {
     console.warn("Virhe tallennuksessa:", err);
   }
@@ -1221,8 +1247,12 @@ function toggleSettingsPopover() {
 
 function toggleFavorite(rawKey) {
   if (!rawKey) return;
-  const isSection = ["kirjat", "kertaus", "arviointi", "lukujarjestys", "aikataulu"].includes(String(rawKey).toLowerCase());
-  const key = isSection ? rawKey.toLowerCase() : rawKey.toUpperCase();
+  const lower = String(rawKey).toLowerCase();
+  // Lukujärjestys ja Ryhmät yleisnäkyminä eivät ole enää suosikeissa
+  if (lower === "lukujarjestys" || lower === "aikataulu" || lower === "ryhmat") return;
+
+  const isSection = ["kirjat", "kertaus", "arviointi"].includes(lower);
+  const key = isSection ? lower : rawKey.toUpperCase();
 
   const idx = state.favorites.indexOf(key);
   const meta = getFavoriteMeta(key);
@@ -1231,6 +1261,9 @@ function toggleFavorite(rawKey) {
     state.favorites.splice(idx, 1);
     if (state.defaultView === key) {
       state.defaultView = "home";
+    }
+    if (state.defaultScheduleGroup === key) {
+      state.defaultScheduleGroup = null;
     }
     savePreferences();
     showToast(`Poistettu suosikeista: ${meta?.title || key}`);
@@ -1445,11 +1478,12 @@ async function initHomeAikatauluEmbed() {
 
   // Valitaan näytettävä ryhmä:
   // 1. Käyttäjän aiempi valinta kotinäkymässä
-  // 2. Käyttäjän suosikkiryhmä
+  // 2. Käyttäjän ensisijainen suosikkiryhmä / suosikkiryhmä
   // 3. Ensimmäinen saatavilla oleva ryhmä
   let targetGroup = state.homeConfig.aikatauluGroup;
   if (!targetGroup || !groups.some((g) => g.groupCode === targetGroup)) {
-    const favGroup = groups.find((g) => state.favorites.includes(g.groupCode));
+    const prefGroup = groups.find((g) => g.groupCode === state.defaultScheduleGroup && state.favorites.includes(g.groupCode));
+    const favGroup = prefGroup || groups.find((g) => state.favorites.includes(g.groupCode));
     targetGroup = favGroup ? favGroup.groupCode : groups[0].groupCode;
   }
 
@@ -1812,8 +1846,6 @@ function renderSettingsPopover() {
 
     optGroups.push(`
       <optgroup label="📌 Osio-sivut">
-        <option value="lukujarjestys">📅 Lukujärjestys (RAUH)</option>
-        <option value="aikataulu">👥 Ryhmät</option>
         <option value="kirjat">📚 Avoin matematiikka -kirjat</option>
         <option value="kertaus">📝 Kertaustehtävät & mallit</option>
         <option value="arviointi">ℹ️ Arviointiperusteet & info</option>
@@ -1916,6 +1948,60 @@ function renderSettingsPopover() {
           toggleFavorite(btn.dataset.key);
         });
       });
+    }
+  }
+
+  // 2c. Oletusryhmä ryhmänäkymässä kun suosikkiryhmiä on useampia kuin 1
+  const defaultGroupSection = document.querySelector("#settings-default-group-section");
+  const defaultGroupOptions = document.querySelector("#settings-default-group-options");
+
+  if (defaultGroupSection && defaultGroupOptions) {
+    const allGroups = getAllScheduleGroups();
+    const favGroups = allGroups.filter((g) => state.favorites.includes(g.groupCode));
+
+    if (favGroups.length > 1) {
+      defaultGroupSection.hidden = false;
+
+      // Jos oletusryhmää ei ole vielä valittu tai se ei ole enää suosikeissa, oletetaan ensimmäinen suosikkiryhmä
+      if (!state.defaultScheduleGroup || !favGroups.some((g) => g.groupCode === state.defaultScheduleGroup)) {
+        state.defaultScheduleGroup = favGroups[0].groupCode;
+      }
+
+      defaultGroupOptions.innerHTML = favGroups
+        .map((g) => {
+          const isActive = state.defaultScheduleGroup === g.groupCode;
+          return `
+            <button
+              type="button"
+              class="default-view-option-btn ${isActive ? "active" : ""}"
+              data-set-default-group="${escapeHtml(g.groupCode)}"
+            >
+              <span class="option-check">${isActive ? "✓" : "○"}</span>
+              <span class="option-label">👥 Ryhmä ${escapeHtml(g.groupCode)} (${escapeHtml(g.courseCode)})</span>
+            </button>
+          `;
+        })
+        .join("");
+
+      defaultGroupOptions.querySelectorAll(".default-view-option-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const gCode = btn.dataset.setDefaultGroup;
+          if (gCode) {
+            state.defaultScheduleGroup = gCode;
+            savePreferences();
+            showToast(`👥 Ryhmänäkymän oletukseksi asetettu: ${gCode}`);
+            renderSettingsPopover();
+          }
+        });
+      });
+    } else {
+      defaultGroupSection.hidden = true;
+      if (favGroups.length === 1) {
+        state.defaultScheduleGroup = favGroups[0].groupCode;
+      } else {
+        state.defaultScheduleGroup = null;
+      }
     }
   }
 
@@ -3441,9 +3527,9 @@ function updateCurrentGroupFavoriteButton() {
   const starIcon = btn.querySelector(".star-icon");
   if (starIcon) starIcon.textContent = isFav ? "★" : "☆";
   if (starLabel) {
-    starLabel.textContent = isFav ? `Ryhmä ${currentGroup} suosikeissa ★` : `Lisää ${currentGroup} suosikkeihin`;
+    starLabel.textContent = isFav ? "Suosikeissa" : "Lisää suosikkeihin";
   }
-  btn.title = isFav ? `Poista ryhmä ${currentGroup} suosikeista` : `Lisää ryhmä ${currentGroup} suosikkeihin`;
+  btn.title = isFav ? "Poista suosikeista" : "Lisää suosikkeihin";
 }
 
 async function selectScheduleGroup(groupCode) {
@@ -3461,8 +3547,15 @@ async function renderAikataulu() {
     return;
   }
 
+  const favGroups = groups.filter((g) => state.favorites.includes(g.groupCode));
+
   if (!state.activeScheduleGroup || !groups.some((g) => g.groupCode === state.activeScheduleGroup)) {
-    state.activeScheduleGroup = groups[0].groupCode;
+    if (favGroups.length > 0) {
+      const pref = favGroups.find((g) => g.groupCode === state.defaultScheduleGroup);
+      state.activeScheduleGroup = pref ? pref.groupCode : favGroups[0].groupCode;
+    } else {
+      state.activeScheduleGroup = groups[0].groupCode;
+    }
   }
 
   renderAikatauluGroupPills(groups);
@@ -3635,7 +3728,13 @@ async function renderAikataulu() {
       });
     });
 
-    highlightCurrentLesson(true);
+    const isFavGroup = state.favorites.includes(state.activeScheduleGroup);
+    if (isFavGroup) {
+      highlightCurrentLesson(true);
+    } else {
+      highlightCurrentLesson(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   } catch (err) {
     console.error("Aikataulun latausvirhe:", err);
     if (aikatauluLessonsList) {
