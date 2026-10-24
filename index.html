@@ -42,10 +42,10 @@
 
       <nav id="main-navigation" class="main-nav" aria-label="Päävalikko">
         <button type="button" class="nav-tab active" data-nav="view" data-view="koti">🏠 Koti</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="7">7. lk</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="8">8. lk</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="9">9. lk</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="valinnainen">Muut</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="7">🟢 7.&nbsp;lk</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="8">🔵 8.&nbsp;lk</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="9">🟣 9.&nbsp;lk</button>
+        <button type="button" class="nav-tab" data-nav="grade" data-grade="valinnainen">🟠 Muut</button>
         
         <span class="nav-divider" aria-hidden="true"></span>
 
@@ -56,7 +56,7 @@
         <span class="nav-divider" aria-hidden="true"></span>
 
         <button type="button" class="nav-tab" data-nav="view" data-view="lukujarjestys">📅 Lukujärjestys</button>
-        <button type="button" class="nav-tab" data-nav="view" data-view="aikataulu">🗓️ Aikataulu</button>
+        <button type="button" class="nav-tab" data-nav="view" data-view="aikataulu">👥 Ryhmät</button>
       </nav>
 
       <div class="header-actions">
@@ -296,9 +296,9 @@
           <p class="sidebar-caption">CC BY 3.0 lisensoidut oppikirjat</p>
           <div class="sidebar-pill-filters" id="books-filter-pills">
             <button type="button" class="filter-pill active" data-filter="all">Kaikki</button>
-            <button type="button" class="filter-pill" data-filter="7">7. lk</button>
-            <button type="button" class="filter-pill" data-filter="8">8. lk</button>
-            <button type="button" class="filter-pill" data-filter="9">9. lk</button>
+            <button type="button" class="filter-pill" data-filter="7">🟢 7. lk</button>
+            <button type="button" class="filter-pill" data-filter="8">🔵 8. lk</button>
+            <button type="button" class="filter-pill" data-filter="9">🟣 9. lk</button>
           </div>
         </div>
         <div class="sidebar-section">
@@ -314,9 +314,9 @@
           <p class="sidebar-caption">Kenraaliharjoitukset ja mallit</p>
           <div class="sidebar-pill-filters" id="revision-filter-pills">
             <button type="button" class="filter-pill active" data-filter="all">Kaikki</button>
-            <button type="button" class="filter-pill" data-filter="7">7. lk</button>
-            <button type="button" class="filter-pill" data-filter="8">8. lk</button>
-            <button type="button" class="filter-pill" data-filter="9">9. lk</button>
+            <button type="button" class="filter-pill" data-filter="7">🟢 7. lk</button>
+            <button type="button" class="filter-pill" data-filter="8">🔵 8. lk</button>
+            <button type="button" class="filter-pill" data-filter="9">🟣 9. lk</button>
           </div>
         </div>
         <div class="sidebar-section">
@@ -553,9 +553,9 @@
               <span class="star-label">Lisää suosikkeihin</span>
             </button>
           </div>
-          <h2 class="view-title">Lukujärjestys</h2>
+          <h2 class="view-title">Lukujärjestys (RAUH)</h2>
           <p class="view-description" id="lukujarjestys-sub-desc">
-            Pasilan peruskoulu · 2. jakso · Oppitunnit, valvontavuorot ja luokkatilat
+            Mikael Rauhalan viikoittainen opetuslukujärjestys · Pasilan peruskoulu · 2. jakso · Oppitunnit, valvontavuorot ja luokkatilat
           </p>
         </header>
 
@@ -564,7 +564,7 @@
         </div>
       </article>
 
-      <!-- 6. AIKATAULU (RYHMIEN TUNTIOHJELMA) -->
+      <!-- 6. RYHMÄT (OPETUSRYHMIEN TUNTIOHJELMA) -->
       <article class="view-panel" id="view-aikataulu" hidden>
         <header class="view-header">
           <div class="view-header-top-row">
@@ -574,13 +574,13 @@
                 <span class="star-icon">☆</span>
                 <span class="star-label" id="fav-group-star-label">Ryhmä suosikkeihin</span>
               </button>
-              <button type="button" class="favorite-star-btn" data-toggle-view-fav="aikataulu" id="fav-btn-aikataulu" title="Lisää aikataulu suosikkeihin" aria-label="Lisää suosikkeihin">
+              <button type="button" class="favorite-star-btn" data-toggle-view-fav="aikataulu" id="fav-btn-aikataulu" title="Lisää ryhmät suosikkeihin" aria-label="Lisää suosikkeihin">
                 <span class="star-icon">☆</span>
-                <span class="star-label">Aikataulu suosikkeihin</span>
+                <span class="star-label">Ryhmät suosikkeihin</span>
               </button>
             </div>
           </div>
-          <h2 class="view-title" id="aikataulu-main-title">Ryhmien tuntiaikataulut</h2>
+          <h2 class="view-title" id="aikataulu-main-title">Ryhmät</h2>
           <p class="view-description">
             Opetusryhmäkohtainen tuntiohjelma, päivämäärät, koepäivät ja poikkeusohjelmat.
           </p>

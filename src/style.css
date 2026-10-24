@@ -28,6 +28,27 @@
   --color-task-blue: #2563eb;
   --color-task-red: #dc2626;
 
+  /* Luokkatasojen teemavärit: 7 = Vihreä, 8 = Sininen, 9 = Purppura, Muut = Oranssi */
+  --color-grade-7: #16a34a;
+  --color-grade-7-bg: #f0fdf4;
+  --color-grade-7-border: #86efac;
+  --color-grade-7-text: #15803d;
+
+  --color-grade-8: #2563eb;
+  --color-grade-8-bg: #eff6ff;
+  --color-grade-8-border: #93c5fd;
+  --color-grade-8-text: #1d4ed8;
+
+  --color-grade-9: #9333ea;
+  --color-grade-9-bg: #faf5ff;
+  --color-grade-9-border: #d8b4fe;
+  --color-grade-9-text: #7e22ce;
+
+  --color-grade-other: #ea580c;
+  --color-grade-other-bg: #fff7ed;
+  --color-grade-other-border: #fdba74;
+  --color-grade-other-text: #c2410c;
+
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
@@ -60,6 +81,27 @@
   --color-task-warmup: #94a3b8;
   --color-task-blue: #38bdf8;
   --color-task-red: #f87171;
+
+  /* Luokkatasojen teemavärit tummassa tilassa */
+  --color-grade-7: #4ade80;
+  --color-grade-7-bg: rgba(74, 222, 128, 0.12);
+  --color-grade-7-border: rgba(74, 222, 128, 0.3);
+  --color-grade-7-text: #86efac;
+
+  --color-grade-8: #60a5fa;
+  --color-grade-8-bg: rgba(96, 165, 250, 0.12);
+  --color-grade-8-border: rgba(96, 165, 250, 0.3);
+  --color-grade-8-text: #93c5fd;
+
+  --color-grade-9: #c084fc;
+  --color-grade-9-bg: rgba(192, 132, 252, 0.12);
+  --color-grade-9-border: rgba(192, 132, 252, 0.3);
+  --color-grade-9-text: #d8b4fe;
+
+  --color-grade-other: #fb923c;
+  --color-grade-other-bg: rgba(251, 146, 60, 0.12);
+  --color-grade-other-border: rgba(251, 146, 60, 0.3);
+  --color-grade-other-text: #fed7aa;
 
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
@@ -226,12 +268,16 @@ a:hover {
   background: transparent;
   color: #cbd5e1;
   border: 1px solid transparent;
-  padding: 6px 14px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .nav-tab:hover {
@@ -243,6 +289,19 @@ a:hover {
   background: white;
   color: var(--color-header-bg, #0f172a);
   font-weight: 700;
+}
+
+.nav-tab[data-grade="7"].active {
+  box-shadow: inset 0 -3px 0 0 var(--color-grade-7);
+}
+.nav-tab[data-grade="8"].active {
+  box-shadow: inset 0 -3px 0 0 var(--color-grade-8);
+}
+.nav-tab[data-grade="9"].active {
+  box-shadow: inset 0 -3px 0 0 var(--color-grade-9);
+}
+.nav-tab[data-grade="valinnainen"].active {
+  box-shadow: inset 0 -3px 0 0 var(--color-grade-other);
 }
 
 .portal-pill-link {
@@ -1218,6 +1277,39 @@ a:hover {
   color: white;
 }
 
+.filter-pill[data-filter="7"].active {
+  background: var(--color-grade-7);
+  border-color: var(--color-grade-7);
+  color: #ffffff;
+}
+
+.filter-pill[data-filter="8"].active {
+  background: var(--color-grade-8);
+  border-color: var(--color-grade-8);
+  color: #ffffff;
+}
+
+.filter-pill[data-filter="9"].active {
+  background: var(--color-grade-9);
+  border-color: var(--color-grade-9);
+  color: #ffffff;
+}
+
+.filter-pill[data-filter="7"]:hover:not(.active) {
+  border-color: var(--color-grade-7-border);
+  color: var(--color-grade-7-text);
+}
+
+.filter-pill[data-filter="8"]:hover:not(.active) {
+  border-color: var(--color-grade-8-border);
+  color: var(--color-grade-8-text);
+}
+
+.filter-pill[data-filter="9"]:hover:not(.active) {
+  border-color: var(--color-grade-9-border);
+  color: var(--color-grade-9-text);
+}
+
 /* Sivupalkin pikalinkit */
 .sidebar-quick-links {
   margin-top: 24px;
@@ -1431,9 +1523,31 @@ a:hover {
   border-radius: var(--radius-sm);
 }
 
-.book-grade-badge.grade-7 { background: #eff6ff; color: #1d4ed8; }
-.book-grade-badge.grade-8 { background: #f0fdf4; color: #15803d; }
-.book-grade-badge.grade-9 { background: #faf5ff; color: #7e22ce; }
+.book-grade-badge.grade-7 {
+  background: var(--color-grade-7-bg);
+  color: var(--color-grade-7-text);
+  border: 1px solid var(--color-grade-7-border);
+}
+.book-grade-badge.grade-8 {
+  background: var(--color-grade-8-bg);
+  color: var(--color-grade-8-text);
+  border: 1px solid var(--color-grade-8-border);
+}
+.book-grade-badge.grade-9 {
+  background: var(--color-grade-9-bg);
+  color: var(--color-grade-9-text);
+  border: 1px solid var(--color-grade-9-border);
+}
+
+.book-card.grade-7 {
+  border-top: 4px solid var(--color-grade-7);
+}
+.book-card.grade-8 {
+  border-top: 4px solid var(--color-grade-8);
+}
+.book-card.grade-9 {
+  border-top: 4px solid var(--color-grade-9);
+}
 
 .book-pages {
   font-size: 0.78rem;
@@ -1559,6 +1673,32 @@ a:hover {
   border-radius: var(--radius-sm);
   display: inline-block;
   margin-bottom: 6px;
+}
+
+.revision-course-badge.grade-7 {
+  background: var(--color-grade-7-bg);
+  color: var(--color-grade-7-text);
+  border: 1px solid var(--color-grade-7-border);
+}
+.revision-course-badge.grade-8 {
+  background: var(--color-grade-8-bg);
+  color: var(--color-grade-8-text);
+  border: 1px solid var(--color-grade-8-border);
+}
+.revision-course-badge.grade-9 {
+  background: var(--color-grade-9-bg);
+  color: var(--color-grade-9-text);
+  border: 1px solid var(--color-grade-9-border);
+}
+
+.revision-card.grade-7 {
+  border-left: 4px solid var(--color-grade-7);
+}
+.revision-card.grade-8 {
+  border-left: 4px solid var(--color-grade-8);
+}
+.revision-card.grade-9 {
+  border-left: 4px solid var(--color-grade-9);
 }
 
 .revision-course-title {
@@ -3193,11 +3333,11 @@ a:hover {
     to bottom,
     transparent 0,
     transparent 24px,
-    rgba(226, 232, 240, 0.6) 24px,
-    rgba(226, 232, 240, 0.6) 25px
+    rgba(203, 213, 225, 0.45) 24px,
+    rgba(203, 213, 225, 0.45) 25px
   );
   border-radius: var(--radius-sm);
-  background-color: var(--color-surface);
+  background-color: #f1f5f9;
   border: 1px solid var(--color-border);
 }
 
@@ -3206,10 +3346,10 @@ a:hover {
     to bottom,
     transparent 0,
     transparent 24px,
-    rgba(51, 65, 85, 0.6) 24px,
-    rgba(51, 65, 85, 0.6) 25px
+    rgba(51, 65, 85, 0.5) 24px,
+    rgba(51, 65, 85, 0.5) 25px
   );
-  background-color: var(--color-surface-subtle);
+  background-color: #0b1120;
 }
 
 .schedule-event {
@@ -3239,6 +3379,38 @@ a:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
   border-color: var(--color-primary-light);
+}
+
+.schedule-event.grade-7 {
+  border-left: 4px solid var(--color-grade-7);
+  background: var(--color-grade-7-bg);
+}
+.schedule-event.grade-7 .schedule-event-content strong {
+  color: var(--color-grade-7-text);
+}
+
+.schedule-event.grade-8 {
+  border-left: 4px solid var(--color-grade-8);
+  background: var(--color-grade-8-bg);
+}
+.schedule-event.grade-8 .schedule-event-content strong {
+  color: var(--color-grade-8-text);
+}
+
+.schedule-event.grade-9 {
+  border-left: 4px solid var(--color-grade-9);
+  background: var(--color-grade-9-bg);
+}
+.schedule-event.grade-9 .schedule-event-content strong {
+  color: var(--color-grade-9-text);
+}
+
+.schedule-event.grade-other {
+  border-left: 4px solid var(--color-grade-other);
+  background: var(--color-grade-other-bg);
+}
+.schedule-event.grade-other .schedule-event-content strong {
+  color: var(--color-grade-other-text);
 }
 
 .schedule-time {
@@ -3275,27 +3447,42 @@ a:hover {
 
 .schedule-event.supervision {
   min-height: 0;
-  padding: 0 4px;
+  padding: 0 6px;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
   gap: 4px;
   line-height: 15px;
-  border-left-color: #10b981;
+  border-left: 3px solid #eab308;
+  background: #fefce8;
+  border-color: #fef08a;
   z-index: 2;
+}
+
+[data-theme="dark"] .schedule-event.supervision {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: rgba(234, 179, 8, 0.35);
+  border-left-color: #facc15;
 }
 
 .schedule-event.supervision .schedule-event-content {
   display: flex;
-  align-items: baseline;
-  gap: 3px;
+  align-items: center;
   min-width: 0;
 }
 
-.schedule-event.supervision .schedule-event-content strong,
-.schedule-event.supervision .schedule-event-content span {
-  font-size: 0.64rem;
-  line-height: 15px;
+.schedule-event.supervision .schedule-event-content strong {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #854d0e;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin: 0;
+  line-height: 1.2;
+}
+
+[data-theme="dark"] .schedule-event.supervision .schedule-event-content strong {
+  color: #fde047;
 }
 
 .schedule-event.homeroom {

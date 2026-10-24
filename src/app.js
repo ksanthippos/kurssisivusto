@@ -24,8 +24,8 @@ const state = {
   homeConfig: {
     blocks: [
       { id: "welcome", title: "Tervetuloteksti", enabled: true },
-      { id: "timetable", title: "Lukujärjestys", enabled: true },
-      { id: "aikataulu", title: "Ryhmän aikataulu", enabled: true }
+      { id: "timetable", title: "Lukujärjestys (RAUH)", enabled: true },
+      { id: "aikataulu", title: "Ryhmät", enabled: true }
     ],
     aikatauluGroup: null
   }
@@ -555,7 +555,7 @@ function parseRoute() {
     switchView("arviointi");
   } else if (firstPart === "lukujarjestys") {
     switchView("lukujarjestys");
-  } else if (firstPart === "aikataulu" || firstPart === "portaali") {
+  } else if (firstPart === "aikataulu" || firstPart === "ryhmat" || firstPart === "portaali") {
     if (parts[1]) {
       state.activeScheduleGroup = parts[1];
     }
@@ -747,20 +747,20 @@ function getFavoriteMeta(key) {
     return {
       key: "lukujarjestys",
       type: "section",
-      title: "Lukujärjestys",
-      label: "📅 Lukujärjestys",
+      title: "Lukujärjestys (RAUH)",
+      label: "📅 Lukujärjestys (RAUH)",
       hash: "#/lukujarjestys",
       icon: "📅"
     };
   }
-  if (lower === "aikataulu") {
+  if (lower === "aikataulu" || lower === "ryhmat") {
     return {
       key: "aikataulu",
       type: "section",
-      title: "Ryhmien aikataulut",
-      label: "🗓️ Ryhmien aikataulut",
+      title: "Ryhmät",
+      label: "👥 Ryhmät",
       hash: "#/aikataulu",
-      icon: "🗓️"
+      icon: "👥"
     };
   }
 
@@ -870,7 +870,7 @@ function loadPreferences() {
           if (!existingIds.includes(id)) {
             mergedBlocks.push({
               id,
-              title: id === "welcome" ? "Tervetuloteksti" : id === "timetable" ? "Lukujärjestys" : "Ryhmän aikataulu",
+              title: id === "welcome" ? "Tervetuloteksti" : id === "timetable" ? "Lukujärjestys (RAUH)" : "Ryhmät",
               enabled: true
             });
           }
@@ -1155,7 +1155,7 @@ function renderHome() {
     container.innerHTML = `
       <div class="empty home-empty-state">
         <p style="font-size: 1.05rem; margin-bottom: 6px;"><strong>Kaikki kotinäkymän osiot on piilotettu</strong></p>
-        <p style="margin: 0;">Voit aktivoida osioita (Tervetuloteksti, Lukujärjestys, Ryhmän aikataulu) sivuston asetuksista yläpalkin ⚙️-valikosta.</p>
+        <p style="margin: 0;">Voit aktivoida osioita (Tervetuloteksti, Lukujärjestys (RAUH), Ryhmät) sivuston asetuksista yläpalkin ⚙️-valikosta.</p>
       </div>
     `;
     return;
@@ -1182,8 +1182,8 @@ function renderHome() {
             <div class="home-schedule-title-group">
               <span class="home-schedule-icon" aria-hidden="true">📅</span>
               <div>
-                <h3 class="home-schedule-heading">Lukujärjestys</h3>
-                <p class="home-schedule-sub">2. jakso (19.10.2026 – 18.12.2026) · Viikon oppitunnit ja tilat</p>
+                <h3 class="home-schedule-heading">Lukujärjestys (RAUH)</h3>
+                <p class="home-schedule-sub">Mikael Rauhalan viikoittainen lukujärjestys · 2. jakso</p>
               </div>
             </div>
             <div class="home-embed-header-actions">
@@ -1198,9 +1198,9 @@ function renderHome() {
         <section class="home-embed-card" id="home-block-aikataulu">
           <div class="home-embed-card-header">
             <div class="home-schedule-title-group">
-              <span class="home-schedule-icon" aria-hidden="true">🗓️</span>
+              <span class="home-schedule-icon" aria-hidden="true">👥</span>
               <div>
-                <h3 class="home-schedule-heading">Ryhmien aikataulut</h3>
+                <h3 class="home-schedule-heading">Ryhmät</h3>
                 <p class="home-schedule-sub" id="home-aikataulu-sub">Opetusryhmäkohtainen tuntiohjelma ja eteneminen</p>
               </div>
             </div>
@@ -1421,8 +1421,8 @@ function renderSettingsHomeBlocks() {
 
   const blockNames = {
     welcome: "🏠 Tervetuloteksti",
-    timetable: "📅 Lukujärjestys",
-    aikataulu: "🗓️ Ryhmän aikataulu"
+    timetable: "📅 Lukujärjestys (RAUH)",
+    aikataulu: "👥 Ryhmät"
   };
 
   container.innerHTML = state.homeConfig.blocks
@@ -1592,8 +1592,8 @@ function renderSettingsPopover() {
 
     optGroups.push(`
       <optgroup label="📌 Osio-sivut">
-        <option value="lukujarjestys">📅 Lukujärjestys</option>
-        <option value="aikataulu">🗓️ Ryhmien aikataulut</option>
+        <option value="lukujarjestys">📅 Lukujärjestys (RAUH)</option>
+        <option value="aikataulu">👥 Ryhmät</option>
         <option value="kirjat">📚 Avoin matematiikka -kirjat</option>
         <option value="kertaus">📝 Kertaustehtävät & mallit</option>
         <option value="arviointi">ℹ️ Arviointiperusteet & info</option>
@@ -2078,7 +2078,7 @@ function updateLessonPortalCheckButton() {
   if (!courseSched || groupKeys.length === 0) {
     btn.classList.add("disabled");
     btn.removeAttribute("href");
-    btn.innerHTML = `🗓️ Kurssi ei opetuksessa 2. jaksossa`;
+    btn.innerHTML = `👥 Kurssi ei opetuksessa 2. jaksossa`;
     btn.title = `Tälle kurssille (${courseCode}) ei ole aktiivista opetusryhmää 2. jaksossa.`;
     return;
   }
@@ -2089,19 +2089,19 @@ function updateLessonPortalCheckButton() {
   if (favGroup) {
     btn.classList.remove("disabled");
     btn.href = `#/aikataulu/${encodeURIComponent(favGroup)}`;
-    btn.innerHTML = `Tarkista aikataulu: <strong>${escapeHtml(favGroup)}</strong> 🗓️`;
+    btn.innerHTML = `Tarkista ryhmän <strong>${escapeHtml(favGroup)}</strong> aikataulu 👥 →`;
     btn.title = `Avaa suosikkiryhmäsi ${favGroup} aikataulu`;
   } else if (groupKeys.length === 1) {
     const onlyGroup = groupKeys[0];
     btn.classList.remove("disabled");
     btn.href = `#/aikataulu/${encodeURIComponent(onlyGroup)}`;
-    btn.innerHTML = `Tarkista aikataulu: <strong>${escapeHtml(onlyGroup)}</strong> 🗓️`;
+    btn.innerHTML = `Tarkista ryhmän <strong>${escapeHtml(onlyGroup)}</strong> aikataulu 👥 →`;
     btn.title = `Avaa ryhmän ${onlyGroup} aikataulu`;
   } else {
     // Useita ryhmiä eikä mikään suosikkina
     btn.classList.remove("disabled");
     btn.href = `#/aikataulu/${encodeURIComponent(groupKeys[0])}`;
-    btn.innerHTML = `Tarkista ryhmäsi aikataulu (${groupKeys.join(" / ")}) 🗓️`;
+    btn.innerHTML = `Tarkista ryhmäsi aikataulu (${groupKeys.join(" / ")}) 👥 →`;
     btn.title = `Kurssilla on useita ryhmiä (${groupKeys.join(", ")}). Voit lisätä oman ryhmäsi suosikiksi!`;
   }
 }
@@ -2126,7 +2126,7 @@ function renderBooks() {
       .map(
         (b) => `
         <button type="button" class="lesson-nav-btn ${b.grade === filter ? "active" : ""}" data-book-id="${b.id}">
-          <span class="num">${b.grade}. lk</span>
+          <span class="num grade-${b.grade}">${b.grade}. lk</span>
           <span class="title">${escapeHtml(b.title)}</span>
         </button>
       `
@@ -2145,7 +2145,7 @@ function renderBooks() {
   booksGrid.innerHTML = filtered
     .map(
       (b) => `
-      <div class="book-card" id="book-card-${b.id}">
+      <div class="book-card grade-${b.grade}" id="book-card-${b.id}">
         <div class="book-card-header">
           <span class="book-grade-badge grade-${b.grade}">${b.grade}. luokka</span>
           <span class="book-pages">${b.pages ? `~${b.pages} sivua` : "PDF"}</span>
@@ -2218,7 +2218,7 @@ function renderRevisions() {
       .map(
         (r) => `
         <button type="button" class="lesson-nav-btn ${r.grade === filter ? "active" : ""}" data-course="${r.code}">
-          <span class="num">${r.code}</span>
+          <span class="num grade-${r.grade}">${r.code}</span>
           <span class="title">${escapeHtml(r.title)}</span>
         </button>
       `
@@ -2295,10 +2295,10 @@ function renderRevisions() {
         `;
 
       return `
-        <div class="revision-card" id="rev-card-${r.code}">
+        <div class="revision-card grade-${r.grade}" id="rev-card-${r.code}">
           <div class="revision-card-header">
             <div>
-              <span class="revision-course-badge">${r.grade}. luokka · ${r.subject}</span>
+              <span class="revision-course-badge grade-${r.grade}">${r.grade}. luokka · ${r.subject}</span>
               <h3 class="revision-course-title">${r.code}: ${escapeHtml(r.title)}</h3>
             </div>
             <a href="#/${r.code}/1" class="context-pill-link">
@@ -2733,17 +2733,27 @@ function renderTimetable() {
   renderTimetableGrid(scheduleContent);
 }
 
+function getGradeClassFromGroup(code) {
+  if (!code) return "";
+  const match = code.match(/[A-Za-z]+_(\d)/) || code.match(/(\d)/);
+  if (!match) return "";
+  const d = match[1];
+  if (d === "7") return "grade-7";
+  if (d === "8") return "grade-8";
+  if (d === "9") return "grade-9";
+  return "grade-other";
+}
+
 function renderScheduleEvent(event) {
   const top = minutesFromStart(event.alku);
   const height = minutesBetween(event.alku, event.loppu);
 
   if (event.tyyppi === "valvonta") {
+    const location = event.paikka || "Valvonta";
     return `
-      <div class="schedule-event supervision" style="--event-top: ${top}px; --event-height: ${height}px;">
-        <div class="schedule-time">${event.alku}–${event.loppu}</div>
+      <div class="schedule-event supervision" style="--event-top: ${top}px; --event-height: ${height}px;" title="Valvonta (${event.alku}–${event.loppu}): ${escapeHtml(location)}">
         <div class="schedule-event-content">
-          <strong>Valvonta</strong>
-          <span>${escapeHtml(event.paikka || "")}</span>
+          <strong>${escapeHtml(location)}</strong>
         </div>
       </div>
     `;
@@ -2751,7 +2761,7 @@ function renderScheduleEvent(event) {
 
   if (event.tyyppi === "kotiryhma") {
     return `
-      <div class="schedule-event homeroom" style="--event-top: ${top}px; --event-height: ${height}px;">
+      <div class="schedule-event homeroom" style="--event-top: ${top}px; --event-height: ${height}px;" title="Kotiryhmä (${event.alku}–${event.loppu})">
         <div class="schedule-time">${event.alku}–${event.loppu}</div>
         <div class="schedule-event-content">
           <strong>${escapeHtml(event.ryhma || "Kotiryhmätunti")}</strong>
@@ -2762,8 +2772,9 @@ function renderScheduleEvent(event) {
   }
 
   const groupCode = event.ryhma || "";
+  const gradeClass = getGradeClassFromGroup(groupCode);
   return `
-    <a href="#/aikataulu/${encodeURIComponent(groupCode)}" class="schedule-event" style="--event-top: ${top}px; --event-height: ${height}px;" title="Avaa ryhmän ${escapeHtml(groupCode)} aikataulu">
+    <a href="#/aikataulu/${encodeURIComponent(groupCode)}" class="schedule-event ${gradeClass}" style="--event-top: ${top}px; --event-height: ${height}px;" title="Avaa ryhmän ${escapeHtml(groupCode)} aikataulu">
       <div class="schedule-time">${event.alku}–${event.loppu}</div>
       <div class="schedule-event-content">
         <strong>${escapeHtml(groupCode)}</strong>
