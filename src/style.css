@@ -1082,6 +1082,17 @@ a:hover {
   color: var(--color-text-light);
 }
 
+.footer-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.15s ease;
+}
+
+.footer-note a:hover {
+  opacity: 0.8;
+}
+
 /* Mobiiliresponsiivisuus */
 @media (max-width: 900px) {
   .app-layout {

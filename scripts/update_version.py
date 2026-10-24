@@ -15,11 +15,10 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_NAME = os.path.basename(ROOT_DIR)
 
-# Pohjakommittien määrä ennen versionumeroinnin käyttöönottoa (0.11)
-# kurssisivusto-new: 34 committia ennestään -> commit #35 on 0.11
-# kurssi-portaali: 49 committia ennestään -> commit #50 on 0.11
-BASE_COMMIT_COUNT = 50 if REPO_NAME == "kurssi-portaali" else 35
-BASE_HUNDREDTHS = 11
+# Pohjakommittien määrä version 1.0 (100 sadasosaa) julkaisusta alkaen:
+# Commit #46 on versio 1.0
+BASE_COMMIT_COUNT = 46
+BASE_HUNDREDTHS = 100
 
 def get_commit_count():
     try:
@@ -38,6 +37,8 @@ def compute_version(offset_commit=1):
     total_hundredths = BASE_HUNDREDTHS + diff
     major = total_hundredths // 100
     minor = total_hundredths % 100
+    if minor == 0:
+        return f"{major}.0"
     return f"{major}.{minor:02d}"
 
 def write_version(version):

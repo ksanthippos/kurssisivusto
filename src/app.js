@@ -149,10 +149,15 @@ function getSchoolYear(date = new Date()) {
 
 function updateFooterInfo() {
   const schoolYearEl = document.getElementById("footer-school-year");
+  const copyrightYearEl = document.getElementById("footer-copyright-year");
   const versionEl = document.getElementById("footer-version");
-  const schoolYear = getSchoolYear();
+  const now = new Date();
+  const schoolYear = getSchoolYear(now);
   const version = (typeof window !== "undefined" && window.APP_VERSION) ? window.APP_VERSION : "0.11";
 
+  if (copyrightYearEl) {
+    copyrightYearEl.textContent = now.getFullYear();
+  }
   if (schoolYearEl) {
     schoolYearEl.textContent = schoolYear;
   }
