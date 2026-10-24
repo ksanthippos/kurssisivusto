@@ -42,10 +42,122 @@
 
       <nav id="main-navigation" class="main-nav" aria-label="Päävalikko">
         <button type="button" class="nav-tab active" data-nav="view" data-view="koti">🏠 Koti</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="7">🟢 7.&nbsp;lk</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="8">🔵 8.&nbsp;lk</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="9">🟣 9.&nbsp;lk</button>
-        <button type="button" class="nav-tab" data-nav="grade" data-grade="valinnainen">🟠 Muut</button>
+        
+        <div class="nav-grade-group" data-grade-group="7">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="7">
+            <span class="nav-tab-label">🟢 7.&nbsp;lk</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-grade-courses-7" hidden>
+            <button type="button" class="nav-course-btn" data-course-code="FY_71">
+              <span class="nav-course-badge grade-7">⚡ FY_71</span>
+              <span class="nav-course-title">Lämpöoppi ja aaltoliike</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_71">
+              <span class="nav-course-badge grade-7">📐 MA_71</span>
+              <span class="nav-course-title">Laskuoppi</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_72">
+              <span class="nav-course-badge grade-7">📐 MA_72</span>
+              <span class="nav-course-title">Geometria I: Tasogeometria</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_73">
+              <span class="nav-course-badge grade-7">📐 MA_73</span>
+              <span class="nav-course-title">Lausekkeet ja yhtälöt</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_74">
+              <span class="nav-course-badge grade-7">📐 MA_74</span>
+              <span class="nav-course-title">Potenssit ja polynomit</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-grade-group" data-grade-group="8">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="8">
+            <span class="nav-tab-label">🔵 8.&nbsp;lk</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-grade-courses-8" hidden>
+            <button type="button" class="nav-course-btn" data-course-code="FY_81">
+              <span class="nav-course-badge grade-8">⚡ FY_81</span>
+              <span class="nav-course-title">Liike, voima ja energia</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_81">
+              <span class="nav-course-badge grade-8">📐 MA_81</span>
+              <span class="nav-course-title">Yhtälöt ja epäyhtälöt</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_82">
+              <span class="nav-course-badge grade-8">📐 MA_82</span>
+              <span class="nav-course-title">Geometria II: Syventävä geometria</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_83">
+              <span class="nav-course-badge grade-8">📐 MA_83</span>
+              <span class="nav-course-title">Prosenttilaskenta</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-grade-group" data-grade-group="9">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="9">
+            <span class="nav-tab-label">🟣 9.&nbsp;lk</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-grade-courses-9" hidden>
+            <button type="button" class="nav-course-btn" data-course-code="FY_91">
+              <span class="nav-course-badge grade-9">⚡ FY_91</span>
+              <span class="nav-course-title">Sähkömagnetismi</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="FY_92">
+              <span class="nav-course-badge grade-9">⚡ FY_92</span>
+              <span class="nav-course-title">Maapallolta maailmankaikkeuteen</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_91">
+              <span class="nav-course-badge grade-9">📐 MA_91</span>
+              <span class="nav-course-title">Yhtälöparit</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_92">
+              <span class="nav-course-badge grade-9">📐 MA_92</span>
+              <span class="nav-course-title">Geometria III: Avaruusgeometria</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_93">
+              <span class="nav-course-badge grade-9">📐 MA_93</span>
+              <span class="nav-course-title">Funktiot</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-course-code="MA_94">
+              <span class="nav-course-badge grade-9">📐 MA_94</span>
+              <span class="nav-course-title">Trigonometria ja kertaus</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-grade-group" data-grade-group="valinnainen">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="valinnainen">
+            <span class="nav-tab-label">🟠 Muut</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-grade-courses-valinnainen" hidden>
+            <button type="button" class="nav-course-btn" data-course-code="VMA_01">
+              <span class="nav-course-badge grade-other">📐 VMA_01</span>
+              <span class="nav-course-title">Matematiikan valinnaiskurssi</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
         
         <span class="nav-divider" aria-hidden="true"></span>
 

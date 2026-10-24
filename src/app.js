@@ -193,6 +193,7 @@ async function init() {
     if (schedulesRes && schedulesRes.ok) state.schedules = await schedulesRes.json();
 
     setupEventListeners();
+    renderMobileNavCourseLists();
     renderSidebarFavorites();
     parseRoute();
   } catch (err) {
@@ -206,13 +207,21 @@ async function init() {
 function setupEventListeners() {
   // Yläpalkin navigaatiopainikkeet
   navTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      closeMobileMenu();
+    tab.addEventListener("click", (e) => {
       const navType = tab.dataset.nav;
       if (navType === "grade") {
         const grade = tab.dataset.grade;
+        const isMobileMenu = Boolean(mainNav && mainNav.classList.contains("is-open"));
+        if (isMobileMenu) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleMobileGradeCourses(grade);
+          return;
+        }
+        closeMobileMenu();
         setGrade(grade);
       } else if (navType === "view") {
+        closeMobileMenu();
         const targetView = tab.dataset.view;
         if (targetView === "home" || targetView === "koti") {
           window.location.hash = "#/koti";
@@ -698,6 +707,7 @@ function updateNavTabsUI() {
       tab.classList.toggle("active", isHome || state.activeView === tab.dataset.view);
     }
   });
+  renderMobileNavCourseLists();
 }
 
 function navigateTo(courseCode, lessonNumber = 1) {
@@ -1052,7 +1062,89 @@ function toggleMobileMenu(forceState) {
   menuToggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
   if (willOpen) {
     closeSettingsPopover();
+    // Jos käyttäjä on jo kurssioppitunnilla, avataan kyseisen luokkatason kurssit valmiiksi esille
+    if (state.activeView === "lesson" && state.activeGrade) {
+      openMobileGradeCourses(state.activeGrade);
+    }
+  } else {
+    // Suljetaan harmonikat kun valikko suljetaan
+    document.querySelectorAll(".nav-grade-group").forEach((g) => g.classList.remove("is-expanded"));
+    document.querySelectorAll(".nav-grade-courses").forEach((c) => (c.hidden = true));
   }
+}
+
+function openMobileGradeCourses(grade) {
+  document.querySelectorAll(".nav-grade-group").forEach((g) => {
+    const isThis = g.dataset.gradeGroup === grade;
+    g.classList.toggle("is-expanded", isThis);
+  });
+  document.querySelectorAll(".nav-grade-courses").forEach((c) => {
+    const isThis = c.id === `nav-grade-courses-${grade}`;
+    c.hidden = !isThis;
+  });
+}
+
+function toggleMobileGradeCourses(grade) {
+  const group = document.querySelector(`.nav-grade-group[data-grade-group="${grade}"]`);
+  const coursesContainer = document.querySelector(`#nav-grade-courses-${grade}`);
+  if (!group || !coursesContainer) return;
+
+  const isCurrentlyOpen = !coursesContainer.hidden;
+  if (isCurrentlyOpen) {
+    group.classList.remove("is-expanded");
+    coursesContainer.hidden = true;
+  } else {
+    openMobileGradeCourses(grade);
+  }
+}
+
+function renderMobileNavCourseLists() {
+  if (!state.courses || !state.courses.length) return;
+
+  const grades = ["7", "8", "9", "valinnainen"];
+
+  grades.forEach((grade) => {
+    const container = document.querySelector(`#nav-grade-courses-${grade}`);
+    if (!container) return;
+
+    const filtered = state.courses.filter((c) => c.grade === grade);
+    const activeCourseCode = state.activeCourse ? state.activeCourse.code : null;
+
+    container.innerHTML = filtered
+      .map((c) => {
+        const isActive = activeCourseCode && activeCourseCode.toUpperCase() === c.code.toUpperCase();
+        const icon = c.subject === "fysiikka" ? "⚡" : "📐";
+        const gradeClass =
+          grade === "7"
+            ? "grade-7"
+            : grade === "8"
+            ? "grade-8"
+            : grade === "9"
+            ? "grade-9"
+            : "grade-other";
+
+        return `
+          <button type="button" class="nav-course-btn ${isActive ? "active" : ""}" data-course-code="${escapeHtml(c.code)}">
+            <span class="nav-course-badge ${gradeClass}">${icon} ${escapeHtml(c.code)}</span>
+            <span class="nav-course-title">${escapeHtml(c.title)}</span>
+            <span class="nav-course-arrow" aria-hidden="true">→</span>
+          </button>
+        `;
+      })
+      .join("");
+
+    container.querySelectorAll(".nav-course-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeMobileMenu();
+        const code = btn.dataset.courseCode;
+        if (code) {
+          navigateTo(code, 1);
+        }
+      });
+    });
+  });
 }
 
 function closeMobileMenu() {
