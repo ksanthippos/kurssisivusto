@@ -446,6 +446,11 @@ function parseRoute() {
     switchView("kertaus");
     const targetCourse = parts[1];
     if (targetCourse) {
+      const rev = state.revisions.find((r) => r.code.toUpperCase() === targetCourse.toUpperCase());
+      if (rev && state.activeRevisionFilter !== "all" && state.activeRevisionFilter !== rev.grade) {
+        state.activeRevisionFilter = "all";
+        renderRevisions();
+      }
       // Vieritetään kyseiseen kurssiin
       setTimeout(() => {
         const card = document.querySelector(`#rev-card-${targetCourse.toUpperCase()}`);
@@ -1422,6 +1427,10 @@ function renderBooks() {
   const filter = state.activeBooksFilter;
   const filtered = filter === "all" ? state.books : state.books.filter((b) => b.grade === filter);
 
+  if (booksFilterPills) {
+    booksFilterPills.forEach((p) => p.classList.toggle("active", p.dataset.filter === filter));
+  }
+
   // Sivupalkin pikalista
   if (booksQuickNav) {
     booksQuickNav.innerHTML = state.books
@@ -1510,12 +1519,16 @@ function renderRevisions() {
   const filter = state.activeRevisionFilter;
   const filtered = filter === "all" ? state.revisions : state.revisions.filter((r) => r.grade === filter);
 
+  if (revisionFilterPills) {
+    revisionFilterPills.forEach((p) => p.classList.toggle("active", p.dataset.filter === filter));
+  }
+
   // Sivupalkin kurssiluettelo
   if (revisionQuickNav) {
     revisionQuickNav.innerHTML = state.revisions
       .map(
         (r) => `
-        <button type="button" class="lesson-nav-btn" data-course="${r.code}">
+        <button type="button" class="lesson-nav-btn ${r.grade === filter ? "active" : ""}" data-course="${r.code}">
           <span class="num">${r.code}</span>
           <span class="title">${escapeHtml(r.title)}</span>
         </button>
@@ -1525,8 +1538,18 @@ function renderRevisions() {
 
     revisionQuickNav.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const card = document.querySelector(`#rev-card-${btn.dataset.course}`);
-        if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
+        let card = document.querySelector(`#rev-card-${btn.dataset.course}`);
+        if (!card) {
+          const rev = state.revisions.find((r) => r.code === btn.dataset.course);
+          if (rev) {
+            state.activeRevisionFilter = rev.grade || "all";
+            renderRevisions();
+            card = document.querySelector(`#rev-card-${btn.dataset.course}`);
+          }
+        }
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       });
     });
   }
