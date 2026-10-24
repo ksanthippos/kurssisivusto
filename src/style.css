@@ -3794,6 +3794,20 @@ a:hover {
   gap: 16px;
 }
 
+.aikataulu-unselected-box {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-top: 8px;
+}
+
+[data-theme="dark"] .aikataulu-unselected-box {
+  background: #1e293b;
+  border-color: #334155;
+}
+
 /* Oppituntikortit aikataulussa */
 .lesson-card {
   background: var(--color-surface);

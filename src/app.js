@@ -713,7 +713,7 @@ function parseRoute() {
         const pref = favGroups.find((g) => g.groupCode === state.defaultScheduleGroup);
         state.activeScheduleGroup = pref ? pref.groupCode : favGroups[0].groupCode;
       } else {
-        state.activeScheduleGroup = allGroups.length ? allGroups[0].groupCode : null;
+        state.activeScheduleGroup = null;
       }
     }
     switchView("aikataulu");
@@ -2096,7 +2096,7 @@ function renderSettingsPopover() {
           if (gCode) {
             state.defaultScheduleGroup = gCode;
             savePreferences();
-            showToast(`👥 Ryhmänäkymän oletukseksi asetettu: ${gCode}`);
+            showToast(`👥 Automaattisesti keskitettäväksi ryhmäksi valittu: ${gCode}`);
             renderSettingsPopover();
           }
         });
@@ -3656,17 +3656,41 @@ async function renderAikataulu() {
 
   const favGroups = groups.filter((g) => state.favorites.includes(g.groupCode));
 
-  if (!state.activeScheduleGroup || !groups.some((g) => g.groupCode === state.activeScheduleGroup)) {
+  if (!state.activeScheduleGroup) {
+    if (favGroups.length > 0) {
+      const pref = favGroups.find((g) => g.groupCode === state.defaultScheduleGroup);
+      state.activeScheduleGroup = pref ? pref.groupCode : favGroups[0].groupCode;
+    }
+  } else if (!groups.some((g) => g.groupCode === state.activeScheduleGroup)) {
     if (favGroups.length > 0) {
       const pref = favGroups.find((g) => g.groupCode === state.defaultScheduleGroup);
       state.activeScheduleGroup = pref ? pref.groupCode : favGroups[0].groupCode;
     } else {
-      state.activeScheduleGroup = groups[0].groupCode;
+      state.activeScheduleGroup = null;
     }
   }
 
   renderAikatauluGroupPills(groups);
   updateCurrentGroupFavoriteButton();
+
+  if (!state.activeScheduleGroup) {
+    if (aikatauluLessonsList) {
+      aikatauluLessonsList.innerHTML = `
+        <div class="aikataulu-unselected-box">
+          <div style="font-size: 2.5rem; margin-bottom: 12px;" aria-hidden="true">👥</div>
+          <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 8px 0; color: var(--color-heading);">Valitse opetusryhmä</h3>
+          <p style="font-size: 0.92rem; color: var(--color-text-muted); max-width: 440px; margin: 0 auto 16px auto; line-height: 1.5;">
+            Valitse ryhmä yläpuolelta nähdäksesi sen tuntiaikataulun, päivämäärät ja tehtävät.
+          </p>
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin: 0;">
+            💡 <em>Vinkki: Voit lisätä oman ryhmäsi suosikkeihin tähdellä (☆), jolloin ryhmänäkymä avaa ja keskittää sen automaattisesti!</em>
+          </p>
+        </div>
+      `;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
 
   const currentGroupObj = groups.find((g) => g.groupCode === state.activeScheduleGroup);
   if (!currentGroupObj) return;
@@ -3835,13 +3859,7 @@ async function renderAikataulu() {
       });
     });
 
-    const isFavGroup = state.favorites.includes(state.activeScheduleGroup);
-    if (isFavGroup) {
-      highlightCurrentLesson(true);
-    } else {
-      highlightCurrentLesson(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    highlightCurrentLesson(true);
   } catch (err) {
     console.error("Aikataulun latausvirhe:", err);
     if (aikatauluLessonsList) {
