@@ -1332,7 +1332,7 @@ function renderTasks(tasks, taskSheets) {
               <div class="task-sheet-box">
                 <div class="task-sheet-info">
                   <div class="task-sheet-badge-group">
-                    <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tuntitehtävä")}</span>
+                    <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tehtävät")}</span>
                     <h4 class="task-sheet-title">${escapeHtml(sheet.title)}</h4>
                   </div>
                   ${sheet.description ? `<p class="task-sheet-desc">${escapeHtml(sheet.description)}</p>` : ""}
