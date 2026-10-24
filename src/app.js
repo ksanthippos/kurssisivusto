@@ -226,7 +226,9 @@ function setupEventListeners() {
   // Mobiilivalikon asetusrivi
   const navBtnMobileSettings = document.querySelector("#nav-btn-mobile-settings");
   if (navBtnMobileSettings) {
-    navBtnMobileSettings.addEventListener("click", () => {
+    navBtnMobileSettings.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       closeMobileMenu();
       openSettingsPopover();
     });
@@ -474,8 +476,15 @@ function setupEventListeners() {
     // 2. Leijuvan asetusvalikon sulkeminen kun klikataan ohi
     if (settingsPopover && !settingsPopover.hidden) {
       const isInsidePopover = settingsPopover.contains(e.target) || path.includes(settingsPopover);
-      const isInsideGear = headerSettingsBtn.contains(e.target) || path.includes(headerSettingsBtn);
-      if (!isInsidePopover && !isInsideGear) {
+      const isInsideGear = headerSettingsBtn && (headerSettingsBtn.contains(e.target) || path.includes(headerSettingsBtn));
+      const isOpener = Boolean(
+        e.target &&
+        e.target.closest &&
+        e.target.closest(
+          "#header-settings-btn, #nav-btn-mobile-settings, [data-mobile-nav='settings'], #btn-open-settings-from-sheet"
+        )
+      );
+      if (!isInsidePopover && !isInsideGear && !isOpener) {
         closeSettingsPopover();
       }
     }
@@ -1070,9 +1079,7 @@ function openSettingsPopover() {
   requestAnimationFrame(() => {
     try {
       settingsPopover.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      const closeBtn = document.querySelector("#settings-popover-close-btn");
-      if (closeBtn) closeBtn.focus({ preventScroll: true });
-      else settingsPopover.focus({ preventScroll: true });
+      settingsPopover.focus({ preventScroll: true });
     } catch (e) {}
   });
 }
@@ -2159,7 +2166,9 @@ function renderMobileFavoritesSheet() {
 
     const btnOpenSettings = body.querySelector("#btn-open-settings-from-sheet");
     if (btnOpenSettings) {
-      btnOpenSettings.addEventListener("click", () => {
+      btnOpenSettings.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         closeMobileFavoritesSheet();
         openSettingsPopover();
         const favCard = document.querySelector("#card-setting-favs");

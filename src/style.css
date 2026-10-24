@@ -177,7 +177,7 @@ a:hover {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1050;
   background-color: var(--color-header-bg, var(--color-primary));
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1191,19 +1191,6 @@ a:hover {
   }
   .main-nav.is-open {
     display: flex;
-  }
-
-  .settings-floating-popover {
-    position: fixed;
-    top: 64px;
-    left: 12px;
-    right: 12px;
-    width: auto;
-    max-width: 440px;
-    margin: 0 auto;
-    max-height: calc(100vh - 136px);
-    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
-    z-index: 1200;
   }
 
   .nav-tab {
@@ -2314,6 +2301,8 @@ a:hover {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
+  left: auto;
+  bottom: auto;
   width: 440px;
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 90px);
@@ -4841,5 +4830,19 @@ a:hover {
 
   .main-content {
     padding: 16px 12px !important;
+  }
+
+  /* Mobiilissa leijuva popover kiinnitetään näkymään (viewport) */
+  .settings-floating-popover {
+    position: fixed !important;
+    top: 64px !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+    width: auto !important;
+    max-width: 460px !important;
+    margin: 0 auto !important;
+    max-height: calc(100vh - 136px) !important;
+    z-index: 1250 !important;
   }
 }
