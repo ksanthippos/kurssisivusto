@@ -207,6 +207,7 @@ function setupEventListeners() {
   // Yläpalkin navigaatiopainikkeet
   navTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
+      closeMobileMenu();
       const navType = tab.dataset.nav;
       if (navType === "grade") {
         const grade = tab.dataset.grade;
@@ -221,6 +222,15 @@ function setupEventListeners() {
       }
     });
   });
+
+  // Mobiilivalikon asetusrivi
+  const navBtnMobileSettings = document.querySelector("#nav-btn-mobile-settings");
+  if (navBtnMobileSettings) {
+    navBtnMobileSettings.addEventListener("click", () => {
+      closeMobileMenu();
+      openSettingsPopover();
+    });
+  }
 
   // Suosikkitähden klikkaus oppituntinäkymässä
   if (favoriteToggleBtn) {
@@ -1943,53 +1953,48 @@ function renderMobileBottomBar() {
   const leftKeys = order.slice(0, 2);
   const rightKeys = order.slice(2, 4);
 
+  const isSheetOpen = Boolean(document.querySelector("#mobile-favorites-sheet") && !document.querySelector("#mobile-favorites-sheet").hidden);
+  const isSettingsOpen = Boolean(settingsPopover && !settingsPopover.hidden);
+
   const getBtnHtml = (key) => {
+    let icon = "📌";
+    let label = key;
+    let isActive = false;
+
     if (key === "lukujarjestys") {
-      const isActive = state.activeView === "lukujarjestys";
-      return `
-        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="lukujarjestys" aria-label="Lukujärjestys">
-          <span class="mobile-nav-icon">📅</span>
-          <span class="mobile-nav-label">Lukujärjestys</span>
-        </button>
-      `;
+      icon = "📅";
+      label = "Lukujärjestys";
+      isActive = state.activeView === "lukujarjestys" && !isSheetOpen && !isSettingsOpen;
+    } else if (key === "ryhmat") {
+      icon = "👥";
+      label = "Ryhmät";
+      isActive = state.activeView === "aikataulu" && !isSheetOpen && !isSettingsOpen;
+    } else if (key === "favorites") {
+      icon = "⭐";
+      label = "Suosikit";
+      isActive = isSheetOpen;
+    } else if (key === "settings") {
+      icon = "⚙️";
+      label = "Asetukset";
+      isActive = isSettingsOpen;
     }
-    if (key === "ryhmat") {
-      const isActive = state.activeView === "aikataulu";
-      return `
-        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="ryhmat" aria-label="Ryhmät">
-          <span class="mobile-nav-icon">👥</span>
-          <span class="mobile-nav-label">Ryhmät</span>
-        </button>
-      `;
-    }
-    if (key === "favorites") {
-      const sheet = document.querySelector("#mobile-favorites-sheet");
-      const isActive = sheet && !sheet.hidden;
-      return `
-        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="favorites" aria-label="Suosikit">
-          <span class="mobile-nav-icon">⭐</span>
-          <span class="mobile-nav-label">Suosikit</span>
-        </button>
-      `;
-    }
-    if (key === "settings") {
-      const isActive = settingsPopover && !settingsPopover.hidden;
-      return `
-        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="settings" aria-label="Asetukset">
-          <span class="mobile-nav-icon">⚙️</span>
-          <span class="mobile-nav-label">Asetukset</span>
-        </button>
-      `;
-    }
-    return "";
+
+    return `
+      <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="${escapeHtml(key)}" aria-label="${escapeHtml(label)}">
+        <span class="mobile-nav-icon">${icon}</span>
+        <span class="mobile-nav-label">${escapeHtml(label)}</span>
+        <span class="mobile-nav-indicator" aria-hidden="true"></span>
+      </button>
+    `;
   };
 
+  const isHomeActive = state.activeView === "home" && !isSheetOpen && !isSettingsOpen;
+
   const homeBtnHtml = `
-    <button type="button" class="mobile-nav-btn mobile-nav-btn-home ${state.activeView === "home" ? "active" : ""}" data-mobile-nav="koti" aria-label="Koti">
-      <span class="mobile-nav-home-bubble">
-        <span class="mobile-nav-icon">🏠</span>
-      </span>
+    <button type="button" class="mobile-nav-btn mobile-nav-btn-home ${isHomeActive ? "active" : ""}" data-mobile-nav="koti" aria-label="Koti">
+      <span class="mobile-nav-icon">🏠</span>
       <span class="mobile-nav-label">Koti</span>
+      <span class="mobile-nav-indicator" aria-hidden="true"></span>
     </button>
   `;
 
@@ -2097,102 +2102,52 @@ function renderMobileFavoritesSheet() {
   const body = document.querySelector("#mobile-sheet-body");
   if (!body) return;
 
-  let favsHtml = "";
   if (state.favorites.length > 0) {
-    favsHtml = `
+    const favItemsHtml = state.favorites
+      .map((key) => {
+        const meta = getFavoriteMeta(key);
+        if (!meta) return "";
+        return `
+          <a href="${meta.hash}" class="mobile-sheet-item-btn mobile-sheet-fav-link" data-fav-key="${escapeHtml(key)}">
+            <span class="icon">${meta.icon}</span>
+            <span class="label">${escapeHtml(meta.title)}</span>
+          </a>
+        `;
+      })
+      .join("");
+
+    body.innerHTML = `
       <div class="mobile-sheet-section">
-        <div class="mobile-sheet-section-title">⭐ Omat suosikit</div>
+        <div class="mobile-sheet-section-title">⭐ Omat suosikit (${state.favorites.length})</div>
         <div class="mobile-sheet-grid">
-          ${state.favorites
-            .map((key) => {
-              const meta = getFavoriteMeta(key);
-              if (!meta) return "";
-              return `
-                <a href="${meta.hash}" class="mobile-sheet-item-btn mobile-sheet-fav-link" data-fav-key="${escapeHtml(key)}">
-                  <span class="icon">${meta.icon}</span>
-                  <span class="label">${escapeHtml(meta.title)}</span>
-                </a>
-              `;
-            })
-            .join("")}
+          ${favItemsHtml}
         </div>
       </div>
     `;
   } else {
-    favsHtml = `
-      <div class="mobile-sheet-section">
-        <div class="mobile-sheet-section-title">⭐ Omat suosikit</div>
-        <p style="font-size: 0.82rem; color: var(--color-text-muted); margin: 0 0 4px 0;">
-          Ei tallennettuja suosikkeja. Voit lisätä suosikkeja tähtipainikkeella (☆) tai asetuksista!
+    body.innerHTML = `
+      <div class="mobile-sheet-section" style="text-align: center; padding: 24px 12px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">⭐</div>
+        <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: var(--color-heading);">Ei vielä suosikkeja</h4>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin: 0 0 16px 0; line-height: 1.45;">
+          Voit lisätä opetusryhmiä, kursseja tai sivuja suosikkeihisi tähtipainikkeella (☆) tai asetusvalikosta.
         </p>
+        <button type="button" class="rev-btn rev-btn-tasks" id="btn-open-settings-from-sheet" style="font-size: 0.84rem; padding: 8px 16px; margin: 0 auto;">
+          ⚙️ Hallitse suosikkeja asetuksissa
+        </button>
       </div>
     `;
+
+    const btnOpenSettings = body.querySelector("#btn-open-settings-from-sheet");
+    if (btnOpenSettings) {
+      btnOpenSettings.addEventListener("click", () => {
+        closeMobileFavoritesSheet();
+        openSettingsPopover();
+        const favCard = document.querySelector("#card-setting-favs");
+        if (favCard) favCard.open = true;
+      });
+    }
   }
-
-  // Jos ollaan kurssilla, näytetään kurssin oppituntilista (1-12)
-  let courseLessonsHtml = "";
-  if (state.activeView === "lesson" && state.activeCourse && state.activeCourseData?.lessons?.length > 0) {
-    const lessons = state.activeCourseData.lessons;
-    courseLessonsHtml = `
-      <div class="mobile-sheet-section">
-        <div class="mobile-sheet-section-title">📖 ${state.activeCourse.code}: Oppitunnit</div>
-        <div class="mobile-sheet-lessons-grid">
-          ${lessons
-            .map((les) => {
-              const isActive = les.lesson === state.activeLessonNumber;
-              return `
-                <a href="#/${state.activeCourse.code}/${les.lesson}" class="mobile-sheet-lesson-pill ${isActive ? "active" : ""}">
-                  ${les.lesson}
-                </a>
-              `;
-            })
-            .join("")}
-        </div>
-      </div>
-    `;
-  }
-
-  const sectionsHtml = `
-    <div class="mobile-sheet-section">
-      <div class="mobile-sheet-section-title">🧭 Luokat & Osio-sivut</div>
-      <div class="mobile-sheet-grid">
-        <a href="#/7" class="mobile-sheet-item-btn">
-          <span>🟢</span>
-          <span>7. luokka</span>
-        </a>
-        <a href="#/8" class="mobile-sheet-item-btn">
-          <span>🔵</span>
-          <span>8. luokka</span>
-        </a>
-        <a href="#/9" class="mobile-sheet-item-btn">
-          <span>🟣</span>
-          <span>9. luokka</span>
-        </a>
-        <a href="#/valinnainen" class="mobile-sheet-item-btn">
-          <span>🟠</span>
-          <span>Muut kurssit</span>
-        </a>
-        <a href="#/kirjat" class="mobile-sheet-item-btn">
-          <span>📚</span>
-          <span>Oppikirjat</span>
-        </a>
-        <a href="#/kertaus" class="mobile-sheet-item-btn">
-          <span>📝</span>
-          <span>Kertaustehtävät</span>
-        </a>
-        <a href="#/arviointi" class="mobile-sheet-item-btn">
-          <span>ℹ️</span>
-          <span>Arviointi & info</span>
-        </a>
-      </div>
-    </div>
-  `;
-
-  body.innerHTML = `
-    ${favsHtml}
-    ${courseLessonsHtml}
-    ${sectionsHtml}
-  `;
 
   body.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {

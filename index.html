@@ -57,6 +57,9 @@
 
         <button type="button" class="nav-tab" data-nav="view" data-view="lukujarjestys">📅 Lukujärjestys</button>
         <button type="button" class="nav-tab" data-nav="view" data-view="aikataulu">👥 Ryhmät</button>
+
+        <span class="nav-divider nav-divider-mobile-only" aria-hidden="true"></span>
+        <button type="button" class="nav-tab nav-tab-mobile-settings" id="nav-btn-mobile-settings">⚙️ Sivuston asetukset</button>
       </nav>
 
       <div class="header-actions">
@@ -100,15 +103,6 @@
         </div>
 
         <div class="settings-popover-content">
-          <div class="settings-accordion-mode-bar" id="settings-accordion-mode-bar">
-            <span class="settings-accordion-mode-label">Osioiden avaus:</span>
-            <div class="settings-accordion-mode-btns" id="settings-accordion-mode-btns">
-              <button type="button" class="accordion-mode-btn active" data-mode="closed" title="Kaikki osiot suljettuina (oletus)">🔒 Suljettuina</button>
-              <button type="button" class="accordion-mode-btn" data-mode="last" title="Avaa aiemmin avatut osiot">🕒 Viimeksi avatut</button>
-              <button type="button" class="accordion-mode-btn" data-mode="all" title="Kaikki osiot avattuina">📖 Kaikki auki</button>
-            </div>
-          </div>
-
           <div class="settings-accordion-container">
             
             <!-- 1. Aloitus- ja kotinäkymä -->
@@ -193,6 +187,16 @@
                     <span class="theme-opt-icon">🌙</span>
                     <span class="theme-opt-label">Tumma</span>
                   </button>
+                </div>
+
+                <div class="settings-group" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border);">
+                  <h4 class="settings-group-title">📂 Asetusvalikon osioiden avaustapa</h4>
+                  <p class="settings-group-desc">Valitse, miten asetuskortit avautuvat valikon auetessa:</p>
+                  <div class="settings-accordion-mode-btns" id="settings-accordion-mode-btns">
+                    <button type="button" class="accordion-mode-btn active" data-mode="closed" title="Kaikki osiot suljettuina (oletus)">🔒 Suljettuina</button>
+                    <button type="button" class="accordion-mode-btn" data-mode="last" title="Avaa aiemmin avatut osiot">🕒 Viimeksi avatut</button>
+                    <button type="button" class="accordion-mode-btn" data-mode="all" title="Kaikki osiot avattuina">📖 Kaikki auki</button>
+                  </div>
                 </div>
               </div>
             </details>

@@ -4459,73 +4459,72 @@ a:hover {
   background: transparent;
   border: none;
   color: var(--color-text-muted);
-  padding: 6px 0;
+  padding: 8px 0 6px 0;
   cursor: pointer;
-  transition: color 0.15s ease, transform 0.1s ease;
+  transition: color 0.15s ease, transform 0.12s ease;
   position: relative;
   text-decoration: none;
   height: 100%;
 }
 
 .mobile-nav-btn:active {
-  transform: scale(0.94);
+  transform: scale(0.93);
 }
 
 .mobile-nav-icon {
   font-size: 1.25rem;
   line-height: 1;
+  transition: transform 0.15s ease;
 }
 
 .mobile-nav-label {
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+/* Kevyt ja selkeä aktiivisen tilan alaviiva */
+.mobile-nav-indicator {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 28px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--color-primary);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease;
 }
 
 .mobile-nav-btn.active {
-  color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.mobile-nav-btn.active .mobile-nav-icon {
+  transform: translateY(-1px);
+}
+
+.mobile-nav-btn.active .mobile-nav-label {
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.mobile-nav-btn.active .mobile-nav-indicator {
+  transform: translateX(-50%) scaleX(1);
 }
 
 [data-theme="dark"] .mobile-nav-btn.active {
-  color: #60a5fa;
+  color: #fde047;
 }
 
-/* Korostettu Koti-painike keskellä */
-.mobile-nav-btn-home {
-  position: relative;
+[data-theme="dark"] .mobile-nav-btn.active .mobile-nav-label {
+  color: #fde047;
 }
 
-.mobile-nav-home-bubble {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.35);
-  margin-top: -12px;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-.mobile-nav-btn-home:active .mobile-nav-home-bubble {
-  transform: scale(0.92);
-}
-
-.mobile-nav-home-bubble .mobile-nav-icon {
-  font-size: 1.3rem;
-  color: #fff;
-}
-
-.mobile-nav-btn-home.active .mobile-nav-home-bubble {
-  background: var(--color-accent);
-  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.4);
-}
-
-.mobile-nav-btn-home.active .mobile-nav-label {
-  color: var(--color-accent);
-  font-weight: 700;
+[data-theme="dark"] .mobile-nav-indicator {
+  background: #fde047;
 }
 
 /* --------------------------------------------------------------------------
@@ -4706,8 +4705,13 @@ a:hover {
 
 /* --------------------------------------------------------------------------
    Mobiilikäyttöliittymä (< 768px):
-   Piilotetaan työpöydän sivupalkki ja ylävalikko, aktivoidaan alapalkki
+   Piilotetaan työpöydän sivupalkki, säilytetään hampurilainen, aktivoidaan alapalkki
    -------------------------------------------------------------------------- */
+.nav-divider-mobile-only,
+.nav-tab-mobile-settings {
+  display: none;
+}
+
 @media (max-width: 768px) {
   body {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
@@ -4721,12 +4725,33 @@ a:hover {
     display: none !important;
   }
 
-  .main-nav {
+  .header-settings-btn {
     display: none !important;
   }
 
   .menu-toggle {
-    display: none !important;
+    display: flex !important;
+  }
+
+  .nav-divider-mobile-only {
+    display: block !important;
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .nav-tab-mobile-settings {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: #fde047 !important;
+    padding: 10px 14px;
+    background: rgba(254, 224, 71, 0.12);
+    border-radius: var(--radius-md);
+    margin-top: 6px;
+    border: 1px solid rgba(254, 224, 71, 0.25);
   }
 
   .app-layout {
