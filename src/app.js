@@ -1062,6 +1062,19 @@ function openSettingsPopover() {
   applySettingsAccordionMode();
   updateMobileBottomBarActive();
   renderSettingsPopover();
+
+  // Ohjataan näkymä ja vieritys heti asetuksiin
+  settingsPopover.scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  requestAnimationFrame(() => {
+    try {
+      settingsPopover.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      const closeBtn = document.querySelector("#settings-popover-close-btn");
+      if (closeBtn) closeBtn.focus({ preventScroll: true });
+      else settingsPopover.focus({ preventScroll: true });
+    } catch (e) {}
+  });
 }
 
 function closeSettingsPopover() {
@@ -2108,9 +2121,15 @@ function renderMobileFavoritesSheet() {
         const meta = getFavoriteMeta(key);
         if (!meta) return "";
         return `
-          <a href="${meta.hash}" class="mobile-sheet-item-btn mobile-sheet-fav-link" data-fav-key="${escapeHtml(key)}">
-            <span class="icon">${meta.icon}</span>
-            <span class="label">${escapeHtml(meta.title)}</span>
+          <a href="${meta.hash}" class="mobile-sheet-fav-row" data-fav-key="${escapeHtml(key)}">
+            <div class="mobile-sheet-fav-left">
+              <span class="mobile-sheet-fav-icon">${meta.icon}</span>
+              <div class="mobile-sheet-fav-text">
+                <span class="mobile-sheet-fav-title">${escapeHtml(meta.title)}</span>
+                ${meta.key ? `<span class="mobile-sheet-fav-sub">${escapeHtml(meta.key)}</span>` : ""}
+              </div>
+            </div>
+            <span class="mobile-sheet-fav-arrow" aria-hidden="true">→</span>
           </a>
         `;
       })
@@ -2119,7 +2138,7 @@ function renderMobileFavoritesSheet() {
     body.innerHTML = `
       <div class="mobile-sheet-section">
         <div class="mobile-sheet-section-title">⭐ Omat suosikit (${state.favorites.length})</div>
-        <div class="mobile-sheet-grid">
+        <div class="mobile-sheet-favs-list">
           ${favItemsHtml}
         </div>
       </div>
