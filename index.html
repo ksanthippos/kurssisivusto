@@ -100,91 +100,169 @@
         </div>
 
         <div class="settings-popover-content">
-          <!-- 1. Aloitusnäkymän valinta -->
-          <div class="settings-group">
-            <h4 class="settings-group-title">🚀 Sivuston aloitusnäkymä</h4>
-            <p class="settings-group-desc">Valitse mikä sivu avautuu oletuksena sivustolle tultaessa:</p>
-            <div class="default-view-options-group" id="settings-default-options"></div>
-          </div>
+          <div class="settings-accordion-container">
+            
+            <!-- 1. Aloitus- ja kotinäkymä -->
+            <details class="settings-card" open id="card-setting-home">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">🏠</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Aloitus- ja kotinäkymä</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-home">Kotinäkymä</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <div class="settings-group">
+                  <h4 class="settings-group-title">🚀 Sivuston aloitusnäkymä</h4>
+                  <p class="settings-group-desc">Valitse mikä sivu avautuu oletuksena sivustolle tultaessa:</p>
+                  <div class="default-view-options-group" id="settings-default-options"></div>
+                </div>
 
-          <!-- 2. Suosikkien muokkaus -->
-          <div class="settings-group">
-            <h4 class="settings-group-title">⭐ Omat suosikit</h4>
-            <p class="settings-group-desc">Muuta suosikkien järjestystä nuolilla tai poista kohteita listalta:</p>
-            <div class="settings-favorites-list" id="settings-favorites-list"></div>
-          </div>
+                <div class="settings-group" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border);">
+                  <h4 class="settings-group-title">📦 Kotinäkymän osiot & järjestys</h4>
+                  <p class="settings-group-desc">Valitse mitkä upotukset näytetään kotinäkymässä ja järjestä ne nuolilla:</p>
+                  <div class="settings-home-blocks-list" id="settings-home-blocks-list"></div>
+                </div>
+              </div>
+            </details>
 
-          <!-- 3. Tumman tilan valinta -->
-          <div class="settings-group">
-            <h4 class="settings-group-title">🌓 Ulkoasu ja teema</h4>
-            <p class="settings-group-desc">Valitse sivuston väritystila:</p>
-            <div class="theme-selector-group" id="theme-selector-group">
-              <button type="button" class="theme-opt-btn" data-theme-choice="system">
-                <span class="theme-opt-icon">💻</span>
-                <span class="theme-opt-label">Järjestelmä</span>
-              </button>
-              <button type="button" class="theme-opt-btn" data-theme-choice="light">
-                <span class="theme-opt-icon">☀️</span>
-                <span class="theme-opt-label">Vaalea</span>
-              </button>
-              <button type="button" class="theme-opt-btn" data-theme-choice="dark">
-                <span class="theme-opt-icon">🌙</span>
-                <span class="theme-opt-label">Tumma</span>
-              </button>
-            </div>
-          </div>
+            <!-- 2. Omat suosikit -->
+            <details class="settings-card" id="card-setting-favs">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">⭐</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Omat suosikit</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-favs">0 kohdetta</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <div class="settings-group">
+                  <p class="settings-group-desc">Voit lisätä suosikkeihin oppiaineita, kursseja tai oman opetusryhmäsi:</p>
+                  
+                  <div class="settings-add-fav-bar" style="margin-bottom: 12px;">
+                    <label for="settings-quick-add-select" class="sidebar-label" style="margin-bottom: 4px;">➕ Lisää suosikki:</label>
+                    <div style="display: flex; gap: 8px;">
+                      <select id="settings-quick-add-select" class="course-select" style="font-size: 0.85rem; padding: 6px 10px;"></select>
+                      <button type="button" class="rev-btn rev-btn-tasks" id="btn-quick-add-fav" style="padding: 6px 12px; font-size: 0.82rem; white-space: nowrap;">Lisää</button>
+                    </div>
+                  </div>
 
-          <!-- 4. Päivämääräperusteinen tuntiohjaus -->
-          <div class="settings-group">
-            <div class="settings-group-header-with-badge">
-              <h4 class="settings-group-title">📅 Tuntiohjaus päivämäärän mukaan</h4>
-              <span class="settings-future-badge">Valmius kytketty</span>
-            </div>
-            <p class="settings-group-desc">Ohjaa suosikkikurssilla automaattisesti kuluvan päivän oppitunnille Kurssiportaalin aikataulun mukaisesti.</p>
-            <label class="settings-toggle-row">
-              <input type="checkbox" id="setting-auto-date-lesson" class="settings-checkbox">
-              <span class="settings-toggle-label">Aktivoi päivämääräohjaus suosikkikursseilla</span>
-            </label>
-          </div>
+                  <div class="settings-favorites-list" id="settings-favorites-list"></div>
+                </div>
+              </div>
+            </details>
 
-          <!-- 5. Oppituntien laajuus -->
-          <div class="settings-group">
-            <div class="settings-group-header-with-badge">
-              <h4 class="settings-group-title">📖 Oppituntien laajuus</h4>
-              <span class="settings-future-badge">Pilotti käytössä</span>
-            </div>
-            <p class="settings-group-desc">Määrittää oppitunneilla näytettävän sisällön oletuslaajuuden:</p>
-            <div class="scope-selector-group" id="scope-selector-group">
-              <button type="button" class="scope-opt-btn" data-scope="compact">
-                <span class="scope-opt-title">⚡ Tiivistetty</span>
-                <span class="scope-opt-sub">Vain ydinteoria</span>
-              </button>
-              <button type="button" class="scope-opt-btn active" data-scope="extended">
-                <span class="scope-opt-title">📖 Laaja</span>
-                <span class="scope-opt-sub">Koko oppimateriaali ja kuvat</span>
-              </button>
-            </div>
-          </div>
-          <!-- 6. Opettajan ja sijaisen työkalut -->
-          <div class="settings-group">
-            <h4 class="settings-group-title">👨‍🏫 Opettajan ja sijaisen työkalut</h4>
-            <p class="settings-group-desc">Sijaisjärjestelyt, tuntiohjeet ja muistilistat:</p>
-            <div class="teacher-tools-btn-group" id="teacher-tools-btn-group">
-              <button type="button" class="teacher-tool-btn" id="btn-open-substitute-guide">
-                <span class="teacher-tool-icon">📋</span>
-                <span class="teacher-tool-info">
-                  <strong>Sijaisen muistilista</strong>
-                  <small>Tuntikäytännöt, Wilma ja valvonta</small>
-                </span>
-              </button>
-              <button type="button" class="teacher-tool-btn" id="btn-open-substitute-instructions">
-                <span class="teacher-tool-icon">✉️</span>
-                <span class="teacher-tool-info">
-                  <strong>Luo sijaisohjeet</strong>
-                  <small>Generoi tuntiohjeet leikepöydälle</small>
-                </span>
-              </button>
-            </div>
+            <!-- 3. Ulkoasu ja teema -->
+            <details class="settings-card" id="card-setting-theme">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">🌓</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Ulkoasu ja teema</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-theme">Järjestelmä</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <div class="theme-selector-group" id="theme-selector-group">
+                  <button type="button" class="theme-opt-btn" data-theme-choice="system">
+                    <span class="theme-opt-icon">💻</span>
+                    <span class="theme-opt-label">Järjestelmä</span>
+                  </button>
+                  <button type="button" class="theme-opt-btn" data-theme-choice="light">
+                    <span class="theme-opt-icon">☀️</span>
+                    <span class="theme-opt-label">Vaalea</span>
+                  </button>
+                  <button type="button" class="theme-opt-btn" data-theme-choice="dark">
+                    <span class="theme-opt-icon">🌙</span>
+                    <span class="theme-opt-label">Tumma</span>
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <!-- 4. Tuntiohjaus & laajuus -->
+            <details class="settings-card" id="card-setting-dates">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">📅</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Tuntiohjaus & laajuus</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-dates">Päivämääräohjaus</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <div class="settings-group">
+                  <div class="settings-group-header-with-badge">
+                    <h4 class="settings-group-title">📅 Tuntiohjaus päivämäärän mukaan</h4>
+                    <span class="settings-future-badge active" style="background:#10b981; color:#fff; border-color:#10b981;">Käytössä</span>
+                  </div>
+                  <p class="settings-group-desc">Ohjaa kurssille tultaessa automaattisesti suosikkiryhmäsi kuluvan päivän oppitunnille.</p>
+                  <label class="settings-toggle-row">
+                    <input type="checkbox" id="setting-auto-date-lesson" class="settings-checkbox">
+                    <span class="settings-toggle-label">Aktivoi päivämääräohjaus</span>
+                  </label>
+                </div>
+
+                <div class="settings-group" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border);">
+                  <h4 class="settings-group-title">📖 Oppituntien oletuslaajuus</h4>
+                  <p class="settings-group-desc">Määrittää oppitunneilla näytettävän sisällön oletuslaajuuden:</p>
+                  <div class="scope-selector-group" id="scope-selector-group">
+                    <button type="button" class="scope-opt-btn" data-scope="compact">
+                      <span class="scope-opt-title">⚡ Tiivistetty</span>
+                      <span class="scope-opt-sub">Vain ydinteoria</span>
+                    </button>
+                    <button type="button" class="scope-opt-btn active" data-scope="extended">
+                      <span class="scope-opt-title">📖 Laaja</span>
+                      <span class="scope-opt-sub">Koko oppimateriaali ja kuvat</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <!-- 5. Opettajan ja sijaisen työkalut -->
+            <details class="settings-card" id="card-setting-tools">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">👨‍🏫</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Opettajan ja sijaisen työkalut</h4>
+                    <span class="settings-card-status-badge">Sijaisjärjestelyt</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <p class="settings-group-desc">Pikalinkit sijaisohjeiden luontiin ja tuntikäytäntöihin:</p>
+                <div class="teacher-tools-btn-group" id="teacher-tools-btn-group">
+                  <button type="button" class="teacher-tool-btn" id="btn-open-substitute-guide">
+                    <span class="teacher-tool-icon">📋</span>
+                    <span class="teacher-tool-info">
+                      <strong>Sijaisen muistilista</strong>
+                      <small>Tuntikäytännöt, Wilma ja valvonta</small>
+                    </span>
+                  </button>
+                  <button type="button" class="teacher-tool-btn" id="btn-open-substitute-instructions">
+                    <span class="teacher-tool-icon">✉️</span>
+                    <span class="teacher-tool-info">
+                      <strong>Luo sijaisohjeet</strong>
+                      <small>Generoi tuntiohjeet leikepöydälle</small>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </details>
+
           </div>
         </div>
 
@@ -271,44 +349,7 @@
       
       <!-- 0. KOTINÄKYMÄ -->
       <article class="view-panel" id="view-home">
-        <!-- Tervetulokortti (normaali vaalea ilme, ei sinistä pohjaa) -->
-        <section class="home-welcome-card">
-          <h2 class="home-welcome-title">Tervetuloa kurssisivustolle!</h2>
-          <p class="home-welcome-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
-          <div class="home-welcome-body">
-            <p>
-              <strong>Pasilan peruskoululainen ✋</strong> Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset simulaatiot, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät ratkaisuineen.
-            </p>
-          </div>
-        </section>
-
-        <!-- Kurssiportaalin aikataululaatikko -->
-        <section class="home-schedule-card" id="home-schedule-card">
-          <div class="home-schedule-header">
-            <div class="home-schedule-title-group">
-              <span class="home-schedule-icon" aria-hidden="true">📅</span>
-              <div>
-                <h3 class="home-schedule-heading">Lukujärjestys & ryhmien aikataulut</h3>
-                <p class="home-schedule-sub">2. jakso (19.10.2026 – 18.12.2026) · Opetusryhmät, tuntiohjelma ja koepäivät</p>
-              </div>
-            </div>
-            <span class="home-schedule-badge active-badge">Käytössä</span>
-          </div>
-          <div class="home-schedule-body">
-            <p class="home-schedule-text">
-              Kurssiportaali on integroitu osaksi kurssisivustoa. Löydät viikoittaisen lukujärjestyksen, tuntien ajankohdat, opetusryhmien etenemisen sekä poikkeuspäivät suoraan ylävalikosta.
-            </p>
-            <div class="home-schedule-footer-row">
-              <a href="#/lukujarjestys" class="home-schedule-cta-btn">
-                <span>📅 Avaa lukujärjestys</span>
-              </a>
-              <a href="#/aikataulu" class="home-schedule-cta-btn secondary">
-                <span>🗓️ Avaa ryhmien aikataulut</span>
-              </a>
-              <span class="home-schedule-hint">Toimii puhelimessa ja tietokoneella ilman kirjautumista</span>
-            </div>
-          </div>
-        </section>
+        <div id="home-blocks-container" class="home-blocks-container"></div>
       </article>
 
       <!-- 1. OPPITUNTINÄKYMÄ -->
@@ -398,8 +439,8 @@
         <!-- Navigaatio edellinen / seuraava tunti -->
         <footer class="lesson-footer-nav">
           <button type="button" id="prev-lesson-btn" class="nav-btn prev-btn">← Edellinen tunti</button>
-          <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="portal-check-btn">
-            Tarkista ryhmäsi aikataulu kurssiportaalista ↗
+          <a href="#/aikataulu" class="portal-check-btn" id="lesson-portal-check-btn">
+            Tarkista ryhmäsi aikataulu 🗓️
           </a>
           <button type="button" id="next-lesson-btn" class="nav-btn next-btn">Seuraava tunti →</button>
         </footer>
@@ -528,10 +569,16 @@
         <header class="view-header">
           <div class="view-header-top-row">
             <div class="view-eyebrow">2. jakso (19.10.2026 – 18.12.2026)</div>
-            <button type="button" class="favorite-star-btn" data-toggle-view-fav="aikataulu" id="fav-btn-aikataulu" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
-              <span class="star-icon">☆</span>
-              <span class="star-label">Lisää suosikkeihin</span>
-            </button>
+            <div class="aikataulu-header-actions" style="display: flex; gap: 8px;">
+              <button type="button" class="favorite-star-btn" id="fav-btn-current-group" title="Lisää opetusryhmä suosikkeihin" aria-label="Lisää opetusryhmä suosikkeihin">
+                <span class="star-icon">☆</span>
+                <span class="star-label" id="fav-group-star-label">Ryhmä suosikkeihin</span>
+              </button>
+              <button type="button" class="favorite-star-btn" data-toggle-view-fav="aikataulu" id="fav-btn-aikataulu" title="Lisää aikataulu suosikkeihin" aria-label="Lisää suosikkeihin">
+                <span class="star-icon">☆</span>
+                <span class="star-label">Aikataulu suosikkeihin</span>
+              </button>
+            </div>
           </div>
           <h2 class="view-title" id="aikataulu-main-title">Ryhmien tuntiaikataulut</h2>
           <p class="view-description">

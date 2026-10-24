@@ -20,7 +20,15 @@ const state = {
   activeRevisionFilter: "all",
   theme: "system", // "system" | "light" | "dark"
   autoDateLesson: false, // boolean
-  lessonScope: "extended" // "compact" | "extended"
+  lessonScope: "extended", // "compact" | "extended"
+  homeConfig: {
+    blocks: [
+      { id: "welcome", title: "Tervetuloteksti", enabled: true },
+      { id: "timetable", title: "Lukujärjestys", enabled: true },
+      { id: "aikataulu", title: "Ryhmän aikataulu", enabled: true }
+    ],
+    aikatauluGroup: null
+  }
 };
 
 // DOM-elementit
@@ -282,6 +290,16 @@ function setupEventListeners() {
     });
   }
 
+  // Aikataulunäkymän opetusryhmän suosikkitähti
+  const favBtnCurrentGroup = document.querySelector("#fav-btn-current-group");
+  if (favBtnCurrentGroup) {
+    favBtnCurrentGroup.addEventListener("click", () => {
+      if (!state.activeScheduleGroup) return;
+      toggleFavorite(state.activeScheduleGroup);
+      updateCurrentGroupFavoriteButton();
+    });
+  }
+
   // Päivämääräperusteinen tuntiohjaus -valintaruutu
   if (settingAutoDateLesson) {
     settingAutoDateLesson.addEventListener("change", () => {
@@ -289,9 +307,13 @@ function setupEventListeners() {
       try {
         localStorage.setItem("rauh_auto_date_lesson", state.autoDateLesson ? "true" : "false");
       } catch (err) {}
+      const badge = document.querySelector("#summary-badge-dates");
+      if (badge) {
+        badge.textContent = state.autoDateLesson ? "📅 Päällä" : "Poissa käytöstä";
+      }
       showToast(
         state.autoDateLesson
-          ? "📅 Päivämääräohjaus aktivoitu (käytössä Kurssiportaali-integraation valmistuttua)"
+          ? "📅 Päivämääräohjaus aktivoitu: kurssille siirryttäessä avataan kuluvan päivän oppitunti"
           : "Päivämääräohjaus kytketty pois"
       );
     });
@@ -320,7 +342,18 @@ function setupEventListeners() {
   if (courseSelect) {
     courseSelect.addEventListener("change", () => {
       const code = courseSelect.value;
-      if (code) navigateTo(code, 1);
+      if (code) {
+        if (state.autoDateLesson) {
+          const autoInfo = getAutoLessonForCourse(code);
+          if (autoInfo && autoInfo.lesson) {
+            navigateTo(code, autoInfo.lesson);
+            const dateStr = autoInfo.date ? ` (${formatDisplayDate(autoInfo.date)})` : "";
+            showToast(`📅 Päivämääräohjaus: ryhmän ${autoInfo.groupCode} oppitunti #${autoInfo.lesson}${dateStr}`);
+            return;
+          }
+        }
+        navigateTo(code, 1);
+      }
     });
   }
 
@@ -527,12 +560,27 @@ function parseRoute() {
   } else if (firstPart === "sijaisohjeet" || firstPart === "instructions") {
     switchView("sijaisohjeet");
   } else {
-    // Kurssioppitunti: esim. #/MA_71/1 tai #/FY_91/3
+    // Kurssioppitunti: esim. #/MA_71 tai #/MA_71/1 tai #/FY_91/3
     const courseCode = parts[0];
-    const lessonNum = parseInt(parts[1], 10) || 1;
+    let lessonNum = parts[1] ? parseInt(parts[1], 10) : null;
 
     const foundCourse = state.courses.find((c) => c.code.toLowerCase() === courseCode.toLowerCase());
     if (foundCourse) {
+      if (!lessonNum) {
+        if (state.autoDateLesson) {
+          const autoInfo = getAutoLessonForCourse(foundCourse.code);
+          if (autoInfo && autoInfo.lesson) {
+            lessonNum = autoInfo.lesson;
+            const dateStr = autoInfo.date ? ` (${formatDisplayDate(autoInfo.date)})` : "";
+            showToast(`📅 Päivämääräohjaus: ryhmän ${autoInfo.groupCode} oppitunti #${lessonNum}${dateStr}`);
+          } else {
+            lessonNum = 1;
+          }
+        } else {
+          lessonNum = 1;
+        }
+      }
+
       switchView("lesson");
       state.activeGrade = foundCourse.grade;
       updateNavTabsUI();
@@ -641,6 +689,11 @@ function populateCourseSelect(grade, selectedCode) {
 // SUOSIKIT JA ASETUKSET (LOCALSTORAGE)
 // --------------------------------------------------------------------------
 
+function isGroupKey(key) {
+  if (!key || typeof key !== "string") return false;
+  return key.includes(".") && /^[A-Z0-9_]+\.[0-9]+$/i.test(key);
+}
+
 function getFavoriteMeta(key) {
   if (!key) return null;
   const lower = String(key).toLowerCase();
@@ -706,6 +759,22 @@ function getFavoriteMeta(key) {
     };
   }
 
+  // Ryhmäkohde (esim. "FY_71.3", "MA_72.1")
+  if (isGroupKey(key)) {
+    const [cCode] = String(key).split(".");
+    const course = (state.courses || []).find((c) => c.code.toUpperCase() === cCode.toUpperCase());
+    const courseTitle = course ? course.title : cCode;
+    return {
+      key: String(key).toUpperCase(),
+      type: "group",
+      title: `Ryhmä ${key} (${courseTitle})`,
+      label: `👥 Ryhmä ${key}: ${courseTitle}`,
+      hash: `#/aikataulu/${encodeURIComponent(key)}`,
+      icon: "👥",
+      courseCode: cCode.toUpperCase()
+    };
+  }
+
   // Kurssikohde
   const course = (state.courses || []).find((c) => c.code.toUpperCase() === String(key).toUpperCase());
   const code = course ? course.code : String(key).toUpperCase();
@@ -718,12 +787,16 @@ function getFavoriteMeta(key) {
     type: "course",
     title: title,
     label: `${icon} ${code}: ${title}`,
-    hash: `#/${code}/1`,
+    hash: `#/${code}`,
     icon: icon
   };
 }
 
 function applyFavoritesCollapseState() {
+  const section = document.querySelector("#sidebar-favorites-section");
+  if (section) {
+    section.classList.toggle("is-collapsed", state.favoritesCollapsed);
+  }
   if (sidebarFavoritesList) {
     sidebarFavoritesList.hidden = state.favoritesCollapsed;
   }
@@ -780,6 +853,33 @@ function loadPreferences() {
     }
   } catch (err) {}
 
+  try {
+    const rawHome = localStorage.getItem("rauh_home_config");
+    if (rawHome) {
+      const parsed = JSON.parse(rawHome);
+      if (parsed && Array.isArray(parsed.blocks)) {
+        const defaultBlockIds = ["welcome", "timetable", "aikataulu"];
+        const existingIds = parsed.blocks.map((b) => b.id);
+        const mergedBlocks = [...parsed.blocks];
+        defaultBlockIds.forEach((id) => {
+          if (!existingIds.includes(id)) {
+            mergedBlocks.push({
+              id,
+              title: id === "welcome" ? "Tervetuloteksti" : id === "timetable" ? "Lukujärjestys" : "Ryhmän aikataulu",
+              enabled: true
+            });
+          }
+        });
+        state.homeConfig = {
+          blocks: mergedBlocks,
+          aikatauluGroup: parsed.aikatauluGroup || null
+        };
+      }
+    }
+  } catch (err) {
+    console.warn("Virhe kotinäkymän asetusten latauksessa:", err);
+  }
+
   applyTheme(state.theme, false);
 }
 
@@ -788,6 +888,7 @@ function savePreferences() {
     localStorage.setItem("rauh_favorites", JSON.stringify(state.favorites));
     localStorage.setItem("rauh_default_view", state.defaultView);
     localStorage.setItem("rauh_fav_collapsed", state.favoritesCollapsed ? "true" : "false");
+    localStorage.setItem("rauh_home_config", JSON.stringify(state.homeConfig));
   } catch (err) {
     console.warn("Virhe tallennuksessa:", err);
   }
@@ -994,6 +1095,9 @@ function updateFavoriteToggleBtn() {
     if (label) label.textContent = isFav ? "Suosikeissa" : "Lisää suosikkeihin";
     btn.title = isFav ? "Poista suosikeista" : "Lisää suosikkeihin";
   });
+
+  // 3. Ryhmäsuosikkitähti aikataulunäkymässä
+  updateCurrentGroupFavoriteButton();
 }
 
 function renderSidebarFavorites() {
@@ -1015,6 +1119,8 @@ function renderSidebarFavorites() {
       const isActive =
         meta.type === "course"
           ? state.activeView === "lesson" && state.activeCourse?.code.toUpperCase() === key.toUpperCase()
+          : meta.type === "group"
+          ? state.activeView === "aikataulu" && state.activeScheduleGroup?.toUpperCase() === key.toUpperCase()
           : state.activeView === meta.key;
 
       return `
@@ -1035,6 +1141,375 @@ function renderSidebarFavorites() {
 function renderHome() {
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
+
+  const container = document.querySelector("#home-blocks-container");
+  if (!container) return;
+
+  const enabledBlocks = (state.homeConfig.blocks || []).filter((b) => b.enabled);
+  if (enabledBlocks.length === 0) {
+    container.innerHTML = `
+      <div class="empty home-empty-state">
+        <p style="font-size: 1.05rem; margin-bottom: 6px;"><strong>Kaikki kotinäkymän osiot on piilotettu</strong></p>
+        <p style="margin: 0;">Voit aktivoida osioita (Tervetuloteksti, Lukujärjestys, Ryhmän aikataulu) sivuston asetuksista yläpalkin ⚙️-valikosta.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let html = "";
+  enabledBlocks.forEach((block) => {
+    if (block.id === "welcome") {
+      html += `
+        <section class="home-welcome-card" id="home-block-welcome">
+          <h2 class="home-welcome-title">Tervetuloa kurssisivustolle!</h2>
+          <p class="home-welcome-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
+          <div class="home-welcome-body">
+            <p>
+              <strong>Pasilan peruskoululainen ✋</strong> Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset simulaatiot, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät ratkaisuineen.
+            </p>
+          </div>
+        </section>
+      `;
+    } else if (block.id === "timetable") {
+      html += `
+        <section class="home-embed-card" id="home-block-timetable">
+          <div class="home-embed-card-header">
+            <div class="home-schedule-title-group">
+              <span class="home-schedule-icon" aria-hidden="true">📅</span>
+              <div>
+                <h3 class="home-schedule-heading">Lukujärjestys</h3>
+                <p class="home-schedule-sub">2. jakso (19.10.2026 – 18.12.2026) · Viikon oppitunnit ja tilat</p>
+              </div>
+            </div>
+            <div class="home-embed-header-actions">
+              <a href="#/lukujarjestys" class="home-embed-expand-btn">Koko näkymä ↗</a>
+            </div>
+          </div>
+          <div class="home-embed-card-body" id="home-timetable-embed-container"></div>
+        </section>
+      `;
+    } else if (block.id === "aikataulu") {
+      html += `
+        <section class="home-embed-card" id="home-block-aikataulu">
+          <div class="home-embed-card-header">
+            <div class="home-schedule-title-group">
+              <span class="home-schedule-icon" aria-hidden="true">🗓️</span>
+              <div>
+                <h3 class="home-schedule-heading">Ryhmien aikataulut</h3>
+                <p class="home-schedule-sub" id="home-aikataulu-sub">Opetusryhmäkohtainen tuntiohjelma ja eteneminen</p>
+              </div>
+            </div>
+            <div class="home-embed-header-actions">
+              <select id="home-group-select" class="home-group-select" aria-label="Valitse opetusryhmä"></select>
+              <a href="#/aikataulu" id="home-aikataulu-expand-link" class="home-embed-expand-btn">Koko näkymä ↗</a>
+            </div>
+          </div>
+          <div class="home-embed-card-body" id="home-aikataulu-embed-container"></div>
+        </section>
+      `;
+    }
+  });
+
+  container.innerHTML = html;
+
+  // Renderöidään lukujärjestys jos mukana
+  if (enabledBlocks.some((b) => b.id === "timetable")) {
+    const timetableContainer = document.querySelector("#home-timetable-embed-container");
+    if (timetableContainer) {
+      renderTimetableGrid(timetableContainer);
+    }
+  }
+
+  // Renderöidään ryhmän aikataulu jos mukana
+  if (enabledBlocks.some((b) => b.id === "aikataulu")) {
+    initHomeAikatauluEmbed();
+  }
+}
+
+async function initHomeAikatauluEmbed() {
+  const groupSelect = document.querySelector("#home-group-select");
+  const expandLink = document.querySelector("#home-aikataulu-expand-link");
+  const groups = getAllScheduleGroups();
+  if (!groups.length) {
+    const container = document.querySelector("#home-aikataulu-embed-container");
+    if (container) container.innerHTML = '<div class="empty">Ei aktiivisia opetusryhmiä.</div>';
+    return;
+  }
+
+  // Valitaan näytettävä ryhmä:
+  // 1. Käyttäjän aiempi valinta kotinäkymässä
+  // 2. Käyttäjän suosikkiryhmä
+  // 3. Ensimmäinen saatavilla oleva ryhmä
+  let targetGroup = state.homeConfig.aikatauluGroup;
+  if (!targetGroup || !groups.some((g) => g.groupCode === targetGroup)) {
+    const favGroup = groups.find((g) => state.favorites.includes(g.groupCode));
+    targetGroup = favGroup ? favGroup.groupCode : groups[0].groupCode;
+  }
+
+  if (groupSelect) {
+    groupSelect.innerHTML = groups
+      .map((g) => {
+        const isFav = state.favorites.includes(g.groupCode);
+        const star = isFav ? "★ " : "";
+        const isSel = g.groupCode === targetGroup ? "selected" : "";
+        return `<option value="${escapeHtml(g.groupCode)}" ${isSel}>${star}${escapeHtml(g.groupCode)} (${escapeHtml(g.courseCode)})</option>`;
+      })
+      .join("");
+
+    groupSelect.addEventListener("change", (e) => {
+      const selected = e.target.value;
+      state.homeConfig.aikatauluGroup = selected;
+      savePreferences();
+      if (expandLink) {
+        expandLink.href = `#/aikataulu/${encodeURIComponent(selected)}`;
+      }
+      renderHomeAikatauluEmbed(selected);
+    });
+  }
+
+  if (expandLink) {
+    expandLink.href = `#/aikataulu/${encodeURIComponent(targetGroup)}`;
+  }
+
+  await renderHomeAikatauluEmbed(targetGroup);
+}
+
+async function renderHomeAikatauluEmbed(groupCode) {
+  const container = document.querySelector("#home-aikataulu-embed-container");
+  if (!container) return;
+
+  const groups = getAllScheduleGroups();
+  const currentGroupObj = groups.find((g) => g.groupCode === groupCode);
+  if (!currentGroupObj) {
+    container.innerHTML = '<div class="empty">Ryhmää ei löytynyt.</div>';
+    return;
+  }
+
+  const { courseCode, schedule } = currentGroupObj;
+  container.innerHTML = '<div class="empty">Ladataan ryhmän aikataulua…</div>';
+
+  try {
+    const courseData = await getCourseData(courseCode);
+    const lessons = courseData.lessons || [];
+    const exceptions = schedule.exceptions || [];
+    const events = [];
+
+    lessons.forEach((lesson) => {
+      const date = getLessonDate(lesson.lesson, schedule);
+      if (date) {
+        events.push({ date, lesson, exception: null });
+      }
+    });
+
+    exceptions.forEach((exception) => {
+      events.push({ date: exception.date, lesson: null, exception });
+    });
+
+    events.sort((a, b) => a.date.localeCompare(b.date));
+
+    if (!events.length) {
+      container.innerHTML = '<div class="empty">Tälle ryhmälle ei löytynyt aikataulua.</div>';
+      return;
+    }
+
+    const today = formatDate(new Date());
+
+    const cardsHtml = events
+      .map((event) => {
+        if (event.exception) {
+          return `
+            <article class="lesson-card exception-card" data-date="${event.date}">
+              <div class="lesson-header">
+                <div>
+                  <p class="lesson-number">Poikkeusohjelmaa</p>
+                  <p class="lesson-date">${formatDisplayDate(event.date)}</p>
+                  <div class="exception-box">
+                    <strong>${escapeHtml(event.exception.type)}</strong>
+                  </div>
+                  <p class="lesson-card-body-text">${escapeHtml(event.exception.description)}</p>
+                </div>
+              </div>
+            </article>
+          `;
+        }
+
+        const lesson = event.lesson;
+        const lessonNum = lesson.lesson;
+
+        let sheetsHtml = "";
+        const rawSheets = lesson.taskSheets || lesson.taskSheet;
+        if (rawSheets) {
+          const list = Array.isArray(rawSheets) ? rawSheets : [rawSheets];
+          sheetsHtml = `
+            <div class="task-sheets-list" style="margin-top: 10px;">
+              ${list
+                .map(
+                  (sheet) => `
+                  <div class="task-sheet-card">
+                    <div class="task-sheet-info">
+                      <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tehtävät")}</span>
+                      <strong class="task-sheet-title" style="font-size: 0.88rem; margin-left: 6px;">${escapeHtml(sheet.title)}</strong>
+                    </div>
+                    <button type="button" class="rev-btn rev-btn-tasks home-embed-pdf-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}" style="padding: 4px 10px; font-size: 0.78rem;">
+                      Avaa PDF 📄
+                    </button>
+                  </div>
+                `
+                )
+                .join("")}
+            </div>
+          `;
+        }
+
+        return `
+          <article class="lesson-card" data-date="${event.date}">
+            <div class="lesson-header">
+              <div class="lesson-card-header-row">
+                <div>
+                  <p class="lesson-number">Oppitunti #${lessonNum}</p>
+                  <p class="lesson-date">${formatDisplayDate(event.date)}</p>
+                </div>
+                <a href="#/${courseCode}/${lessonNum}" class="lesson-open-link-btn" title="Siirry oppitunnin sivulle">
+                  <span>Oppitunnille</span>
+                  <span>→</span>
+                </a>
+              </div>
+              <h3 class="lesson-card-title">${escapeHtml(lesson.topic || lesson.title)}</h3>
+            </div>
+            ${lesson.content ? `<div class="lesson-card-body-text">${lesson.content}</div>` : ""}
+            ${sheetsHtml}
+          </article>
+        `;
+      })
+      .join("");
+
+    container.innerHTML = `<div class="home-aikataulu-embed-scroll" id="home-aikataulu-scroll">${cardsHtml}</div>`;
+
+    container.querySelectorAll(".home-embed-pdf-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openLessonTaskViewer(btn.dataset.title, btn.dataset.url);
+      });
+    });
+
+    // Vieritetään kuluvaan tai seuraavaan tuntiin scroll-säiliössä
+    const scrollContainer = container.querySelector("#home-aikataulu-scroll");
+    if (scrollContainer) {
+      const cards = Array.from(scrollContainer.querySelectorAll(".lesson-card"));
+      cards.forEach((c) => c.classList.remove("current-lesson"));
+      let currentCard = cards.find((c) => c.dataset.date >= today) || cards[cards.length - 1];
+      if (currentCard) {
+        currentCard.classList.add("current-lesson");
+        setTimeout(() => {
+          currentCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 120);
+      }
+    }
+  } catch (err) {
+    console.error("Virhe kotinäkymän aikataulu-upotuksessa:", err);
+    container.innerHTML = `<div class="empty">Aikataulun lataus epäonnistui: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderSettingsHomeBlocks() {
+  const container = document.querySelector("#settings-home-blocks-list");
+  if (!container) return;
+
+  const blockNames = {
+    welcome: "🏠 Tervetuloteksti",
+    timetable: "📅 Lukujärjestys",
+    aikataulu: "🗓️ Ryhmän aikataulu"
+  };
+
+  container.innerHTML = state.homeConfig.blocks
+    .map((block, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === state.homeConfig.blocks.length - 1;
+      const label = blockNames[block.id] || block.title || block.id;
+
+      return `
+        <div class="settings-home-block-item" data-block-id="${escapeHtml(block.id)}">
+          <label class="settings-home-block-left">
+            <input type="checkbox" class="settings-checkbox block-toggle" data-block-id="${escapeHtml(block.id)}" ${block.enabled ? "checked" : ""}>
+            <span class="settings-home-block-label">${escapeHtml(label)}</span>
+          </label>
+          <div class="settings-reorder-btns">
+            <button type="button" class="settings-reorder-btn btn-block-up" data-index="${idx}" ${isFirst ? "disabled" : ""} title="Siirrä ylemmäs">▲</button>
+            <button type="button" class="settings-reorder-btn btn-block-down" data-index="${idx}" ${isLast ? "disabled" : ""} title="Siirrä alemmas">▼</button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  container.querySelectorAll(".block-toggle").forEach((chk) => {
+    chk.addEventListener("change", () => {
+      const bId = chk.dataset.blockId;
+      const blk = state.homeConfig.blocks.find((b) => b.id === bId);
+      if (blk) {
+        blk.enabled = chk.checked;
+        savePreferences();
+        updateSettingsSummaryBadges();
+        if (state.activeView === "home") renderHome();
+      }
+    });
+  });
+
+  container.querySelectorAll(".btn-block-up").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index, 10);
+      if (idx > 0) {
+        const item = state.homeConfig.blocks.splice(idx, 1)[0];
+        state.homeConfig.blocks.splice(idx - 1, 0, item);
+        savePreferences();
+        renderSettingsHomeBlocks();
+        if (state.activeView === "home") renderHome();
+      }
+    });
+  });
+
+  container.querySelectorAll(".btn-block-down").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index, 10);
+      if (idx < state.homeConfig.blocks.length - 1) {
+        const item = state.homeConfig.blocks.splice(idx, 1)[0];
+        state.homeConfig.blocks.splice(idx + 1, 0, item);
+        savePreferences();
+        renderSettingsHomeBlocks();
+        if (state.activeView === "home") renderHome();
+      }
+    });
+  });
+}
+
+function updateSettingsSummaryBadges() {
+  const badgeHome = document.querySelector("#summary-badge-home");
+  if (badgeHome) {
+    const enabledCount = (state.homeConfig.blocks || []).filter((b) => b.enabled).length;
+    const defMeta = getFavoriteMeta(state.defaultView);
+    if (state.defaultView !== "home" && defMeta) {
+      badgeHome.textContent = `Aloitus: ${defMeta.title}`;
+    } else {
+      badgeHome.textContent = `Kotinäkymä (${enabledCount}/3 osiota)`;
+    }
+  }
+
+  const badgeFavs = document.querySelector("#summary-badge-favs");
+  if (badgeFavs) {
+    badgeFavs.textContent = `${state.favorites.length} kpl tallennettu`;
+  }
+
+  const badgeTheme = document.querySelector("#summary-badge-theme");
+  if (badgeTheme) {
+    badgeTheme.textContent =
+      state.theme === "system" ? "💻 Järjestelmä" : state.theme === "light" ? "☀️ Vaalea" : "🌙 Tumma";
+  }
+
+  const badgeDates = document.querySelector("#summary-badge-dates");
+  if (badgeDates) {
+    badgeDates.textContent = state.autoDateLesson ? "📅 Päällä" : "Poissa käytöstä";
+  }
 }
 
 function renderSettingsPopover() {
@@ -1078,16 +1553,77 @@ function renderSettingsPopover() {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         setDefaultView(btn.dataset.setDefault);
+        updateSettingsSummaryBadges();
       });
     });
   }
 
-  // 2. Suosikkilistan järjestely & poisto (#settings-favorites-list)
+  // 1b. Kotinäkymän osioiden valinta & järjestys
+  renderSettingsHomeBlocks();
+
+  // 2. Suosikkien pikalisäysalasvetovalikko (#settings-quick-add-select & #btn-quick-add-fav)
+  const quickAddSelect = document.querySelector("#settings-quick-add-select");
+  const btnQuickAddFav = document.querySelector("#btn-quick-add-fav");
+
+  if (quickAddSelect) {
+    const groups = getAllScheduleGroups();
+    const optGroups = [];
+
+    if (groups.length > 0) {
+      optGroups.push(`
+        <optgroup label="👥 Opetusryhmät (2. jakso)">
+          ${groups.map((g) => `<option value="${escapeHtml(g.groupCode)}">Ryhmä ${escapeHtml(g.groupCode)} (${escapeHtml(g.courseCode)})</option>`).join("")}
+        </optgroup>
+      `);
+    }
+
+    if (state.courses?.length > 0) {
+      optGroups.push(`
+        <optgroup label="📚 Kurssit">
+          ${state.courses.map((c) => `<option value="${escapeHtml(c.code)}">${c.subject === "fysiikka" ? "⚡" : "📐"} ${escapeHtml(c.code)}: ${escapeHtml(c.title)}</option>`).join("")}
+        </optgroup>
+      `);
+    }
+
+    optGroups.push(`
+      <optgroup label="📌 Osio-sivut">
+        <option value="lukujarjestys">📅 Lukujärjestys</option>
+        <option value="aikataulu">🗓️ Ryhmien aikataulut</option>
+        <option value="kirjat">📚 Avoin matematiikka -kirjat</option>
+        <option value="kertaus">📝 Kertaustehtävät & mallit</option>
+        <option value="arviointi">ℹ️ Arviointiperusteet & info</option>
+      </optgroup>
+    `);
+
+    quickAddSelect.innerHTML = optGroups.join("");
+  }
+
+  if (btnQuickAddFav && !btnQuickAddFav._hasListener) {
+    btnQuickAddFav._hasListener = true;
+    btnQuickAddFav.addEventListener("click", () => {
+      if (!quickAddSelect) return;
+      const selectedKey = quickAddSelect.value;
+      if (!selectedKey) return;
+
+      if (state.favorites.includes(selectedKey)) {
+        showToast("⚠️ Kohde on jo suosikeissasi!");
+        return;
+      }
+
+      state.favorites.push(selectedKey);
+      savePreferences();
+      renderSettingsPopover();
+      const meta = getFavoriteMeta(selectedKey);
+      showToast(`⭐ Lisätty suosikkeihin: ${meta?.title || selectedKey}!`);
+    });
+  }
+
+  // 2b. Suosikkilistan järjestely & poisto (#settings-favorites-list)
   if (settingsFavoritesList) {
     if (state.favorites.length === 0) {
       settingsFavoritesList.innerHTML = `
         <p class="settings-fav-empty">
-          Ei suosikkeja vielä. Voit lisätä kohteita tähdellä (☆) kurssien tai aineistojen sivulla.
+          Ei suosikkeja vielä. Voit lisätä ryhmiä, kursseja tai sivuja yllä olevasta valikosta tai tähdellä (☆).
         </p>
       `;
     } else {
@@ -1168,6 +1704,9 @@ function renderSettingsPopover() {
 
   // 5. Oppituntien laajuus -valitsimet
   updateScopeSelectorButtons();
+
+  // 6. Yhteenvetobadget korttien otsikoihin
+  updateSettingsSummaryBadges();
 }
 
 // --------------------------------------------------------------------------
@@ -1377,6 +1916,7 @@ function renderActiveLesson() {
   // Kontekstilinkit oppikirjaan ja kertaustehtäviin
   renderLessonContextLinks();
   updateFavoriteToggleBtn();
+  updateLessonPortalCheckButton();
 
   // Edellinen / Seuraava -painikkeet
   if (prevLessonBtn) prevLessonBtn.disabled = current.lesson <= 1;
@@ -1515,6 +2055,50 @@ function renderLessonContextLinks() {
   `;
 
   lessonContextLinks.innerHTML = html;
+}
+
+function updateLessonPortalCheckButton() {
+  const btn = document.querySelector("#lesson-portal-check-btn");
+  if (!btn) return;
+  const courseCode = state.activeCourse?.code;
+  if (!courseCode) {
+    btn.classList.add("disabled");
+    btn.removeAttribute("href");
+    return;
+  }
+
+  const courseSched = state.schedules?.[courseCode];
+  const groupKeys = Object.keys(courseSched?.groups || {});
+
+  if (!courseSched || groupKeys.length === 0) {
+    btn.classList.add("disabled");
+    btn.removeAttribute("href");
+    btn.innerHTML = `🗓️ Kurssi ei opetuksessa 2. jaksossa`;
+    btn.title = `Tälle kurssille (${courseCode}) ei ole aktiivista opetusryhmää 2. jaksossa.`;
+    return;
+  }
+
+  // Tarkistetaan onko käyttäjällä jokin ryhmistä suosikeissa
+  const favGroup = groupKeys.find((gk) => state.favorites.includes(gk));
+
+  if (favGroup) {
+    btn.classList.remove("disabled");
+    btn.href = `#/aikataulu/${encodeURIComponent(favGroup)}`;
+    btn.innerHTML = `Tarkista aikataulu: <strong>${escapeHtml(favGroup)}</strong> 🗓️`;
+    btn.title = `Avaa suosikkiryhmäsi ${favGroup} aikataulu`;
+  } else if (groupKeys.length === 1) {
+    const onlyGroup = groupKeys[0];
+    btn.classList.remove("disabled");
+    btn.href = `#/aikataulu/${encodeURIComponent(onlyGroup)}`;
+    btn.innerHTML = `Tarkista aikataulu: <strong>${escapeHtml(onlyGroup)}</strong> 🗓️`;
+    btn.title = `Avaa ryhmän ${onlyGroup} aikataulu`;
+  } else {
+    // Useita ryhmiä eikä mikään suosikkina
+    btn.classList.remove("disabled");
+    btn.href = `#/aikataulu/${encodeURIComponent(groupKeys[0])}`;
+    btn.innerHTML = `Tarkista ryhmäsi aikataulu (${groupKeys.join(" / ")}) 🗓️`;
+    btn.title = `Kurssilla on useita ryhmiä (${groupKeys.join(", ")}). Voit lisätä oman ryhmäsi suosikiksi!`;
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -1998,6 +2582,80 @@ function getLessonDate(lessonNumber, schedule) {
   return null;
 }
 
+function getLessonNumberForDate(schedule, targetDate = new Date()) {
+  if (!schedule || !schedule.startDate || !schedule.endDate || !Array.isArray(schedule.weekdays)) {
+    return { lesson: 1, exact: false, date: null };
+  }
+  const startDate = new Date(`${schedule.startDate}T12:00:00`);
+  const endDate = new Date(`${schedule.endDate}T12:00:00`);
+  let current = new Date(startDate);
+  let lessonsFound = 0;
+  const lessons = [];
+
+  while (current <= endDate) {
+    const isoDate = formatDate(current);
+    if (schedule.weekdays.includes(current.getDay())) {
+      const isException = (schedule.exceptions || []).some((item) => item.date === isoDate);
+      if (!isException) {
+        lessonsFound++;
+        lessons.push({ lesson: lessonsFound, date: isoDate });
+      }
+    }
+    current.setDate(current.getDate() + 1);
+  }
+
+  const targetIso = formatDate(targetDate);
+  const exact = lessons.find((l) => l.date === targetIso);
+  if (exact) {
+    return { lesson: exact.lesson, exact: true, date: exact.date };
+  }
+
+  const upcoming = lessons.find((l) => l.date > targetIso);
+  if (upcoming) {
+    return { lesson: upcoming.lesson, exact: false, date: upcoming.date };
+  }
+
+  if (lessons.length > 0) {
+    return { lesson: lessons[lessons.length - 1].lesson, exact: false, date: lessons[lessons.length - 1].date };
+  }
+
+  return { lesson: 1, exact: false, date: null };
+}
+
+function getAutoLessonForCourse(courseCode) {
+  if (!courseCode || !state.schedules) return null;
+  const upper = courseCode.toUpperCase();
+  const courseSched = state.schedules[upper];
+  if (!courseSched || !courseSched.groups) return null;
+
+  const groupKeys = Object.keys(courseSched.groups);
+  if (groupKeys.length === 0) return null;
+
+  // 1. Suosikkiryhmä
+  let targetGroup = groupKeys.find((gk) => state.favorites.includes(gk));
+
+  // 2. Vain 1 ryhmä kurssilla
+  if (!targetGroup && groupKeys.length === 1) {
+    targetGroup = groupKeys[0];
+  }
+
+  // 3. Fallback
+  if (!targetGroup) {
+    targetGroup = groupKeys[0];
+  }
+
+  const groupSched = courseSched.groups[targetGroup];
+  if (!groupSched) return null;
+
+  const dateResult = getLessonNumberForDate(groupSched, new Date());
+  return {
+    groupCode: targetGroup,
+    lesson: dateResult.lesson,
+    date: dateResult.date,
+    exact: dateResult.exact
+  };
+}
+
 // Kurssidatan lataus välimuistilla
 async function getCourseData(courseCode) {
   const code = courseCode.toUpperCase();
@@ -2017,9 +2675,9 @@ async function getCourseData(courseCode) {
 // 1. LUKUJÄRJESTYS
 // --------------------------------------------------------------------------
 
-function renderTimetable() {
-  if (!scheduleContent || !state.timetable) {
-    if (scheduleContent) scheduleContent.innerHTML = '<div class="empty">Lukujärjestystä ei löytynyt.</div>';
+function renderTimetableGrid(container) {
+  if (!container || !state.timetable) {
+    if (container) container.innerHTML = '<div class="empty">Lukujärjestystä ei löytynyt.</div>';
     return;
   }
 
@@ -2034,7 +2692,7 @@ function renderTimetable() {
   const days = Object.entries(state.timetable.paivat || {});
   const referenceMonday = getTimetableReferenceDate();
 
-  scheduleContent.innerHTML = `
+  container.innerHTML = `
     <p class="schedule-period">
       ${escapeHtml(state.timetable.jakso)}. jakso ·
       vko ${getWeekNumber(referenceMonday)} ·
@@ -2064,6 +2722,10 @@ function renderTimetable() {
       }).join("")}
     </div>
   `;
+}
+
+function renderTimetable() {
+  renderTimetableGrid(scheduleContent);
 }
 
 function renderScheduleEvent(event) {
@@ -2157,6 +2819,27 @@ function renderAikatauluGroupPills(groups) {
   }
 }
 
+function updateCurrentGroupFavoriteButton() {
+  const btn = document.querySelector("#fav-btn-current-group");
+  const starLabel = document.querySelector("#fav-group-star-label");
+  if (!btn) return;
+  const currentGroup = state.activeScheduleGroup;
+  if (!currentGroup) {
+    btn.hidden = true;
+    return;
+  }
+  btn.hidden = false;
+  const isFav = state.favorites.includes(currentGroup);
+  btn.classList.toggle("is-favorite", isFav);
+  btn.setAttribute("aria-pressed", isFav ? "true" : "false");
+  const starIcon = btn.querySelector(".star-icon");
+  if (starIcon) starIcon.textContent = isFav ? "★" : "☆";
+  if (starLabel) {
+    starLabel.textContent = isFav ? `Ryhmä ${currentGroup} suosikeissa ★` : `Lisää ${currentGroup} suosikkeihin`;
+  }
+  btn.title = isFav ? `Poista ryhmä ${currentGroup} suosikeista` : `Lisää ryhmä ${currentGroup} suosikkeihin`;
+}
+
 async function selectScheduleGroup(groupCode) {
   state.activeScheduleGroup = groupCode;
   window.location.hash = `#/aikataulu/${groupCode}`;
@@ -2177,6 +2860,7 @@ async function renderAikataulu() {
   }
 
   renderAikatauluGroupPills(groups);
+  updateCurrentGroupFavoriteButton();
 
   const currentGroupObj = groups.find((g) => g.groupCode === state.activeScheduleGroup);
   if (!currentGroupObj) return;
