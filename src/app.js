@@ -210,17 +210,13 @@ function setupEventListeners() {
     tab.addEventListener("click", (e) => {
       const navType = tab.dataset.nav;
       if (navType === "grade") {
+        e.preventDefault();
+        e.stopPropagation();
         const grade = tab.dataset.grade;
-        const isMobileMenu = Boolean(mainNav && mainNav.classList.contains("is-open"));
-        if (isMobileMenu) {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleMobileGradeCourses(grade);
-          return;
-        }
-        closeMobileMenu();
-        setGrade(grade);
+        toggleMobileGradeCourses(grade);
+        return;
       } else if (navType === "view") {
+        closeAllGradeCourses();
         closeMobileMenu();
         const targetView = tab.dataset.view;
         if (targetView === "home" || targetView === "koti") {
@@ -497,11 +493,17 @@ function setupEventListeners() {
         closeSettingsPopover();
       }
     }
+
+    // 3. Luokkatasojen alasvetovalikoiden sulkeminen kun klikataan muualle
+    if (!e.target || !e.target.closest || !e.target.closest(".nav-grade-group")) {
+      closeAllGradeCourses();
+    }
   });
 
   // Sulkeminen Escape-näppäimellä
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      closeAllGradeCourses();
       closeMobileMenu();
       closeSettingsPopover();
       closeMobileFavoritesSheet();
@@ -1068,9 +1070,15 @@ function toggleMobileMenu(forceState) {
     }
   } else {
     // Suljetaan harmonikat kun valikko suljetaan
-    document.querySelectorAll(".nav-grade-group").forEach((g) => g.classList.remove("is-expanded"));
-    document.querySelectorAll(".nav-grade-courses").forEach((c) => (c.hidden = true));
+    closeAllGradeCourses();
   }
+}
+
+function closeAllGradeCourses() {
+  document.querySelectorAll(".nav-grade-group").forEach((g) => g.classList.remove("is-expanded"));
+  document.querySelectorAll(".nav-grade-courses").forEach((c) => {
+    c.hidden = true;
+  });
 }
 
 function openMobileGradeCourses(grade) {
@@ -1091,8 +1099,7 @@ function toggleMobileGradeCourses(grade) {
 
   const isCurrentlyOpen = !coursesContainer.hidden;
   if (isCurrentlyOpen) {
-    group.classList.remove("is-expanded");
-    coursesContainer.hidden = true;
+    closeAllGradeCourses();
   } else {
     openMobileGradeCourses(grade);
   }
@@ -1137,6 +1144,7 @@ function renderMobileNavCourseLists() {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
+        closeAllGradeCourses();
         closeMobileMenu();
         const code = btn.dataset.courseCode;
         if (code) {
