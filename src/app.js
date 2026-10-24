@@ -214,7 +214,13 @@ function setupEventListeners() {
         e.preventDefault();
         e.stopPropagation();
         const grade = tab.dataset.grade;
-        toggleMobileGradeCourses(grade);
+        toggleNavDropdown(grade);
+        return;
+      } else if (navType === "dropdown") {
+        e.preventDefault();
+        e.stopPropagation();
+        const drop = tab.dataset.dropdown;
+        toggleNavDropdown(drop);
         return;
       } else if (navType === "view") {
         closeAllGradeCourses();
@@ -226,6 +232,68 @@ function setupEventListeners() {
           window.location.hash = `#/${targetView}`;
         }
       }
+    });
+  });
+
+  // Kirjojen suodatusvalinnat ylävalikosta
+  document.querySelectorAll("[data-action='book-filter']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const filter = btn.dataset.filter || "all";
+      state.activeBooksFilter = filter;
+      closeAllGradeCourses();
+      closeMobileMenu();
+      if (state.activeView === "kirjat") {
+        renderBooks();
+      } else {
+        window.location.hash = "#/kirjat";
+      }
+      updateNavTabsUI();
+    });
+  });
+
+  // Kertaustehtävien suodatusvalinnat ylävalikosta
+  document.querySelectorAll("[data-action='revision-filter']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const filter = btn.dataset.filter || "all";
+      state.activeRevisionFilter = filter;
+      closeAllGradeCourses();
+      closeMobileMenu();
+      if (state.activeView === "kertaus") {
+        renderRevisions();
+      } else {
+        window.location.hash = "#/kertaus";
+      }
+      updateNavTabsUI();
+    });
+  });
+
+  // Arviointitiedotteen osioihin hyppääminen ylävalikosta
+  document.querySelectorAll("[data-action='info-scroll']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const sec = btn.dataset.section;
+      closeAllGradeCourses();
+      closeMobileMenu();
+      if (sec === "all") {
+        if (state.activeView === "arviointi") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          window.location.hash = "#/arviointi";
+        }
+      } else {
+        if (state.activeView === "arviointi") {
+          const el = document.querySelector(`#info-${sec}`);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          window.location.hash = `#/arviointi/${sec}`;
+        }
+      }
+      updateNavTabsUI();
     });
   });
 
@@ -597,16 +665,22 @@ function parseRoute() {
   const firstPart = parts[0].toLowerCase();
 
   if (firstPart === "kirjat" || firstPart === "avoin-matematiikka") {
-    switchView("kirjat");
     const bookId = parts[1];
-    if (bookId) {
+    if (bookId && ["7", "8", "9", "all"].includes(bookId.toLowerCase())) {
+      state.activeBooksFilter = bookId.toLowerCase();
+    }
+    switchView("kirjat");
+    if (bookId && !["7", "8", "9", "all"].includes(bookId.toLowerCase())) {
       const foundBook = state.books.find((b) => b.id.toLowerCase() === bookId.toLowerCase());
       if (foundBook) openBookViewer(foundBook);
     }
   } else if (firstPart === "kertaus" || firstPart === "kertaustehtavat") {
-    switchView("kertaus");
     const targetCourse = parts[1];
-    if (targetCourse) {
+    if (targetCourse && ["7", "8", "9", "all"].includes(targetCourse.toLowerCase())) {
+      state.activeRevisionFilter = targetCourse.toLowerCase();
+    }
+    switchView("kertaus");
+    if (targetCourse && !["7", "8", "9", "all"].includes(targetCourse.toLowerCase())) {
       const rev = state.revisions.find((r) => r.code.toUpperCase() === targetCourse.toUpperCase());
       if (rev && state.activeRevisionFilter !== "all" && state.activeRevisionFilter !== rev.grade) {
         state.activeRevisionFilter = "all";
@@ -620,6 +694,13 @@ function parseRoute() {
     }
   } else if (firstPart === "arviointi" || firstPart === "info") {
     switchView("arviointi");
+    const secId = parts[1];
+    if (secId && secId !== "all") {
+      setTimeout(() => {
+        const el = document.querySelector(`#info-${secId}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    }
   } else if (firstPart === "lukujarjestys") {
     switchView("lukujarjestys");
   } else if (firstPart === "aikataulu" || firstPart === "ryhmat" || firstPart === "portaali") {
@@ -730,12 +811,31 @@ function updateNavTabsUI() {
     const navType = tab.dataset.nav;
     if (navType === "grade") {
       tab.classList.toggle("active", state.activeView === "lesson" && tab.dataset.grade === state.activeGrade);
+    } else if (navType === "dropdown") {
+      tab.classList.toggle("active", state.activeView === tab.dataset.dropdown);
     } else if (navType === "view") {
       const isHome = state.activeView === "home" && (tab.dataset.view === "home" || tab.dataset.view === "koti");
       tab.classList.toggle("active", isHome || state.activeView === tab.dataset.view);
     }
   });
   renderMobileNavCourseLists();
+  updateMobileNavDropdownActiveStates();
+}
+
+function updateMobileNavDropdownActiveStates() {
+  // Kirjat
+  document.querySelectorAll("[data-action='book-filter']").forEach((btn) => {
+    const f = btn.dataset.filter;
+    const isActive = state.activeView === "kirjat" && state.activeBooksFilter === f;
+    btn.classList.toggle("active", isActive);
+  });
+
+  // Kertaus
+  document.querySelectorAll("[data-action='revision-filter']").forEach((btn) => {
+    const f = btn.dataset.filter;
+    const isActive = state.activeView === "kertaus" && state.activeRevisionFilter === f;
+    btn.classList.toggle("active", isActive);
+  });
 }
 
 function navigateTo(courseCode, lessonNumber = 1) {
@@ -1134,17 +1234,23 @@ function openMobileGradeCourses(grade) {
   });
 }
 
-function toggleMobileGradeCourses(grade) {
-  const group = document.querySelector(`.nav-grade-group[data-grade-group="${grade}"]`);
-  const coursesContainer = document.querySelector(`#nav-grade-courses-${grade}`);
-  if (!group || !coursesContainer) return;
+function toggleNavDropdown(key) {
+  const group = document.querySelector(
+    `.nav-grade-group[data-grade-group="${key}"], .nav-grade-group[data-dropdown-group="${key}"]`
+  );
+  const menu = document.querySelector(`#nav-grade-courses-${key}, #nav-dropdown-${key}`);
+  if (!group || !menu) return;
 
-  const isCurrentlyOpen = !coursesContainer.hidden;
-  if (isCurrentlyOpen) {
-    closeAllGradeCourses();
-  } else {
-    openMobileGradeCourses(grade);
+  const isCurrentlyOpen = !menu.hidden;
+  closeAllGradeCourses();
+  if (!isCurrentlyOpen) {
+    group.classList.add("is-expanded");
+    menu.hidden = false;
   }
+}
+
+function toggleMobileGradeCourses(grade) {
+  toggleNavDropdown(grade);
 }
 
 function renderMobileNavCourseLists() {
@@ -3090,13 +3196,14 @@ function escapeHtml(str) {
 // Sivun alkuun -painike
 const backToTopBtn = document.querySelector("#back-to-top");
 if (backToTopBtn) {
-  backToTopBtn.addEventListener("click", () => {
+  backToTopBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   window.addEventListener("scroll", () => {
-    backToTopBtn.classList.toggle("is-visible", window.scrollY > 400);
-  });
+    backToTopBtn.classList.toggle("is-visible", window.scrollY > 280);
+  }, { passive: true });
 }
 
 // Estetään ulkoisten upotusten (kuten GeoGebra) ei-toivottu automaattinen focus-vieritys

@@ -161,9 +161,100 @@
         
         <span class="nav-divider" aria-hidden="true"></span>
 
-        <button type="button" class="nav-tab" data-nav="view" data-view="kirjat">📚 Kirjat</button>
-        <button type="button" class="nav-tab" data-nav="view" data-view="kertaus">📝 Kertaus</button>
-        <button type="button" class="nav-tab" data-nav="view" data-view="arviointi">ℹ️ Arviointi</button>
+        <!-- Kirjat pudotusvalikko -->
+        <div class="nav-grade-group" data-dropdown-group="kirjat">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="kirjat">
+            <span class="nav-tab-label">📚 Kirjat</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-dropdown-kirjat" hidden>
+            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="all">
+              <span class="nav-course-badge grade-other">📚 Kaikki</span>
+              <span class="nav-course-title">Kaikki oppikirjat (7–9 lk)</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="7">
+              <span class="nav-course-badge grade-7">🟢 7. lk</span>
+              <span class="nav-course-title">7. luokan kirjat</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="8">
+              <span class="nav-course-badge grade-8">🔵 8. lk</span>
+              <span class="nav-course-title">8. luokan kirjat</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="9">
+              <span class="nav-course-badge grade-9">🟣 9. lk</span>
+              <span class="nav-course-title">9. luokan kirjat</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Kertaus pudotusvalikko -->
+        <div class="nav-grade-group" data-dropdown-group="kertaus">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="kertaus">
+            <span class="nav-tab-label">📝 Kertaus</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-dropdown-kertaus" hidden>
+            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="all">
+              <span class="nav-course-badge grade-other">📝 Kaikki</span>
+              <span class="nav-course-title">Kaikki kertaustehtävät</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="7">
+              <span class="nav-course-badge grade-7">🟢 7. lk</span>
+              <span class="nav-course-title">7. luokan kertaustehtävät</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="8">
+              <span class="nav-course-badge grade-8">🔵 8. lk</span>
+              <span class="nav-course-title">8. luokan kertaustehtävät</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="9">
+              <span class="nav-course-badge grade-9">🟣 9. lk</span>
+              <span class="nav-course-title">9. luokan kertaustehtävät</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Arviointi pudotusvalikko -->
+        <div class="nav-grade-group" data-dropdown-group="arviointi">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="arviointi">
+            <span class="nav-tab-label">ℹ️ Arviointi</span>
+            <span class="nav-tab-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="nav-grade-courses" id="nav-dropdown-arviointi" hidden>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="all">
+              <span class="nav-course-badge grade-other">ℹ️ Kaikki</span>
+              <span class="nav-course-title">Arviointitiedote koteihin</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="koe">
+              <span class="nav-course-badge grade-8">50 %</span>
+              <span class="nav-course-title">1. Kurssikoe</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="tuntityoskentely">
+              <span class="nav-course-badge grade-7">50 %</span>
+              <span class="nav-course-title">2. Tuntityöskentely & läksyt</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="viikkoraportit">
+              <span class="nav-course-badge grade-other">Pe klo 14</span>
+              <span class="nav-course-title">3. Viikkoraportit sähköpostiin</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="muistilista">
+              <span class="nav-course-badge grade-9">💡 Info</span>
+              <span class="nav-course-title">4. Oppilaan muistilista</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
 
         <span class="nav-divider" aria-hidden="true"></span>
 
