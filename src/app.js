@@ -494,6 +494,20 @@ function setupEventListeners() {
       }
     }
 
+    // 2b. Leijuvan suosikkivalikon sulkeminen kun klikataan ohi
+    const favSheet = document.querySelector("#mobile-favorites-sheet");
+    if (favSheet && !favSheet.hidden) {
+      const isInsideFav = favSheet.contains(e.target) || path.includes(favSheet);
+      const isFavOpener = Boolean(
+        e.target &&
+        e.target.closest &&
+        e.target.closest("[data-mobile-nav='favorites']")
+      );
+      if (!isInsideFav && !isFavOpener) {
+        closeMobileFavoritesSheet();
+      }
+    }
+
     // 3. Luokkatasojen alasvetovalikoiden sulkeminen kun klikataan muualle
     if (!e.target || !e.target.closest || !e.target.closest(".nav-grade-group")) {
       closeAllGradeCourses();
@@ -510,14 +524,16 @@ function setupEventListeners() {
     }
   });
 
-  // Mobiilin suosikkipaneelin sulkemispainikkeet
+  // Mobiilin suosikkipaneelin tapahtumat
   const sheetCloseBtn = document.querySelector("#mobile-sheet-close-btn");
-  const sheetBackdrop = document.querySelector("#mobile-sheet-backdrop");
   if (sheetCloseBtn) {
     sheetCloseBtn.addEventListener("click", closeMobileFavoritesSheet);
   }
-  if (sheetBackdrop) {
-    sheetBackdrop.addEventListener("click", closeMobileFavoritesSheet);
+  const favSheetModal = document.querySelector("#mobile-favorites-sheet");
+  if (favSheetModal) {
+    favSheetModal.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
   }
 
   // Alustetaan asetusaccordionin tila ja mobiilipalkki
@@ -2100,9 +2116,8 @@ function renderMobileBottomBar() {
     }
 
     return `
-      <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="${escapeHtml(key)}" aria-label="${escapeHtml(label)}">
+      <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="${escapeHtml(key)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">
         <span class="mobile-nav-icon">${icon}</span>
-        <span class="mobile-nav-label">${escapeHtml(label)}</span>
         <span class="mobile-nav-indicator" aria-hidden="true"></span>
       </button>
     `;
@@ -2111,9 +2126,8 @@ function renderMobileBottomBar() {
   const isHomeActive = state.activeView === "home" && !isSheetOpen && !isSettingsOpen;
 
   const homeBtnHtml = `
-    <button type="button" class="mobile-nav-btn mobile-nav-btn-home ${isHomeActive ? "active" : ""}" data-mobile-nav="koti" aria-label="Koti">
+    <button type="button" class="mobile-nav-btn mobile-nav-btn-home ${isHomeActive ? "active" : ""}" data-mobile-nav="koti" aria-label="Koti" title="Koti">
       <span class="mobile-nav-icon">🏠</span>
-      <span class="mobile-nav-label">Koti</span>
       <span class="mobile-nav-indicator" aria-hidden="true"></span>
     </button>
   `;
@@ -2198,6 +2212,12 @@ function openMobileFavoritesSheet() {
   sheet.setAttribute("aria-hidden", "false");
   renderMobileFavoritesSheet();
   updateMobileBottomBarActive();
+  sheet.scrollTop = 0;
+  requestAnimationFrame(() => {
+    try {
+      sheet.focus({ preventScroll: true });
+    } catch (e) {}
+  });
 }
 
 function closeMobileFavoritesSheet() {
