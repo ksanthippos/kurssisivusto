@@ -1,0 +1,216 @@
+
+{
+  "FY_71": {
+    "groups": {
+      "FY_71.3": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [2, 5],
+        "exceptions": [
+          {
+            "date": "2026-10-23",
+            "type": "KIRJAMESSUT",
+            "description": "Ilmoittaudu opettajalle (RAUH) Messukeskuksen aulassa klo 12.30."
+          },
+          {
+            "date": "2026-11-17",
+            "type": "KERTAUS",
+            "description": "Kertaustehtävät ilmoitettu Wilmassa. Kirjoita muistiin itsellesi vaikeat asiat jo etukäteen, selvitellään niitä tunnilla."
+          },
+          {
+            "date": "2026-11-20",
+            "type": "*** KOE ***",
+            "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
+          }
+        ]
+      }
+    }
+  },
+
+  "FY_81": {
+    "groups": {
+    }
+  },
+
+  "FY_91": {
+    "groups": {
+      "FY_91.3": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [1, 3],
+        "exceptions": [
+          {
+            "date": "2026-10-19",
+            "type": "KURSSIN ALOITUS",
+            "description": "Esittelyt, istumajärjestys, kurssin sisältö ja tavoitteet. Yleiset pelisäännöt ja arviointi. Kurssimateriaalin jakaminen."
+          },
+          {
+            "date": "2026-11-09",
+            "type": "TET-HARJOITTELU",
+            "description": "9. luokkien TET-viikko. Ei oppituntia."
+          },
+          {
+            "date": "2026-11-11",
+            "type": "TET-HARJOITTELU",
+            "description": "9. luokkien TET-viikko. Ei oppituntia."
+          },
+          {
+            "date": "2026-12-02",
+            "type": "KERTAUS",
+            "description": "Kertaustehtävät ilmoitettu Wilmassa. Kirjoita muistiin itsellesi vaikeat asiat jo etukäteen, selvitellään niitä tunnilla."
+          },
+          {
+            "date": "2026-12-07",
+            "type": "*** KOE ***",
+            "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
+          }
+        ]
+      }
+    }
+  },
+
+  "MA_71": {
+    "groups": {
+  }
+  },
+
+  "MA_72": {
+    "groups": {
+      "MA_72.1": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [1, 4],
+        "exceptions": [
+          {
+            "date": "2026-10-19",
+            "type": "KURSSIN ALOITUS",
+            "description": "Esittelyt, istumajärjestys, kurssin sisältö ja tavoitteet. Yleiset pelisäännöt ja arviointi. Kurssimateriaalin jakaminen."
+          },
+          {
+            "date": "2026-11-26",
+            "type": "KERTAUS",
+            "description": "Kertaustehtävät ilmoitettu Wilmassa. Kirjoita muistiin itsellesi vaikeat asiat jo etukäteen, selvitellään niitä tunnilla."
+          },
+          {
+            "date": "2026-11-30",
+            "type": "*** KOE ***",
+            "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
+          }
+        ]
+      },
+      "MA_72.2": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [1, 4],
+        "exceptions": [
+          {
+            "date": "2026-12-10",
+            "type": "KERTAUS",
+            "description": "Kertaustehtävät ilmoitettu Wilmassa. Kirjoita muistiin itsellesi vaikeat asiat jo etukäteen, selvitellään niitä tunnilla."
+          },
+          {
+            "date": "2026-12-14",
+            "type": "*** KOE ***",
+            "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
+          }
+        ]
+      }
+    }
+  },
+
+
+  "MA_81": {
+    "groups": {
+        "MA_81.5": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [2, 5],
+        "exceptions": [
+
+          {
+            "date": "2026-10-23",
+            "type": "KIRJAMESSUT",
+            "description": "Ruokailu klo 10, lähtö Messukeskukseen luokasta klo 10.30. Ennen lähtöä ilmoittaudu opettajalle (RAUH) Messukeskuksen aulassa klo 12.15."
+          },
+          {
+            "date": "2026-11-24",
+            "type": "KERTAUS",
+            "description": "Kertaustehtävät ilmoitettu Wilmassa. Kirjoita muistiin itsellesi vaikeat asiat jo etukäteen, selvitellään niitä tunnilla."
+          },
+          {
+            "date": "2026-11-27",
+            "type": "*** KOE ***",
+            "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
+          }
+        ]
+      }
+    }
+  },
+
+  "MA_91": {
+    "groups": {
+    }
+  },
+
+  "MA_92": {
+    "groups": {
+      "MA_92.3": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [1, 3],
+        "exceptions": [
+        
+          {
+            "date": "2026-11-09",
+            "type": "TET-HARJOITTELU",
+            "description": "9. luokkien TET-viikko. Ei oppituntia."
+          },
+          {
+            "date": "2026-11-11",
+            "type": "TET-HARJOITTELU",
+            "description": "9. luokkien TET-viikko. Ei oppituntia."
+          },
+          {
+            "date": "2026-11-30",
+            "type": "KERTAUS",
+            "description": "Kertaustehtävät ilmoitettu Wilmassa. Kirjoita muistiin itsellesi vaikeat asiat jo etukäteen, selvitellään niitä tunnilla."
+          },
+          {
+            "date": "2026-12-02",
+            "type": "*** KOE ***",
+            "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
+          }
+        ]
+      }
+    }
+  },
+
+  "VMA_01": {
+    "groups": {
+      "VMA_01.1": {
+        "startDate": "2026-10-19",
+        "endDate": "2026-12-18",
+        "weekdays": [2, 4],
+        "exceptions": [
+          {
+            "date":"2026-10-20",
+            "type": "KURSSIN ALOITUS",
+            "description": "Esittelyt, kurssin sisältö, yleiset pelisäännöt ja arviointi. Ensimmäinen tehtävä Möbiuksen nauhan rakentaminen ja topologian perusajatuksia."
+          },
+                    {
+            "date": "2026-11-10",
+            "type": "TET-HARJOITTELU",
+            "description": "9. luokkien TET-viikko. 8. luokkalaisilla vierailu Kumpulan kampukselle, lähtö luokasta tasan klo 10.00 eli ajoissa paikalle! Wilmassa lisätiedot."
+          },
+          {
+            "date": "2026-11-12",
+            "type": "TET-HARJOITTELU",
+            "description": "9. luokkien TET-viikko. 8. luokkalaisilla poikkeusohjelmaa."
+          }
+        ]
+      }
+    }
+  }
+
+
+}

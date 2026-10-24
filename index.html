@@ -53,9 +53,10 @@
         <button type="button" class="nav-tab" data-nav="view" data-view="kertaus">📝 Kertaus</button>
         <button type="button" class="nav-tab" data-nav="view" data-view="arviointi">ℹ️ Arviointi</button>
 
-        <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="portal-pill-link">
-          Kurssiportaali ↗
-        </a>
+        <span class="nav-divider" aria-hidden="true"></span>
+
+        <button type="button" class="nav-tab" data-nav="view" data-view="lukujarjestys">📅 Lukujärjestys</button>
+        <button type="button" class="nav-tab" data-nav="view" data-view="aikataulu">🗓️ Aikataulu</button>
       </nav>
 
       <div class="header-actions">
@@ -164,6 +165,27 @@
               </button>
             </div>
           </div>
+          <!-- 6. Opettajan ja sijaisen työkalut -->
+          <div class="settings-group">
+            <h4 class="settings-group-title">👨‍🏫 Opettajan ja sijaisen työkalut</h4>
+            <p class="settings-group-desc">Sijaisjärjestelyt, tuntiohjeet ja muistilistat:</p>
+            <div class="teacher-tools-btn-group" id="teacher-tools-btn-group">
+              <button type="button" class="teacher-tool-btn" id="btn-open-substitute-guide">
+                <span class="teacher-tool-icon">📋</span>
+                <span class="teacher-tool-info">
+                  <strong>Sijaisen muistilista</strong>
+                  <small>Tuntikäytännöt, Wilma ja valvonta</small>
+                </span>
+              </button>
+              <button type="button" class="teacher-tool-btn" id="btn-open-substitute-instructions">
+                <span class="teacher-tool-icon">✉️</span>
+                <span class="teacher-tool-info">
+                  <strong>Luo sijaisohjeet</strong>
+                  <small>Generoi tuntiohjeet leikepöydälle</small>
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="settings-popover-footer">
@@ -225,6 +247,15 @@
         </div>
       </div>
 
+      <!-- Aikataulun sivupalkki (aikataulunäkymässä) -->
+      <div id="sidebar-aikataulu-controls" hidden>
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading">Opetusryhmä</h3>
+          <p class="sidebar-caption">2. jakso (19.10.–18.12.)</p>
+          <div class="sidebar-pill-filters group-buttons" id="sidebar-aikataulu-group-pills"></div>
+        </div>
+      </div>
+
       <!-- Omat suosikit sivupalkissa -->
       <div class="sidebar-section sidebar-favorites-section" id="sidebar-favorites-section">
         <h3 class="sidebar-heading sidebar-collapsible-heading" id="sidebar-fav-heading" title="Klikkaa piilottaaksesi tai avataksesi suosikit" role="button" tabindex="0">
@@ -251,26 +282,28 @@
           </div>
         </section>
 
-        <!-- Kurssiportaalin aikataululaatikko (tulee myöhemmin) -->
+        <!-- Kurssiportaalin aikataululaatikko -->
         <section class="home-schedule-card" id="home-schedule-card">
           <div class="home-schedule-header">
             <div class="home-schedule-title-group">
               <span class="home-schedule-icon" aria-hidden="true">📅</span>
               <div>
-                <h3 class="home-schedule-heading">Kurssiportaalin aikataulu & läksyt</h3>
-                <p class="home-schedule-sub">Opetusryhmäkohtainen tuntiohjelma, kotitehtävät ja koepäivät</p>
+                <h3 class="home-schedule-heading">Lukujärjestys & ryhmien aikataulut</h3>
+                <p class="home-schedule-sub">2. jakso (19.10.2026 – 18.12.2026) · Opetusryhmät, tuntiohjelma ja koepäivät</p>
               </div>
             </div>
-            <span class="home-schedule-badge">Integraatio tulossa</span>
+            <span class="home-schedule-badge active-badge">Käytössä</span>
           </div>
           <div class="home-schedule-body">
             <p class="home-schedule-text">
-              Tähän osioon kytketään reaaliaikainen opetusryhmän aikataulu Kurssiportaalista. Näet suoraan viikon aiheet, kotitehtävät ja linkit kunkin päivän oppituntiin.
+              Kurssiportaali on integroitu osaksi kurssisivustoa. Löydät viikoittaisen lukujärjestyksen, tuntien ajankohdat, opetusryhmien etenemisen sekä poikkeuspäivät suoraan ylävalikosta.
             </p>
             <div class="home-schedule-footer-row">
-              <a href="https://donmiguel.github.io/kurssi-portaali/" target="_blank" rel="noopener noreferrer" class="home-schedule-cta-btn">
-                <span>Siirry Kurssiportaaliin</span>
-                <span aria-hidden="true">↗</span>
+              <a href="#/lukujarjestys" class="home-schedule-cta-btn">
+                <span>📅 Avaa lukujärjestys</span>
+              </a>
+              <a href="#/aikataulu" class="home-schedule-cta-btn secondary">
+                <span>🗓️ Avaa ryhmien aikataulut</span>
               </a>
               <span class="home-schedule-hint">Toimii puhelimessa ja tietokoneella ilman kirjautumista</span>
             </div>
@@ -467,6 +500,103 @@
         </header>
 
         <div class="info-sections-container" id="info-sections-container"></div>
+      </article>
+
+      <!-- 5. LUKUJÄRJESTYS -->
+      <article class="view-panel" id="view-lukujarjestys" hidden>
+        <header class="view-header">
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">Viikkonäkymä · Pasilan peruskoulu</div>
+            <button type="button" class="favorite-star-btn" data-toggle-view-fav="lukujarjestys" id="fav-btn-lukujarjestys" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
+              <span class="star-icon">☆</span>
+              <span class="star-label">Lisää suosikkeihin</span>
+            </button>
+          </div>
+          <h2 class="view-title">Lukujärjestys</h2>
+          <p class="view-description" id="lukujarjestys-sub-desc">
+            Pasilan peruskoulu · 2. jakso · Oppitunnit, valvontavuorot ja luokkatilat
+          </p>
+        </header>
+
+        <div id="schedule-content" class="schedule-content">
+          <div class="empty">Ladataan lukujärjestystä…</div>
+        </div>
+      </article>
+
+      <!-- 6. AIKATAULU (RYHMIEN TUNTIOHJELMA) -->
+      <article class="view-panel" id="view-aikataulu" hidden>
+        <header class="view-header">
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">2. jakso (19.10.2026 – 18.12.2026)</div>
+            <button type="button" class="favorite-star-btn" data-toggle-view-fav="aikataulu" id="fav-btn-aikataulu" title="Lisää suosikkeihin" aria-label="Lisää suosikkeihin">
+              <span class="star-icon">☆</span>
+              <span class="star-label">Lisää suosikkeihin</span>
+            </button>
+          </div>
+          <h2 class="view-title" id="aikataulu-main-title">Ryhmien tuntiaikataulut</h2>
+          <p class="view-description">
+            Opetusryhmäkohtainen tuntiohjelma, päivämäärät, koepäivät ja poikkeusohjelmat.
+          </p>
+        </header>
+
+        <!-- Ryhmävalitsin mobiilissa ja pääalueella -->
+        <div class="aikataulu-group-bar" id="aikataulu-group-bar">
+          <span class="aikataulu-group-label">Valitse opetusryhmä:</span>
+          <div class="aikataulu-group-pills" id="aikataulu-group-pills"></div>
+        </div>
+
+        <!-- Tuntikorttien aikajana -->
+        <div class="aikataulu-lessons-list" id="aikataulu-lessons-list">
+          <div class="empty">Ladataan ryhmän aikataulua…</div>
+        </div>
+      </article>
+
+      <!-- 7. SIJAISEN MUISTILISTA -->
+      <article class="view-panel" id="view-substitute" hidden>
+        <header class="view-header">
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">Lue nämä ensin!</div>
+            <button type="button" class="back-link-btn" id="btn-back-from-substitute">← Takaisin</button>
+          </div>
+          <h2 class="view-title">Sijaisen muistilista</h2>
+          <p class="view-description">
+            Käytännön ohjeet oppimateriaaleista, tuntimerkinnöistä, oppilastöistä ja koetilanteen valvonnasta.
+          </p>
+        </header>
+
+        <div id="substitute-content" class="substitute-content"></div>
+      </article>
+
+      <!-- 8. LUO SIJAISOHJEET -->
+      <article class="view-panel" id="view-instructions" hidden>
+        <header class="view-header">
+          <div class="view-header-top-row">
+            <div class="view-eyebrow">Sijaisjärjestelyt</div>
+            <button type="button" class="back-link-btn" id="btn-back-from-instructions">← Takaisin</button>
+          </div>
+          <h2 class="view-title">Luo sijaisohjeet</h2>
+          <p class="view-description">
+            Valitse poissaolon alku- ja loppupäivä. Sovellus kokoaa automaattisesti kyseisen jakson oppitunnit, tuntiaiheet, tehtävät ja sijaisohjeet valmiiksi viestipohjaksi.
+          </p>
+        </header>
+
+        <div id="instructions-content" class="instructions-content">
+          <form id="instructions-form" class="instruction-form">
+            <div>
+              <label for="instructions-start">Alkupäivä</label>
+              <input type="date" id="instructions-start" required>
+            </div>
+            <div>
+              <label for="instructions-end">Loppupäivä</label>
+              <input type="date" id="instructions-end" required>
+            </div>
+            <button type="submit" class="primary-button" id="btn-generate-instructions">
+              Generoi sijaisohjeet ✨
+            </button>
+          </form>
+
+          <div id="generated-instructions" class="generated-instructions" hidden></div>
+        </div>
       </article>
 
     </main>

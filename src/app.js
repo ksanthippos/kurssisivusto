@@ -4,6 +4,10 @@ const state = {
   books: [],
   revisions: [],
   info: null,
+  timetable: null,
+  schedules: null,
+  activeScheduleGroup: null,
+  _courseDataMap: {},
   favorites: [], // Esim. ["MA_81", "kertaus", "kirjat"]
   defaultView: "home", // "home" | "kirjat" | "kertaus" | "arviointi" | kurssikoodi esim. "MA_81"
   favoritesCollapsed: false,
@@ -68,6 +72,27 @@ const viewLesson = document.querySelector("#view-lesson");
 const viewBooks = document.querySelector("#view-books");
 const viewRevision = document.querySelector("#view-revision");
 const viewArviointi = document.querySelector("#view-arviointi");
+const viewLukujarjestys = document.querySelector("#view-lukujarjestys");
+const viewAikataulu = document.querySelector("#view-aikataulu");
+const viewSubstitute = document.querySelector("#view-substitute");
+const viewInstructions = document.querySelector("#view-instructions");
+
+// Uudet lukujärjestys- ja aikatauluohjaimet
+const scheduleContent = document.querySelector("#schedule-content");
+const aikatauluGroupPills = document.querySelector("#aikataulu-group-pills");
+const aikatauluLessonsList = document.querySelector("#aikataulu-lessons-list");
+const sidebarAikatauluControls = document.querySelector("#sidebar-aikataulu-controls");
+const sidebarAikatauluGroupPills = document.querySelector("#sidebar-aikataulu-group-pills");
+const substituteContent = document.querySelector("#substitute-content");
+const instructionsContent = document.querySelector("#instructions-content");
+const instructionsForm = document.querySelector("#instructions-form");
+const instructionsStart = document.querySelector("#instructions-start");
+const instructionsEnd = document.querySelector("#instructions-end");
+const generatedInstructions = document.querySelector("#generated-instructions");
+const btnBackFromSubstitute = document.querySelector("#btn-back-from-substitute");
+const btnBackFromInstructions = document.querySelector("#btn-back-from-instructions");
+const btnOpenSubstituteGuide = document.querySelector("#btn-open-substitute-guide");
+const btnOpenSubstituteInstructions = document.querySelector("#btn-open-substitute-instructions");
 
 // Yläpalkin ja asetusten elementit
 const headerSettingsBtn = document.querySelector("#header-settings-btn");
@@ -135,17 +160,21 @@ async function init() {
     updateFooterInfo();
 
     // Ladataan rinnakkain perusdata
-    const [coursesRes, booksRes, revisionsRes, infoRes] = await Promise.all([
+    const [coursesRes, booksRes, revisionsRes, infoRes, timetableRes, schedulesRes] = await Promise.all([
       fetch("src/data/courses.json"),
       fetch("src/data/books.json"),
       fetch("src/data/revisions.json"),
-      fetch("src/data/info.json")
+      fetch("src/data/info.json"),
+      fetch("src/data/lukujarjestys.json"),
+      fetch("src/data/schedules.json")
     ]);
 
     if (coursesRes.ok) state.courses = await coursesRes.json();
     if (booksRes.ok) state.books = await booksRes.json();
     if (revisionsRes.ok) state.revisions = await revisionsRes.json();
     if (infoRes.ok) state.info = await infoRes.json();
+    if (timetableRes && timetableRes.ok) state.timetable = await timetableRes.json();
+    if (schedulesRes && schedulesRes.ok) state.schedules = await schedulesRes.json();
 
     setupEventListeners();
     renderSidebarFavorites();
@@ -343,6 +372,33 @@ function setupEventListeners() {
     });
   });
 
+  // Sijais- ja opettajatoimintojen painikkeet
+  if (btnOpenSubstituteGuide) {
+    btnOpenSubstituteGuide.addEventListener("click", () => {
+      closeSettingsPopover();
+      window.location.hash = "#/sijaiselle";
+    });
+  }
+  if (btnOpenSubstituteInstructions) {
+    btnOpenSubstituteInstructions.addEventListener("click", () => {
+      closeSettingsPopover();
+      window.location.hash = "#/sijaisohjeet";
+    });
+  }
+  if (btnBackFromSubstitute) {
+    btnBackFromSubstitute.addEventListener("click", () => {
+      window.location.hash = "#/koti";
+    });
+  }
+  if (btnBackFromInstructions) {
+    btnBackFromInstructions.addEventListener("click", () => {
+      window.location.hash = "#/koti";
+    });
+  }
+  if (instructionsForm) {
+    instructionsForm.addEventListener("submit", handleInstructionsSubmit);
+  }
+
   // Mobiilivalikon avaus ja sulku hampurilaisesta
   if (menuToggle && mainNav) {
     menuToggle.addEventListener("click", (e) => {
@@ -459,6 +515,17 @@ function parseRoute() {
     }
   } else if (firstPart === "arviointi" || firstPart === "info") {
     switchView("arviointi");
+  } else if (firstPart === "lukujarjestys") {
+    switchView("lukujarjestys");
+  } else if (firstPart === "aikataulu" || firstPart === "portaali") {
+    if (parts[1]) {
+      state.activeScheduleGroup = parts[1];
+    }
+    switchView("aikataulu");
+  } else if (firstPart === "sijaiselle" || firstPart === "substitute") {
+    switchView("sijaiselle");
+  } else if (firstPart === "sijaisohjeet" || firstPart === "instructions") {
+    switchView("sijaisohjeet");
   } else {
     // Kurssioppitunti: esim. #/MA_71/1 tai #/FY_91/3
     const courseCode = parts[0];
@@ -488,11 +555,16 @@ function switchView(viewName) {
   if (viewBooks) viewBooks.hidden = viewName !== "kirjat";
   if (viewRevision) viewRevision.hidden = viewName !== "kertaus";
   if (viewArviointi) viewArviointi.hidden = viewName !== "arviointi";
+  if (viewLukujarjestys) viewLukujarjestys.hidden = viewName !== "lukujarjestys";
+  if (viewAikataulu) viewAikataulu.hidden = viewName !== "aikataulu";
+  if (viewSubstitute) viewSubstitute.hidden = viewName !== "sijaiselle";
+  if (viewInstructions) viewInstructions.hidden = viewName !== "sijaisohjeet";
 
   // Sivupalkin vastaavat kontrollit
   if (sidebarLessonControls) sidebarLessonControls.hidden = viewName !== "lesson";
   if (sidebarBooksControls) sidebarBooksControls.hidden = viewName !== "kirjat";
   if (sidebarRevisionControls) sidebarRevisionControls.hidden = viewName !== "kertaus";
+  if (sidebarAikatauluControls) sidebarAikatauluControls.hidden = viewName !== "aikataulu";
 
   if (viewName === "home") {
     renderHome();
@@ -509,6 +581,14 @@ function switchView(viewName) {
     renderRevisions();
   } else if (viewName === "arviointi") {
     renderInfo();
+  } else if (viewName === "lukujarjestys") {
+    renderTimetable();
+  } else if (viewName === "aikataulu") {
+    renderAikataulu();
+  } else if (viewName === "sijaiselle") {
+    renderSubstituteGuide();
+  } else if (viewName === "sijaisohjeet") {
+    initInstructionsForm();
   }
 
   renderSidebarFavorites();
@@ -603,6 +683,26 @@ function getFavoriteMeta(key) {
       label: "ℹ️ Arviointiperusteet & info",
       hash: "#/arviointi",
       icon: "ℹ️"
+    };
+  }
+  if (lower === "lukujarjestys") {
+    return {
+      key: "lukujarjestys",
+      type: "section",
+      title: "Lukujärjestys",
+      label: "📅 Lukujärjestys",
+      hash: "#/lukujarjestys",
+      icon: "📅"
+    };
+  }
+  if (lower === "aikataulu") {
+    return {
+      key: "aikataulu",
+      type: "section",
+      title: "Ryhmien aikataulut",
+      label: "🗓️ Ryhmien aikataulut",
+      hash: "#/aikataulu",
+      icon: "🗓️"
     };
   }
 
@@ -813,7 +913,7 @@ function toggleSettingsPopover() {
 
 function toggleFavorite(rawKey) {
   if (!rawKey) return;
-  const isSection = ["kirjat", "kertaus", "arviointi"].includes(String(rawKey).toLowerCase());
+  const isSection = ["kirjat", "kertaus", "arviointi", "lukujarjestys", "aikataulu"].includes(String(rawKey).toLowerCase());
   const key = isSection ? rawKey.toLowerCase() : rawKey.toUpperCase();
 
   const idx = state.favorites.indexOf(key);
@@ -1761,6 +1861,832 @@ window.addEventListener("scroll", () => {
     }
   }
 });
+
+// Käynnistetään sovellus poistettu tästä ja siirretty tiedoston loppuun
+
+
+// ==========================================================================
+// INTEGRAATIO: LUKUJÄRJESTYS, RYHMIEN AIKATAULUT JA SIJAISTOIMINNOT
+// ==========================================================================
+
+const weekdayNames = [
+  "Sunnuntai",
+  "Maanantai",
+  "Tiistai",
+  "Keskiviikko",
+  "Torstai",
+  "Perjantai",
+  "Lauantai"
+];
+
+function formatDate(date) {
+  const d = date instanceof Date ? date : new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getWeekNumber(date) {
+  const target = new Date(date.valueOf());
+  const dayNumber = (date.getDay() + 6) % 7;
+  target.setDate(target.getDate() - dayNumber + 3);
+  const firstThursday = target.valueOf();
+  target.setMonth(0, 1);
+  if (target.getDay() !== 4) {
+    target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+  }
+  return 1 + Math.ceil((firstThursday - target) / 604800000);
+}
+
+function formatDisplayDate(isoDate) {
+  const date = new Date(`${isoDate}T12:00:00`);
+  return `${weekdayNames[date.getDay()]} ${date.getDate()}.${date.getMonth() + 1}.`;
+}
+
+function formatShortDate(value) {
+  const date = value instanceof Date ? value : new Date(`${value}T12:00:00`);
+  return `${date.getDate()}.${date.getMonth() + 1}.`;
+}
+
+function formatEmailDate(isoDate) {
+  const date = new Date(`${isoDate}T12:00:00`);
+  return `${weekdayNames[date.getDay()]} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+}
+
+function formatDateRange(start, end) {
+  const startDate = new Date(`${start}T12:00:00`);
+  const endDate = new Date(`${end}T12:00:00`);
+  return `${startDate.getDate()}.${startDate.getMonth() + 1}.–${endDate.getDate()}.${endDate.getMonth() + 1}.${endDate.getFullYear()}`;
+}
+
+function getMonday(date) {
+  const monday = new Date(date);
+  monday.setHours(12, 0, 0, 0);
+  const day = monday.getDay();
+  const difference = day === 0 ? -6 : 1 - day;
+  monday.setDate(monday.getDate() + difference);
+  return monday;
+}
+
+function getTimetableReferenceDate() {
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+  return getMonday(today);
+}
+
+function getDateForWeekday(referenceMonday, weekdayKey) {
+  const weekdayNumbers = {
+    maanantai: 1,
+    tiistai: 2,
+    keskiviikko: 3,
+    torstai: 4,
+    perjantai: 5
+  };
+  const date = new Date(referenceMonday);
+  date.setHours(12, 0, 0, 0);
+  const weekdayNumber = weekdayNumbers[weekdayKey];
+  if (!weekdayNumber) return date;
+  date.setDate(date.getDate() + (weekdayNumber - 1));
+  return date;
+}
+
+function minutesFromStart(time) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes - (8 * 60 + 30);
+}
+
+function minutesBetween(start, end) {
+  const toMinutes = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+  return toMinutes(end) - toMinutes(start);
+}
+
+function getDatesBetween(start, end) {
+  const dates = [];
+  const current = new Date(`${start}T12:00:00`);
+  const stop = new Date(`${end}T12:00:00`);
+  while (current <= stop) {
+    dates.push(formatDate(current));
+    current.setDate(current.getDate() + 1);
+  }
+  return dates;
+}
+
+function getLessonDate(lessonNumber, schedule) {
+  if (!schedule || !schedule.startDate || !schedule.endDate || !Array.isArray(schedule.weekdays)) return null;
+  const startDate = new Date(`${schedule.startDate}T12:00:00`);
+  const endDate = new Date(`${schedule.endDate}T12:00:00`);
+  let current = new Date(startDate);
+  let lessonsFound = 0;
+
+  while (current <= endDate) {
+    const isoDate = formatDate(current);
+    if (schedule.weekdays.includes(current.getDay())) {
+      const isException = (schedule.exceptions || []).some((item) => item.date === isoDate);
+      if (!isException) {
+        lessonsFound++;
+        if (lessonsFound === lessonNumber) {
+          return isoDate;
+        }
+      }
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return null;
+}
+
+// Kurssidatan lataus välimuistilla
+async function getCourseData(courseCode) {
+  const code = courseCode.toUpperCase();
+  if (state._courseDataMap[code]) {
+    return state._courseDataMap[code];
+  }
+  const res = await fetch(`src/data/courses/${code.toLowerCase()}.json`);
+  if (!res.ok) {
+    throw new Error(`Kurssin ${code} lataaminen epäonnistui.`);
+  }
+  const data = await res.json();
+  state._courseDataMap[code] = data;
+  return data;
+}
+
+// --------------------------------------------------------------------------
+// 1. LUKUJÄRJESTYS
+// --------------------------------------------------------------------------
+
+function renderTimetable() {
+  if (!scheduleContent || !state.timetable) {
+    if (scheduleContent) scheduleContent.innerHTML = '<div class="empty">Lukujärjestystä ei löytynyt.</div>';
+    return;
+  }
+
+  const dayNames = {
+    maanantai: "Maanantai",
+    tiistai: "Tiistai",
+    keskiviikko: "Keskiviikko",
+    torstai: "Torstai",
+    perjantai: "Perjantai"
+  };
+
+  const days = Object.entries(state.timetable.paivat || {});
+  const referenceMonday = getTimetableReferenceDate();
+
+  scheduleContent.innerHTML = `
+    <p class="schedule-period">
+      ${escapeHtml(state.timetable.jakso)}. jakso ·
+      vko ${getWeekNumber(referenceMonday)} ·
+      ${formatShortDate(referenceMonday)}–${formatShortDate(
+        getDateForWeekday(referenceMonday, "perjantai")
+      )}
+    </p>
+
+    <div class="schedule-grid">
+      ${days.map(([key, day]) => {
+        const date = getDateForWeekday(referenceMonday, key);
+        const isToday = formatDate(date) === formatDate(new Date());
+
+        return `
+          <article class="schedule-day ${isToday ? "is-today" : ""}">
+            <header class="schedule-day-header">
+              <h3>${dayNames[key] || escapeHtml(key)} ${formatShortDate(date)}${isToday ? " · Tänään" : ""}</h3>
+            </header>
+
+            <div class="schedule-events">
+              <div class="schedule-timeline">
+                ${(day.tapahtumat || []).map(renderScheduleEvent).join("")}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderScheduleEvent(event) {
+  const top = minutesFromStart(event.alku);
+  const height = minutesBetween(event.alku, event.loppu);
+
+  if (event.tyyppi === "valvonta") {
+    return `
+      <div class="schedule-event supervision" style="--event-top: ${top}px; --event-height: ${height}px;">
+        <div class="schedule-time">${event.alku}–${event.loppu}</div>
+        <div class="schedule-event-content">
+          <strong>Valvonta</strong>
+          <span>${escapeHtml(event.paikka || "")}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  if (event.tyyppi === "kotiryhma") {
+    return `
+      <div class="schedule-event homeroom" style="--event-top: ${top}px; --event-height: ${height}px;">
+        <div class="schedule-time">${event.alku}–${event.loppu}</div>
+        <div class="schedule-event-content">
+          <strong>${escapeHtml(event.ryhma || "Kotiryhmätunti")}</strong>
+          <span>Kotiryhmä</span>
+        </div>
+      </div>
+    `;
+  }
+
+  const groupCode = event.ryhma || "";
+  return `
+    <a href="#/aikataulu/${encodeURIComponent(groupCode)}" class="schedule-event" style="--event-top: ${top}px; --event-height: ${height}px;" title="Avaa ryhmän ${escapeHtml(groupCode)} aikataulu">
+      <div class="schedule-time">${event.alku}–${event.loppu}</div>
+      <div class="schedule-event-content">
+        <strong>${escapeHtml(groupCode)}</strong>
+        <span>${escapeHtml(event.tila || "")}</span>
+      </div>
+    </a>
+  `;
+}
+
+// --------------------------------------------------------------------------
+// 2. RYHMIEN AIKATAULUT (AIKATAULU-NÄKYMÄ)
+// --------------------------------------------------------------------------
+
+function getAllScheduleGroups() {
+  if (!state.schedules) return [];
+  const groups = [];
+  Object.entries(state.schedules).forEach(([courseCode, courseSched]) => {
+    Object.keys(courseSched.groups || {}).forEach((groupCode) => {
+      groups.push({
+        courseCode,
+        groupCode,
+        schedule: courseSched.groups[groupCode]
+      });
+    });
+  });
+  groups.sort((a, b) => a.groupCode.localeCompare(b.groupCode));
+  return groups;
+}
+
+function renderAikatauluGroupPills(groups) {
+  const pillHtml = groups
+    .map((g) => {
+      const isActive = g.groupCode === state.activeScheduleGroup;
+      return `
+        <button type="button" class="aikataulu-group-btn ${isActive ? "active" : ""}" data-group="${escapeHtml(g.groupCode)}">
+          ${escapeHtml(g.groupCode)}
+        </button>
+      `;
+    })
+    .join("");
+
+  if (aikatauluGroupPills) {
+    aikatauluGroupPills.innerHTML = pillHtml;
+    aikatauluGroupPills.querySelectorAll(".aikataulu-group-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectScheduleGroup(btn.dataset.group);
+      });
+    });
+  }
+
+  if (sidebarAikatauluGroupPills) {
+    sidebarAikatauluGroupPills.innerHTML = pillHtml;
+    sidebarAikatauluGroupPills.querySelectorAll(".aikataulu-group-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectScheduleGroup(btn.dataset.group);
+      });
+    });
+  }
+}
+
+async function selectScheduleGroup(groupCode) {
+  state.activeScheduleGroup = groupCode;
+  window.location.hash = `#/aikataulu/${groupCode}`;
+  await renderAikataulu();
+}
+
+async function renderAikataulu() {
+  const groups = getAllScheduleGroups();
+  if (!groups.length) {
+    if (aikatauluLessonsList) {
+      aikatauluLessonsList.innerHTML = '<div class="empty">Ei aktiivisia opetusryhmiä tässä jaksossa.</div>';
+    }
+    return;
+  }
+
+  if (!state.activeScheduleGroup || !groups.some((g) => g.groupCode === state.activeScheduleGroup)) {
+    state.activeScheduleGroup = groups[0].groupCode;
+  }
+
+  renderAikatauluGroupPills(groups);
+
+  const currentGroupObj = groups.find((g) => g.groupCode === state.activeScheduleGroup);
+  if (!currentGroupObj) return;
+
+  const { courseCode, schedule } = currentGroupObj;
+
+  if (aikatauluLessonsList) {
+    aikatauluLessonsList.innerHTML = '<div class="empty">Ladataan ryhmän tuntiaikataulua…</div>';
+  }
+
+  try {
+    const courseData = await getCourseData(courseCode);
+    const lessons = courseData.lessons || [];
+    const exceptions = schedule.exceptions || [];
+    const events = [];
+
+    lessons.forEach((lesson) => {
+      const date = getLessonDate(lesson.lesson, schedule);
+      if (date) {
+        events.push({
+          date,
+          lesson,
+          exception: null
+        });
+      }
+    });
+
+    exceptions.forEach((exception) => {
+      events.push({
+        date: exception.date,
+        lesson: null,
+        exception
+      });
+    });
+
+    events.sort((a, b) => a.date.localeCompare(b.date));
+
+    if (!events.length) {
+      aikatauluLessonsList.innerHTML = '<div class="empty">Tälle ryhmälle ei löytynyt aikataulutettuja oppitunteja.</div>';
+      return;
+    }
+
+    aikatauluLessonsList.innerHTML = events
+      .map((event) => {
+        if (event.exception) {
+          return `
+            <article class="lesson-card exception-card" data-date="${event.date}">
+              <div class="lesson-header">
+                <div>
+                  <p class="lesson-number">Poikkeusohjelmaa</p>
+                  <p class="lesson-date">${formatDisplayDate(event.date)}</p>
+                  <div class="exception-box">
+                    <strong>${escapeHtml(event.exception.type)}</strong>
+                  </div>
+                  <p class="lesson-card-body-text">${escapeHtml(event.exception.description)}</p>
+                </div>
+              </div>
+            </article>
+          `;
+        }
+
+        const lesson = event.lesson;
+        const lessonNum = lesson.lesson;
+
+        // Renderöidään tehtävät (taskSheets ja tasks)
+        let tasksHtml = "";
+        const taskDefs = [
+          { key: "research", label: "Tutkimus", className: "research" },
+          { key: "theory", label: "Työkirja", className: "theory" },
+          { key: "warmup", label: "Yhteiset", className: "warmup" },
+          { key: "blue", label: "Siniset", className: "blue" },
+          { key: "red", label: "Punaiset", className: "red" }
+        ];
+
+        let rows = "";
+        if (lesson.tasks && typeof lesson.tasks === "object") {
+          rows = taskDefs
+            .filter((def) => lesson.tasks[def.key] && lesson.tasks[def.key].trim() !== "")
+            .map((def) => `
+              <div class="task-card-row">
+                <span class="task-badge ${def.className}">${def.label}</span>
+                <span class="task-desc">${escapeHtml(lesson.tasks[def.key])}</span>
+              </div>
+            `)
+            .join("");
+        }
+
+        let sheetsHtml = "";
+        const sheets = Array.isArray(lesson.taskSheets) ? lesson.taskSheets : (lesson.taskSheets ? [lesson.taskSheets] : []);
+        if (sheets.length > 0) {
+          sheetsHtml = `
+            <div class="lesson-task-sheets-container" style="margin-top: 8px;">
+              ${sheets
+                .map(
+                  (sheet) => `
+                    <div class="task-sheet-box">
+                      <div class="task-sheet-info">
+                        <div class="task-sheet-badge-group">
+                          <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tehtävät")}</span>
+                          <h4 class="task-sheet-title">${escapeHtml(sheet.title)}</h4>
+                        </div>
+                        ${sheet.description ? `<p class="task-sheet-desc">${escapeHtml(sheet.description)}</p>` : ""}
+                      </div>
+                      <div class="task-sheet-btns">
+                        <button type="button" class="rev-btn rev-btn-tasks aikataulu-task-pdf-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}">
+                          Avaa tehtävänanto (PDF) 📄
+                        </button>
+                      </div>
+                    </div>
+                  `
+                )
+                .join("")}
+            </div>
+          `;
+        }
+
+        if (rows || sheetsHtml) {
+          tasksHtml = `
+            <div class="tasks" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border);">
+              <h4 style="margin: 0 0 8px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Oppitunnin tehtävät</h4>
+              <div class="task-cards-grid">${rows}</div>
+              ${sheetsHtml}
+            </div>
+          `;
+        }
+
+        return `
+          <article class="lesson-card" data-date="${event.date}">
+            <div class="lesson-header">
+              <div class="lesson-card-header-row">
+                <div>
+                  <p class="lesson-number">Oppitunti #${lessonNum}</p>
+                  <p class="lesson-date">${formatDisplayDate(event.date)}</p>
+                </div>
+                <a href="#/${courseCode}/${lessonNum}" class="lesson-open-link-btn" title="Siirry oppitunnin sivulle">
+                  <span>Oppitunnille</span>
+                  <span>→</span>
+                </a>
+              </div>
+              <h3 class="lesson-card-title">${escapeHtml(lesson.topic || lesson.title)}</h3>
+            </div>
+
+            ${lesson.content ? `<div class="lesson-card-body-text">${lesson.content}</div>` : ""}
+
+            ${tasksHtml}
+
+            ${
+              lesson.substituteNote
+                ? `
+                  <div class="substitute-box">
+                    <strong>Sijaiselle</strong>
+                    <p>${escapeHtml(lesson.substituteNote)}</p>
+                  </div>
+                `
+                : ""
+            }
+          </article>
+        `;
+      })
+      .join("");
+
+    // Kytketään PDF-napit avaamaan modaali
+    aikatauluLessonsList.querySelectorAll(".aikataulu-task-pdf-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openLessonTaskViewer(btn.dataset.title, btn.dataset.url);
+      });
+    });
+
+    highlightCurrentLesson(true);
+  } catch (err) {
+    console.error("Aikataulun latausvirhe:", err);
+    if (aikatauluLessonsList) {
+      aikatauluLessonsList.innerHTML = `<div class="empty">Virhe ryhmän aikataulun lataamisessa: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+}
+
+function highlightCurrentLesson(scrollIntoView = true) {
+  const today = formatDate(new Date());
+  const cards = Array.from(document.querySelectorAll("#aikataulu-lessons-list .lesson-card"));
+  if (!cards.length) return;
+
+  cards.forEach((card) => card.classList.remove("current-lesson"));
+
+  let currentCard = cards.find((card) => card.dataset.date >= today);
+  if (!currentCard && cards.length > 0) {
+    currentCard = cards[cards.length - 1];
+  }
+
+  if (currentCard) {
+    currentCard.classList.add("current-lesson");
+    if (scrollIntoView) {
+      setTimeout(() => {
+        currentCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// 3. SIJAISEN MUISTILISTA
+// --------------------------------------------------------------------------
+
+function renderSubstituteGuide() {
+  if (!substituteContent) return;
+
+  substituteContent.innerHTML = `
+    <div class="guide-content">
+      <h3>Oppimateriaalit</h3>
+      <p>Löydät esimerkiksi opettajan oppaat ja muun tarpeellisen seuraavasti:</p>
+      <ul>
+        <li><strong>Talon sisäiset sijaiset:</strong> Opehuone-Drive → Sijaiset JAETTU → Yläkoulu → RAUH</li>
+        <li><strong>Talon ulkopuoliset sijaiset:</strong> Kirjaudu sijaisläppärillä → selaimella Google Drive → Minulle jaetut → Sijaiset JAETTU → Yläkoulu → RAUH</li>
+      </ul>
+      <p>Tuntien aiheet ilmoitetaan seuraavista lähteistä:</p>
+      <ul>
+        <li>Kurssisivusto (KS)</li>
+        <li>Avoin matematiikka (AM), pdf-muodossa</li>
+        <li>Oppikirja (esim. Kuutio X)</li>
+        <li>Työkirja (vain fysiikassa, FYKE-kirjasarja)</li>
+      </ul>
+      <p>Kurssisivusto toimii ilman kirjautumista kaikilla laitteilla. Osoitteen löydät oppimateriaalikansiosta ja se on jaettu myös oppilaille.</p>
+
+      <h3>Oppilaiden tuntitehtävät</h3>
+      <p>Oppilaiden tuntitehtävissä on eri tyyppejä ja vaikeustasoja.</p>
+
+      <h4>MATEMATIIKKA</h4>
+      <ul class="task-levels">
+        <li><span class="level-dot black"></span><strong>Yhteiset:</strong> Kaikille pakolliset aloitustehtävät</li>
+        <li><span class="level-dot blue"></span><strong>Siniset:</strong> Arvosanan 8 tasoon tähtäävät tehtävät</li>
+        <li><span class="level-dot red"></span><strong>Punaiset:</strong> Arvosanojen 9 ja 10 tasoon tähtäävät tehtävät</li>
+      </ul>
+
+      <h4>FYSIIKKA</h4>
+      <ul class="task-levels">
+        <li><span class="level-dot green"></span><strong>Tutkimus:</strong> Labratyöt (työkirjasta, jos sivunumero), simulaatiot ja demot</li>
+        <li><span class="level-dot black"></span><strong>Työkirja:</strong> Harjoitustehtävät työkirjasta, loppupään tehtävät haastavampia</li>
+      </ul>
+
+      <h3>Tuntimerkinnät</h3>
+      <p>Oppilaiden tuntimerkinnät kirjataan <strong>paperisiin oppilaslistoihin</strong>.</p>
+      <p>Merkitse:</p>
+      <ul>
+        <li>ketkä ovat pois tunnilta</li>
+        <li>ketkä ovat myöhässä</li>
+        <li>muut olennaiset tuntimerkinnät</li>
+      </ul>
+      <p>Merkitse lisäksi kouluarvosana-asteikolla <strong>4–10</strong>, millaista tuntityöskentelyä kullakin oppilaalla on ollut. Huomioon otetaan esimerkiksi läksyt, harjoittelumäärä ja erityisesti laatu, kaverien auttaminen ja aktiivisuus.</p>
+      <div class="guide-important">
+        <strong>⚠️ Ilman tätä tietoa oppilaiden jatkuva arviointi ei ole mahdollista, ethän unohda tehdä sitä!</strong>
+      </div>
+
+      <h3>Koetilanne</h3>
+      <p>Sallitut välineet kokeissa:</p>
+      <ul>
+        <li>Kynä ja pyyhekumi</li>
+        <li>Opettajan antamaa tyhjää paperia (oppilaan omia ei saa käyttää)</li>
+        <li>Laskin (ilmoitetaan kokeen tiedoissa erikseen)</li>
+        <li>Tietokone (ilmoitetaan kokeen tiedoissa erikseen)</li>
+      </ul>
+      <p>Kielletyt välineet kokeissa:</p>
+      <ul>
+        <li>Oppilaan omat lunttilaput yms.</li>
+        <li>Puhelimet, älykellot, kuulokkeet ja älylasit</li>
+      </ul>
+      <p>Ennen koetta valvova opettaja tarkistaa, että kiellettyjä välineitä ei ole (esim. ranteet ja korvat tulee näyttää). Oppilaiden reput viedään opettajan osoittamaan paikkaan, kuten luokan etu- tai takaosaan.</p>
+      <p>Varmista, että oppilaat istuvat sellaisessa paikassa, johon on hyvä näkyvyys. Jos kokeen aikana oppilas tarvitsee apua, opettaja ei mene oppilaan luo, vaan oppilas tulee opettajan luo.</p>
+      <p>Jos koe on kirjallinen, valvotaan luokan etuosasta. Jos koe on sähköinen, luokan takaosasta näkee parhaiten oppilaiden näytöt. Muista oikeasti VALVOA oppilaita, älä puuhastele omiasi!</p>
+      <p>Lunttaustilanteessa oppilaan koe keskeytetään ja koevälineet kerätään pois. Kaikista poikkeustilanteista tulee tehdä muistiinpanot.</p>
+      <p>Kun koe on palautettu, oppilaat voivat lukea luokassa olevia lehtiä tai kirjoja. Omia tietokoneita ja puhelimia ei saa käyttää. Koe päättyy aina viimeistään silloin, kun oppitunti päättyy.</p>
+    </div>
+  `;
+}
+
+// --------------------------------------------------------------------------
+// 4. LUO SIJAISOHJEET
+// --------------------------------------------------------------------------
+
+function initInstructionsForm() {
+  if (!instructionsStart || !instructionsEnd) return;
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  if (!instructionsStart.value) instructionsStart.value = formatDate(today);
+  if (!instructionsEnd.value) instructionsEnd.value = formatDate(tomorrow);
+}
+
+function getTimetableEventsForDate(isoDate) {
+  if (!state.timetable || !state.timetable.paivat) return [];
+  const date = new Date(`${isoDate}T12:00:00`);
+  const dayKeys = ["sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai"];
+  const dayKey = dayKeys[date.getDay()];
+  const dayData = state.timetable.paivat[dayKey];
+  if (!dayData || !Array.isArray(dayData.tapahtumat)) return [];
+
+  return dayData.tapahtumat.map((event) => ({
+    ...event,
+    date: isoDate
+  }));
+}
+
+function getCourseForGroup(groupCode) {
+  if (!groupCode) return null;
+  const courseCodeValue = groupCode.split(".").slice(0, -1).join(".");
+  return (state.courses || []).find((course) => course.code === courseCodeValue) || null;
+}
+
+function getScheduleForGroup(groupCode) {
+  if (!state.schedules || !groupCode) return null;
+  const courseCodeValue = groupCode.split(".").slice(0, -1).join(".");
+  const courseSchedule = state.schedules[courseCodeValue];
+  return courseSchedule?.groups?.[groupCode] || null;
+}
+
+async function getLessonForDate(course, schedule, isoDate) {
+  if (!course || !schedule) return null;
+
+  const courseData = await getCourseData(course.code);
+  const lessons = courseData.lessons || [];
+  const date = new Date(`${isoDate}T12:00:00`);
+  const startDate = new Date(`${schedule.startDate}T12:00:00`);
+  const endDate = new Date(`${schedule.endDate}T12:00:00`);
+
+  if (date < startDate || date > endDate || !schedule.weekdays.includes(date.getDay())) {
+    return null;
+  }
+
+  const exception = (schedule.exceptions || []).find((item) => item.date === isoDate);
+  if (exception) {
+    return { exception };
+  }
+
+  let lessonNumber = 0;
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= date) {
+    const currentIso = formatDate(currentDate);
+    if (schedule.weekdays.includes(currentDate.getDay())) {
+      const isException = (schedule.exceptions || []).some((item) => item.date === currentIso);
+      if (!isException) {
+        lessonNumber++;
+      }
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  const lesson = lessons.find((item) => item.lesson === lessonNumber);
+  return lesson ? { lesson } : null;
+}
+
+async function handleInstructionsSubmit(e) {
+  e.preventDefault();
+  if (!instructionsStart || !instructionsEnd) return;
+
+  const start = instructionsStart.value;
+  const end = instructionsEnd.value;
+
+  if (!start || !end) {
+    showToast("Valitse sekä alku- että loppupäivä.");
+    return;
+  }
+
+  if (start > end) {
+    showToast("Alkupäivä ei voi olla loppupäivän jälkeen.");
+    return;
+  }
+
+  const dates = getDatesBetween(start, end);
+  const events = [];
+
+  for (const date of dates) {
+    const dayEvents = getTimetableEventsForDate(date);
+    for (const event of dayEvents) {
+      if (event.tyyppi === "oppitunti" && event.ryhma) {
+        const course = getCourseForGroup(event.ryhma);
+        const schedule = getScheduleForGroup(event.ryhma);
+        if (course && schedule) {
+          const lessonInfo = await getLessonForDate(course, schedule, date);
+          if (lessonInfo) {
+            events.push({
+              ...event,
+              ...lessonInfo
+            });
+            continue;
+          }
+        }
+      }
+      events.push(event);
+    }
+  }
+
+  const emailText = buildSubstituteInstructions(events, start, end);
+  const lessonEventsCount = events.filter((ev) => ev.tyyppi === "oppitunti").length;
+  renderGeneratedInstructions(emailText, start, end, lessonEventsCount);
+}
+
+function buildSubstituteInstructions(events, start, end) {
+  const lines = [];
+  const grouped = new Map();
+
+  events.forEach((event) => {
+    const date = event.date;
+    if (!grouped.has(date)) grouped.set(date, []);
+    grouped.get(date).push(event);
+  });
+
+  [...grouped.entries()].forEach(([date, dayEvents]) => {
+    lines.push(formatEmailDate(date));
+    lines.push("");
+
+    dayEvents.forEach((event, eventIndex) => {
+      if (event.tyyppi === "valvonta") {
+        lines.push(`  ${event.alku}–${event.loppu}  VALVONTA  (${event.paikka || ""})`);
+      } else {
+        lines.push(`  ${event.alku}–${event.loppu}  ${event.ryhma}  (${event.tila || ""})`);
+
+        if (event.exception) {
+          lines.push(`    ${event.exception.type}`);
+          lines.push(`    ${event.exception.description}`);
+        } else if (event.lesson) {
+          lines.push(`    Aihe: ${event.lesson.topic || event.lesson.title || ""}`);
+
+          if (event.lesson.tasks) {
+            const taskLines = Object.entries(event.lesson.tasks)
+              .filter(([, value]) => value !== undefined && value !== null && value !== "")
+              .map(([key, value]) => {
+                const labels = {
+                  research: "Tutkimus",
+                  theory: "Työkirja",
+                  warmup: "Yhteiset",
+                  blue: "Siniset",
+                  red: "Punaiset"
+                };
+                return `${labels[key] || key}: ${value}`;
+              });
+
+            if (taskLines.length) {
+              lines.push(`    Tehtävät: ${taskLines.join(" | ")}`);
+            }
+          }
+
+          if (Array.isArray(event.lesson.taskSheets) && event.lesson.taskSheets.length) {
+            const sheetTitles = event.lesson.taskSheets.map((s) => s.title).join(", ");
+            lines.push(`    Tehtävämoniste (PDF): ${sheetTitles}`);
+          }
+
+          if (event.lesson.substituteNote) {
+            lines.push(`    Sijaiselle: ${event.lesson.substituteNote}`);
+          }
+        }
+      }
+
+      if (eventIndex < dayEvents.length - 1) {
+        lines.push("");
+      }
+    });
+
+    lines.push("");
+  });
+
+  const siteUrl = window.location.href.split("#")[0];
+  const range = formatDateRange(start, end);
+
+  return [
+    `Hei!`,
+    ``,
+    `Olen poissa ${range}. Tässä poissaoloni aikana pidettävät oppitunnit ja niiden ohjeet:`,
+    ``,
+    lines.join("\n"),
+    `Luethan myös muut sijaisuuksiin liittyvät ohjeet kurssisivustolta:`,
+    siteUrl,
+    ``,
+    `Ystävällisin terveisin,`,
+    `Mikael`
+  ].join("\n").replace(/\n{3,}/g, "\n\n");
+}
+
+function renderGeneratedInstructions(emailText, start, end, eventCount) {
+  if (!generatedInstructions) return;
+  generatedInstructions.hidden = false;
+
+  generatedInstructions.innerHTML = `
+    <div class="generated-header">
+      <h3>Valmis sijaisohje</h3>
+      <p>${eventCount} oppituntia löytyi aikaväliltä ${formatDateRange(start, end)}.</p>
+    </div>
+
+    <pre id="instructions-preview-formatted" class="instructions-preview-formatted">${escapeHtml(emailText)}</pre>
+
+    <div class="instruction-actions">
+      <button id="btn-copy-instructions" class="rev-btn rev-btn-tasks" type="button" style="padding: 10px 18px; font-size: 0.95rem;">
+        📋 Kopioi leikepöydälle
+      </button>
+    </div>
+  `;
+
+  const copyBtn = document.querySelector("#btn-copy-instructions");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(emailText)
+        .then(() => {
+          showToast("📋 Sijaisohjeet kopioitu leikepöydälle!");
+        })
+        .catch(() => {
+          showToast("Kopiointi epäonnistui. Kopioi teksti suoraan ruudulta.");
+        });
+    });
+  }
+}
 
 // Käynnistetään sovellus
 init();

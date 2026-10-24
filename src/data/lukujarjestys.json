@@ -1,0 +1,153 @@
+{
+  "jakso": "2",
+  "paivat": {
+    "maanantai": {
+      "tapahtumat": [
+        {
+          "tyyppi": "oppitunti",
+          "alku": "08:30",
+          "loppu": "10:00",
+          "ryhma": "MA_72.1",
+          "tila": "A 2103"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "10:15",
+          "loppu": "11:45",
+          "ryhma": "MA_92.3",
+          "tila": "A 5044"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "12:20",
+          "loppu": "13:50",
+          "ryhma": "MA_72.2",
+          "tila": "A 2090"
+        },
+        {
+          "tyyppi": "valvonta",
+          "alku": "13:50",
+          "loppu": "14:05",
+          "paikka": "kirnu"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "14:05",
+          "loppu": "15:35",
+          "ryhma": "FY_91.3",
+          "tila": "A 2090"
+        }
+      ]
+    },
+    "tiistai": {
+      "tapahtumat": [
+        {
+          "tyyppi": "oppitunti",
+          "alku": "08:30",
+          "loppu": "10:00",
+          "ryhma": "FY_71.3",
+          "tila": "A 2090"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "10:15",
+          "loppu": "11:45",
+          "ryhma": "VMA_01.1",
+          "tila": "A 2090"
+        },
+        {
+          "tyyppi": "valvonta",
+          "alku": "13:50",
+          "loppu": "14:05",
+          "paikka": "kirnu"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "14:05",
+          "loppu": "15:35",
+          "ryhma": "MA_81.5",
+          "tila": "A 2103"
+        }
+      ]
+    },
+    "keskiviikko": {
+      "tapahtumat": [
+        {
+          "tyyppi": "oppitunti",
+          "alku": "10:15",
+          "loppu": "11:45",
+          "ryhma": "FY_91.3",
+          "tila": "A 2090"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "12:20",
+          "loppu": "13:50",
+          "ryhma": "MA_92.3",
+          "tila": "A 5044"
+        }
+      ]
+    },
+    "torstai": {
+      "tapahtumat": [
+        {
+          "tyyppi": "oppitunti",
+          "alku": "08:30",
+          "loppu": "10:00",
+          "ryhma": "MA_72.2",
+          "tila": "A 2090"
+        },
+        {
+          "tyyppi": "valvonta",
+          "alku": "10:00",
+          "loppu": "10:15",
+          "paikka": "kirnu"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "10:15",
+          "loppu": "11:45",
+          "ryhma": "MA_72.1",
+          "tila": "A 2103"
+        },
+        {
+          "tyyppi": "valvonta",
+          "alku": "12:00",
+          "loppu": "12:15",
+          "paikka": "ruokala"
+        },
+        {
+          "tyyppi": "kotiryhma",
+          "alku": "12:20",
+          "loppu": "12:50",
+          "ryhma": "KR- tunti"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "12:55",
+          "loppu": "14:25",
+          "ryhma": "VMA_01.1",
+          "tila": "A 2090"
+        }
+      ]
+    },
+    "perjantai": {
+      "tapahtumat": [
+        {
+          "tyyppi": "oppitunti",
+          "alku": "10:15",
+          "loppu": "11:45",
+          "ryhma": "MA_81.5",
+          "tila": "A 2103"
+        },
+        {
+          "tyyppi": "oppitunti",
+          "alku": "12:20",
+          "loppu": "13:50",
+          "ryhma": "FY_71.3",
+          "tila": "A 2090"
+        }
+      ]
+    }
+  }
+}
