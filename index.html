@@ -100,10 +100,19 @@
         </div>
 
         <div class="settings-popover-content">
+          <div class="settings-accordion-mode-bar" id="settings-accordion-mode-bar">
+            <span class="settings-accordion-mode-label">Osioiden avaus:</span>
+            <div class="settings-accordion-mode-btns" id="settings-accordion-mode-btns">
+              <button type="button" class="accordion-mode-btn active" data-mode="closed" title="Kaikki osiot suljettuina (oletus)">🔒 Suljettuina</button>
+              <button type="button" class="accordion-mode-btn" data-mode="last" title="Avaa aiemmin avatut osiot">🕒 Viimeksi avatut</button>
+              <button type="button" class="accordion-mode-btn" data-mode="all" title="Kaikki osiot avattuina">📖 Kaikki auki</button>
+            </div>
+          </div>
+
           <div class="settings-accordion-container">
             
             <!-- 1. Aloitus- ja kotinäkymä -->
-            <details class="settings-card" open id="card-setting-home">
+            <details class="settings-card" id="card-setting-home">
               <summary class="settings-card-summary">
                 <div class="settings-card-summary-left">
                   <span class="settings-card-icon" aria-hidden="true">🏠</span>
@@ -260,6 +269,110 @@
                     </span>
                   </button>
                 </div>
+              </div>
+            </details>
+
+            <!-- 6. Mobiilin alapalkki -->
+            <details class="settings-card" id="card-setting-mobile">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">📱</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Mobiilin alapalkki</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-mobile">Koti keskellä</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <div class="settings-group">
+                  <h4 class="settings-group-title">Painikkeiden järjestys</h4>
+                  <p class="settings-group-desc">
+                    Mobiililaitteella sivuston alareunassa on nopea alapalkki. <strong>Koti on aina lukittuna keskelle</strong>. Voit järjestää muut 4 painiketta nuolilla haluamaasi järjestykseen:
+                  </p>
+                  
+                  <div class="mobile-nav-slots-list" id="mobile-nav-slots-list"></div>
+
+                  <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+                    <button type="button" class="btn-restore-default" id="btn-reset-mobile-nav">
+                      ↺ Palauta oletusjärjestys
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <!-- 7. Ohjeet ja sivuston tiedot -->
+            <details class="settings-card" id="card-setting-help">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">📖</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Ohjeet & sivuston tiedot</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-help">Yleistä & PWA</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                
+                <!-- a) Yleistä sivustosta -->
+                <div class="settings-group">
+                  <h4 class="settings-group-title">ℹ️ Yleistä kurssisivustosta</h4>
+                  <div class="settings-help-text">
+                    <p><strong>Kurssisivusto</strong> on Pasilan peruskoulun matematiikan ja fysiikan opiskeluun tarkoitettu oppimisportaali ja tuntityökalu.</p>
+                    <ul class="settings-help-list">
+                      <li><strong>Tekijä:</strong> Mikael Rauhala (RAUH), Pasilan peruskoulu, Helsingin kaupunki.</li>
+                      <li><strong>Sisältö:</strong> 7.–9. luokkien matematiikan ja fysiikan sekä valinnaiskurssien tuntiteoriat, interaktiiviset simulaatiot, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät malliratkaisuineen.</li>
+                      <li><strong>Tekijänoikeudet & Lisenssi:</strong> Sivuston oma opetusmateriaali ja tuntitehtävät on lisensoitu <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fi" target="_blank" rel="noopener noreferrer">Creative Commons Nimeä-EiKaupallinen 4.0 (CC BY-NC 4.0)</a> -lisenssillä. Materiaalia saa vapaasti hyödyntää ja jakaa opetuksessa ei-kaupallisesti, kunhan tekijä mainitaan. Avoin matematiikka -oppikirjat: CC BY 3.0.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- b) Mobiiliapin lisääminen (PWA) -->
+                <div class="settings-group" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--color-border);">
+                  <h4 class="settings-group-title">📲 Mobiiliapin lisääminen kotivalikkoon (PWA)</h4>
+                  <p class="settings-group-desc">Voit lisätä sivuston puhelimesi tai tablettisi kotinäytölle ilman sovelluskauppaa. Tällöin se avautuu kuten aito mobiilisovellus koko ruudulla:</p>
+                  
+                  <div class="settings-pwa-steps-grid">
+                    <div class="settings-pwa-step-card">
+                      <div class="settings-pwa-step-header">
+                        <span class="settings-pwa-platform-icon">🍏</span>
+                        <strong>iPhone & iPad (Safari)</strong>
+                      </div>
+                      <ol class="settings-pwa-step-list">
+                        <li>Avaa sivusto <strong>Safari</strong>-selaimella.</li>
+                        <li>Napauta alareunan <strong>Jaa</strong>-painiketta (neliö ja nuoli ylös <span class="share-symbol">⎋</span>).</li>
+                        <li>Vieritä jakoikkunaa alaspäin ja valitse <strong>"Lisää Koti-valikkoon"</strong>.</li>
+                        <li>Paina oikeasta yläkulmasta <strong>Lisää</strong>. Kuvake ilmestyy laitteesi kotivalikkoon.</li>
+                      </ol>
+                    </div>
+
+                    <div class="settings-pwa-step-card">
+                      <div class="settings-pwa-step-header">
+                        <span class="settings-pwa-platform-icon">🤖</span>
+                        <strong>Android (Google Chrome)</strong>
+                      </div>
+                      <ol class="settings-pwa-step-list">
+                        <li>Avaa sivusto <strong>Chrome</strong>-selaimella.</li>
+                        <li>Napauta oikean yläkulman valikkokuvaketta (<strong>⋮</strong> kolme pistettä).</li>
+                        <li>Valitse valikosta <strong>"Asenna sovellus"</strong> tai <strong>"Lisää aloitusnäyttöön"</strong>.</li>
+                        <li>Vahvista napauttamalla <strong>Asenna</strong>.</li>
+                      </ol>
+                    </div>
+
+                    <div class="settings-pwa-step-card">
+                      <div class="settings-pwa-step-header">
+                        <span class="settings-pwa-platform-icon">💻</span>
+                        <strong>Tietokone (Chrome, Edge)</strong>
+                      </div>
+                      <p style="font-size: 0.82rem; margin: 6px 0 0 0; color: var(--color-text-muted); line-height: 1.45;">
+                        Klikkaa selaimen osoiterivin oikeasta reunasta asennuskuvaketta (<strong>⊕</strong> tai näyttösymbolia) ja valitse <strong>Asenna</strong>.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </details>
 
@@ -665,6 +778,35 @@
 
   <!-- Toast-ilmoitus -->
   <div id="toast" class="toast" role="alert" aria-live="polite" hidden></div>
+
+  <!-- Mobiilin Suosikit- ja navigaatiopaneeli (Bottom Sheet) -->
+  <div id="mobile-favorites-sheet" class="mobile-bottom-sheet" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mobile-sheet-title">
+    <div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop"></div>
+    <div class="mobile-sheet-content">
+      <div class="mobile-sheet-handle-bar">
+        <span class="mobile-sheet-handle"></span>
+      </div>
+      <div class="mobile-sheet-header">
+        <div class="mobile-sheet-title-group">
+          <span class="mobile-sheet-icon">⭐</span>
+          <div>
+            <h3 id="mobile-sheet-title" class="mobile-sheet-heading">Suosikit & Valikko</h3>
+            <p class="mobile-sheet-caption">Pääsy omiin suosikkeihin, kursseihin ja oppitunteihin</p>
+          </div>
+        </div>
+        <button type="button" class="mobile-sheet-close-btn" id="mobile-sheet-close-btn" aria-label="Sulje valikko">✕</button>
+      </div>
+
+      <div class="mobile-sheet-body" id="mobile-sheet-body">
+        <!-- Renderöidään dynaamisesti JS:ssä -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobiilin kiinteä alapalkki -->
+  <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Mobiilin päävalikko">
+    <!-- Renderöidään dynaamisesti JS:ssä järjestettävien slottien mukaan -->
+  </nav>
 
   <script src="src/version.js"></script>
   <script type="module" src="src/app.js"></script>

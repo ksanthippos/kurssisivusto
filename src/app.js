@@ -28,7 +28,10 @@ const state = {
       { id: "aikataulu", title: "Ryhmät", enabled: true }
     ],
     aikatauluGroup: null
-  }
+  },
+  mobileNavOrder: ["lukujarjestys", "ryhmat", "favorites", "settings"],
+  settingsAccordionMode: "closed", // "closed" | "last" | "all"
+  settingsLastOpenCards: []
 };
 
 // DOM-elementit
@@ -473,8 +476,24 @@ function setupEventListeners() {
     if (e.key === "Escape") {
       closeMobileMenu();
       closeSettingsPopover();
+      closeMobileFavoritesSheet();
     }
   });
+
+  // Mobiilin suosikkipaneelin sulkemispainikkeet
+  const sheetCloseBtn = document.querySelector("#mobile-sheet-close-btn");
+  const sheetBackdrop = document.querySelector("#mobile-sheet-backdrop");
+  if (sheetCloseBtn) {
+    sheetCloseBtn.addEventListener("click", closeMobileFavoritesSheet);
+  }
+  if (sheetBackdrop) {
+    sheetBackdrop.addEventListener("click", closeMobileFavoritesSheet);
+  }
+
+  // Alustetaan asetusaccordionin tila ja mobiilipalkki
+  initSettingsAccordionTracking();
+  renderSettingsAccordionModeBtns();
+  renderMobileBottomBar();
 
   // Kuunnellaan järjestelmän teeman vaihtumista reaaliajassa
   if (window.matchMedia) {
@@ -500,6 +519,7 @@ function parseRoute() {
 
   // Suljetaan mobiilivalikko ja asetukset siirtymissä
   closeMobileMenu();
+  closeMobileFavoritesSheet();
   closeSettingsPopover();
 
   const isHomeRoute = !hash || hash === "koti" || hash === "home";
@@ -646,6 +666,7 @@ function switchView(viewName) {
 
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
+  updateMobileBottomBarActive();
 }
 
 function updateNavTabsUI() {
@@ -885,6 +906,34 @@ function loadPreferences() {
     console.warn("Virhe kotinäkymän asetusten latauksessa:", err);
   }
 
+  try {
+    const rawMobileNav = localStorage.getItem("rauh_mobile_nav_order");
+    if (rawMobileNav) {
+      const parsed = JSON.parse(rawMobileNav);
+      const validKeys = ["lukujarjestys", "ryhmat", "favorites", "settings"];
+      if (Array.isArray(parsed) && parsed.length === 4 && validKeys.every((k) => parsed.includes(k))) {
+        state.mobileNavOrder = parsed;
+      }
+    }
+  } catch (err) {}
+
+  try {
+    const rawAccMode = localStorage.getItem("rauh_settings_accordion_mode");
+    if (rawAccMode && ["closed", "last", "all"].includes(rawAccMode)) {
+      state.settingsAccordionMode = rawAccMode;
+    }
+  } catch (err) {}
+
+  try {
+    const rawLastOpen = localStorage.getItem("rauh_settings_last_open");
+    if (rawLastOpen) {
+      const parsed = JSON.parse(rawLastOpen);
+      if (Array.isArray(parsed)) {
+        state.settingsLastOpenCards = parsed;
+      }
+    }
+  } catch (err) {}
+
   applyTheme(state.theme, false);
 }
 
@@ -894,11 +943,14 @@ function savePreferences() {
     localStorage.setItem("rauh_default_view", state.defaultView);
     localStorage.setItem("rauh_fav_collapsed", state.favoritesCollapsed ? "true" : "false");
     localStorage.setItem("rauh_home_config", JSON.stringify(state.homeConfig));
+    localStorage.setItem("rauh_mobile_nav_order", JSON.stringify(state.mobileNavOrder));
+    localStorage.setItem("rauh_settings_accordion_mode", state.settingsAccordionMode);
   } catch (err) {
     console.warn("Virhe tallennuksessa:", err);
   }
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
+  renderMobileBottomBar();
   if (settingsPopover && !settingsPopover.hidden) {
     renderSettingsPopover();
   }
@@ -991,11 +1043,14 @@ function closeMobileMenu() {
 function openSettingsPopover() {
   if (!settingsPopover) return;
   closeMobileMenu();
+  closeMobileFavoritesSheet();
   settingsPopover.hidden = false;
   if (headerSettingsBtn) {
     headerSettingsBtn.classList.add("is-active");
     headerSettingsBtn.setAttribute("aria-expanded", "true");
   }
+  applySettingsAccordionMode();
+  updateMobileBottomBarActive();
   renderSettingsPopover();
 }
 
@@ -1006,6 +1061,7 @@ function closeSettingsPopover() {
     headerSettingsBtn.classList.remove("is-active");
     headerSettingsBtn.setAttribute("aria-expanded", "false");
   }
+  updateMobileBottomBarActive();
 }
 
 function toggleSettingsPopover() {
@@ -1405,7 +1461,14 @@ async function renderHomeAikatauluEmbed(groupCode) {
       if (currentCard) {
         currentCard.classList.add("current-lesson");
         setTimeout(() => {
-          currentCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          // Vieritetään VAIN upotuksen omaa säiliötä, ei koko selainikkunaa
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const cardRect = currentCard.getBoundingClientRect();
+          const relativeTop = cardRect.top - containerRect.top + scrollContainer.scrollTop;
+          scrollContainer.scrollTo({
+            top: Math.max(0, relativeTop - 12),
+            behavior: "smooth"
+          });
         }, 120);
       }
     }
@@ -1515,6 +1578,11 @@ function updateSettingsSummaryBadges() {
   if (badgeDates) {
     badgeDates.textContent = state.autoDateLesson ? "📅 Päällä" : "Poissa käytöstä";
   }
+
+  const badgeMobile = document.querySelector("#summary-badge-mobile");
+  if (badgeMobile) {
+    badgeMobile.textContent = "Koti keskellä";
+  }
 }
 
 function renderSettingsPopover() {
@@ -1565,6 +1633,12 @@ function renderSettingsPopover() {
 
   // 1b. Kotinäkymän osioiden valinta & järjestys
   renderSettingsHomeBlocks();
+
+  // 1c. Mobiilin alapalkin järjestely
+  renderMobileNavSlotsList();
+
+  // 1d. Asetuskorttien avaustila
+  renderSettingsAccordionModeBtns();
 
   // 2. Suosikkien pikalisäysalasvetovalikko (#settings-quick-add-select & #btn-quick-add-fav)
   const quickAddSelect = document.querySelector("#settings-quick-add-select");
@@ -1712,6 +1786,419 @@ function renderSettingsPopover() {
 
   // 6. Yhteenvetobadget korttien otsikoihin
   updateSettingsSummaryBadges();
+}
+
+// --------------------------------------------------------------------------
+// ASETUSVALIKON JA MOBIILIN ALAPALKIN APUFUNKTIOT
+// --------------------------------------------------------------------------
+
+function renderSettingsAccordionModeBtns() {
+  const bar = document.querySelector("#settings-accordion-mode-btns");
+  if (!bar) return;
+
+  bar.querySelectorAll(".accordion-mode-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.mode === state.settingsAccordionMode);
+    if (!btn._hasListener) {
+      btn._hasListener = true;
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const mode = btn.dataset.mode;
+        state.settingsAccordionMode = mode;
+        try {
+          localStorage.setItem("rauh_settings_accordion_mode", mode);
+        } catch (err) {}
+        renderSettingsAccordionModeBtns();
+        applySettingsAccordionMode();
+      });
+    }
+  });
+}
+
+function applySettingsAccordionMode() {
+  const cards = document.querySelectorAll(".settings-accordion-container > .settings-card");
+  if (!cards.length) return;
+
+  if (state.settingsAccordionMode === "all") {
+    cards.forEach((card) => {
+      card.open = true;
+    });
+  } else if (state.settingsAccordionMode === "last") {
+    const lastOpen = state.settingsLastOpenCards || [];
+    cards.forEach((card) => {
+      card.open = lastOpen.includes(card.id);
+    });
+  } else {
+    // "closed" on oletus
+    cards.forEach((card) => {
+      card.open = false;
+    });
+  }
+}
+
+function initSettingsAccordionTracking() {
+  document.querySelectorAll(".settings-accordion-container > .settings-card").forEach((card) => {
+    card.addEventListener("toggle", () => {
+      const openIds = Array.from(document.querySelectorAll(".settings-accordion-container > .settings-card[open]")).map((c) => c.id);
+      state.settingsLastOpenCards = openIds;
+      try {
+        localStorage.setItem("rauh_settings_last_open", JSON.stringify(openIds));
+      } catch (err) {}
+    });
+  });
+}
+
+function renderMobileNavSlotsList() {
+  const container = document.querySelector("#mobile-nav-slots-list");
+  if (!container) return;
+
+  const slotLabels = {
+    lukujarjestys: { icon: "📅", label: "Lukujärjestys" },
+    ryhmat: { icon: "👥", label: "Ryhmät" },
+    favorites: { icon: "⭐", label: "Suosikit" },
+    settings: { icon: "⚙️", label: "Asetukset" }
+  };
+
+  const order = state.mobileNavOrder || ["lukujarjestys", "ryhmat", "favorites", "settings"];
+
+  const renderSlotRow = (key, index, slotLabel) => {
+    const item = slotLabels[key] || { icon: "📌", label: key };
+    const isFirst = index === 0;
+    const isLast = index === 3;
+
+    return `
+      <div class="mobile-nav-slot-row" data-key="${escapeHtml(key)}">
+        <div class="mobile-nav-slot-left">
+          <span class="mobile-nav-slot-badge">${slotLabel}</span>
+          <span class="mobile-nav-slot-title">${item.icon} ${escapeHtml(item.label)}</span>
+        </div>
+        <div class="mobile-nav-slot-actions">
+          <button type="button" class="mobile-nav-reorder-btn btn-nav-up" data-index="${index}" ${isFirst ? "disabled" : ""} title="Siirrä ylemmäs" aria-label="Siirrä ylemmäs">▲</button>
+          <button type="button" class="mobile-nav-reorder-btn btn-nav-down" data-index="${index}" ${isLast ? "disabled" : ""} title="Siirrä alemmas" aria-label="Siirrä alemmas">▼</button>
+        </div>
+      </div>
+    `;
+  };
+
+  container.innerHTML = `
+    ${renderSlotRow(order[0], 0, "Vasen 1")}
+    ${renderSlotRow(order[1], 1, "Vasen 2")}
+    <div class="mobile-nav-slot-row locked-center">
+      <div class="mobile-nav-slot-left">
+        <span class="mobile-nav-slot-badge">Keskellä</span>
+        <span class="mobile-nav-slot-title">🏠 Koti (lukittu keskelle)</span>
+      </div>
+      <div style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 600;">🔒 Kiinteä</div>
+    </div>
+    ${renderSlotRow(order[2], 2, "Oikea 1")}
+    ${renderSlotRow(order[3], 3, "Oikea 2")}
+  `;
+
+  container.querySelectorAll(".btn-nav-up").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index, 10);
+      if (idx > 0) {
+        const item = state.mobileNavOrder.splice(idx, 1)[0];
+        state.mobileNavOrder.splice(idx - 1, 0, item);
+        savePreferences();
+        renderMobileNavSlotsList();
+        renderMobileBottomBar();
+      }
+    });
+  });
+
+  container.querySelectorAll(".btn-nav-down").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index, 10);
+      if (idx < 3) {
+        const item = state.mobileNavOrder.splice(idx, 1)[0];
+        state.mobileNavOrder.splice(idx + 1, 0, item);
+        savePreferences();
+        renderMobileNavSlotsList();
+        renderMobileBottomBar();
+      }
+    });
+  });
+
+  const btnReset = document.querySelector("#btn-reset-mobile-nav");
+  if (btnReset && !btnReset._hasListener) {
+    btnReset._hasListener = true;
+    btnReset.addEventListener("click", (e) => {
+      e.stopPropagation();
+      state.mobileNavOrder = ["lukujarjestys", "ryhmat", "favorites", "settings"];
+      savePreferences();
+      renderMobileNavSlotsList();
+      renderMobileBottomBar();
+      showToast("Palautettu mobiilipalkin oletusjärjestys!");
+    });
+  }
+}
+
+function renderMobileBottomBar() {
+  const bar = document.querySelector("#mobile-bottom-bar");
+  if (!bar) return;
+
+  const order = state.mobileNavOrder || ["lukujarjestys", "ryhmat", "favorites", "settings"];
+  const leftKeys = order.slice(0, 2);
+  const rightKeys = order.slice(2, 4);
+
+  const getBtnHtml = (key) => {
+    if (key === "lukujarjestys") {
+      const isActive = state.activeView === "lukujarjestys";
+      return `
+        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="lukujarjestys" aria-label="Lukujärjestys">
+          <span class="mobile-nav-icon">📅</span>
+          <span class="mobile-nav-label">Lukujärjestys</span>
+        </button>
+      `;
+    }
+    if (key === "ryhmat") {
+      const isActive = state.activeView === "aikataulu";
+      return `
+        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="ryhmat" aria-label="Ryhmät">
+          <span class="mobile-nav-icon">👥</span>
+          <span class="mobile-nav-label">Ryhmät</span>
+        </button>
+      `;
+    }
+    if (key === "favorites") {
+      const sheet = document.querySelector("#mobile-favorites-sheet");
+      const isActive = sheet && !sheet.hidden;
+      return `
+        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="favorites" aria-label="Suosikit">
+          <span class="mobile-nav-icon">⭐</span>
+          <span class="mobile-nav-label">Suosikit</span>
+        </button>
+      `;
+    }
+    if (key === "settings") {
+      const isActive = settingsPopover && !settingsPopover.hidden;
+      return `
+        <button type="button" class="mobile-nav-btn ${isActive ? "active" : ""}" data-mobile-nav="settings" aria-label="Asetukset">
+          <span class="mobile-nav-icon">⚙️</span>
+          <span class="mobile-nav-label">Asetukset</span>
+        </button>
+      `;
+    }
+    return "";
+  };
+
+  const homeBtnHtml = `
+    <button type="button" class="mobile-nav-btn mobile-nav-btn-home ${state.activeView === "home" ? "active" : ""}" data-mobile-nav="koti" aria-label="Koti">
+      <span class="mobile-nav-home-bubble">
+        <span class="mobile-nav-icon">🏠</span>
+      </span>
+      <span class="mobile-nav-label">Koti</span>
+    </button>
+  `;
+
+  bar.innerHTML = `
+    ${leftKeys.map(getBtnHtml).join("")}
+    ${homeBtnHtml}
+    ${rightKeys.map(getBtnHtml).join("")}
+  `;
+
+  bar.querySelectorAll(".mobile-nav-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const action = btn.dataset.mobileNav;
+      handleMobileNavAction(action);
+    });
+  });
+}
+
+function updateMobileBottomBarActive() {
+  const bar = document.querySelector("#mobile-bottom-bar");
+  if (!bar) return;
+
+  const sheet = document.querySelector("#mobile-favorites-sheet");
+  const isSheetOpen = sheet && !sheet.hidden;
+  const isSettingsOpen = settingsPopover && !settingsPopover.hidden;
+
+  bar.querySelectorAll(".mobile-nav-btn").forEach((btn) => {
+    const act = btn.dataset.mobileNav;
+    let isActive = false;
+    if (act === "koti") isActive = state.activeView === "home" && !isSheetOpen && !isSettingsOpen;
+    else if (act === "lukujarjestys") isActive = state.activeView === "lukujarjestys" && !isSheetOpen && !isSettingsOpen;
+    else if (act === "ryhmat") isActive = state.activeView === "aikataulu" && !isSheetOpen && !isSettingsOpen;
+    else if (act === "favorites") isActive = isSheetOpen;
+    else if (act === "settings") isActive = isSettingsOpen;
+
+    btn.classList.toggle("active", isActive);
+  });
+}
+
+function handleMobileNavAction(action) {
+  if (action === "koti") {
+    closeMobileFavoritesSheet();
+    closeSettingsPopover();
+    if (window.location.hash === "#/" || window.location.hash === "#/koti" || !window.location.hash) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.location.hash = "#/";
+    }
+  } else if (action === "lukujarjestys") {
+    closeMobileFavoritesSheet();
+    closeSettingsPopover();
+    if (window.location.hash === "#/lukujarjestys") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.location.hash = "#/lukujarjestys";
+    }
+  } else if (action === "ryhmat") {
+    closeMobileFavoritesSheet();
+    closeSettingsPopover();
+    if (window.location.hash === "#/ryhmat" || window.location.hash === "#/aikataulu") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.location.hash = "#/ryhmat";
+    }
+  } else if (action === "favorites") {
+    closeSettingsPopover();
+    toggleMobileFavoritesSheet();
+  } else if (action === "settings") {
+    closeMobileFavoritesSheet();
+    toggleSettingsPopover();
+  }
+}
+
+function openMobileFavoritesSheet() {
+  const sheet = document.querySelector("#mobile-favorites-sheet");
+  if (!sheet) return;
+  closeSettingsPopover();
+  closeMobileMenu();
+  sheet.hidden = false;
+  sheet.setAttribute("aria-hidden", "false");
+  renderMobileFavoritesSheet();
+  updateMobileBottomBarActive();
+}
+
+function closeMobileFavoritesSheet() {
+  const sheet = document.querySelector("#mobile-favorites-sheet");
+  if (!sheet) return;
+  sheet.hidden = true;
+  sheet.setAttribute("aria-hidden", "true");
+  updateMobileBottomBarActive();
+}
+
+function toggleMobileFavoritesSheet() {
+  const sheet = document.querySelector("#mobile-favorites-sheet");
+  if (!sheet) return;
+  if (sheet.hidden) {
+    openMobileFavoritesSheet();
+  } else {
+    closeMobileFavoritesSheet();
+  }
+}
+
+function renderMobileFavoritesSheet() {
+  const body = document.querySelector("#mobile-sheet-body");
+  if (!body) return;
+
+  let favsHtml = "";
+  if (state.favorites.length > 0) {
+    favsHtml = `
+      <div class="mobile-sheet-section">
+        <div class="mobile-sheet-section-title">⭐ Omat suosikit</div>
+        <div class="mobile-sheet-grid">
+          ${state.favorites
+            .map((key) => {
+              const meta = getFavoriteMeta(key);
+              if (!meta) return "";
+              return `
+                <a href="${meta.hash}" class="mobile-sheet-item-btn mobile-sheet-fav-link" data-fav-key="${escapeHtml(key)}">
+                  <span class="icon">${meta.icon}</span>
+                  <span class="label">${escapeHtml(meta.title)}</span>
+                </a>
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+    `;
+  } else {
+    favsHtml = `
+      <div class="mobile-sheet-section">
+        <div class="mobile-sheet-section-title">⭐ Omat suosikit</div>
+        <p style="font-size: 0.82rem; color: var(--color-text-muted); margin: 0 0 4px 0;">
+          Ei tallennettuja suosikkeja. Voit lisätä suosikkeja tähtipainikkeella (☆) tai asetuksista!
+        </p>
+      </div>
+    `;
+  }
+
+  // Jos ollaan kurssilla, näytetään kurssin oppituntilista (1-12)
+  let courseLessonsHtml = "";
+  if (state.activeView === "lesson" && state.activeCourse && state.activeCourseData?.lessons?.length > 0) {
+    const lessons = state.activeCourseData.lessons;
+    courseLessonsHtml = `
+      <div class="mobile-sheet-section">
+        <div class="mobile-sheet-section-title">📖 ${state.activeCourse.code}: Oppitunnit</div>
+        <div class="mobile-sheet-lessons-grid">
+          ${lessons
+            .map((les) => {
+              const isActive = les.lesson === state.activeLessonNumber;
+              return `
+                <a href="#/${state.activeCourse.code}/${les.lesson}" class="mobile-sheet-lesson-pill ${isActive ? "active" : ""}">
+                  ${les.lesson}
+                </a>
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  const sectionsHtml = `
+    <div class="mobile-sheet-section">
+      <div class="mobile-sheet-section-title">🧭 Luokat & Osio-sivut</div>
+      <div class="mobile-sheet-grid">
+        <a href="#/7" class="mobile-sheet-item-btn">
+          <span>🟢</span>
+          <span>7. luokka</span>
+        </a>
+        <a href="#/8" class="mobile-sheet-item-btn">
+          <span>🔵</span>
+          <span>8. luokka</span>
+        </a>
+        <a href="#/9" class="mobile-sheet-item-btn">
+          <span>🟣</span>
+          <span>9. luokka</span>
+        </a>
+        <a href="#/valinnainen" class="mobile-sheet-item-btn">
+          <span>🟠</span>
+          <span>Muut kurssit</span>
+        </a>
+        <a href="#/kirjat" class="mobile-sheet-item-btn">
+          <span>📚</span>
+          <span>Oppikirjat</span>
+        </a>
+        <a href="#/kertaus" class="mobile-sheet-item-btn">
+          <span>📝</span>
+          <span>Kertaustehtävät</span>
+        </a>
+        <a href="#/arviointi" class="mobile-sheet-item-btn">
+          <span>ℹ️</span>
+          <span>Arviointi & info</span>
+        </a>
+      </div>
+    </div>
+  `;
+
+  body.innerHTML = `
+    ${favsHtml}
+    ${courseLessonsHtml}
+    ${sectionsHtml}
+  `;
+
+  body.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeMobileFavoritesSheet();
+    });
+  });
 }
 
 // --------------------------------------------------------------------------
