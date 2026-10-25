@@ -1217,16 +1217,9 @@ function toggleMobileMenu(forceState) {
   mainNav.classList.toggle("is-open", willOpen);
   menuToggle.classList.toggle("is-active", willOpen);
   menuToggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
-  if (willOpen) {
-    closeSettingsPopover();
-    // Jos käyttäjä on jo kurssioppitunnilla, avataan kyseisen luokkatason kurssit valmiiksi esille
-    if (state.activeView === "lesson" && state.activeGrade) {
-      openMobileGradeCourses(state.activeGrade);
-    }
-  } else {
-    // Suljetaan harmonikat kun valikko suljetaan
-    closeAllGradeCourses();
-  }
+  closeSettingsPopover();
+  // Suljetaan kaikki haitarit ja alavalikot aina puhtaaksi, kun valikko avataan tai suljetaan
+  closeAllGradeCourses();
 }
 
 function closeAllGradeCourses() {
@@ -1251,9 +1244,6 @@ function openMobileGradeCourses(grade) {
   document.querySelectorAll(".nav-grade-courses").forEach((c) => {
     const isThis = c.id === `nav-grade-courses-${grade}`;
     c.hidden = !isThis;
-    if (isThis && state.activeCourse && state.activeCourse.grade === grade) {
-      toggleCourseLessons(state.activeCourse.code, c, true);
-    }
   });
 }
 
@@ -1269,17 +1259,6 @@ function toggleNavDropdown(key) {
   if (!isCurrentlyOpen) {
     group.classList.add("is-expanded");
     menu.hidden = false;
-    if (state.activeCourse && state.activeCourse.grade === key) {
-      toggleCourseLessons(state.activeCourse.code, menu, true);
-    }
-    if (key === "kirjat") {
-      const activeG = state.activeBooksFilter && state.activeBooksFilter !== "all" ? state.activeBooksFilter : "7";
-      toggleBooksGrade(activeG, menu, true);
-    }
-    if (key === "kertaus") {
-      const activeG = state.activeRevisionFilter && state.activeRevisionFilter !== "all" ? state.activeRevisionFilter : "7";
-      toggleRevisionsGrade(activeG, menu, true);
-    }
   }
 }
 
