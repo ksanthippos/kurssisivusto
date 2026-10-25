@@ -1184,7 +1184,8 @@ function setLessonScope(scope) {
     compact: "Tiivistetty (vain ydinteoria)",
     extended: "Laaja (koko oppimateriaali ja kuvat)"
   };
-  showToast(`📖 Oppituntien laajuus: ${labels[cleanScope] || cleanScope}`);
+  const icon = cleanScope === "compact" ? "🎯" : "📖";
+  showToast(`${icon} Oppituntien laajuus: ${labels[cleanScope] || cleanScope}`);
 }
 
 function updateScopeSelectorButtons() {
@@ -1223,6 +1224,13 @@ function closeAllGradeCourses() {
   document.querySelectorAll(".nav-grade-courses").forEach((c) => {
     c.hidden = true;
   });
+  document.querySelectorAll(".nav-course-lessons-dropdown").forEach((d) => {
+    d.hidden = true;
+  });
+  document.querySelectorAll(".nav-course-btn").forEach((b) => {
+    b.classList.remove("is-expanded");
+    b.setAttribute("aria-expanded", "false");
+  });
 }
 
 function openMobileGradeCourses(grade) {
@@ -1233,6 +1241,9 @@ function openMobileGradeCourses(grade) {
   document.querySelectorAll(".nav-grade-courses").forEach((c) => {
     const isThis = c.id === `nav-grade-courses-${grade}`;
     c.hidden = !isThis;
+    if (isThis && state.activeCourse && state.activeCourse.grade === grade) {
+      toggleCourseLessons(state.activeCourse.code, c, true);
+    }
   });
 }
 
@@ -1248,11 +1259,110 @@ function toggleNavDropdown(key) {
   if (!isCurrentlyOpen) {
     group.classList.add("is-expanded");
     menu.hidden = false;
+    if (state.activeCourse && state.activeCourse.grade === key) {
+      toggleCourseLessons(state.activeCourse.code, menu, true);
+    }
   }
 }
 
 function toggleMobileGradeCourses(grade) {
   toggleNavDropdown(grade);
+}
+
+async function toggleCourseLessons(courseCode, container, forceOpen = false) {
+  const code = courseCode.toUpperCase();
+  const dropdown = container.querySelector(`#nav-lessons-${code.toLowerCase()}`);
+  const btn = container.querySelector(`.nav-course-btn[data-course-code="${code}"]`);
+  if (!dropdown || !btn) return;
+
+  const willOpen = forceOpen ? true : dropdown.hidden;
+
+  // Suljetaan muut saman tason kurssien tuntilistat
+  container.querySelectorAll(".nav-course-lessons-dropdown").forEach((d) => {
+    if (d !== dropdown) d.hidden = true;
+  });
+  container.querySelectorAll(".nav-course-btn").forEach((b) => {
+    if (b !== btn) {
+      b.classList.remove("is-expanded");
+      b.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  if (!willOpen) {
+    dropdown.hidden = true;
+    btn.classList.remove("is-expanded");
+    btn.setAttribute("aria-expanded", "false");
+    return;
+  }
+
+  btn.classList.add("is-expanded");
+  btn.setAttribute("aria-expanded", "true");
+  dropdown.hidden = false;
+
+  if (!dropdown.dataset.loaded) {
+    dropdown.innerHTML = '<div class="nav-lessons-loading">Ladataan oppitunteja…</div>';
+    try {
+      const courseData = await getCourseData(code);
+      const lessons = courseData.lessons || [];
+      if (!lessons.length) {
+        dropdown.innerHTML = '<div class="nav-lessons-empty">Ei oppitunteja saatavilla.</div>';
+        return;
+      }
+
+      const activeCourseCode = state.activeCourse ? state.activeCourse.code : null;
+      const isThisCourseActive = activeCourseCode && activeCourseCode.toUpperCase() === code;
+
+      dropdown.innerHTML = `
+        <div class="nav-lessons-list">
+          <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-course-code="${escapeHtml(code)}" data-lesson-num="1" title="Siirry kurssin alkuun">
+            <span class="nav-lesson-num">🚀</span>
+            <span class="nav-lesson-title">Siirry kurssin alkuun (#1)</span>
+          </button>
+          ${lessons
+            .map((l) => {
+              const isLessonActive = isThisCourseActive && state.activeLessonNumber === l.lesson;
+              const lessonTitle = l.title || l.topic || `Oppitunti ${l.lesson}`;
+              return `
+                <button
+                  type="button"
+                  class="nav-lesson-item-btn ${isLessonActive ? "active" : ""}"
+                  data-course-code="${escapeHtml(code)}"
+                  data-lesson-num="${l.lesson}"
+                  title="Oppitunti #${l.lesson}: ${escapeHtml(lessonTitle)}"
+                >
+                  <span class="nav-lesson-num">#${l.lesson}</span>
+                  <span class="nav-lesson-title">${escapeHtml(lessonTitle)}</span>
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
+      dropdown.dataset.loaded = "true";
+
+      dropdown.querySelectorAll(".nav-lesson-item-btn").forEach((lBtn) => {
+        lBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const lNum = parseInt(lBtn.dataset.lessonNum, 10) || 1;
+          closeAllGradeCourses();
+          closeMobileMenu();
+          navigateTo(code, lNum);
+        });
+      });
+    } catch (err) {
+      console.error("Virhe oppituntien latauksessa:", err);
+      dropdown.innerHTML = '<div class="nav-lessons-empty">Oppituntien lataus epäonnistui.</div>';
+    }
+  } else {
+    const activeCourseCode = state.activeCourse ? state.activeCourse.code : null;
+    const isThisCourseActive = activeCourseCode && activeCourseCode.toUpperCase() === code;
+    dropdown.querySelectorAll(".nav-lesson-item-btn").forEach((lBtn) => {
+      const lNum = parseInt(lBtn.dataset.lessonNum, 10);
+      const isLessonActive = isThisCourseActive && state.activeLessonNumber === lNum;
+      lBtn.classList.toggle("active", isLessonActive);
+    });
+  }
 }
 
 function renderMobileNavCourseLists() {
@@ -1281,23 +1391,39 @@ function renderMobileNavCourseLists() {
             : "grade-other";
 
         return `
-          <button type="button" class="nav-course-btn ${isActive ? "active" : ""}" data-course-code="${escapeHtml(c.code)}">
-            <span class="nav-course-badge ${gradeClass}">${icon} ${escapeHtml(c.code)}</span>
-            <span class="nav-course-title">${escapeHtml(c.title)}</span>
-            <span class="nav-course-arrow" aria-hidden="true">→</span>
-          </button>
+          <div class="nav-course-item" data-course-code="${escapeHtml(c.code)}">
+            <button
+              type="button"
+              class="nav-course-btn ${isActive ? "active" : ""}"
+              data-course-code="${escapeHtml(c.code)}"
+              aria-expanded="false"
+              title="${escapeHtml(c.title)} - avaa oppituntilista"
+            >
+              <span class="nav-course-badge ${gradeClass}">${icon} ${escapeHtml(c.code)}</span>
+              <span class="nav-course-title">${escapeHtml(c.title)}</span>
+              <span class="nav-course-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="nav-course-lessons-dropdown" id="nav-lessons-${escapeHtml(c.code.toLowerCase())}" hidden></div>
+          </div>
         `;
       })
       .join("");
 
     container.querySelectorAll(".nav-course-btn").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
+      btn.addEventListener("click", async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        closeAllGradeCourses();
-        closeMobileMenu();
         const code = btn.dataset.courseCode;
-        if (code) {
+        if (!code) return;
+
+        const isMobile = window.innerWidth <= 768;
+        const isChevron = !!e.target.closest(".nav-course-chevron");
+
+        if (isMobile || isChevron) {
+          await toggleCourseLessons(code, container);
+        } else {
+          closeAllGradeCourses();
+          closeMobileMenu();
           navigateTo(code, 1);
         }
       });
