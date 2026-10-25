@@ -1912,6 +1912,102 @@ a:hover {
   min-width: 0;
 }
 
+/* Mobiilinäkymän suodatinpillerit (Kirjat ja Kertaus) */
+.mobile-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 18px 0;
+}
+
+.mobile-filter-pills .filter-pill {
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mobile-filter-pills .filter-pill:hover {
+  background: var(--color-surface-subtle);
+  border-color: var(--color-primary-light);
+}
+
+.mobile-filter-pills .filter-pill.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+@media (min-width: 769px) {
+  .mobile-filter-pills {
+    display: none !important;
+  }
+}
+
+/* Kirjakorttien ryhmittely luokkatasoittain */
+.books-grade-section {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.books-grade-section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding: 10px 14px;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.books-grade-section-title:hover {
+  background: var(--color-surface);
+}
+
+.books-grade-section-title .section-chevron {
+  font-size: 0.85rem;
+  opacity: 0.65;
+  transition: transform 0.2s ease;
+}
+
+.books-grade-section.is-collapsed .books-grade-section-title .section-chevron {
+  transform: rotate(-90deg);
+}
+
+.books-grade-section.is-collapsed .books-grade-cards-grid {
+  display: none !important;
+}
+
+.books-grade-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .books-grade-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
 .book-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);

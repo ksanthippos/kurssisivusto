@@ -168,26 +168,96 @@
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-dropdown-kirjat" hidden>
-            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="all">
+            <button type="button" class="nav-course-btn active" data-action="book-filter" data-filter="all">
               <span class="nav-course-badge grade-other">📚 Kaikki</span>
               <span class="nav-course-title">Kaikki oppikirjat (7–9 lk)</span>
               <span class="nav-course-arrow" aria-hidden="true">→</span>
             </button>
-            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="7">
-              <span class="nav-course-badge grade-7">🟢 7. lk</span>
-              <span class="nav-course-title">7. luokan kirjat</span>
-              <span class="nav-course-arrow" aria-hidden="true">→</span>
-            </button>
-            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="8">
-              <span class="nav-course-badge grade-8">🔵 8. lk</span>
-              <span class="nav-course-title">8. luokan kirjat</span>
-              <span class="nav-course-arrow" aria-hidden="true">→</span>
-            </button>
-            <button type="button" class="nav-course-btn" data-action="book-filter" data-filter="9">
-              <span class="nav-course-badge grade-9">🟣 9. lk</span>
-              <span class="nav-course-title">9. luokan kirjat</span>
-              <span class="nav-course-arrow" aria-hidden="true">→</span>
-            </button>
+            <div class="nav-course-item" data-books-grade="7">
+              <button type="button" class="nav-course-btn" data-books-grade-btn="7" aria-expanded="false" title="7. luokan kirjat - avaa kirjalista">
+                <span class="nav-course-badge grade-7">🟢 7. lk</span>
+                <span class="nav-course-title">7. luokan kirjat (3)</span>
+                <span class="nav-course-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-course-lessons-dropdown nav-books-dropdown" id="nav-books-grade-7" hidden>
+                <div class="nav-lessons-list">
+                  <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-action="book-filter" data-filter="7" title="Näytä kaikki 7. lk kirjat">
+                    <span class="nav-lesson-num">📚</span>
+                    <span class="nav-lesson-title">Näytä kaikki 7. lk kirjat</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-7-1" title="7. lk Osio 1: Reaaliluvut ja laskutoimitukset">
+                    <span class="nav-lesson-num">Osio 1</span>
+                    <span class="nav-lesson-title">Reaaliluvut ja laskutoimitukset</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-7-2" title="7. lk Osio 2: Tasogeometria I">
+                    <span class="nav-lesson-num">Osio 2</span>
+                    <span class="nav-lesson-title">Tasogeometria I</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-7-3" title="7. lk Osio 3: Potenssit ja polynomit">
+                    <span class="nav-lesson-num">Osio 3</span>
+                    <span class="nav-lesson-title">Potenssit ja polynomit</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="nav-course-item" data-books-grade="8">
+              <button type="button" class="nav-course-btn" data-books-grade-btn="8" aria-expanded="false" title="8. luokan kirjat - avaa kirjalista">
+                <span class="nav-course-badge grade-8">🔵 8. lk</span>
+                <span class="nav-course-title">8. luokan kirjat (3)</span>
+                <span class="nav-course-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-course-lessons-dropdown nav-books-dropdown" id="nav-books-grade-8" hidden>
+                <div class="nav-lessons-list">
+                  <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-action="book-filter" data-filter="8" title="Näytä kaikki 8. lk kirjat">
+                    <span class="nav-lesson-num">📚</span>
+                    <span class="nav-lesson-title">Näytä kaikki 8. lk kirjat</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-8-1" title="8. lk Osio 1: Yhtälöt ja prosentit">
+                    <span class="nav-lesson-num">Osio 1</span>
+                    <span class="nav-lesson-title">Yhtälöt ja prosentit</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-8-2" title="8. lk Osio 2: Suorat ja verrannollisuudet">
+                    <span class="nav-lesson-num">Osio 2</span>
+                    <span class="nav-lesson-title">Suorat ja verrannollisuudet</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-8-3" title="8. lk Osio 3: Tasogeometria II">
+                    <span class="nav-lesson-num">Osio 3</span>
+                    <span class="nav-lesson-title">Tasogeometria II</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="nav-course-item" data-books-grade="9">
+              <button type="button" class="nav-course-btn" data-books-grade-btn="9" aria-expanded="false" title="9. luokan kirjat - avaa kirjalista">
+                <span class="nav-course-badge grade-9">🟣 9. lk</span>
+                <span class="nav-course-title">9. luokan kirjat (4)</span>
+                <span class="nav-course-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-course-lessons-dropdown nav-books-dropdown" id="nav-books-grade-9" hidden>
+                <div class="nav-lessons-list">
+                  <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-action="book-filter" data-filter="9" title="Näytä kaikki 9. lk kirjat">
+                    <span class="nav-lesson-num">📚</span>
+                    <span class="nav-lesson-title">Näytä kaikki 9. lk kirjat</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-9-1" title="9. lk Osio 1: Funktiot ja yhtälöparit">
+                    <span class="nav-lesson-num">Osio 1</span>
+                    <span class="nav-lesson-title">Funktiot ja yhtälöparit</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-9-2" title="9. lk Osio 2: Trigonometria ja avaruusgeometria">
+                    <span class="nav-lesson-num">Osio 2</span>
+                    <span class="nav-lesson-title">Trigonometria ja avaruusgeometria</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-9-3" title="9. lk Osio 3: Yläkoulun matikan kertausta">
+                    <span class="nav-lesson-num">Osio 3</span>
+                    <span class="nav-lesson-title">Yläkoulun matikan kertausta</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-book-id="am-9-4" title="9. lk Osio 4: Todennäköisyys ja tilastot">
+                    <span class="nav-lesson-num">Osio 4</span>
+                    <span class="nav-lesson-title">Todennäköisyys ja tilastot</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -198,26 +268,92 @@
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-dropdown-kertaus" hidden>
-            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="all">
+            <button type="button" class="nav-course-btn active" data-action="revision-filter" data-filter="all">
               <span class="nav-course-badge grade-other">📝 Kaikki</span>
               <span class="nav-course-title">Kaikki kertaustehtävät</span>
               <span class="nav-course-arrow" aria-hidden="true">→</span>
             </button>
-            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="7">
-              <span class="nav-course-badge grade-7">🟢 7. lk</span>
-              <span class="nav-course-title">7. luokan kertaustehtävät</span>
-              <span class="nav-course-arrow" aria-hidden="true">→</span>
-            </button>
-            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="8">
-              <span class="nav-course-badge grade-8">🔵 8. lk</span>
-              <span class="nav-course-title">8. luokan kertaustehtävät</span>
-              <span class="nav-course-arrow" aria-hidden="true">→</span>
-            </button>
-            <button type="button" class="nav-course-btn" data-action="revision-filter" data-filter="9">
-              <span class="nav-course-badge grade-9">🟣 9. lk</span>
-              <span class="nav-course-title">9. luokan kertaustehtävät</span>
-              <span class="nav-course-arrow" aria-hidden="true">→</span>
-            </button>
+            <div class="nav-course-item" data-revisions-grade="7">
+              <button type="button" class="nav-course-btn" data-revisions-grade-btn="7" aria-expanded="false" title="7. luokan kertaustehtävät - avaa kurssiluettelo">
+                <span class="nav-course-badge grade-7">🟢 7. lk</span>
+                <span class="nav-course-title">7. luokan kertaustehtävät (4)</span>
+                <span class="nav-course-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-course-lessons-dropdown nav-revisions-dropdown" id="nav-revisions-grade-7" hidden>
+                <div class="nav-lessons-list">
+                  <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-action="revision-filter" data-filter="7" title="Näytä kaikki 7. lk kertaustehtävät">
+                    <span class="nav-lesson-num">📝</span>
+                    <span class="nav-lesson-title">Näytä kaikki 7. lk kertaustehtävät</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_71" title="MA_71: Laskuoppi">
+                    <span class="nav-lesson-num">📐 MA_71</span>
+                    <span class="nav-lesson-title">Laskuoppi</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_72" title="MA_72: Geometria I: Tasogeometria">
+                    <span class="nav-lesson-num">📐 MA_72</span>
+                    <span class="nav-lesson-title">Geometria I: Tasogeometria</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_73" title="MA_73: Lausekkeet ja yhtälöt">
+                    <span class="nav-lesson-num">📐 MA_73</span>
+                    <span class="nav-lesson-title">Lausekkeet ja yhtälöt</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_74" title="MA_74: Potenssit ja polynomit">
+                    <span class="nav-lesson-num">📐 MA_74</span>
+                    <span class="nav-lesson-title">Potenssit ja polynomit</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="FY_71" title="FY_71: Lämpöoppi ja aaltoliike">
+                    <span class="nav-lesson-num">⚡ FY_71</span>
+                    <span class="nav-lesson-title">Lämpöoppi ja aaltoliike</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="nav-course-item" data-revisions-grade="8">
+              <button type="button" class="nav-course-btn" data-revisions-grade-btn="8" aria-expanded="false" title="8. luokan kertaustehtävät - avaa kurssiluettelo">
+                <span class="nav-course-badge grade-8">🔵 8. lk</span>
+                <span class="nav-course-title">8. luokan kertaustehtävät (1)</span>
+                <span class="nav-course-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-course-lessons-dropdown nav-revisions-dropdown" id="nav-revisions-grade-8" hidden>
+                <div class="nav-lessons-list">
+                  <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-action="revision-filter" data-filter="8" title="Näytä kaikki 8. lk kertaustehtävät">
+                    <span class="nav-lesson-num">📝</span>
+                    <span class="nav-lesson-title">Näytä kaikki 8. lk kertaustehtävät</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_81" title="MA_81: Yhtälöt ja epäyhtälöt">
+                    <span class="nav-lesson-num">📐 MA_81</span>
+                    <span class="nav-lesson-title">Yhtälöt ja epäyhtälöt</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="nav-course-item" data-revisions-grade="9">
+              <button type="button" class="nav-course-btn" data-revisions-grade-btn="9" aria-expanded="false" title="9. luokan kertaustehtävät - avaa kurssiluettelo">
+                <span class="nav-course-badge grade-9">🟣 9. lk</span>
+                <span class="nav-course-title">9. luokan kertaustehtävät (3)</span>
+                <span class="nav-course-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-course-lessons-dropdown nav-revisions-dropdown" id="nav-revisions-grade-9" hidden>
+                <div class="nav-lessons-list">
+                  <button type="button" class="nav-lesson-item-btn nav-course-top-btn" data-action="revision-filter" data-filter="9" title="Näytä kaikki 9. lk kertaustehtävät">
+                    <span class="nav-lesson-num">📝</span>
+                    <span class="nav-lesson-title">Näytä kaikki 9. lk kertaustehtävät</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_92" title="MA_92: Geometria III: Avaruusgeometria">
+                    <span class="nav-lesson-num">📐 MA_92</span>
+                    <span class="nav-lesson-title">Geometria III: Avaruusgeometria</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="MA_93" title="MA_93: Funktiot">
+                    <span class="nav-lesson-num">📐 MA_93</span>
+                    <span class="nav-lesson-title">Funktiot</span>
+                  </button>
+                  <button type="button" class="nav-lesson-item-btn" data-revision-code="FY_91" title="FY_91: Sähkömagnetismi">
+                    <span class="nav-lesson-num">⚡ FY_91</span>
+                    <span class="nav-lesson-title">Sähkömagnetismi</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -785,6 +921,13 @@
           <p class="view-description">
             Avoimen <strong>Creative Commons CC BY 3.0</strong> -lisenssin matematiikan kirjasarja yläkoulun luokka-asteille 7–9. Voit lukea kirjoja suoraan selaimessa tai ladata PDF-tiedostot talteen.
           </p>
+
+          <div class="mobile-filter-pills" id="mobile-books-filters">
+            <button type="button" class="filter-pill active" data-action="book-filter-pill" data-filter="all">📚 Kaikki (10)</button>
+            <button type="button" class="filter-pill" data-action="book-filter-pill" data-filter="7">🟢 7. lk (3)</button>
+            <button type="button" class="filter-pill" data-action="book-filter-pill" data-filter="8">🔵 8. lk (3)</button>
+            <button type="button" class="filter-pill" data-action="book-filter-pill" data-filter="9">🟣 9. lk (4)</button>
+          </div>
         </header>
 
         <!-- Upotettu PDF-lukija (aktivoituu klikatessa kirjaa) -->
@@ -824,6 +967,13 @@
           <p class="view-description">
             Kokeiden kenraaliharjoitukset, keskeiset muistilistat ja vaiheittaiset malliratkaisut matematiikan ja fysiikan kursseille.
           </p>
+
+          <div class="mobile-filter-pills" id="mobile-revision-filters">
+            <button type="button" class="filter-pill active" data-action="revision-filter-pill" data-filter="all">📝 Kaikki</button>
+            <button type="button" class="filter-pill" data-action="revision-filter-pill" data-filter="7">🟢 7. lk</button>
+            <button type="button" class="filter-pill" data-action="revision-filter-pill" data-filter="8">🔵 8. lk</button>
+            <button type="button" class="filter-pill" data-action="revision-filter-pill" data-filter="9">🟣 9. lk</button>
+          </div>
         </header>
 
         <!-- Upotettu PDF-lukija kertaustehtäville -->
