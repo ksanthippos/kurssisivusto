@@ -197,6 +197,8 @@ async function init() {
 
     setupEventListeners();
     renderMobileNavCourseLists();
+    renderMobileNavBooksList();
+    renderMobileNavRevisionsList();
     renderSidebarFavorites();
     parseRoute();
   } catch (err) {
@@ -237,41 +239,7 @@ function setupEventListeners() {
     });
   });
 
-  // Kirjojen suodatusvalinnat ylävalikosta
-  document.querySelectorAll("[data-action='book-filter']").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const filter = btn.dataset.filter || "all";
-      state.activeBooksFilter = filter;
-      closeAllGradeCourses();
-      closeMobileMenu();
-      if (state.activeView === "kirjat") {
-        renderBooks();
-      } else {
-        window.location.hash = "#/kirjat";
-      }
-      updateNavTabsUI();
-    });
-  });
-
-  // Kertaustehtävien suodatusvalinnat ylävalikosta
-  document.querySelectorAll("[data-action='revision-filter']").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const filter = btn.dataset.filter || "all";
-      state.activeRevisionFilter = filter;
-      closeAllGradeCourses();
-      closeMobileMenu();
-      if (state.activeView === "kertaus") {
-        renderRevisions();
-      } else {
-        window.location.hash = "#/kertaus";
-      }
-      updateNavTabsUI();
-    });
-  });
+  // Kirjojen ja kertaustehtävien suodatus- ja alasvetovalinnat alustetaan renderMobileNavBooksList() ja renderMobileNavRevisionsList() kautta
 
   // Arviointitiedotteen osioihin hyppääminen ylävalikosta
   document.querySelectorAll("[data-action='info-scroll']").forEach((btn) => {
@@ -691,7 +659,10 @@ function parseRoute() {
       // Vieritetään kyseiseen kurssiin
       setTimeout(() => {
         const card = document.querySelector(`#rev-card-${targetCourse.toUpperCase()}`);
-        if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+          highlightCard(card);
+        }
       }, 100);
     }
   } else if (firstPart === "arviointi" || firstPart === "info") {
@@ -821,6 +792,8 @@ function updateNavTabsUI() {
     }
   });
   renderMobileNavCourseLists();
+  renderMobileNavBooksList();
+  renderMobileNavRevisionsList();
   updateMobileNavDropdownActiveStates();
 }
 
@@ -831,12 +804,32 @@ function updateMobileNavDropdownActiveStates() {
     const isActive = state.activeView === "kirjat" && state.activeBooksFilter === f;
     btn.classList.toggle("active", isActive);
   });
+  document.querySelectorAll("[data-books-grade-btn]").forEach((btn) => {
+    const g = btn.dataset.booksGradeBtn;
+    const isActive = state.activeView === "kirjat" && state.activeBooksFilter === g;
+    btn.classList.toggle("active", isActive);
+  });
+  document.querySelectorAll("[data-book-id]").forEach((btn) => {
+    const bId = btn.dataset.bookId;
+    const isBookActive = state.activeView === "kirjat" && window.location.hash.toLowerCase().includes(bId.toLowerCase());
+    btn.classList.toggle("active", isBookActive);
+  });
 
   // Kertaus
   document.querySelectorAll("[data-action='revision-filter']").forEach((btn) => {
     const f = btn.dataset.filter;
     const isActive = state.activeView === "kertaus" && state.activeRevisionFilter === f;
     btn.classList.toggle("active", isActive);
+  });
+  document.querySelectorAll("[data-revisions-grade-btn]").forEach((btn) => {
+    const g = btn.dataset.revisionsGradeBtn;
+    const isActive = state.activeView === "kertaus" && state.activeRevisionFilter === g;
+    btn.classList.toggle("active", isActive);
+  });
+  document.querySelectorAll("[data-revision-code]").forEach((btn) => {
+    const code = btn.dataset.revisionCode;
+    const isRevActive = state.activeView === "kertaus" && window.location.hash.toUpperCase().includes(code.toUpperCase());
+    btn.classList.toggle("active", isRevActive);
   });
 }
 
@@ -1262,6 +1255,12 @@ function toggleNavDropdown(key) {
     if (state.activeCourse && state.activeCourse.grade === key) {
       toggleCourseLessons(state.activeCourse.code, menu, true);
     }
+    if (key === "kirjat" && state.activeBooksFilter && state.activeBooksFilter !== "all") {
+      toggleBooksGrade(state.activeBooksFilter, menu, true);
+    }
+    if (key === "kertaus" && state.activeRevisionFilter && state.activeRevisionFilter !== "all") {
+      toggleRevisionsGrade(state.activeRevisionFilter, menu, true);
+    }
   }
 }
 
@@ -1429,6 +1428,363 @@ function renderMobileNavCourseLists() {
       });
     });
   });
+}
+
+function toggleBooksGrade(grade, container, forceOpen = false) {
+  const dropdown = container.querySelector(`#nav-books-grade-${grade}`);
+  const btn = container.querySelector(`.nav-course-btn[data-books-grade-btn="${grade}"]`);
+  if (!dropdown || !btn) return;
+
+  const willOpen = forceOpen ? true : dropdown.hidden;
+
+  container.querySelectorAll(".nav-books-dropdown").forEach((d) => {
+    if (d !== dropdown) d.hidden = true;
+  });
+  container.querySelectorAll("[data-books-grade-btn]").forEach((b) => {
+    if (b !== btn) {
+      b.classList.remove("is-expanded");
+      b.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  if (!willOpen) {
+    dropdown.hidden = true;
+    btn.classList.remove("is-expanded");
+    btn.setAttribute("aria-expanded", "false");
+    return;
+  }
+
+  btn.classList.add("is-expanded");
+  btn.setAttribute("aria-expanded", "true");
+  dropdown.hidden = false;
+}
+
+function renderMobileNavBooksList() {
+  const container = document.querySelector("#nav-dropdown-kirjat");
+  if (!container || !state.books || !state.books.length) return;
+
+  const grades = ["7", "8", "9"];
+  const isKirjatActive = state.activeView === "kirjat";
+  const activeFilter = state.activeBooksFilter || "all";
+
+  let html = `
+    <button type="button" class="nav-course-btn ${isKirjatActive && activeFilter === "all" ? "active" : ""}" data-action="book-filter" data-filter="all">
+      <span class="nav-course-badge grade-other">📚 Kaikki</span>
+      <span class="nav-course-title">Kaikki oppikirjat (7–9 lk)</span>
+      <span class="nav-course-arrow" aria-hidden="true">→</span>
+    </button>
+  `;
+
+  grades.forEach((grade) => {
+    const gradeBooks = state.books.filter((b) => b.grade === grade);
+    const gradeClass = grade === "7" ? "grade-7" : grade === "8" ? "grade-8" : "grade-9";
+    const gradeIcon = grade === "7" ? "🟢" : grade === "8" ? "🔵" : "🟣";
+    const isGradeActive = isKirjatActive && activeFilter === grade;
+
+    html += `
+      <div class="nav-course-item" data-books-grade="${grade}">
+        <button
+          type="button"
+          class="nav-course-btn ${isGradeActive ? "active" : ""}"
+          data-books-grade-btn="${grade}"
+          aria-expanded="false"
+          title="${grade}. luokan kirjat - avaa kirjalista"
+        >
+          <span class="nav-course-badge ${gradeClass}">${gradeIcon} ${grade}. lk</span>
+          <span class="nav-course-title">${grade}. luokan kirjat (${gradeBooks.length})</span>
+          <span class="nav-course-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-course-lessons-dropdown nav-books-dropdown" id="nav-books-grade-${grade}" hidden>
+          <div class="nav-lessons-list">
+            <button
+              type="button"
+              class="nav-lesson-item-btn nav-course-top-btn ${isGradeActive ? "active" : ""}"
+              data-action="book-filter"
+              data-filter="${grade}"
+              title="Näytä kaikki ${grade}. lk kirjat"
+            >
+              <span class="nav-lesson-num">📚</span>
+              <span class="nav-lesson-title">Näytä kaikki ${grade}. lk kirjat</span>
+            </button>
+            ${gradeBooks
+              .map((b) => {
+                const isBookActive = isKirjatActive && window.location.hash.toLowerCase().includes(b.id.toLowerCase());
+                return `
+                  <button
+                    type="button"
+                    class="nav-lesson-item-btn ${isBookActive ? "active" : ""}"
+                    data-book-id="${escapeHtml(b.id)}"
+                    title="${escapeHtml(b.grade + '. lk ' + b.part + ': ' + b.title)}"
+                  >
+                    <span class="nav-lesson-num">${escapeHtml(b.part || b.grade + '. lk')}</span>
+                    <span class="nav-lesson-title">${escapeHtml(b.title)}</span>
+                  </button>
+                `;
+              })
+              .join("")}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  // Tapahtumat "Kaikki" ja luokkatason suodatinpainikkeille
+  container.querySelectorAll("[data-action='book-filter']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const filter = btn.dataset.filter || "all";
+      state.activeBooksFilter = filter;
+      closeAllGradeCourses();
+      closeMobileMenu();
+      if (state.activeView === "kirjat") {
+        renderBooks();
+      } else {
+        window.location.hash = "#/kirjat";
+      }
+      updateNavTabsUI();
+    });
+  });
+
+  // Tapahtumat luokkatasojen haitaripainikkeille
+  container.querySelectorAll("[data-books-grade-btn]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const grade = btn.dataset.booksGradeBtn;
+      if (!grade) return;
+
+      const isMobile = window.innerWidth <= 768;
+      const isChevron = !!e.target.closest(".nav-course-chevron");
+
+      if (isMobile || isChevron) {
+        toggleBooksGrade(grade, container);
+      } else {
+        state.activeBooksFilter = grade;
+        closeAllGradeCourses();
+        closeMobileMenu();
+        if (state.activeView === "kirjat") {
+          renderBooks();
+        } else {
+          window.location.hash = "#/kirjat";
+        }
+        updateNavTabsUI();
+      }
+    });
+  });
+
+  // Tapahtumat yksittäisten kirjojen painikkeille
+  container.querySelectorAll("[data-book-id]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const bookId = btn.dataset.bookId;
+      if (!bookId) return;
+
+      const book = state.books.find((b) => b.id.toLowerCase() === bookId.toLowerCase());
+      closeAllGradeCourses();
+      closeMobileMenu();
+
+      if (book) {
+        state.activeBooksFilter = book.grade;
+        if (window.location.hash === `#/kirjat/${book.id}`) {
+          switchView("kirjat");
+          openBookViewer(book);
+        } else {
+          window.location.hash = `#/kirjat/${book.id}`;
+        }
+      }
+    });
+  });
+}
+
+function toggleRevisionsGrade(grade, container, forceOpen = false) {
+  const dropdown = container.querySelector(`#nav-revisions-grade-${grade}`);
+  const btn = container.querySelector(`.nav-course-btn[data-revisions-grade-btn="${grade}"]`);
+  if (!dropdown || !btn) return;
+
+  const willOpen = forceOpen ? true : dropdown.hidden;
+
+  container.querySelectorAll(".nav-revisions-dropdown").forEach((d) => {
+    if (d !== dropdown) d.hidden = true;
+  });
+  container.querySelectorAll("[data-revisions-grade-btn]").forEach((b) => {
+    if (b !== btn) {
+      b.classList.remove("is-expanded");
+      b.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  if (!willOpen) {
+    dropdown.hidden = true;
+    btn.classList.remove("is-expanded");
+    btn.setAttribute("aria-expanded", "false");
+    return;
+  }
+
+  btn.classList.add("is-expanded");
+  btn.setAttribute("aria-expanded", "true");
+  dropdown.hidden = false;
+}
+
+function renderMobileNavRevisionsList() {
+  const container = document.querySelector("#nav-dropdown-kertaus");
+  if (!container || !state.revisions || !state.revisions.length) return;
+
+  const grades = ["7", "8", "9"];
+  const isKertausActive = state.activeView === "kertaus";
+  const activeFilter = state.activeRevisionFilter || "all";
+
+  let html = `
+    <button type="button" class="nav-course-btn ${isKertausActive && activeFilter === "all" ? "active" : ""}" data-action="revision-filter" data-filter="all">
+      <span class="nav-course-badge grade-other">📝 Kaikki</span>
+      <span class="nav-course-title">Kaikki kertaustehtävät</span>
+      <span class="nav-course-arrow" aria-hidden="true">→</span>
+    </button>
+  `;
+
+  grades.forEach((grade) => {
+    const gradeRevisions = state.revisions.filter((r) => r.grade === grade);
+    const gradeClass = grade === "7" ? "grade-7" : grade === "8" ? "grade-8" : "grade-9";
+    const gradeIcon = grade === "7" ? "🟢" : grade === "8" ? "🔵" : "🟣";
+    const isGradeActive = isKertausActive && activeFilter === grade;
+
+    html += `
+      <div class="nav-course-item" data-revisions-grade="${grade}">
+        <button
+          type="button"
+          class="nav-course-btn ${isGradeActive ? "active" : ""}"
+          data-revisions-grade-btn="${grade}"
+          aria-expanded="false"
+          title="${grade}. luokan kertaustehtävät - avaa kurssiluettelo"
+        >
+          <span class="nav-course-badge ${gradeClass}">${gradeIcon} ${grade}. lk</span>
+          <span class="nav-course-title">${grade}. luokan kertaustehtävät (${gradeRevisions.length})</span>
+          <span class="nav-course-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-course-lessons-dropdown nav-revisions-dropdown" id="nav-revisions-grade-${grade}" hidden>
+          <div class="nav-lessons-list">
+            <button
+              type="button"
+              class="nav-lesson-item-btn nav-course-top-btn ${isGradeActive ? "active" : ""}"
+              data-action="revision-filter"
+              data-filter="${grade}"
+              title="Näytä kaikki ${grade}. lk kertaustehtävät"
+            >
+              <span class="nav-lesson-num">📝</span>
+              <span class="nav-lesson-title">Näytä kaikki ${grade}. lk kertaustehtävät</span>
+            </button>
+            ${gradeRevisions
+              .map((r) => {
+                const icon = r.subject === "fysiikka" ? "⚡" : "📐";
+                const isRevActive = isKertausActive && window.location.hash.toUpperCase().includes(r.code.toUpperCase());
+                return `
+                  <button
+                    type="button"
+                    class="nav-lesson-item-btn ${isRevActive ? "active" : ""}"
+                    data-revision-code="${escapeHtml(r.code)}"
+                    title="${escapeHtml(r.code + ': ' + r.title)}"
+                  >
+                    <span class="nav-lesson-num">${icon} ${escapeHtml(r.code)}</span>
+                    <span class="nav-lesson-title">${escapeHtml(r.title)}</span>
+                  </button>
+                `;
+              })
+              .join("")}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  // Tapahtumat "Kaikki" ja luokkatason suodatinpainikkeille
+  container.querySelectorAll("[data-action='revision-filter']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const filter = btn.dataset.filter || "all";
+      state.activeRevisionFilter = filter;
+      closeAllGradeCourses();
+      closeMobileMenu();
+      if (state.activeView === "kertaus") {
+        renderRevisions();
+      } else {
+        window.location.hash = "#/kertaus";
+      }
+      updateNavTabsUI();
+    });
+  });
+
+  // Tapahtumat luokkatasojen haitaripainikkeille
+  container.querySelectorAll("[data-revisions-grade-btn]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const grade = btn.dataset.revisionsGradeBtn;
+      if (!grade) return;
+
+      const isMobile = window.innerWidth <= 768;
+      const isChevron = !!e.target.closest(".nav-course-chevron");
+
+      if (isMobile || isChevron) {
+        toggleRevisionsGrade(grade, container);
+      } else {
+        state.activeRevisionFilter = grade;
+        closeAllGradeCourses();
+        closeMobileMenu();
+        if (state.activeView === "kertaus") {
+          renderRevisions();
+        } else {
+          window.location.hash = "#/kertaus";
+        }
+        updateNavTabsUI();
+      }
+    });
+  });
+
+  // Tapahtumat yksittäisten kurssien kertaustehtäväpainikkeille
+  container.querySelectorAll("[data-revision-code]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const code = btn.dataset.revisionCode;
+      if (!code) return;
+
+      closeAllGradeCourses();
+      closeMobileMenu();
+
+      const rev = state.revisions.find((r) => r.code.toUpperCase() === code.toUpperCase());
+      if (rev) {
+        state.activeRevisionFilter = "all";
+        if (window.location.hash === `#/kertaus/${rev.code}`) {
+          switchView("kertaus");
+          setTimeout(() => {
+            const card = document.querySelector(`#rev-card-${rev.code.toUpperCase()}`);
+            if (card) {
+              card.scrollIntoView({ behavior: "smooth", block: "start" });
+              highlightCard(card);
+            }
+          }, 80);
+        } else {
+          window.location.hash = `#/kertaus/${rev.code}`;
+        }
+      }
+    });
+  });
+}
+
+function highlightCard(element) {
+  if (!element) return;
+  element.classList.remove("card-highlight");
+  void element.offsetWidth;
+  element.classList.add("card-highlight");
+  setTimeout(() => {
+    element.classList.remove("card-highlight");
+  }, 2200);
 }
 
 function closeMobileMenu() {
@@ -3273,6 +3629,7 @@ function renderRevisions() {
         }
         if (card) {
           card.scrollIntoView({ behavior: "smooth", block: "start" });
+          highlightCard(card);
         }
       });
     });
