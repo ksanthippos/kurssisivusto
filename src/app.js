@@ -25,11 +25,11 @@ const state = {
   homeConfig: {
     blocks: [
       { id: "welcome", title: "Tervetuloteksti", enabled: true },
-      { id: "timetable", title: "Lukujärjestys (RAUH)", enabled: true },
-      { id: "aikataulu", title: "Ryhmät", enabled: true }
-    ],
-    aikatauluGroup: null
+      { id: "weekInfo", title: "Viikon infokortti", enabled: true }
+    ]
   },
+  homeWeekOffset: 0,
+  scienceFacts: null,
   mobileNavOrder: ["lukujarjestys", "ryhmat", "favorites", "settings"],
   settingsAccordionMode: "closed", // "closed" | "last" | "all"
   settingsLastOpenCards: []
@@ -177,13 +177,14 @@ async function init() {
     updateFooterInfo();
 
     // Ladataan rinnakkain perusdata
-    const [coursesRes, booksRes, revisionsRes, infoRes, timetableRes, schedulesRes] = await Promise.all([
+    const [coursesRes, booksRes, revisionsRes, infoRes, timetableRes, schedulesRes, factsRes] = await Promise.all([
       fetch("src/data/courses.json"),
       fetch("src/data/books.json"),
       fetch("src/data/revisions.json"),
       fetch("src/data/info.json"),
       fetch("src/data/lukujarjestys.json"),
-      fetch("src/data/schedules.json")
+      fetch("src/data/schedules.json"),
+      fetch("src/data/science_facts.json")
     ]);
 
     if (coursesRes.ok) state.courses = await coursesRes.json();
@@ -192,6 +193,7 @@ async function init() {
     if (infoRes.ok) state.info = await infoRes.json();
     if (timetableRes && timetableRes.ok) state.timetable = await timetableRes.json();
     if (schedulesRes && schedulesRes.ok) state.schedules = await schedulesRes.json();
+    if (factsRes && factsRes.ok) state.scienceFacts = await factsRes.json();
 
     setupEventListeners();
     renderMobileNavCourseLists();
@@ -1052,21 +1054,21 @@ function loadPreferences() {
     if (rawHome) {
       const parsed = JSON.parse(rawHome);
       if (parsed && Array.isArray(parsed.blocks)) {
-        const defaultBlockIds = ["welcome", "timetable", "aikataulu"];
-        const existingIds = parsed.blocks.map((b) => b.id);
-        const mergedBlocks = [...parsed.blocks];
-        defaultBlockIds.forEach((id) => {
-          if (!existingIds.includes(id)) {
-            mergedBlocks.push({
+        const allowedIds = ["welcome", "weekInfo"];
+        const validBlocks = parsed.blocks.filter((b) => allowedIds.includes(b.id));
+
+        allowedIds.forEach((id) => {
+          if (!validBlocks.some((b) => b.id === id)) {
+            validBlocks.push({
               id,
-              title: id === "welcome" ? "Tervetuloteksti" : id === "timetable" ? "Lukujärjestys (RAUH)" : "Ryhmät",
+              title: id === "welcome" ? "Tervetuloteksti" : "Viikon infokortti",
               enabled: true
             });
           }
         });
+
         state.homeConfig = {
-          blocks: mergedBlocks,
-          aikatauluGroup: parsed.aikatauluGroup || null
+          blocks: validBlocks
         };
       }
     }
@@ -1484,6 +1486,364 @@ function renderSidebarFavorites() {
 // 0. KOTINÄKYMÄN LOGIIKKA JA ASETUKSET
 // --------------------------------------------------------------------------
 
+function getWeatherDescription(code) {
+  if (code === 0) return "Selkeää";
+  if (code === 1) return "Enimmäkseen selkeää";
+  if (code === 2) return "Puolipilvistä";
+  if (code === 3) return "Pilvistä";
+  if (code === 45 || code === 48) return "Sumua";
+  if (code >= 51 && code <= 55) return "Tihkusadetta";
+  if (code >= 56 && code <= 57) return "Jäätävää tihkusadetta";
+  if (code >= 61 && code <= 65) return "Vesisadetta";
+  if (code >= 66 && code <= 67) return "Jäätävää sadetta";
+  if (code >= 71 && code <= 77) return "Lumisadetta";
+  if (code >= 80 && code <= 82) return "Sadekuuroja";
+  if (code >= 85 && code <= 86) return "Lumikuuroja";
+  if (code >= 95) return "Ukkoskuuroja";
+  return "Vaihtelevaa";
+}
+
+function getWeatherIcon(code) {
+  if (code === 0) return "☀️";
+  if (code === 1) return "🌤️";
+  if (code === 2) return "⛅";
+  if (code === 3) return "☁️";
+  if (code === 45 || code === 48) return "🌫️";
+  if (code >= 51 && code <= 57) return "🌦️";
+  if (code >= 61 && code <= 67) return "🌧️";
+  if (code >= 71 && code <= 77) return "🌨️";
+  if (code >= 80 && code <= 82) return "🌦️";
+  if (code >= 85 && code <= 86) return "🌨️";
+  if (code >= 95) return "⛈️";
+  return "🌡️";
+}
+
+async function fetchPasilaWeather() {
+  try {
+    const cached = sessionStorage.getItem("rauh_pasila_weather");
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Date.now() - parsed.timestamp < 15 * 60 * 1000) {
+        return parsed.data;
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=60.199&longitude=24.934&current_weather=true", {
+      headers: { Accept: "application/json" }
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const cur = json.current_weather;
+    if (!cur) return null;
+
+    const data = {
+      temp: Math.round(cur.temperature),
+      code: cur.weathercode,
+      desc: getWeatherDescription(cur.weathercode),
+      icon: getWeatherIcon(cur.weathercode)
+    };
+
+    try {
+      sessionStorage.setItem("rauh_pasila_weather", JSON.stringify({ timestamp: Date.now(), data }));
+    } catch (e) {}
+
+    return data;
+  } catch (err) {
+    console.warn("Säätilan lataus epäonnistui:", err);
+    return null;
+  }
+}
+
+async function loadAndRenderPasilaWeather() {
+  const weatherEl = document.querySelector("#home-week-weather");
+  if (!weatherEl) return;
+
+  const weather = await fetchPasilaWeather();
+  if (!weather) {
+    weatherEl.innerHTML = "";
+    return;
+  }
+
+  weatherEl.innerHTML = `
+    <div class="home-weather-pill" title="Pasilan peruskoulu, Helsinki · Tämän päivän sää">
+      <span class="weather-icon" aria-hidden="true">${weather.icon}</span>
+      <span class="weather-temp">${weather.temp > 0 ? "+" : ""}${weather.temp}&nbsp;°C</span>
+      <span class="weather-desc">${escapeHtml(weather.desc)}</span>
+    </div>
+  `;
+}
+
+function getHomeWeekData(offset = 0) {
+  const now = new Date();
+  const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset * 7);
+
+  const weekNum = getWeekNumber(targetDate);
+  const monday = getMonday(targetDate);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+
+  const startIso = formatDate(monday);
+  const endIso = formatDate(sunday);
+
+  const groups = getAllScheduleGroups();
+  const rawExams = [];
+  const rawExceptions = [];
+
+  groups.forEach((g) => {
+    const exs = g.schedule?.exceptions || [];
+    exs.forEach((ex) => {
+      if (ex.date >= startIso && ex.date <= endIso) {
+        const isExam = /koe/i.test(ex.type) || /koe/i.test(ex.description);
+        const item = {
+          groupCode: g.groupCode,
+          courseCode: g.courseCode,
+          date: ex.date,
+          type: ex.type,
+          description: ex.description
+        };
+        if (isExam) {
+          rawExams.push(item);
+        } else {
+          rawExceptions.push(item);
+        }
+      }
+    });
+  });
+
+  const groupEvents = (list) => {
+    const map = new Map();
+    list.forEach((item) => {
+      const key = `${item.date}__${item.type}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          date: item.date,
+          type: item.type,
+          description: item.description,
+          groups: [item.groupCode]
+        });
+      } else {
+        const existing = map.get(key);
+        if (!existing.groups.includes(item.groupCode)) {
+          existing.groups.push(item.groupCode);
+        }
+      }
+    });
+    const result = Array.from(map.values());
+    result.sort((a, b) => a.date.localeCompare(b.date));
+    return result;
+  };
+
+  const exams = groupEvents(rawExams);
+  const exceptions = groupEvents(rawExceptions);
+
+  let nextExam = null;
+  if (exams.length === 0) {
+    const todayIso = formatDate(now);
+    const searchFrom = todayIso > endIso ? todayIso : endIso;
+    const futureExams = [];
+    groups.forEach((g) => {
+      (g.schedule?.exceptions || []).forEach((ex) => {
+        if (ex.date > searchFrom && (/koe/i.test(ex.type) || /koe/i.test(ex.description))) {
+          futureExams.push({ groupCode: g.groupCode, date: ex.date, type: ex.type });
+        }
+      });
+    });
+    futureExams.sort((a, b) => a.date.localeCompare(b.date));
+    if (futureExams.length > 0) {
+      nextExam = futureExams[0];
+    }
+  }
+
+  let fact = null;
+  if (state.scienceFacts && state.scienceFacts[String(weekNum)]) {
+    fact = state.scienceFacts[String(weekNum)];
+  } else {
+    fact = {
+      title: "Tiedefakta",
+      text: "Matematiikka ja fysiikka rakentuvat uteliaisuuden, kokeellisten havaintojen ja loogisen päättelyn varaan.",
+      url: "https://fi.wikipedia.org/wiki/Luonnontiede",
+      linkText: "Lue lisää tieteestä (Wikipedia)"
+    };
+  }
+
+  return {
+    now,
+    targetDate,
+    weekNum,
+    monday,
+    sunday,
+    startIso,
+    endIso,
+    exams,
+    exceptions,
+    nextExam,
+    fact
+  };
+}
+
+function renderHomeWeekInfoCardHtml() {
+  const weekData = getHomeWeekData(state.homeWeekOffset);
+  const isCurrentWeek = state.homeWeekOffset === 0;
+  const now = weekData.now;
+
+  const headerDateStr = isCurrentWeek
+    ? `${weekdayNames[now.getDay()]} ${now.getDate()}.${now.getMonth() + 1}.${now.getFullYear()}`
+    : `Viikko ${weekData.weekNum} · ${formatDateRange(weekData.startIso, weekData.endIso)}`;
+
+  let examsHtml = "";
+  if (weekData.exams.length > 0) {
+    examsHtml = `
+      <ul class="home-week-event-list">
+        ${weekData.exams
+          .map((item) => `
+            <li class="home-week-event-item exam-item">
+              <div class="home-week-event-top">
+                <span class="home-week-groups-badge">${escapeHtml(item.groups.join(", "))}</span>
+                <span class="home-week-event-date">${formatDisplayDate(item.date)}</span>
+              </div>
+              <div class="home-week-event-desc">
+                <strong>${escapeHtml(item.type.replace(/\*/g, "").trim())}</strong>${item.description ? `: ${escapeHtml(item.description)}` : ""}
+              </div>
+            </li>
+          `)
+          .join("")}
+      </ul>
+    `;
+  } else {
+    examsHtml = `
+      <div class="home-week-empty-notice">
+        <p class="home-week-empty-main">Ei kokeita tällä viikolla 👍</p>
+        ${
+          weekData.nextExam
+            ? `<p class="home-week-empty-sub">Seuraava tiedossa oleva koe: <strong>${escapeHtml(weekData.nextExam.groupCode)}</strong> (${formatDisplayDate(weekData.nextExam.date)})</p>`
+            : ""
+        }
+      </div>
+    `;
+  }
+
+  let exceptionsHtml = "";
+  if (weekData.exceptions.length > 0) {
+    exceptionsHtml = `
+      <ul class="home-week-event-list">
+        ${weekData.exceptions
+          .map((item) => `
+            <li class="home-week-event-item">
+              <div class="home-week-event-top">
+                <span class="home-week-groups-badge">${escapeHtml(item.groups.join(", "))}</span>
+                <span class="home-week-event-date">${formatDisplayDate(item.date)}</span>
+              </div>
+              <div class="home-week-event-desc">
+                <strong>${escapeHtml(item.type)}</strong>${item.description ? `: ${escapeHtml(item.description)}` : ""}
+              </div>
+            </li>
+          `)
+          .join("")}
+      </ul>
+    `;
+  } else {
+    exceptionsHtml = `
+      <div class="home-week-empty-notice">
+        <p class="home-week-empty-main">Normaali kouluviikko ✨</p>
+        <p class="home-week-empty-sub">Ei poikkeusohjelmaa ryhmillä tällä viikolla.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <section class="home-week-card" id="home-block-weekInfo">
+      <div class="home-week-header">
+        <div class="home-week-date-group">
+          <div class="home-week-badge-line">
+            <span class="home-week-badge">📅 VIIKKO ${weekData.weekNum}</span>
+            <span class="home-week-range">${formatDateRange(weekData.startIso, weekData.endIso)}</span>
+          </div>
+          <h3 class="home-week-day-title">${escapeHtml(headerDateStr)}</h3>
+        </div>
+        <div class="home-week-weather" id="home-week-weather"></div>
+      </div>
+
+      <div class="home-week-grid">
+        <div class="home-week-item-card">
+          <div class="home-week-item-header">
+            <span class="home-week-item-icon" aria-hidden="true">📝</span>
+            <h4 class="home-week-item-title">Kokeet tällä viikolla</h4>
+          </div>
+          <div class="home-week-item-body">
+            ${examsHtml}
+          </div>
+        </div>
+
+        <div class="home-week-item-card">
+          <div class="home-week-item-header">
+            <span class="home-week-item-icon" aria-hidden="true">📌</span>
+            <h4 class="home-week-item-title">Muu poikkeusohjelma</h4>
+          </div>
+          <div class="home-week-item-body">
+            ${exceptionsHtml}
+          </div>
+        </div>
+      </div>
+
+      <div class="home-week-fact-card">
+        <div class="home-week-fact-header">
+          <span class="home-week-fact-icon" aria-hidden="true">💡</span>
+          <span class="home-week-fact-tag">Tiedefakta · Viikko ${weekData.weekNum}</span>
+        </div>
+        <div class="home-week-fact-body">
+          <p class="home-week-fact-p">
+            ${escapeHtml(weekData.fact.text)}
+            ${
+              weekData.fact.url
+                ? `<a href="${escapeHtml(weekData.fact.url)}" target="_blank" rel="noopener noreferrer" class="home-week-fact-link">${escapeHtml(weekData.fact.linkText || "Lue lisää")} ↗</a>`
+                : ""
+            }
+          </p>
+        </div>
+      </div>
+
+      <div class="home-week-nav-bar">
+        <button type="button" class="home-week-nav-btn" id="home-week-prev-btn" title="Edellinen viikko">
+          ← Edellinen viikko
+        </button>
+        <button type="button" class="home-week-nav-btn home-week-today-btn ${isCurrentWeek ? "active" : ""}" id="home-week-today-btn">
+          ${isCurrentWeek ? "● Kuluva viikko" : "Palaa tähän viikkoon"}
+        </button>
+        <button type="button" class="home-week-nav-btn" id="home-week-next-btn" title="Seuraava viikko">
+          Seuraava viikko →
+        </button>
+      </div>
+    </section>
+  `;
+}
+
+function setupHomeWeekCardEvents() {
+  const prevBtn = document.querySelector("#home-week-prev-btn");
+  const nextBtn = document.querySelector("#home-week-next-btn");
+  const todayBtn = document.querySelector("#home-week-today-btn");
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      state.homeWeekOffset--;
+      renderHome();
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      state.homeWeekOffset++;
+      renderHome();
+    });
+  }
+  if (todayBtn) {
+    todayBtn.addEventListener("click", () => {
+      state.homeWeekOffset = 0;
+      renderHome();
+    });
+  }
+}
+
 function renderHome() {
   renderSidebarFavorites();
   updateFavoriteToggleBtn();
@@ -1496,7 +1856,7 @@ function renderHome() {
     container.innerHTML = `
       <div class="empty home-empty-state">
         <p style="font-size: 1.05rem; margin-bottom: 6px;"><strong>Kaikki kotinäkymän osiot on piilotettu</strong></p>
-        <p style="margin: 0;">Voit aktivoida osioita (Tervetuloteksti, Lukujärjestys (RAUH), Ryhmät) sivuston asetuksista yläpalkin ⚙️-valikosta.</p>
+        <p style="margin: 0;">Voit aktivoida osioita (Tervetuloteksti, Viikon infokortti) sivuston asetuksista yläpalkin ⚙️-valikosta.</p>
       </div>
     `;
     return;
@@ -1507,260 +1867,28 @@ function renderHome() {
     if (block.id === "welcome") {
       html += `
         <section class="home-welcome-card" id="home-block-welcome">
+          <div class="home-welcome-top-row">
+            <span class="home-welcome-badge">Pasilan peruskoulu · Rauhala</span>
+          </div>
           <h2 class="home-welcome-title">Tervetuloa kurssisivustolle!</h2>
           <p class="home-welcome-tagline">Matematiikkaa ja fysiikkaa mitä parhaimmassa seurassa.</p>
           <div class="home-welcome-body">
             <p>
-              <strong>Pasilan peruskoululainen ✋</strong> Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset simulaatiot, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät ratkaisuineen.
+              Tämä on kurssisivusto, jolta löydät oppituntien ydinteoriat, syventävät fysiikan ja matematiikan teemat, interaktiiviset simulaatiot, Avoin matematiikka -oppikirjat sekä kokeiden kertaustehtävät malliratkaisuineen.
             </p>
           </div>
         </section>
       `;
-    } else if (block.id === "timetable") {
-      html += `
-        <section class="home-embed-card" id="home-block-timetable">
-          <div class="home-embed-card-header">
-            <div class="home-schedule-title-group">
-              <span class="home-schedule-icon" aria-hidden="true">📅</span>
-              <div>
-                <h3 class="home-schedule-heading">Lukujärjestys (RAUH)</h3>
-                <p class="home-schedule-sub">Mikael Rauhalan viikoittainen lukujärjestys · 2. jakso</p>
-              </div>
-            </div>
-            <div class="home-embed-header-actions">
-              <a href="#/lukujarjestys" class="home-embed-expand-btn">Koko näkymä ↗</a>
-            </div>
-          </div>
-          <div class="home-embed-card-body" id="home-timetable-embed-container"></div>
-        </section>
-      `;
-    } else if (block.id === "aikataulu") {
-      html += `
-        <section class="home-embed-card" id="home-block-aikataulu">
-          <div class="home-embed-card-header">
-            <div class="home-schedule-title-group">
-              <span class="home-schedule-icon" aria-hidden="true">👥</span>
-              <div>
-                <h3 class="home-schedule-heading">Ryhmät</h3>
-                <p class="home-schedule-sub" id="home-aikataulu-sub">Opetusryhmäkohtainen tuntiohjelma ja eteneminen</p>
-              </div>
-            </div>
-            <div class="home-embed-header-actions">
-              <select id="home-group-select" class="home-group-select" aria-label="Valitse opetusryhmä"></select>
-              <a href="#/aikataulu" id="home-aikataulu-expand-link" class="home-embed-expand-btn">Koko näkymä ↗</a>
-            </div>
-          </div>
-          <div class="home-embed-card-body" id="home-aikataulu-embed-container"></div>
-        </section>
-      `;
+    } else if (block.id === "weekInfo") {
+      html += renderHomeWeekInfoCardHtml();
     }
   });
 
   container.innerHTML = html;
 
-  // Renderöidään lukujärjestys jos mukana
-  if (enabledBlocks.some((b) => b.id === "timetable")) {
-    const timetableContainer = document.querySelector("#home-timetable-embed-container");
-    if (timetableContainer) {
-      renderTimetableGrid(timetableContainer);
-    }
-  }
-
-  // Renderöidään ryhmän aikataulu jos mukana
-  if (enabledBlocks.some((b) => b.id === "aikataulu")) {
-    initHomeAikatauluEmbed();
-  }
-}
-
-async function initHomeAikatauluEmbed() {
-  const groupSelect = document.querySelector("#home-group-select");
-  const expandLink = document.querySelector("#home-aikataulu-expand-link");
-  const groups = getAllScheduleGroups();
-  if (!groups.length) {
-    const container = document.querySelector("#home-aikataulu-embed-container");
-    if (container) container.innerHTML = '<div class="empty">Ei aktiivisia opetusryhmiä.</div>';
-    return;
-  }
-
-  // Valitaan näytettävä ryhmä:
-  // 1. Käyttäjän aiempi valinta kotinäkymässä
-  // 2. Käyttäjän ensisijainen suosikkiryhmä / suosikkiryhmä
-  // 3. Ensimmäinen saatavilla oleva ryhmä
-  let targetGroup = state.homeConfig.aikatauluGroup;
-  if (!targetGroup || !groups.some((g) => g.groupCode === targetGroup)) {
-    const prefGroup = groups.find((g) => g.groupCode === state.defaultScheduleGroup && state.favorites.includes(g.groupCode));
-    const favGroup = prefGroup || groups.find((g) => state.favorites.includes(g.groupCode));
-    targetGroup = favGroup ? favGroup.groupCode : groups[0].groupCode;
-  }
-
-  if (groupSelect) {
-    groupSelect.innerHTML = groups
-      .map((g) => {
-        const isFav = state.favorites.includes(g.groupCode);
-        const star = isFav ? "★ " : "";
-        const isSel = g.groupCode === targetGroup ? "selected" : "";
-        return `<option value="${escapeHtml(g.groupCode)}" ${isSel}>${star}${escapeHtml(g.groupCode)} (${escapeHtml(g.courseCode)})</option>`;
-      })
-      .join("");
-
-    groupSelect.addEventListener("change", (e) => {
-      const selected = e.target.value;
-      state.homeConfig.aikatauluGroup = selected;
-      savePreferences();
-      if (expandLink) {
-        expandLink.href = `#/aikataulu/${encodeURIComponent(selected)}`;
-      }
-      renderHomeAikatauluEmbed(selected);
-    });
-  }
-
-  if (expandLink) {
-    expandLink.href = `#/aikataulu/${encodeURIComponent(targetGroup)}`;
-  }
-
-  await renderHomeAikatauluEmbed(targetGroup);
-}
-
-async function renderHomeAikatauluEmbed(groupCode) {
-  const container = document.querySelector("#home-aikataulu-embed-container");
-  if (!container) return;
-
-  const groups = getAllScheduleGroups();
-  const currentGroupObj = groups.find((g) => g.groupCode === groupCode);
-  if (!currentGroupObj) {
-    container.innerHTML = '<div class="empty">Ryhmää ei löytynyt.</div>';
-    return;
-  }
-
-  const { courseCode, schedule } = currentGroupObj;
-  container.innerHTML = '<div class="empty">Ladataan ryhmän aikataulua…</div>';
-
-  try {
-    const courseData = await getCourseData(courseCode);
-    const lessons = courseData.lessons || [];
-    const exceptions = schedule.exceptions || [];
-    const events = [];
-
-    lessons.forEach((lesson) => {
-      const date = getLessonDate(lesson.lesson, schedule);
-      if (date) {
-        events.push({ date, lesson, exception: null });
-      }
-    });
-
-    exceptions.forEach((exception) => {
-      events.push({ date: exception.date, lesson: null, exception });
-    });
-
-    events.sort((a, b) => a.date.localeCompare(b.date));
-
-    if (!events.length) {
-      container.innerHTML = '<div class="empty">Tälle ryhmälle ei löytynyt aikataulua.</div>';
-      return;
-    }
-
-    const today = formatDate(new Date());
-
-    const cardsHtml = events
-      .map((event) => {
-        if (event.exception) {
-          return `
-            <article class="lesson-card exception-card" data-date="${event.date}">
-              <div class="lesson-header">
-                <div>
-                  <p class="lesson-number">Poikkeusohjelmaa</p>
-                  <p class="lesson-date">${formatDisplayDate(event.date)}</p>
-                  <div class="exception-box">
-                    <strong>${escapeHtml(event.exception.type)}</strong>
-                  </div>
-                  <p class="lesson-card-body-text">${escapeHtml(event.exception.description)}</p>
-                </div>
-              </div>
-            </article>
-          `;
-        }
-
-        const lesson = event.lesson;
-        const lessonNum = lesson.lesson;
-
-        let sheetsHtml = "";
-        const rawSheets = lesson.taskSheets || lesson.taskSheet;
-        if (rawSheets) {
-          const list = Array.isArray(rawSheets) ? rawSheets : [rawSheets];
-          sheetsHtml = `
-            <div class="task-sheets-list" style="margin-top: 10px;">
-              ${list
-                .map(
-                  (sheet) => `
-                  <div class="task-sheet-card">
-                    <div class="task-sheet-info">
-                      <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tehtävät")}</span>
-                      <strong class="task-sheet-title" style="font-size: 0.88rem; margin-left: 6px;">${escapeHtml(sheet.title)}</strong>
-                    </div>
-                    <button type="button" class="rev-btn rev-btn-tasks home-embed-pdf-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}" style="padding: 4px 10px; font-size: 0.78rem;">
-                      Avaa PDF 📄
-                    </button>
-                  </div>
-                `
-                )
-                .join("")}
-            </div>
-          `;
-        }
-
-        return `
-          <article class="lesson-card" data-date="${event.date}">
-            <div class="lesson-header">
-              <div class="lesson-card-header-row">
-                <div>
-                  <p class="lesson-number">Oppitunti #${lessonNum}</p>
-                  <p class="lesson-date">${formatDisplayDate(event.date)}</p>
-                </div>
-                <a href="#/${courseCode}/${lessonNum}" class="lesson-open-link-btn" title="Siirry oppitunnin sivulle">
-                  <span>Oppitunnille</span>
-                  <span>→</span>
-                </a>
-              </div>
-              <h3 class="lesson-card-title">${escapeHtml(lesson.topic || lesson.title)}</h3>
-            </div>
-            ${lesson.content ? `<div class="lesson-card-body-text">${lesson.content}</div>` : ""}
-            ${sheetsHtml}
-          </article>
-        `;
-      })
-      .join("");
-
-    container.innerHTML = `<div class="home-aikataulu-embed-scroll" id="home-aikataulu-scroll">${cardsHtml}</div>`;
-
-    container.querySelectorAll(".home-embed-pdf-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openLessonTaskViewer(btn.dataset.title, btn.dataset.url);
-      });
-    });
-
-    // Vieritetään kuluvaan tai seuraavaan tuntiin scroll-säiliössä
-    const scrollContainer = container.querySelector("#home-aikataulu-scroll");
-    if (scrollContainer) {
-      const cards = Array.from(scrollContainer.querySelectorAll(".lesson-card"));
-      cards.forEach((c) => c.classList.remove("current-lesson"));
-      let currentCard = cards.find((c) => c.dataset.date >= today) || cards[cards.length - 1];
-      if (currentCard) {
-        currentCard.classList.add("current-lesson");
-        setTimeout(() => {
-          // Vieritetään VAIN upotuksen omaa säiliötä, ei koko selainikkunaa
-          const containerRect = scrollContainer.getBoundingClientRect();
-          const cardRect = currentCard.getBoundingClientRect();
-          const relativeTop = cardRect.top - containerRect.top + scrollContainer.scrollTop;
-          scrollContainer.scrollTo({
-            top: Math.max(0, relativeTop - 12),
-            behavior: "smooth"
-          });
-        }, 120);
-      }
-    }
-  } catch (err) {
-    console.error("Virhe kotinäkymän aikataulu-upotuksessa:", err);
-    container.innerHTML = `<div class="empty">Aikataulun lataus epäonnistui: ${escapeHtml(err.message)}</div>`;
+  if (enabledBlocks.some((b) => b.id === "weekInfo")) {
+    setupHomeWeekCardEvents();
+    loadAndRenderPasilaWeather();
   }
 }
 
@@ -1770,8 +1898,7 @@ function renderSettingsHomeBlocks() {
 
   const blockNames = {
     welcome: "🏠 Tervetuloteksti",
-    timetable: "📅 Lukujärjestys (RAUH)",
-    aikataulu: "👥 Ryhmät"
+    weekInfo: "ℹ️ Viikon infokortti"
   };
 
   container.innerHTML = state.homeConfig.blocks
@@ -1845,7 +1972,7 @@ function updateSettingsSummaryBadges() {
     if (state.defaultView !== "home" && defMeta) {
       badgeHome.textContent = `Aloitus: ${defMeta.title}`;
     } else {
-      badgeHome.textContent = `Kotinäkymä (${enabledCount}/3 osiota)`;
+      badgeHome.textContent = `Kotinäkymä (${enabledCount}/2 osiota)`;
     }
   }
 
