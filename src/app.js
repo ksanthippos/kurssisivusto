@@ -4874,13 +4874,14 @@ async function handleInstructionsSubmit(e) {
     }
   }
 
-  const emailText = buildSubstituteInstructions(events, start, end);
+  const instructionsData = buildSubstituteInstructions(events, start, end);
   const lessonEventsCount = events.filter((ev) => ev.tyyppi === "oppitunti").length;
-  renderGeneratedInstructions(emailText, start, end, lessonEventsCount);
+  renderGeneratedInstructions(instructionsData, start, end, lessonEventsCount);
 }
 
 function buildSubstituteInstructions(events, start, end) {
-  const lines = [];
+  const plainLines = [];
+  const htmlParts = [];
   const grouped = new Map();
 
   events.forEach((event) => {
@@ -4889,92 +4890,167 @@ function buildSubstituteInstructions(events, start, end) {
     grouped.get(date).push(event);
   });
 
+  const siteUrl = window.location.href.split("#")[0];
+  const range = formatDateRange(start, end);
+
+  // Alkutervehdys
+  plainLines.push("Hei!");
+  plainLines.push("");
+  plainLines.push(`Olen poissa ${range}. Tässä poissaoloni aikana pidettävät oppitunnit ja niiden ohjeet:`);
+  plainLines.push("");
+
+  htmlParts.push('<p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5;">Hei!</p>');
+  htmlParts.push(`<p style="margin: 0 0 18px 0; font-size: 14px; line-height: 1.5;">Olen poissa ${escapeHtml(range)}. Tässä poissaoloni aikana pidettävät oppitunnit ja niiden ohjeet:</p>`);
+
   [...grouped.entries()].forEach(([date, dayEvents]) => {
-    lines.push(formatEmailDate(date));
-    lines.push("");
+    const dayStr = formatEmailDate(date);
+
+    // Päivän otsikko: Plain textissä selkeä alleviivaus, HTML:ssä alleviivattu ja lihavoitu
+    plainLines.push(dayStr);
+    plainLines.push("─".repeat(Math.max(22, dayStr.length)));
+    plainLines.push("");
+
+    htmlParts.push(`
+      <div style="margin: 22px 0 8px 0; padding-bottom: 2px;">
+        <u style="text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px;"><strong style="font-size: 15px;">${escapeHtml(dayStr)}</strong></u>
+      </div>
+    `);
 
     dayEvents.forEach((event, eventIndex) => {
       if (event.tyyppi === "valvonta") {
-        lines.push(`  ${event.alku}–${event.loppu}  VALVONTA  (${event.paikka || ""})`);
+        const valvontaLine = `${event.alku}–${event.loppu}  VALVONTA  (${event.paikka || ""})`;
+        plainLines.push(`  ${valvontaLine}`);
+
+        // Valvonnat punaisella ja lihavoituna
+        htmlParts.push(`
+          <div style="margin: 6px 0 6px 14px; color: #dc2626; font-weight: bold; font-size: 14px; line-height: 1.5;">
+            ${escapeHtml(event.alku)}–${escapeHtml(event.loppu)}&nbsp;&nbsp;VALVONTA&nbsp;&nbsp;(${escapeHtml(event.paikka || "")})
+          </div>
+        `);
       } else {
-        lines.push(`  ${event.alku}–${event.loppu}  ${event.ryhma}  (${event.tila || ""})`);
+        const lessonHeader = `${event.alku}–${event.loppu}  ${event.ryhma}  (${event.tila || ""})`;
+        plainLines.push(`  ${lessonHeader}`);
+
+        // Oppituntien kellonaika/ryhmä/tilarivi lihavoituna
+        htmlParts.push(`
+          <div style="margin: 8px 0 3px 14px; font-weight: bold; font-size: 14px; line-height: 1.5;">
+            <strong>${escapeHtml(event.alku)}–${escapeHtml(event.loppu)}&nbsp;&nbsp;${escapeHtml(event.ryhma)}&nbsp;&nbsp;(${escapeHtml(event.tila || "")})</strong>
+          </div>
+        `);
+
+        const detailsPlain = [];
+        const detailsHtml = [];
 
         if (event.exception) {
-          lines.push(`    ${event.exception.type}`);
-          lines.push(`    ${event.exception.description}`);
+          detailsPlain.push(`    ${event.exception.type}`);
+          detailsPlain.push(`    ${event.exception.description}`);
+
+          detailsHtml.push(`<div><strong>${escapeHtml(event.exception.type)}</strong></div>`);
+          if (event.exception.description) {
+            detailsHtml.push(`<div>${escapeHtml(event.exception.description)}</div>`);
+          }
         } else if (event.continuation) {
           const c = event.continuation;
-          lines.push(`    Aihe: ${c.title || "Jatkotunti"}`);
+          detailsPlain.push(`    Aihe: ${c.title || "Jatkotunti"}`);
+          detailsHtml.push(`<div><strong>Aihe:</strong> ${escapeHtml(c.title || "Jatkotunti")}</div>`);
+
           if (c.description) {
-            lines.push(`    Kuvaus: ${c.description}`);
+            detailsPlain.push(`    Kuvaus: ${c.description}`);
+            detailsHtml.push(`<div><strong>Kuvaus:</strong> ${escapeHtml(c.description)}</div>`);
           }
           if (c.tasks) {
             const taskStr = Array.isArray(c.tasks) ? c.tasks.join(", ") : c.tasks;
-            lines.push(`    Tehtävät: ${taskStr}`);
+            detailsPlain.push(`    Tehtävät: ${taskStr}`);
+            detailsHtml.push(`<div><strong>Tehtävät:</strong> ${escapeHtml(taskStr)}</div>`);
           }
           if (event.continuedLesson) {
             const cl = event.continuedLesson;
-            lines.push(`    (Jatkoa oppitunnille #${cl.lesson}: ${cl.topic || cl.title})`);
+            detailsPlain.push(`    (Jatkoa oppitunnille #${cl.lesson}: ${cl.topic || cl.title})`);
+            detailsHtml.push(`<div><em>(Jatkoa oppitunnille #${cl.lesson}: ${escapeHtml(cl.topic || cl.title)})</em></div>`);
           }
         } else if (event.lesson) {
-          lines.push(`    Aihe: ${event.lesson.topic || event.lesson.title || ""}`);
+          const topic = event.lesson.topic || event.lesson.title || "";
+          detailsPlain.push(`    Aihe: ${topic}`);
+          detailsHtml.push(`<div><strong>Aihe:</strong> ${escapeHtml(topic)}</div>`);
 
           if (event.lesson.tasks) {
+            const labels = {
+              research: "Tutkimus",
+              theory: "Työkirja",
+              warmup: "Yhteiset",
+              blue: "Siniset",
+              red: "Punaiset"
+            };
             const taskLines = Object.entries(event.lesson.tasks)
               .filter(([, value]) => value !== undefined && value !== null && value !== "")
-              .map(([key, value]) => {
-                const labels = {
-                  research: "Tutkimus",
-                  theory: "Työkirja",
-                  warmup: "Yhteiset",
-                  blue: "Siniset",
-                  red: "Punaiset"
-                };
-                return `${labels[key] || key}: ${value}`;
-              });
+              .map(([key, value]) => `${labels[key] || key}: ${value}`);
 
             if (taskLines.length) {
-              lines.push(`    Tehtävät: ${taskLines.join(" | ")}`);
+              detailsPlain.push(`    Tehtävät: ${taskLines.join(" | ")}`);
+              detailsHtml.push(`<div><strong>Tehtävät:</strong> ${escapeHtml(taskLines.join(" | "))}</div>`);
             }
           }
 
           if (Array.isArray(event.lesson.taskSheets) && event.lesson.taskSheets.length) {
             const sheetTitles = event.lesson.taskSheets.map((s) => s.title).join(", ");
-            lines.push(`    Tehtävämoniste (PDF): ${sheetTitles}`);
+            detailsPlain.push(`    Tehtävämoniste (PDF): ${sheetTitles}`);
+            detailsHtml.push(`<div><strong>Tehtävämoniste (PDF):</strong> ${escapeHtml(sheetTitles)}</div>`);
           }
 
           if (event.lesson.substituteNote) {
-            lines.push(`    Sijaiselle: ${event.lesson.substituteNote}`);
+            detailsPlain.push(`    Sijaiselle: ${event.lesson.substituteNote}`);
+            detailsHtml.push(`<div><strong>Sijaiselle:</strong> ${escapeHtml(event.lesson.substituteNote)}</div>`);
           }
+        }
+
+        if (detailsPlain.length) {
+          plainLines.push(detailsPlain.join("\n"));
+        }
+        if (detailsHtml.length) {
+          htmlParts.push(`
+            <div style="margin: 2px 0 6px 30px; font-size: 13.5px; line-height: 1.5; color: #334155;">
+              ${detailsHtml.join("")}
+            </div>
+          `);
         }
       }
 
       if (eventIndex < dayEvents.length - 1) {
-        lines.push("");
+        plainLines.push("");
       }
     });
 
-    lines.push("");
+    plainLines.push("");
   });
 
-  const siteUrl = window.location.href.split("#")[0];
-  const range = formatDateRange(start, end);
+  // Loppuallekirjoitus
+  plainLines.push("Luethan myös muut sijaisuuksiin liittyvät ohjeet kurssisivustolta:");
+  plainLines.push(siteUrl);
+  plainLines.push("");
+  plainLines.push("Ystävällisin terveisin,");
+  plainLines.push("Mikael");
 
-  return [
-    `Hei!`,
-    ``,
-    `Olen poissa ${range}. Tässä poissaoloni aikana pidettävät oppitunnit ja niiden ohjeet:`,
-    ``,
-    lines.join("\n"),
-    `Luethan myös muut sijaisuuksiin liittyvät ohjeet kurssisivustolta:`,
-    siteUrl,
-    ``,
-    `Ystävällisin terveisin,`,
-    `Mikael`
-  ].join("\n").replace(/\n{3,}/g, "\n\n");
+  htmlParts.push(`
+    <p style="margin: 24px 0 6px 0; font-size: 14px; line-height: 1.5;">Luethan myös muut sijaisuuksiin liittyvät ohjeet kurssisivustolta:<br>
+    <a href="${siteUrl}" style="color: #2563eb; text-decoration: underline;">${siteUrl}</a></p>
+    <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 1.5;">Ystävällisin terveisin,<br>Mikael</p>
+  `);
+
+  const fullHtml = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #1e293b;">
+      ${htmlParts.join("\n")}
+    </div>
+  `.trim();
+
+  const fullText = plainLines.join("\n").replace(/\n{3,}/g, "\n\n");
+
+  return {
+    text: fullText,
+    html: fullHtml
+  };
 }
 
-function renderGeneratedInstructions(emailText, start, end, eventCount) {
+function renderGeneratedInstructions(instructionsData, start, end, eventCount) {
   if (!generatedInstructions) return;
   generatedInstructions.hidden = false;
 
@@ -4984,25 +5060,65 @@ function renderGeneratedInstructions(emailText, start, end, eventCount) {
       <p>${eventCount} oppituntia löytyi aikaväliltä ${formatDateRange(start, end)}.</p>
     </div>
 
-    <pre id="instructions-preview-formatted" class="instructions-preview-formatted">${escapeHtml(emailText)}</pre>
+    <div id="instructions-preview-formatted" class="instructions-preview-formatted">
+      ${instructionsData.html}
+    </div>
 
     <div class="instruction-actions">
-      <button id="btn-copy-instructions" class="rev-btn rev-btn-tasks" type="button" style="padding: 10px 18px; font-size: 0.95rem;">
-        📋 Kopioi leikepöydälle
+      <button id="btn-copy-instructions" class="rev-btn rev-btn-tasks" type="button" style="padding: 11px 22px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;">
+        📋 Kopioi leikepöydälle (sähköpostiin)
       </button>
     </div>
   `;
 
   const copyBtn = document.querySelector("#btn-copy-instructions");
   if (copyBtn) {
-    copyBtn.addEventListener("click", () => {
-      navigator.clipboard.writeText(emailText)
-        .then(() => {
-          showToast("📋 Sijaisohjeet kopioitu leikepöydälle!");
-        })
-        .catch(() => {
-          showToast("Kopiointi epäonnistui. Kopioi teksti suoraan ruudulta.");
-        });
+    copyBtn.addEventListener("click", async () => {
+      // 1. Ensisijainen: moderni ClipboardItem (HTML + plain text yhdessä)
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          const htmlBlob = new Blob([instructionsData.html], { type: "text/html" });
+          const textBlob = new Blob([instructionsData.text], { type: "text/plain" });
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              "text/html": htmlBlob,
+              "text/plain": textBlob
+            })
+          ]);
+          showToast("📋 Sijaisohjeet kopioitu leikepöydälle (valmiina liitettäväksi sähköpostiin)!");
+          return;
+        }
+      } catch (err) {
+        console.warn("ClipboardItem write failed, trying fallback:", err);
+      }
+
+      // 2. Varasuunnitelma: copy event listener (Safari & vanhemmat selaimet)
+      try {
+        const copyListener = (e) => {
+          e.preventDefault();
+          if (e.clipboardData) {
+            e.clipboardData.setData("text/html", instructionsData.html);
+            e.clipboardData.setData("text/plain", instructionsData.text);
+          }
+        };
+        document.addEventListener("copy", copyListener);
+        const ok = document.execCommand("copy");
+        document.removeEventListener("copy", copyListener);
+        if (ok) {
+          showToast("📋 Sijaisohjeet kopioitu leikepöydälle (muotoiluineen)!");
+          return;
+        }
+      } catch (e) {
+        console.warn("execCommand fallback failed:", e);
+      }
+
+      // 3. Viimeinen varasuunnitelma: pelkkä teksti
+      try {
+        await navigator.clipboard.writeText(instructionsData.text);
+        showToast("📋 Sijaisohjeet kopioitu leikepöydälle tekstinä!");
+      } catch (err) {
+        showToast("Kopiointi epäonnistui. Voit kopioida tekstin maalaamalla sen ruudulta.");
+      }
     });
   }
 }

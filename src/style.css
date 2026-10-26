@@ -4667,7 +4667,41 @@ a:hover {
 .instruction-form .primary-button {
   grid-column: 1 / -1;
   justify-self: start;
-  margin-top: 8px;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  min-height: 44px;
+  background: var(--color-primary);
+  color: #ffffff !important;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.18s ease;
+}
+
+.instruction-form .primary-button:hover {
+  background: var(--color-primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.instruction-form .primary-button:active {
+  transform: translateY(0);
+}
+
+[data-theme="dark"] .instruction-form .primary-button {
+  background: var(--color-primary);
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .instruction-form .primary-button:hover {
+  background: var(--color-primary-light);
 }
 
 .generated-instructions {
@@ -4692,15 +4726,36 @@ a:hover {
   display: block;
   width: 100%;
   box-sizing: border-box;
-  padding: 1.25rem;
+  padding: 1.5rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface-subtle);
+  background: var(--color-surface);
   color: var(--color-text);
   line-height: 1.6;
-  white-space: pre-wrap;
   font-family: inherit;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .instructions-preview-formatted {
+  background: var(--color-surface-subtle);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .instructions-preview-formatted [style*="color: #1e293b"] {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .instructions-preview-formatted [style*="color: #334155"] {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .instructions-preview-formatted [style*="color: #475569"] {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .instructions-preview-formatted [style*="color: #dc2626"] {
+  color: #f87171 !important;
 }
 
 .instruction-actions {

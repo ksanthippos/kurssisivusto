@@ -214,7 +214,18 @@
             "description": "9. luokkien TET-viikko. 8. luokkalaisilla poikkeusohjelmaa."
           }
         ],
-        "continuations": []
+        "continuations": [
+          {
+            "date": "2026-11-19",
+            "description": "Pelisuunnittelua",
+            "tasks": "Testataan edellisellä tunnilla suunniteltuja pelejä, kerätään niistä palaute ja keskustellaan."
+          },
+                    {
+            "date": "2026-12-01",
+            "description": "Ohjelmointia",
+            "tasks": "Jatketaan ohjelmointia."
+          }
+        ]
       }
     }
   }
