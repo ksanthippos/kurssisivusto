@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Tasogeometrian kertausta, osa 1: Pythagoraan lause",
       "title": "Pythagoraan lause avaruusgeometrian perustana",
-      "content": "KS aihe 1. Pythagoraan lauseen kertausta (Avoin matematiikka 8. lk osio 3).",
+      "content": "Pythagoraan lauseen kertausta (Avoin matematiikka 8. lk osio 3).",
       "summary": "Suorakulmaisen kolmion kateetit ja hypotenuusa, Pythagoraan lause a² + b² = c² sekä sen soveltaminen kappaleiden korkeuksien ja lävistäjien ratkaisemiseen.",
       "theory": "<p><strong>Pythagoraan lause 3D-kappaleissa:</strong> Avaruuslävistäjä $d$ ratkaistaan soveltamalla Pythagoraan lausetta kahdesti peräkkäin:</p>\n<ol class=\"theory-list\">\n  <li>Pohjan lävistäjä $d_1$: $$d_1^2 = a^2 + b^2$$</li>\n  <li>Avaruuslävistäjä $d$: $$d^2 = d_1^2 + c^2 = a^2 + b^2 + c^2 \\implies d = \\sqrt{a^2 + b^2 + c^2}$$</li>\n</ol>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Tasogeometrian kertausta, osa 2: Laskukaavat",
       "title": "Tasokuvioiden pinta-alojen kertaus",
-      "content": "KS aihe 1. Tasogeometrian keskeisten laskukaavojen kertausta (oppikirjan kpl 7 & Avoin matikka 7. lk osio 2).",
+      "content": "Tasogeometrian keskeisten laskukaavojen kertausta (Avoin matikka 7. lk osio 2).",
       "summary": "Suorakulmion, kolmion, suunnikkaan, puolisuunnikkaan ja ympyrän pinta-alakaavojen kertaus avaruuskappaleiden pohjien laskemista varten.",
       "theory": "<p>Kerrataan tasokuvioiden pinta-alojen peruskaavat:</p>\n<ul class=\"theory-list\">\n  <li><strong>Suorakulmio:</strong> $A = a \\cdot b$</li>\n  <li><strong>Kolmio:</strong> $A = \\frac{a \\cdot h}{2}$</li>\n  <li><strong>Suunnikas:</strong> $A = a \\cdot h$</li>\n  <li><strong>Puolisuunnikas:</strong> $A = \\frac{a + b}{2} \\cdot h$</li>\n  <li><strong>Ympyrä:</strong> $A = \\pi r^2$ ja kehä $p = 2\\pi r$</li>\n</ul>",
       "tasks": {
@@ -44,7 +44,7 @@
       "lesson": 3,
       "topic": "Yksikkömuunnokset",
       "title": "Yksikkömuunnokset ja vetoisuusmitat",
-      "content": "KS aihe 2. Pituuden (suhdeluku 10), pinta-alan (suhdeluku 100) ja tilavuuden (suhdeluku 1000) yksikkömuunnokset sekä vetoisuusmitat (l, dl, cl, ml ja 1 dm³ = 1 l, 1 cm³ = 1 ml).",
+      "content": "Pituuden (suhdeluku 10), pinta-alan (suhdeluku 100) ja tilavuuden (suhdeluku 1000) yksikkömuunnokset sekä vetoisuusmitat (l, dl, cl, ml ja 1 dm³ = 1 l, 1 cm³ = 1 ml).",
       "summary": "Pituuden (10), pinta-alan (100) ja tilavuuden (1000) suhdeluvut, litrajärjestelmä ja kriittiset siltayhteydet 1 dm³ = 1 l ja 1 cm³ = 1 ml.",
       "theory": "<p>Yksiköiden muunnokset geometriassa:</p>\n<ul class=\"theory-list\">\n  <li><strong>Pituus:</strong> Suhdeluku $10$ ($1\\text{ m} = 10\\text{ dm} = 100\\text{ cm}$).</li>\n  <li><strong>Pinta-ala:</strong> Suhdeluku $100$ ($1\\text{ m}^2 = 100\\text{ dm}^2 = 10\\,000\\text{ cm}^2$).</li>\n  <li><strong>Tilavuus:</strong> Suhdeluku $1\\,000$ ($1\\text{ m}^3 = 1\\,000\\text{ dm}^3 = 1\\,000\\,000\\text{ cm}^3$).</li>\n  <li><strong>Vetomitat:</strong> $1\\text{ litra (l)} = 1\\text{ dm}^3$, $1\\text{ ml} = 1\\text{ cm}^3$, $1\\text{ dl} = 100\\text{ cm}^3$.</li>\n</ul>",
       "tasks": {
@@ -63,7 +63,7 @@
       "lesson": 4,
       "topic": "Särmiön tilavuus",
       "title": "Särmiön tilavuus",
-      "content": "KS aihe 3. Särmiön määritelmä, pohjat, vaippa ja tahkot. Suorakulmaisen särmiön tilavuus V = a · b · c.",
+      "content": "Särmiön määritelmä, pohjat, vaippa ja tahkot. Suorakulmaisen särmiön tilavuus V = a · b · c.",
       "summary": "Särmiön määritelmä, tahkot, särmät ja kärjet, suorakulmaisen särmiön tilavuuskaava V = a · b · c sekä pohjan ja korkeuden suhde.",
       "theory": "<p><strong>Särmiön tilavuus:</strong> Kaikki särmiöt noudattavat periaatetta:</p>\n<p class=\"math-callout\">$$V = A_p \\cdot h$$</p>\n<ul class=\"theory-list\">\n  <li>$A_p$ on pohjan pinta-ala ja $h$ on särmiön korkeus.</li>\n  <li>Suorakulmaiselle särmiölle: $$V = a \\cdot b \\cdot c$$</li>\n  <li>Kuutiolle: $$V = a^3$$</li>\n</ul>",
       "tasks": {
@@ -82,7 +82,7 @@
       "lesson": 5,
       "topic": "Särmiön pinta-ala",
       "title": "Särmiön pinta-ala ja tasolevitys",
-      "content": "KS aihe 3. Särmiön tasolevitys ja tahkojen pinta-alat. Särmiön kokonaispinta-alan laskeminen eri tahkoista.",
+      "content": "Särmiön tasolevitys ja tahkojen pinta-alat. Särmiön kokonaispinta-alan laskeminen eri tahkoista.",
       "summary": "Särmiön 6 tahkon tunnistaminen, tasolevitys tasoon ja kokonaispinta-alan laskeminen kaavalla A = 2(ab + bc + ac).",
       "theory": "<p><strong>Särmiön pinta-ala:</strong> Särmiön kokonaispinta-ala $A_k$ koostuu kahdesta pohjasta ja vaipasta:</p>\n<p class=\"math-callout\">$$A_k = 2A_p + A_v$$</p>\n<ul class=\"theory-list\">\n  <li>Suorakulmaisessa särmiössä on 3 paria identtisiä tahkoja: $$A_k = 2(ab + ac + bc)$$</li>\n  <li>Kuutiossa on 6 identtistä neliötahkoa: $$A_k = 6a^2$$</li>\n</ul>",
       "tasks": {
@@ -101,7 +101,7 @@
       "lesson": 6,
       "topic": "Lieriön tilavuus",
       "title": "Lieriön tilavuus",
-      "content": "KS aihe 4. Lieriön määritelmä, yhtenevät pohjat ja vaippa. Lieriön tilavuus V = Ap · h.",
+      "content": "Lieriön määritelmä, yhtenevät pohjat ja vaippa. Lieriön tilavuus V = Ap · h.",
       "summary": "Lieriön yleinen määritelmä, pohjan pinta-ala Ap ja korkeus h, ympyrälieriön tilavuus V = πr²h sekä särmiön ja lieriön suhde.",
       "theory": "<p><strong>Lieriön tilavuus:</strong> Lieriön pohjat ovat kaksi yhtenevää ja yhdensuuntaista tasokuviota:</p>\n<p class=\"math-callout\">$$V = A_p \\cdot h$$</p>\n<ul class=\"theory-list\">\n  <li>Ympyrälieriölle ($A_p = \\pi r^2$): $$V = \\pi r^2 h$$</li>\n  <li>Kaava pätee sekä suorille että vinoille lieriöille, kun $h$ on kohtisuora korkeus.</li>\n</ul>",
       "tasks": {
@@ -120,7 +120,7 @@
       "lesson": 7,
       "topic": "Lieriön pinta-ala",
       "title": "Ympyrälieriön pinta-ala ja vaipan avaus",
-      "content": "KS aihe 4. Ympyrälieriön vaipan auki rullaus ja vaipan ala Av = 2πrh. Kokonaispinta-ala Akok = 2Ap + Av.",
+      "content": "Ympyrälieriön vaipan auki rullaus ja vaipan ala Av = 2πrh. Kokonaispinta-ala Akok = 2Ap + Av.",
       "summary": "Ympyrälieriön vaipan auki rullautuminen suorakulmioksi, vaipan ala Av = 2πrh ja kokonaispinta-ala kahden pohjan kera Akok = 2πr² + 2πrh.",
       "theory": "<p><strong>Ympyrälieriön pinta-ala:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Pohjat:</strong> Kaksi ympyrää: $2A_p = 2\\pi r^2$.</li>\n  <li><strong>Vaippa:</strong> Auki leikattuna suorakulmio, jonka kanta on kehä $2\\pi r$ ja korkeus $h$: $$A_v = 2\\pi r h$$</li>\n  <li><strong>Kokonaispinta-ala:</strong> $$A_k = 2\\pi r^2 + 2\\pi r h$$</li>\n</ul>",
       "tasks": {
@@ -139,7 +139,7 @@
       "lesson": 8,
       "topic": "Kartion tilavuus",
       "title": "Kartion tilavuus",
-      "content": "KS aihe 5. Kartion määritelmä, pohja, vaippa ja kärki. Kartion tilavuus V = (Ap · h) / 3 ja korkeuden määrittäminen Pythagoraan lauseella.",
+      "content": "Kartion määritelmä, pohja, vaippa ja kärki. Kartion tilavuus V = (Ap · h) / 3 ja korkeuden määrittäminen Pythagoraan lauseella.",
       "summary": "Kartion rakenne (pohja, vaippa, kärki), tilavuuskaava V = (Ap · h) / 3 sekä puuttuvan korkeuden ratkaiseminen Pythagoraan lauseella.",
       "theory": "<p><strong>Kartion tilavuus:</strong> Kartion ja pyramidin tilavuus on tasan kolmasosa vastaavasta särmiöstä tai lieriöstä:</p>\n<p class=\"math-callout\">$$V = \\frac{A_p \\cdot h}{3}$$</p>\n<ul class=\"theory-list\">\n  <li>Ympyräkartiolle: $$V = \\frac{\\pi r^2 h}{3}$$</li>\n  <li>Jos korkeutta $h$ ei tunneta, se ratkaistaan sivujanasta $s$ Pythagoraalla: $h^2 + r^2 = s^2$.</li>\n</ul>",
       "tasks": {
@@ -158,7 +158,7 @@
       "lesson": 9,
       "topic": "Kartion pinta-ala",
       "title": "Ympyräkartion pinta-ala ja sivujana",
-      "content": "KS aihe 5. Ympyräkartion vaipan ala Av = πrs (sivujana s) ja kokonaispinta-ala Ak = Av + Ap = πrs + πr².",
+      "content": "Ympyräkartion vaipan ala Av = πrs (sivujana s) ja kokonaispinta-ala Ak = Av + Ap = πrs + πr².",
       "summary": "Ympyräkartion vaipan tasolevitys ympyräsektorina, vaipan ala Av = πrs ja kokonaispinta-ala Ak = πrs + πr².",
       "theory": "<p><strong>Ympyräkartion pinta-ala:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Vaippa:</strong> Auki leikattuna ympyrän sektori: $$A_v = \\pi r s$$ (missä $s$ on sivujana).</li>\n  <li><strong>Pohja:</strong> Ympyrä: $A_p = \\pi r^2$.</li>\n  <li><strong>Kokonaispinta-ala:</strong> $$A_k = \\pi r^2 + \\pi r s$$</li>\n</ul>",
       "tasks": {
@@ -177,7 +177,7 @@
       "lesson": 10,
       "topic": "Pyramidin tilavuus ja pinta-ala",
       "title": "Pyramidin tilavuus ja pinta-ala",
-      "content": "KS aihe 6. Monikulmiopohjainen pyramidi, tasolevitys ja sivukolmiot. Sivukolmion korkeuden laskeminen Pythagoraan lauseella ja kokonaispinta-ala.",
+      "content": "Monikulmiopohjainen pyramidi, tasolevitys ja sivukolmiot. Sivukolmion korkeuden laskeminen Pythagoraan lauseella ja kokonaispinta-ala.",
       "summary": "Monikulmiopohjainen pyramidi, tilavuuskaava V = (Ap · h) / 3, sivukolmion korkeuden ratkaisu Pythagoraalla ja tasolevityksen pinta-ala.",
       "theory": "<p><strong>Pyramidin tilavuus ja pinta-ala:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Tilavuus:</strong> $$V = \\frac{A_p \\cdot h}{3}$$</li>\n  <li><strong>Pinta-ala:</strong> $$A_k = A_p + A_v$$</li>\n  <li>Neliöpohjaisessa pyramidissa ($A_p = a^2$) vaippa muodostuu 4 kolmiosta, joiden korkeus $h_s$ ratkaistaan Pythagoraalla: $h_s^2 = h^2 + (a/2)^2$.</li>\n</ul>",
       "tasks": {
@@ -196,7 +196,7 @@
       "lesson": 11,
       "topic": "Pallon tilavuus ja pinta-ala",
       "title": "Pallon tilavuus ja pinta-ala",
-      "content": "KS aihe 7. Pallon säde r ja halkaisija d. Pallon tilavuus V = 4/3 πr³ ja pinta-ala A = 4πr². Soveltavat monivaiheiset laskut.",
+      "content": "Pallon säde r ja halkaisija d. Pallon tilavuus V = 4/3 πr³ ja pinta-ala A = 4πr². Soveltavat monivaiheiset laskut.",
       "summary": "Pallon tilavuus V = 4/3 πr³, pinta-ala A = 4πr², Arkhimedeen suhde ympäri piirrettyyn lieriöön ja soveltavat tehtävät.",
       "theory": "<p><strong>Pallon tilavuus ja pinta-ala:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Tilavuus:</strong> $$V = \\frac{4}{3}\\pi r^3$$</li>\n  <li><strong>Pinta-ala:</strong> $$A = 4\\pi r^2$$</li>\n  <li>Arkhimedeen tulos: Pallon pinta-ala vastaa täsmälleen neljän sen suuryhpyrän pinta-alaa!</li>\n</ul>",
       "tasks": {
@@ -215,7 +215,7 @@
       "lesson": 12,
       "topic": "Projektiot",
       "title": "3D-kappaleiden projektiot tasossa",
-      "content": "KS aihe 8. 3-ulotteisen kappaleen esittäminen 2-ulotteisessa muodossa: kavaljeeriprojektio, isometrinen projektio, perspektiivi ja pohjapiirrokset.",
+      "content": "3-ulotteisen kappaleen esittäminen 2-ulotteisessa muodossa: kavaljeeriprojektio, isometrinen projektio, perspektiivi ja pohjapiirrokset.",
       "summary": "3D-kappaleen kuvaaminen 2D-tasossa, kavaljeeriprojektion piirtosäännöt (45° kulma, syvyyden puolitus), isometrinen projektio peleissä ja perspektiivipiirustus.",
       "theory": "<p><strong>3D-kappaleiden projektiot:</strong> Kolmiulotteisen kappaleen esittäminen kaksiulotteisella tasolla:</p>\n<ul class=\"theory-list\">\n  <li><strong>Pääprojektiot:</strong> Edestä (julkisivu), päältä (pohjapiirros), sivulta (profiili).</li>\n  <li><strong>Aksonometria ja isometria:</strong> Tekninen piirtäminen ilman pakopisteitä.</li>\n  <li><strong>Perspektiiviprojektio:</strong> Valokuvamainen esitys pakopisteineen.</li>\n</ul>",
       "tasks": {

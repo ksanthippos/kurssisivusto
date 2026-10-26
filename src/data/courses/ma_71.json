@@ -4,7 +4,7 @@
   "lessons": [
     {
       "lesson": 1,
-      "topic": "KS aihe 1, kirjan kpl 1. Laskujärjestys osa 1",
+      "topic": "Laskujärjestys osa 1",
       "title": "Peruslaskutoimitukset ja laskujärjestys",
       "content": "Kerrataan laskujärjestys ja peruslaskutoimitukset sekä niiden soveltamisen erilaisissa laskutehtävissä.",
       "summary": "Laskutoimitusten tärkeysjärjestys: sulkeet, kerto- ja jakolasku vasemmalta oikealle, yhteen- ja vähennyslasku vasemmalta oikealle.",
@@ -23,7 +23,7 @@
     },
     {
       "lesson": 2,
-      "topic": "KS aihe 1, kirjan kpl 1. Laskujärjestys osa 2",
+      "topic": "Laskujärjestys osa 2",
       "title": "Sisäkkäiset sulkeet ja jakoviiva laskujärjestyksessä",
       "content": "Pidemmät laskutoimitukset ja erilaiset sulkulausekkeet, kuten aalto- ja hakasulut.",
       "summary": "Sisäkkäisten sulkeiden purkaminen sisältä ulospäin: kaarisulut (), hakasulut [] ja aaltosulut {}, sekä jakoviiva sulkuna.",
@@ -42,7 +42,7 @@
     },
     {
       "lesson": 3,
-      "topic": "KS aihe 2, kirjan kpl 3. Murtoluvun käsite",
+      "topic": "Murtoluvun käsite",
       "title": "Murtoluvun käsite, laventaminen ja supistaminen",
       "content": "Murtoluvun osoittaja ja nimittäjä, laventaminen ja supistaminen, samannimisyys.",
       "summary": "Osoittaja ja nimittäjä, murtoluvun arvo osana kokonaisuudesta, laventaminen (kerrotaan luvulla) ja supistaminen (jaetaan luvulla) perusmuotoon.",
@@ -65,7 +65,7 @@
     },
     {
       "lesson": 4,
-      "topic": "KS aihe 3, kirjan kpl 3. Murtoluvut ja sekaluvut",
+      "topic": "Murtoluvut ja sekaluvut",
       "title": "Aito murtoluku, epäaito murtoluku ja sekaluku",
       "content": "Murtolukujen muuntaminen sekaluvuksi ja toisin päin.",
       "summary": "Aito murtoluku (< 1), epäaito murtoluku (>= 1) ja sekaluku sekä muunnokset niiden välillä.",
@@ -88,7 +88,7 @@
     },
     {
       "lesson": 5,
-      "topic": "KS aihe 4, kirjan kpl 4. Murtolukujen yhteen- ja vähennyslasku, osa 1",
+      "topic": "Murtolukujen yhteen- ja vähennyslasku, osa 1",
       "title": "Murtolukujen yhteen- ja vähennyslasku samannimisillä ja erinimisillä",
       "content": "Murtolukujen yhteen- ja vähennyslasku, laventaminen tarvittaessa",
       "summary": "Samannimisten murtolukujen laskeminen (osoittajat lasketaan yhteen, nimittäjä säilyy) ja erinimisten laventaminen yhteiseen nimittäjään.",
@@ -107,7 +107,7 @@
     },
     {
       "lesson": 6,
-      "topic": "KS aihe 4, kirjan kpl 4. Murtolukujen yhteen- ja vähennyslasku, osa 2",
+      "topic": "Murtolukujen yhteen- ja vähennyslasku, osa 2",
       "title": "Sekalukujen yhteen- ja vähennyslasku ja sovellukset",
       "content": "Sekalukujen muuntaminen ennen laskemista. Haastavammat ja pidemmät murtolukujen yhteen- ja vähennyslaskut.",
       "summary": "Sekalukujen laskeminen epäaidon murtoluvun kautta, lainaaminen kokonaisosasta ja murtolukujen sanalliset sovellukset.",
@@ -129,7 +129,7 @@
     },
     {
       "lesson": 7,
-      "topic": "KS aihe 5, kirjan kpl 5. Murtolukujen kertolasku",
+      "topic": "Murtolukujen kertolasku",
       "title": "Murtolukujen kertolasku ja ristiinsupistaminen",
       "content": "Murtolukujen kertolasku, sekalukujen muuntaminen ennen laskemista.",
       "summary": "Kokonaisluvun ja murtoluvun tulo, murtolukujen kertolasku: osoittajat kerrotaan keskenään ja nimittäjät keskenään, sekä ristiinsupistaminen.",
@@ -148,7 +148,7 @@
     },
     {
       "lesson": 8,
-      "topic": "KS aihe 6, kirjan kpl 6. Murtolukujen jakolasku",
+      "topic": "Murtolukujen jakolasku",
       "title": "Käänteisluku ja murtolukujen jakolasku",
       "content": "Murtolukujen jakaminen niin kokonais-, murto- kuin sekaluvuilla. Jakolaskun konsepti käänteisluvun kertolaskun avulla.",
       "summary": "Käänteisluvun määritelmä a/b -> b/a, jakolaskun sääntö: jaettava kerrotaan jakajan käänteisluvulla, sekä miksi nollalla ei voi jakaa.",
@@ -167,7 +167,7 @@
     },
     {
       "lesson": 9,
-      "topic": "KS aihe 7, kirjan kpl 2. Desimaaliluvut",
+      "topic": "Desimaaliluvut",
       "title": "Desimaaliluvut, paikka-arvot ja pyöristäminen",
       "content": "Desimaalilukujen käsittely, pyöristäminen ja vertailu. Desimaaliluvuilla laskeminen, tarvittaessa muunnos murtoluvuksi ennen laskemista.",
       "summary": "Desimaaliluvun paikkajärjestelmä (kymmenesosa, sadasosa, tuhannesosa), pyöristyssäännöt ja desimaaliluvun muuntaminen murtoluvuksi.",
@@ -186,7 +186,7 @@
     },
     {
       "lesson": 10,
-      "topic": "KS aihe 8, kirjan kpl 10. Lukusuora",
+      "topic": "Lukusuora",
       "title": "Lukusuora ja lukujen vertailu",
       "content": "Lukujen vertailu lukusuoralla. Erisuuruusmerkit ja niiden käyttö.",
       "summary": "Lukusuora, positiiviset ja negatiiviset luvut, vertailumerkit <, >, <=, >= ja lukujen järjestäminen suuruusjärjestykseen.",
@@ -209,7 +209,7 @@
     },
     {
       "lesson": 11,
-      "topic": "KS aihe 9, kirjan kpl 11 ja 12. Itseisarvo ja vastaluku",
+      "topic": "Itseisarvo ja vastaluku",
       "title": "Vastaluku ja itseisarvo",
       "content": "Itseisarvon ja vastaluvun määritelmät. Lukujen sijoittaminen lukusuoralle. Vastaluvun laskeminen miinusmerkin avulla.",
       "summary": "Luvun vastaluku -a ja niiden summa a + (-a) = 0, itseisarvo |a| etäisyytenä nollasta lukusuoralla sekä laskutoimitukset itseisarvolla.",
@@ -228,7 +228,7 @@
     },
     {
       "lesson": 12,
-      "topic": "KS aihe 10, kirjan kpl 14 ja 15. Sulkumerkkien poistaminen",
+      "topic": "Sulkumerkkien poistaminen",
       "title": "Etumerkkisäännöt ja sulkujen poistaminen",
       "content": "Kahden tai useamman etumerkin muuntaminen yhdeksi ennen laskutoimitusta",
       "summary": "Kahden peräkkäisen merkin sääntö: + (+) = +, - (-) = +, + (-) = -, - (+) = -, sekä sulkeiden poistaminen etumerkin mukaan.",
@@ -251,7 +251,7 @@
     },
     {
       "lesson": 13,
-      "topic": "KS aihe 11, kirjan kpl 16. Kertolasku negatiivisilla luvuilla",
+      "topic": "Kertolasku negatiivisilla luvuilla",
       "title": "Kertolasku negatiivisilla luvuilla",
       "content": "Negatiivisten lukujen kertolaskun säännöt. Tuloksen etumerkin määrittäminen.",
       "summary": "Kertolaskun etumerkkisäännöt: samamerkkisten tulo on positiivinen (+, + tai -, -) ja erimerkkisten tulo on negatiivinen (+, -), sekä useamman tekijän tulo.",
@@ -270,7 +270,7 @@
     },
     {
       "lesson": 14,
-      "topic": "KS aihe 12, kirjan kpl 17. Jakolasku negatiivisilla luvuilla",
+      "topic": "Jakolasku negatiivisilla luvuilla",
       "title": "Jakolasku negatiivisilla luvuilla ja kurssin yhteenveto",
       "content": "Negatiivisten lukujen jakolasku, perustelu kertolaskun avulla.",
       "summary": "Jakolaskun etumerkkisäännöt (+/+, -/-, +/-, -/+), murtoluvun etumerkin paikka ja laskuopin kokonaiskertaus.",

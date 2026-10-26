@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Prosentin käsite",
       "title": "Prosentin käsite ja muodot",
-      "content": "KS aihe 1. Prosentin käsite (sadasosa), prosenttiluvun esittäminen murtolukuna ja desimaalilukuna sekä visuaalinen tulkinta ruudukossa.",
+      "content": "Prosentin käsite (sadasosa), prosenttiluvun esittäminen murtolukuna ja desimaalilukuna sekä visuaalinen tulkinta ruudukossa.",
       "summary": "Prosentin määritelmä sadasosana (pro centum), muunnokset murto- ja desimaaliluvuiksi sekä 100 ruudun ruudukkomalli.",
       "theory": "<p><strong>Prosentin käsite ja muodot:</strong></p>\n<ul class=\"theory-list\">\n  <li>Prosentti tarkoittaa sadasosaa ($1\\% = \\frac{1}{100} = 0{,}01$).</li>\n  <li><strong>Kolme esitysmuotoa:</strong>\n    <ul>\n      <li>Prosenttiluku: $12\\%$</li>\n      <li>Murtoluku: $\\frac{12}{100} = \\frac{3}{25}$</li>\n      <li>Desimaaliluku: $0{,}12$</li>\n    </ul>\n  </li>\n  <li>Muunnos: Desimaaliluvusta prosentiksi kerrotaan sadalla ($0{,}07 \\to 7\\%$).</li>\n</ul>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Prosenttiosuuden laskeminen",
       "title": "Prosenttiosuuden laskeminen",
-      "content": "KS aihe 2. Prosenttiosuuden laskeminen päässä (1 %, 10 %, 20 %, 25 %, 50 %) ja verrannon avulla.",
+      "content": "Prosenttiosuuden laskeminen päässä (1 %, 10 %, 20 %, 25 %, 50 %) ja verrannon avulla.",
       "summary": "Prosenttiosuuden laskenta päässä perusosuuksien kautta, yhden prosentin sääntö sekä yleispätevä verrantotaulukko.",
       "theory": "<p><strong>Prosenttiosuuden laskeminen:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Päässälaskumuistit:</strong> $1\\% \\implies : 100$, $10\\% \\implies : 10$, $20\\% \\implies : 5$, $25\\% \\implies : 4$, $50\\% \\implies : 2$.</li>\n  <li><strong>Desimaalikertoimella:</strong> Kerro perusarvo prosenttikertoimella:\n    $$12\\% \\text{ luvusta } 520\\text{ €} = 0{,}12 \\cdot 520 = 62{,}40\\text{ €}$$</li>\n  <li><strong>Verrannolla:</strong> $\\frac{100}{p} = \\frac{A}{x} \\implies 100 \\cdot x = p \\cdot A$.</li>\n</ul>",
       "tasks": {
@@ -48,7 +48,7 @@
       "lesson": 3,
       "topic": "Prosenttiluvun laskeminen",
       "title": "Prosenttiluvun laskeminen",
-      "content": "KS aihe 3. Prosenttiluvun laskeminen osuuden ja kokonaismäärän suhteesta verrantotekniikalla.",
+      "content": "Prosenttiluvun laskeminen osuuden ja kokonaismäärän suhteesta verrantotekniikalla.",
       "summary": "Kuinka monta prosenttia osuus on kokonaisuudesta, jakolaskumenetelmä ja verrantotekniikan soveltaminen.",
       "theory": "<p><strong>Prosenttiluvun laskeminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kysymys: <em>Kuinka monta prosenttia luku $a$ on luvusta $b$?</em></li>\n  <li><strong>Laskukaava:</strong> Osa jaettuna kokonaisuudella kerrottuna sadalla:\n    $$p = \\frac{\\text{osa}}{\\text{kokonaisuus}} \\cdot 100\\% = \\frac{a}{b} \\cdot 100\\%$$</li>\n  <li>Esimerkki: 18 pistettä 24:stä $\\implies \\frac{18}{24} = 0{,}75 = 75\\%$.</li>\n</ul>",
       "tasks": {
@@ -67,7 +67,7 @@
       "lesson": 4,
       "topic": "Muutosprosentti",
       "title": "Muutosprosentti: Hinnan alennus ja korotus",
-      "content": "KS aihe 4. Hinnan alennus ja korotus, muutosprosentin laskeminen verrannon avulla.",
+      "content": "Hinnan alennus ja korotus, muutosprosentin laskeminen verrannon avulla.",
       "summary": "Muutosprosentin laskeminen, alkuperäinen hinta perusarvona 100 % sekä alennetun hinnan ja alennuksen määrän erottaminen toisistaan.",
       "theory": "<p><strong>Muutosprosentti (Alennus ja korotus):</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kaava:</strong> Muutos jaettuna <em>alkuperäisellä arvolla</em>:\n    $$\\text{muutos-\\%} = \\frac{|\\text{uusi} - \\text{vanha}|}{\\text{vanha}} \\cdot 100\\%$$</li>\n  <li><strong>Muutoskerroin:</strong>\n    <ul>\n      <li>Alennus $20\\% \\implies 100\\% - 20\\% = 80\\% \\implies \\text{kerroin } 0{,}80$</li>\n      <li>Korotus $15\\% \\implies 100\\% + 15\\% = 115\\% \\implies \\text{kerroin } 1{,}15$</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -86,7 +86,7 @@
       "lesson": 5,
       "topic": "Vertailuprosentti",
       "title": "Vertailuprosentti ja 'kuin'-säännön voima",
-      "content": "KS aihe 5. Arvojen vertailu prosenteissa ja perusarvon (100 %) valinnan merkitys.",
+      "content": "Arvojen vertailu prosenteissa ja perusarvon (100 %) valinnan merkitys.",
       "summary": "Kahden arvon vertailu keskenään, miksi vertailutulokset eivät ole symmetrisiä sekä kuin-sanan merkitys 100 % perusarvon valinnassa.",
       "theory": "<p><strong>Vertailuprosentti ja 'kuin'-sääntö:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>KUIN-SÄÄNTÖ:</strong> Se arvo, johon verrataan (sanan <em>'kuin'</em> jälkeinen asia), tulee <strong>AINA nimittäjään (jakajaksi)</strong>!\n    $$\\text{vertailu-\\%} = \\frac{\\text{erotus}}{\\text{kuin-arvo}} \\cdot 100\\%$$</li>\n  <li>Esimerkki: Pekka (180 cm) ja Matti (150 cm):\n    <ul>\n      <li>Pekka pidempi <em>kuin Matti</em>: $\\frac{30}{150} = 20\\%$</li>\n      <li>Matti lyhyempi <em>kuin Pekka</em>: $\\frac{30}{180} \\approx 16{,}7\\%$</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -105,7 +105,7 @@
       "lesson": 6,
       "topic": "Prosenttiyksikkö",
       "title": "Prosentti vastaan prosenttiyksikkö",
-      "content": "KS aihe 6. Prosentti vs. prosenttiyksikkö, kannatuksen ja arvonlisäveron muutokset.",
+      "content": "Prosentti vs. prosenttiyksikkö, kannatuksen ja arvonlisäveron muutokset.",
       "summary": "Prosentin ja prosenttiyksikön ratkaiseva ero, absoluuttinen muutos vs. suhteellinen muutos vaaleissa, veroissa ja koroissa.",
       "theory": "<p><strong>Prosentti vs. prosenttiyksikkö:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Prosenttiyksikkö ($\\%$-yksikkö):</strong> Kahden prosenttiluvun suora vähennyslasku ($12\\% + 5\\%$-yksikköä $= 17\\%$).</li>\n  <li><strong>Prosentuaalinen muutos:</strong> Suhteellinen muutos entisestä:\n    $$15\\% \\text{ nousee } 10\\% \\implies 1{,}10 \\cdot 15\\% = 16{,}5\\%$$</li>\n  <li>Käytetään veroissa, koroissa ja vaalikannatuksissa sekaannusten välttämiseksi.</li>\n</ul>",
       "tasks": {
@@ -124,7 +124,7 @@
       "lesson": 7,
       "topic": "Perusarvon laskeminen",
       "title": "Perusarvon laskeminen (100 %)",
-      "content": "KS aihe 7. Kokonaismäärän (100 %) ratkaiseminen tunnetusta prosenttiosuudesta verrantoyhtälöllä.",
+      "content": "Kokonaismäärän (100 %) ratkaiseminen tunnetusta prosenttiosuudesta verrantoyhtälöllä.",
       "summary": "Koko määrän (100 %) ratkaiseminen osasta ja prosenttiluvusta, verrannon muodostaminen ja jakolaskutapa.",
       "theory": "<p><strong>Perusarvon laskeminen (100 %):</strong></p>\n<ul class=\"theory-list\">\n  <li>Kysymys: <em>Mistä luvusta $12\\%$ on $62{,}40\\text{ €}$?</em></li>\n  <li><strong>Yhtälöllä:</strong> $0{,}12 \\cdot x = 62{,}40 \\implies x = \\frac{62{,}40}{0{,}12} = 520\\text{ €}$.</li>\n  <li><strong>$1\\%$:n kautta:</strong> Laske ensin $1\\%$ ja kerro sadalla:\n    $$1\\% = \\frac{62{,}40}{12} = 5{,}20\\text{ €} \\implies 100\\% = 100 \\cdot 5{,}20\\text{ €} = 520\\text{ €}$$</li>\n  <li>Verrannolla: $\\frac{100}{12} = \\frac{x}{62{,}40}$.</li>\n</ul>",
       "tasks": {
@@ -143,7 +143,7 @@
       "lesson": 8,
       "topic": "Korkolaskut",
       "title": "Korko, lainat ja säästöt",
-      "content": "KS aihe 8. Koron käsite, lainakorko ja talletuskorko sekä vuosi-, kuukausi- ja päiväkoron laskeminen.",
+      "content": "Koron käsite, lainakorko ja talletuskorko sekä vuosi-, kuukausi- ja päiväkoron laskeminen.",
       "summary": "Koron käsite rahan hintana, laina- ja talletuskorko, vuosi- ja aikakoron laskeminen kuukausina ja päivinä.",
       "theory": "<p><strong>Korkolaskut:</strong></p>\n<ul class=\"theory-list\">\n  <li>Korko ($K$) on korvaus rahan lainaamisesta. Korkoprosentti $p$ ilmoitetaan aina <strong>vuosikorkona</strong>.</li>\n  <li><strong>Vuosikorko:</strong> $K = k \\cdot \\frac{p}{100}$, missä $k$ on pääoma.</li>\n  <li><strong>Ajan huomioiminen:</strong>\n    <ul>\n      <li>Kuukaudet ($t$ kk): $K = k \\cdot \\frac{p}{100} \\cdot \\frac{t}{12}$</li>\n      <li>Päivät ($d$ pv): $K = k \\cdot \\frac{p}{100} \\cdot \\frac{d}{365}$</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {

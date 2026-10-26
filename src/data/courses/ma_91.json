@@ -4,7 +4,7 @@
   "lessons": [
     {
       "lesson": 1,
-      "topic": "Aihe 1. Polynomien kertaus, osa 1",
+      "topic": "Polynomien kertaus, osa 1",
       "title": "Polynomin käsite ja peruslaskutoimitukset",
       "content": "Kerrataan polynomien perusominaisuudet ja laskutoimitukset.",
       "summary": "Monomi, binomi ja polynomi, polynomin asteluku, samanmuotoisten termien yhdistäminen sekä yhteen- ja vähennyslasku.",
@@ -19,7 +19,7 @@
     },
     {
       "lesson": 2,
-      "topic": "Aihe 2. Polynomien kertaus, osa 2",
+      "topic": "Polynomien kertaus, osa 2",
       "title": "Polynomien kertolasku ja binomikaavat",
       "content": "Kerrataan polynomien perusominaisuudet ja laskutoimitukset.",
       "summary": "Monomin ja polynomin tulo, kahden polynomin tulo (jokainen kerrotaan jokaisella) sekä binomin neliöt ja muistikaavat.",
@@ -38,7 +38,7 @@
     },
     {
       "lesson": 3,
-      "topic": "Aihe 2. Polynomien kertaus, osa 3",
+      "topic": "Polynomien kertaus, osa 3",
       "title": "Polynomin jakaminen ja tekijöihin jako",
       "content": "Kerrataan polynomien perusominaisuudet ja laskutoimitukset.",
       "summary": "Polynomin jakaminen monomilla termeittäin sekä tekijöihin jakaminen yhteisen tekijän sulkeiden ulkopuolelle ottamisella.",
@@ -53,7 +53,7 @@
     },
     {
       "lesson": 4,
-      "topic": "Aihe 3. Yhtälöiden kertaus",
+      "topic": "Yhtälöiden kertaus",
       "title": "Ensimmäisen ja toisen asteen yhtälöiden kertaus",
       "content": "Ratkaisutekniikoiden kertausta.",
       "summary": "1. asteen lineaarisen yhtälön ratkaisupolku, nimittäjien poisto sekä vaillinaisen toisen asteen yhtälön ratkaisut (x = ±√a).",
@@ -72,7 +72,7 @@
     },
     {
       "lesson": 5,
-      "topic": "Aihe 4. Sanallisten tehtävien ratkaisu yhtälöillä",
+      "topic": "Sanallisten tehtävien ratkaisu yhtälöillä",
       "title": "Sanallisen ongelman kääntäminen yhtälöksi",
       "content": "Sanallisten tehtävien ratkaisemista yhtälöiden avulla.",
       "summary": "Tehtävänannon purkaminen, muuttujan valinta, yhtälön muodostaminen ja ratkaisun järkevyyden arviointi.",
@@ -87,7 +87,7 @@
     },
     {
       "lesson": 6,
-      "topic": "Aihe 5 / kirjan kpl 12. Yhtälöparin käsite",
+      "topic": "Yhtälöparin käsite",
       "title": "Kahden muuttujan yhtälö ja yhtälöparin käsite",
       "content": "Kahden muuttujan yhtälö ja yhtälöpari. Ratkaisun kokeileminen ja tuloksen tulkinta.",
       "summary": "Kahden muuttujan lineaarinen yhtälö ax + by = c, yhtälöparin merkintä aaltosululla sekä ratkaisuparin (x, y) kokeileminen ja tarkistaminen.",
@@ -106,7 +106,7 @@
     },
     {
       "lesson": 7,
-      "topic": "Aihe 6 / kirjan kpl 14.Sijoituskeino",
+      "topic": "Sijoituskeino",
       "title": "Yhtälöparin ratkaiseminen sijoituskeinolla",
       "content": "Yhtälöparin ratkaiseminen sijoituskeinolla.",
       "summary": "Toisen muuttujan ratkaiseminen toisesta yhtälöstä (esim. y = 3x - 1), lausekkeen sijoittaminen toiseen yhtälöön ja molempien muuttujien ratkaiseminen.",
@@ -125,7 +125,7 @@
     },
     {
       "lesson": 8,
-      "topic": "Aihe 7 / kirjan kpl 14.Yhteenlaskukeino, osa 1",
+      "topic": "Yhteenlaskukeino, osa 1",
       "title": "Yhteenlaskukeino: Vastakkaiset kertoimet",
       "content": "Yhtälöparin ratkaiseminen yhteenlaskukeinolla.",
       "summary": "Yhtälöparin ratkaiseminen yhteenlaskukeinolla, kun toisen muuttujan kertoimet ovat toistensa vastalukuja (kuten +y ja -y tai +2x ja -2x).",
@@ -144,7 +144,7 @@
     },
     {
       "lesson": 9,
-      "topic": "Aihe 8 / kirjan kpl 14. Yhteenlaskukeino, osa 2",
+      "topic": "Yhteenlaskukeino, osa 2",
       "title": "Yhtälöparin laventaminen ja ratkaisutavan valinta",
       "content": "Yhteenlaskukeinon jatkoharjoituksia ja parhaan ratkaisukeinon valinta eri tilanteissa.",
       "summary": "Yhtälön tai molempien yhtälöiden kertominen puolittain sopivilla kertoimilla vastalukujen luomiseksi, sekä sijoitus- vs. yhteenlaskukeinon valintastrategia.",
@@ -163,7 +163,7 @@
     },
     {
       "lesson": 10,
-      "topic": "Aihe 8 / kirjan kpl 15. Ongelmanratkaisu yhtälöparilla, osa 1",
+      "topic": "Ongelmanratkaisu yhtälöparilla, osa 1",
       "title": "Kahden tuntemattoman sanalliset tehtävät",
       "content": "Sanallisten tehtävien ratkaisemista yhtälöparien avulla.",
       "summary": "Sanallisen ongelman mallintaminen kahdella muuttujalla x ja y, yhtälöparin muodostaminen, ratkaisu ja sanallinen vastaus.",
@@ -182,7 +182,7 @@
     },
     {
       "lesson": 11,
-      "topic": "Aihe 8 / kirjan kpl 15. Ongelmanratkaisu yhtälöparilla, osa 2",
+      "topic": "Ongelmanratkaisu yhtälöparilla, osa 2",
       "title": "Nopeus-, seos- ja geometriset yhtälöparitehtävät",
       "content": "Sanalliset tehtävät, haastavampia tapauksia.",
       "summary": "Haastavampien sanallisten ongelmien ratkaiseminen yhtälöparilla: myötä- ja vastatuulitehtävät sekä prosenttiseokset.",
@@ -201,7 +201,7 @@
     },
     {
       "lesson": 12,
-      "topic": "Aihe 9 / kirjan kpl 13. Yhtälöparin ratkaiseminen graafisesti.",
+      "topic": "Yhtälöparin ratkaiseminen graafisesti",
       "title": "Yhtälöparin graafinen ratkaiseminen koordinaatistossa",
       "content": "Yhtälöparin ratkaisemista koordinaatiston ja kuvaajien avulla.",
       "summary": "Suoran yhtälö y = kx + b, suorien piirtäminen koordinaatistoon, leikkauspiste yhtälöparin ratkaisuna (x, y) sekä yhdensuuntaiset ja yhtenevät suorat.",
@@ -220,7 +220,7 @@
     },
     {
       "lesson": 13,
-      "topic": "Aihe 10 / Avoin matikka 8.lk osio 1. Epäyhtälöt",
+      "topic": "Epäyhtälöt",
       "title": "Epäyhtälöt ja yhtälöparin kurssikertaus",
       "content": "Epäyhtälön käsite, esittäminen lukusuoralla ja huomiot ratkaisutekniikassa (suunnan kääntö).",
       "summary": "Epäyhtälöiden ratkaiseminen, suunnanvaihto negatiivisella jaettaessa, lukusuoraesitys sekä yhtälöparikurssin kokonaiskertaus.",

@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Tasainen liike, osa 1",
       "title": "Tasainen liike ja nopeuden laskeminen",
-      "content": "KS aihe 1 / kirjan kpl 11. Tutustutaan tasaisen liikkeen käsitteeseen ja siihen liittyviin suureisiin, kuten nopeuteen ja matkaan. Nopeuden kuvaaja.",
+      "content": "Tutustutaan tasaisen liikkeen käsitteeseen ja siihen liittyviin suureisiin, kuten nopeuteen ja matkaan. Nopeuden kuvaaja.",
       "summary": "Tasainen liike, nopeuden määritelmä v = s/t, yksikkömuunnokset m/s ja km/h (kertoimella 3,6) sekä keskinopeus.",
       "theory": "<p><strong>Tasainen liike ja nopeus:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Tasainen liike:</strong> Nopeus ja suunta pysyvät vakiona.</li>\n  <li><strong>Laskukaavat:</strong>\n    $$v = \\frac{s}{t} \\iff s = v \\cdot t \\iff t = \\frac{s}{v}$$</li>\n  <li><strong>Yksikkömuunnos:</strong> Suhdeluku on $3{,}6$:\n    $$\\text{m/s} \\xrightarrow{\\cdot 3{,}6} \\text{km/h} \\qquad \\text{ja} \\qquad \\text{km/h} \\xrightarrow{: 3{,}6} \\text{m/s}$$</li>\n  <li><strong>Keskinopeus:</strong> Koko matka jaettuna koko ajalla: $v_{\\text{ka}} = \\frac{s_{\\text{kok}}}{t_{\\text{kok}}}$.</li>\n</ul>",
       "tasks": {
@@ -36,7 +36,7 @@
       "lesson": 2,
       "topic": "Tasainen liike, osa 2",
       "title": "Tasaisen liikkeen graafinen esitys",
-      "content": "KS aihe 1 / kirjan kpl 11. Aiheen käsittely jatkuu, kuvaajien piirtäminen mittausdatasta.",
+      "content": "Aiheen käsittely jatkuu, kuvaajien piirtäminen mittausdatasta.",
       "summary": "Aika-matka -kuvaaja (t, s), suoran kulmakerroin fysikaalisena nopeutena sekä aika-nopeus -kuvaaja (t, v) ja pinta-ala kuljettuna matkana.",
       "theory": "<p><strong>Liikkeen graafinen esitys:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Aika-matka -kuvaaja $(t, s)$:</strong>\n    <ul>\n      <li>Kuvaaja on suora tasaisessa liikkeessä.</li>\n      <li>Suoran <strong>fysikaalinen jyrkkyys (kulmakerroin)</strong> on nopeus: $v = \\frac{\\Delta s}{\\Delta t}$. Mitä jyrkempi suora, sitä suurempi nopeus.</li>\n    </ul>\n  </li>\n  <li><strong>Aika-nopeus -kuvaaja $(t, v)$:</strong>\n    <ul>\n      <li>Kuvaajan alle jäävä <strong>pinta-ala</strong> on kuljettu matka: $s = v \\cdot t$.</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -61,7 +61,7 @@
       "lesson": 3,
       "topic": "Kiihtyvä liike",
       "title": "Muuttuva liike ja kiihtyvyys",
-      "content": "KS aihe 2 / kirjan kpl 12. Nopeuden muutos ajan funktiona ja kiihtyvyyden käsite. Kiihtyvän liikkeen kuvaaja eri koordinaatistoissa.",
+      "content": "Nopeuden muutos ajan funktiona ja kiihtyvyyden käsite. Kiihtyvän liikkeen kuvaaja eri koordinaatistoissa.",
       "summary": "Tasaisesti kiihtyvä ja hidastuva liike, kiihtyvyyden määritelmä a = Δv/Δt (m/s²), (t, v)-kuvaajan kulmakerroin ja vapaa pudotus (g ≈ 9,81 m/s²).",
       "theory": "<p><strong>Muuttuva liike ja kiihtyvyys:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kiihtyvyys ($a$):</strong> Kertoo nopeuden muutoksen aikayksikössä:\n    $$a = \\frac{\\Delta v}{\\Delta t} = \\frac{v - v_0}{t}$$</li>\n  <li>Yksikkö on metriä sekunnissa toiseen: $\\text{m/s}^2$.</li>\n  <li>Positiivinen $a$ = nopeus kasvaa (kiihtyvä liike); negatiivinen $a$ = nopeus pienenee (hidastuva liike).</li>\n  <li><strong>Putoamiskiihtyvyys Maassa:</strong> $g \\approx 9{,}81\\text{ m/s}^2 \\approx 10\\text{ m/s}^2$.</li>\n</ul>",
       "tasks": {
@@ -91,7 +91,7 @@
       "lesson": 4,
       "topic": "Vuorovaikutus ja voima",
       "title": "Vuorovaikutus, voima ja Newtonin lait",
-      "content": "KS aihe 3 / kirjan kpl 13. Erilaiset vuorovaikutustyypit, voiman määritelmä, mittaaminen ja yksikkö. Kokonaisvoiman käsite ja Newtonin lait.",
+      "content": "Erilaiset vuorovaikutustyypit, voiman määritelmä, mittaaminen ja yksikkö. Kokonaisvoiman käsite ja Newtonin lait.",
       "summary": "Kosketus- ja etävuorovaikutus, voima vektorisuureena F (Newton N), voimakuvio ja Isaac Newtonin kolme liikelakia (N I jatkavuus, N II peruslaki F = ma, N III voima ja vastavoima).",
       "theory": "<p><strong>Vuorovaikutus ja Newtonin lait:</strong></p>\n<ul class=\"theory-list\">\n  <li>Vuorovaikutus synnyttää voiman ($\\vec{F}$, yksikkö Newton $\\text{N}$).</li>\n  <li><strong>1. Jatkavuuden laki:</strong> Kappale jatkaa tasaista suoraviivaista liikettä tai pysyy levossa, jos kokonaisvoima on nolla.</li>\n  <li><strong>2. Dynamiikan peruslaki:</strong> Voima antaa kiihtyvyyden:\n    $$\\vec{F} = m \\cdot \\vec{a}$$</li>\n  <li><strong>3. Voiman ja vastavoiman laki:</strong> Voimat esiintyvät aina pareittain: $\\vec{F}_1 = -\\vec{F}_2$.</li>\n</ul>",
       "tasks": {
@@ -121,7 +121,7 @@
       "lesson": 5,
       "topic": "Massa, paino ja hitaus",
       "title": "Massa, paino ja hitaus",
-      "content": "KS aihe 4 / kirjan kpl 13. Massan ja painon ero, hitauden käsite. Painovoiman laskeminen.",
+      "content": "Massan ja painon ero, hitauden käsite. Painovoiman laskeminen.",
       "summary": "Massan (m, kg) ja painon (G, N) ero, hitauden ominaisuus ja painovoiman kaava G = mg maan pinnalla ja avaruudessa.",
       "theory": "<p><strong>Massa, paino ja hitaus:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Massa ($m$):</strong> Aineen määrä, yksikkö $\\text{kg}$. Pysyy samana kaikkialla avaruudessa.</li>\n  <li><strong>Paino ($G$):</strong> Taivaankappaleen aiheuttama vetovoima, yksikkö Newton ($\\text{N}$):\n    $$G = m \\cdot g$$</li>\n  <li>Kuussa paino on vain $1/6$ Maan painosta ($g_{\\text{Kuu}} \\approx 1{,}6\\text{ m/s}^2$), mutta massa on täysin sama!</li>\n  <li><strong>Hitaus (inertia):</strong> Kappaleen pyrkimys vastustaa liiketilansa muutosta.</li>\n</ul>",
       "tasks": {
@@ -150,7 +150,7 @@
       "lesson": 6,
       "topic": "Kitka ja noste",
       "title": "Kitka, ilmanvastus ja Arkhimedeen laki",
-      "content": "KS aihe 5 / kirjan kpl 14. Kitkan määritelmä ja kitkavoiman merkitys liikkeessä. Nosteen laskeminen ja vaikutus kokonaisvoimaan.",
+      "content": "Kitkan määritelmä ja kitkavoiman merkitys liikkeessä. Nosteen laskeminen ja vaikutus kokonaisvoimaan.",
       "summary": "Lepokitka vs. liukukitka, vierintävastus, ilman- ja väliaineenvastus, Arkhimedeen laki, nesteen noste ja kappaleen kelluminen ja uppoaminen.",
       "theory": "<p><strong>Kitka, ilmanvastus ja noste:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kitka:</strong> Pintojen välinen vastusvoima. Lepokitka on aina suurempi kuin liukukitka.</li>\n  <li><strong>Väliaineen vastus:</strong> Kasvaa nopeuden neliössä ($v^2$). Rajanopeudessa ilmanvastus on yhtä suuri kuin painovoima.</li>\n  <li><strong>Arkhimedeen laki:</strong> Nesteen noste $F_N$ vastaa syrjäytetyn nesteen painoa:\n    $$F_N = \\rho_{\\text{neste}} \\cdot V \\cdot g$$</li>\n  <li>Kelluminen: Kappale kelluu, jos sen tiheys on pienempi kuin nesteen ($\\rho_{\\text{kappale}} \\le \\rho_{\\text{neste}}$).</li>\n</ul>",
       "tasks": {
@@ -180,7 +180,7 @@
       "lesson": 7,
       "topic": "Paine",
       "title": "Paine kiinteissä aineissa, nesteissä ja ilmakehässä",
-      "content": "KS aihe 6 / kirjan kpl 15. Paineen määritelmä ja laskeminen. Ilmanpaine ja hydrostaattinen paine.",
+      "content": "Paineen määritelmä ja laskeminen. Ilmanpaine ja hydrostaattinen paine.",
       "summary": "Paineen määritelmä p = F/A, Pascal Pa ja bar, kosketuspinta-alan vaikutus, hydrostaattinen syvyyspaine p = ρgh ja normaali-ilmanpaine 1013 hPa.",
       "theory": "<p><strong>Paine kiinteissä, nesteissä ja ilmassa:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Paine ($p$):</strong> Pinta-alayksikköön kohdistuva kohtisuora voima:\n    $$p = \\frac{F}{A}$$</li>\n  <li>Yksikkö: Pascal ($\\text{Pa} = \\text{N/m}^2$). $1\\text{ bar} = 100\\,000\\text{ Pa}$.</li>\n  <li>Pieni ala $\\implies$ suuri paine (veitsi, nasta). Suuri ala $\\implies$ pieni paine (sukset, lumikengät).</li>\n  <li>Hydrostaattinen paine vedessä: $p = \\rho g h$ (kasvaa noin $1\\text{ bar}$ per 10 metriä).</li>\n</ul>",
       "tasks": {
@@ -210,7 +210,7 @@
       "lesson": 8,
       "topic": "Energian eri muodot",
       "title": "Mekaaninen energia ja energian säilyminen",
-      "content": "KS aihe 7 / kirjan kpl 16. Energian muuntuminen ja energian säilymisen periaate.",
+      "content": "Energian muuntuminen ja energian säilymisen periaate.",
       "summary": "Liike-energia (kineettinen energia Ek = 1/2 mv²), potentiaalienergia (asemaenergia Ep = mgh), mekaanisen energian säilymislaki ja kitkahäviöt.",
       "theory": "<p><strong>Mekaaninen energia ja säilymislaki:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Liike-energia:</strong> $E_k = \\frac{1}{2} m v^2$. Nopeuden tuplaus nelinkertaistaa energian!</li>\n  <li><strong>Potentiaalienergia:</strong> $E_p = m \\cdot g \\cdot h$.</li>\n  <li><strong>Mekaanisen energian säilymislaki:</strong> Eristetyssä systeemissä energian kokonaismäärä säilyy vakiona:\n    $$E_k + E_p = \\text{vakio}$$</li>\n  <li>Vuoristoradassa ja heilurissa $E_p$ muuttuu esteettömästi $E_k$:ksi ja päinvastoin.</li>\n</ul>",
       "tasks": {

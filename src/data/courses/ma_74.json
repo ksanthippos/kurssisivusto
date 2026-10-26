@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Potenssilasku",
       "title": "Potenssilaskun perusteet",
-      "content": "KS aihe 1. Potenssilaskun käsite: kantaluku ja eksponentti. Negatiivinen kantaluku ja sulkujen merkitys sekä murto- ja desimaalilukujen potenssit.",
+      "content": "Potenssilaskun käsite: kantaluku ja eksponentti. Negatiivinen kantaluku ja sulkujen merkitys sekä murto- ja desimaalilukujen potenssit.",
       "summary": "Kantaluku ja eksponentti toistettuna tulona, negatiivisen kantaluvun sulut vs. ilman sulkuja sekä murto- ja desimaalilukujen potenssit.",
       "theory": "<p><strong>Potenssilaskun perusteet:</strong></p>\n<ul class=\"theory-list\">\n  <li>Potenssi $a^n$ on lyhennettyä kertolaskua: kantalukua $a$ kerrotaan itsellään eksponentin $n$ ilmoittama määrä.</li>\n  <li><strong>Sulkujen merkitys negatiivisilla luvuilla:</strong>\n    <ul>\n      <li>$(-2)^4 = (-2) \\cdot (-2) \\cdot (-2) \\cdot (-2) = +16$ (parillinen eksponentti suluissa $\\implies +$)</li>\n      <li>$-2^4 = -(2 \\cdot 2 \\cdot 2 \\cdot 2) = -16$ (miinus ei kuulu potenssiin!)</li>\n      <li>$(-2)^3 = -8$ (pariton eksponentti $\\implies -$)</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Samankantaisten potenssien tulo",
       "title": "Samankantaisten potenssien tulo",
-      "content": "KS aihe 2. Samankantaisten potenssien tulon laskusääntö a^m · a^n = a^(m+n) ja sieventäminen muuttujilla.",
+      "content": "Samankantaisten potenssien tulon laskusääntö a^m · a^n = a^(m+n) ja sieventäminen muuttujilla.",
       "summary": "Potenssien tulon laskusääntö saman kantaluvun tapauksessa, eksponenttien yhteenlasku ja muuttujien sieventäminen.",
       "theory": "<p><strong>Samankantaisten potenssien tulo:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kun kerrotaan keskenään potensseja, joilla on sama kantaluku, <strong>kantaluku säilyy ja eksponentit lasketaan yhteen</strong>:\n    $$a^m \\cdot a^n = a^{m + n}$$</li>\n  <li>Esimerkki: $2^4 \\cdot 2^3 = 2^{4 + 3} = 2^7 = 128$.</li>\n  <li><em>Näkymätön ykkönen:</em> Muuttujalla ilman eksponenttia on aina eksponenttina 1: $x \\cdot x^4 = x^1 \\cdot x^4 = x^5$.</li>\n</ul>",
       "tasks": {
@@ -44,7 +44,7 @@
       "lesson": 3,
       "topic": "Samankantaisten potenssien osamäärä",
       "title": "Samankantaisten potenssien osamäärä",
-      "content": "KS aihe 3. Samankantaisten potenssien osamäärän laskusääntö a^m / a^n = a^(m-n) sekä tulon ja osamäärän yhdistetyt laskut.",
+      "content": "Samankantaisten potenssien osamäärän laskusääntö a^m / a^n = a^(m-n) sekä tulon ja osamäärän yhdistetyt laskut.",
       "summary": "Potenssien jakolasku saman kantaluvun tapauksessa, eksponenttien vähennyslasku, supistaminen ja yhdistetyt laskutoimitukset.",
       "theory": "<p><strong>Samankantaisten potenssien osamäärä:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kun jaetaan potensseja, joilla on sama kantaluku, <strong>kantaluku säilyy ja eksponentit vähennetään toisistaan</strong>:\n    $$\\frac{a^m}{a^n} = a^{m - n}$$</li>\n  <li>Esimerkki: $\\frac{2^6}{2^2} = 2^{6 - 2} = 2^4 = 16$.</li>\n  <li>Osoittajan eksponentista vähennetään aina nimittäjän eksponentti ($a \\neq 0$).</li>\n</ul>",
       "tasks": {
@@ -63,7 +63,7 @@
       "lesson": 4,
       "topic": "Tulon ja osamäärän potenssi",
       "title": "Tulon ja osamäärän potenssi",
-      "content": "KS aihe 4. Tulon potenssi (a·b)^n = a^n · b^n ja osamäärän potenssi (a/b)^n = a^n / b^n.",
+      "content": "Tulon potenssi (a·b)^n = a^n · b^n ja osamäärän potenssi (a/b)^n = a^n / b^n.",
       "summary": "Tulon ja osamäärän korottaminen potenssiin, sulkujen jakaminen jokaiselle tekijälle ja negatiiviset kertoimet.",
       "theory": "<p><strong>Tulon ja osamäärän potenssi:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Tulon potenssi:</strong> Jokainen tulon tekijä korotetaan erikseen potenssiin:\n    $$(a \\cdot b)^n = a^n \\cdot b^n \\implies (2x)^3 = 2^3 \\cdot x^3 = 8x^3$$</li>\n  <li><strong>Osamäärän potenssi:</strong> Osoittaja ja nimittäjä korotetaan erikseen:\n    $$\\left(\\frac{a}{b}\\right)^n = \\frac{a^n}{b^n} \\implies \\left(\\frac{x}{3}\\right)^2 = \\frac{x^2}{3^2} = \\frac{x^2}{9}$$</li>\n</ul>",
       "tasks": {
@@ -82,7 +82,7 @@
       "lesson": 5,
       "topic": "Potenssin potenssi",
       "title": "Potenssin potenssi",
-      "content": "KS aihe 5. Potenssin potenssin laskusääntö (a^m)^n = a^(m·n) ja yhdistetyt laskutoimitukset.",
+      "content": "Potenssin potenssin laskusääntö (a^m)^n = a^(m·n) ja yhdistetyt laskutoimitukset.",
       "summary": "Potenssin korottaminen edelleen potenssiin, eksponenttien kertolasku sekä erottaminen tornipotenssista ilman sulkuja.",
       "theory": "<p><strong>Potenssin potenssi:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kun potenssi korotetaan edelleen uuteen potenssiin, <strong>kantaluku säilyy ja eksponentit kerrotaan keskenään</strong>:\n    $$(a^m)^n = a^{m \\cdot n}$$</li>\n  <li>Esimerkki: $(a^2)^3 = a^{2 \\cdot 3} = a^6$.</li>\n  <li>Numerolla: $(2^2)^3 = 2^{2 \\cdot 3} = 2^6 = 64$.</li>\n</ul>",
       "tasks": {
@@ -101,7 +101,7 @@
       "lesson": 6,
       "topic": "Eksponenttina nolla tai negatiivinen luku",
       "title": "Nolla ja negatiivinen eksponentti",
-      "content": "KS aihe 6. Nolla eksponenttina a^0 = 1 ja negatiivinen eksponentti käänteislukuna a^(-n) = 1 / a^n.",
+      "content": "Nolla eksponenttina a^0 = 1 ja negatiivinen eksponentti käänteislukuna a^(-n) = 1 / a^n.",
       "summary": "Miksi mikä tahansa luku potenssiin nolla on 1, negatiivisen eksponentin kääntyminen käänteisluvuksi ja murtolukujen kääntäminen.",
       "theory": "<p><strong>Nolla ja negatiivinen eksponentti:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Eksponenttina nolla ($a^0$):</strong> Mikä tahansa nollasta poikkeava luku korotettuna nollaan on tasan yksi:\n    $$a^0 = 1 \\qquad (\\text{esim. } 17^0 = 1, \\quad (-5)^0 = 1)$$</li>\n  <li><strong>Negatiivinen eksponentti ($a^{-n}$):</strong> Ilmaisee käänteislukua:\n    $$a^{-n} = \\frac{1}{a^n} \\qquad (\\text{esim. } 2^{-3} = \\frac{1}{2^3} = \\frac{1}{8})$$</li>\n</ul>",
       "tasks": {
@@ -120,7 +120,7 @@
       "lesson": 7,
       "topic": "Kymmenpotenssit ja etuliitteet",
       "title": "Kymmenpotenssit ja SI-etuliitteet",
-      "content": "KS aihe 7. Lukujen esittäminen kymmenpotenssimuodossa ja kymmenpotenssien etuliitteet (kilo, mega, giga, mikro, nano jne.).",
+      "content": "Lukujen esittäminen kymmenpotenssimuodossa ja kymmenpotenssien etuliitteet (kilo, mega, giga, mikro, nano jne.).",
       "summary": "Suurten ja pienten lukujen ilmoittaminen kymmenpotensseina, tuhaterottimet sekä kansainväliset SI-etuliitteet.",
       "theory": "<p><strong>Kymmenpotenssit ja etuliitteet:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kymmenpotenssimuoto:</strong> $a \\cdot 10^n$, missä $1 \\le a < 10$.</li>\n  <li>Esimerkki: $4\\,500\\,000 = 4{,}5 \\cdot 10^6$ ja $0{,}0003 = 3 \\cdot 10^{-4}$.</li>\n  <li><strong>SI-etuliitteitä:</strong>\n    <ul>\n      <li>Giga ($G$) = $10^9$, Mega ($M$) = $10^6$, kilo ($k$) = $10^3$</li>\n      <li>milli ($m$) = $10^{-3}$, mikro ($\\mu$) = $10^{-6}$, nano ($n$) = $10^{-9}$</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -143,7 +143,7 @@
       "lesson": 8,
       "topic": "Neliöjuuri",
       "title": "Neliöjuuri ja sen ominaisuudet",
-      "content": "KS aihe 8. Neliöjuuren käsite potenssilaskun käänteistoimituksena, neliöjuurimerkki ja laskujärjestys.",
+      "content": "Neliöjuuren käsite potenssilaskun käänteistoimituksena, neliöjuurimerkki ja laskujärjestys.",
       "summary": "Neliöjuuri toiseen potenssiin korottamisen käänteistoimituksena, neliöjuurimerkki, määrittelyalue ja laskujärjestys.",
       "theory": "<p><strong>Neliöjuuren ominaisuudet:</strong></p>\n<ul class=\"theory-list\">\n  <li>Luvun $a \\ge 0$ neliöjuuri $\\sqrt{a}$ on se ei-negatiivinen luku $b$, jonka toinen potenssi on $a$:\n    $$\\sqrt{a} = b \\iff b^2 = a \\quad (b \\ge 0)$$</li>\n  <li>Neliöjuuri on potenssi eksponentilla $1/2$: $\\sqrt{a} = a^{1/2}$.</li>\n  <li><strong>Laskusäännöt:</strong>\n    $$\\sqrt{a \\cdot b} = \\sqrt{a} \\cdot \\sqrt{b} \\qquad \\text{ja} \\qquad \\sqrt{\\frac{a}{b}} = \\frac{\\sqrt{a}}{\\sqrt{b}}$$</li>\n</ul>",
       "tasks": {
@@ -162,7 +162,7 @@
       "lesson": 9,
       "topic": "Polynomi",
       "title": "Polynomit ja niiden asteluku",
-      "content": "KS aihe 9. Polynomin käsite: monomi, binomi, trinomi. Polynomin asteluku ja termien järjestäminen korkeimman asteen mukaan.",
+      "content": "Polynomin käsite: monomi, binomi, trinomi. Polynomin asteluku ja termien järjestäminen korkeimman asteen mukaan.",
       "summary": "Polynomin määritelmä, luokittelu termien määrän mukaan (monomi, binomi, trinomi), asteluku ja järjestäminen laskevaan järjestykseen.",
       "theory": "<p><strong>Polynomin käsite ja asteluku:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Polynomi:</strong> Monomien summa: $P(x) = a_n x^n + \\dots + a_1 x + a_0$.</li>\n  <li>Nimitykset termien määrän mukaan: monomi (1 termi), binomi (2 termiä), trinomi (3 termiä).</li>\n  <li><strong>Asteluku:</strong> Muuttujan suurin eksponentti. Esimerkiksi $4x^3 - 5x + 2$ on 3. asteen trinomi.</li>\n  <li>Polynomin termit kirjoitetaan aina <strong>korkeimmasta asteesta alenevassa järjestyksessä</strong>.</li>\n</ul>",
       "tasks": {
@@ -181,7 +181,7 @@
       "lesson": 10,
       "topic": "Sieventäminen",
       "title": "Polynomien sieventäminen",
-      "content": "KS aihe 10. Samanmuotoisten termien yhdistäminen ja polynomien sieventäminen.",
+      "content": "Samanmuotoisten termien yhdistäminen ja polynomien sieventäminen.",
       "summary": "Samanasteisten ja samanmuotoisten muuttujatermien yhdistäminen, etumerkkien huomioiminen ja lopputuloksen järjestäminen.",
       "theory": "<p><strong>Polynomien sieventäminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Polynomi sievennetään <strong>yhdistämällä samanmuotoiset termit</strong> (termit, joilla on sama kirjain ja sama eksponentti).</li>\n  <li>Vain kertoimet lasketaan yhteen tai vähennetään:\n    $$4x^2 + 5x - 2x^2 + 3x = (4 - 2)x^2 + (5 + 3)x = 2x^2 + 8x$$</li>\n  <li>Eriasteisia termejä ei voi yhdistää ($2x^2 + 8x$ ei enää sievene!).</li>\n</ul>",
       "tasks": {
@@ -200,7 +200,7 @@
       "lesson": 11,
       "topic": "Polynomin arvo",
       "title": "Polynomin nimeäminen ja arvon laskeminen",
-      "content": "KS aihe 11. Polynomin nimeäminen P(x) ja lukuarvon laskeminen sijoittamalla muuttujan paikalle annettu arvo.",
+      "content": "Polynomin nimeäminen P(x) ja lukuarvon laskeminen sijoittamalla muuttujan paikalle annettu arvo.",
       "summary": "Polynomin nimeäminen isoilla kirjaimilla P(x), muuttujan arvon sijoittaminen suluissa ja polynomin arvon laskeminen.",
       "theory": "<p><strong>Polynomin nimeäminen ja arvo:</strong></p>\n<ul class=\"theory-list\">\n  <li>Polynomi nimetään isolla kirjaimella ja muuttujatunnuksella: $P(x) = 3x^2 - 5x + 2$.</li>\n  <li><strong>Arvon laskeminen $P(a)$:</strong> Sijoitetaan luku $a$ muuttujan $x$ paikalle.</li>\n  <li>Negatiivinen luku sijoitetaan <em>aina suluissa</em>:\n    $$P(-2) = 3(-2)^2 - 5(-2) + 2 = 3(4) + 10 + 2 = 12 + 10 + 2 = 24$$</li>\n</ul>",
       "tasks": {
@@ -219,7 +219,7 @@
       "lesson": 12,
       "topic": "Polynomien yhteen- ja vähennyslasku",
       "title": "Polynomien summa ja erotus",
-      "content": "KS aihe 12. Kahden tai useamman polynomin yhteen- ja vähennyslasku sekä sulkujen poistaminen etumerkkisääntöjä noudattaen.",
+      "content": "Kahden tai useamman polynomin yhteen- ja vähennyslasku sekä sulkujen poistaminen etumerkkisääntöjä noudattaen.",
       "summary": "Polynomien merkitseminen suluilla, yhteenlasku, vähennyslasku ja kaikkien sulkujen sisäisten etumerkkien vaihtaminen miinuksen edellä.",
       "theory": "<p><strong>Polynomien summa ja erotus:</strong></p>\n<ul class=\"theory-list\">\n  <li>Aseta polynomit sulkuihin yhteen- tai vähennyslaskua varten:\n    $$P(x) \\pm Q(x) = (3x^2 + 4x) \\pm (x^2 - 2x + 5)$$</li>\n  <li><strong>Summa:</strong> Sulkeet poistetaan suoraan merkkejä muuttamatta.</li>\n  <li><strong>Erotus:</strong> Miinus vaihtaa <em>kaikkien</em> jälkimmäisen polynomin termien etumerkit:\n    $$-(x^2 - 2x + 5) = -x^2 + 2x - 5$$</li>\n</ul>",
       "tasks": {
@@ -238,7 +238,7 @@
       "lesson": 13,
       "topic": "Polynomien kerto- ja jakolasku",
       "title": "Polynomien kerto- ja jakolasku",
-      "content": "KS aihe 13. Monomin kertominen ja jakaminen monomilla, monomin kertominen polynomilla sekä kahden polynomin kertolasku.",
+      "content": "Monomin kertominen ja jakaminen monomilla, monomin kertominen polynomilla sekä kahden polynomin kertolasku.",
       "summary": "Monomien tulo ja osamäärä, sulkujen avaaminen monomilla kertomalla sekä binomien kertolasku (kaikki kerrotaan kaikilla).",
       "theory": "<p><strong>Polynomien kerto- ja jakolasku:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Monomilla kertominen:</strong> Kerrotaan jokainen termi erikseen:\n    $$2x(3x^2 - 4x + 5) = 6x^3 - 8x^2 + 10x$$</li>\n  <li><strong>Kaikki kerrotaan kaikilla:</strong> $(a + b)(c + d) = ac + ad + bc + bd$.</li>\n  <li><strong>Monomilla jakaminen:</strong> Jokainen osoittajan termi jaetaan erikseen:\n    $$\\frac{6x^3 - 9x^2}{3x} = \\frac{6x^3}{3x} - \\frac{9x^2}{3x} = 2x^2 - 3x$$</li>\n</ul>",
       "tasks": {

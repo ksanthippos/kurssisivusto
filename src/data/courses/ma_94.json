@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Kertaus ja johdanto",
       "title": "Pythagoraasta yhdenmuotoisuuteen ja kulmiin",
-      "content": "KS aihe 1. Pythagoraan lauseen ja yhdenmuotoisuuden kertausta. Suorakulmaisen kolmion kateettien ja hypotenuusan suhteet.",
+      "content": "Pythagoraan lauseen ja yhdenmuotoisuuden kertausta. Suorakulmaisen kolmion kateettien ja hypotenuusan suhteet.",
       "summary": "Suorakulmaisen kolmion kateetit ja hypotenuusa, yhdenmuotoisuus sekä vastaisen ja viereisen kateetin käsitteet kulman näkökulmasta.",
       "theory": "<p><strong>Suorakulmaisen kolmion sivut ja kulmat:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Hypotenuusa ($c$):</strong> Pisin sivu, aina suoran kulman ($90^\\circ$) vastapäätä.</li>\n  <li><strong>Vastainen kateetti:</strong> Tarkasteltavaa terävää kulmaa $\\alpha$ <em>vastapäätä</em> oleva sivu.</li>\n  <li><strong>Viereinen kateetti:</strong> Tarkasteltavan terävän kulman $\\alpha$ <em>vieressä</em> oleva sivu (joka ei ole hypotenuusa).</li>\n  <li>Yhdenmuotoisissa suorakulmaisissa kolmioissa vastinsivujen suhteet ovat aina samat!</li>\n</ul>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Trigonometriset funktiot",
       "title": "Sini, kosini ja tangentti",
-      "content": "KS aihe 2. Sini (sin), kosini (cos) ja tangentti (tan) suorakulmaisessa kolmiossa: vastainen/viereinen kateetti ja hypotenuusa.",
+      "content": "Sini (sin), kosini (cos) ja tangentti (tan) suorakulmaisessa kolmiossa: vastainen/viereinen kateetti ja hypotenuusa.",
       "summary": "Trigonometristen funktioiden määritelmät suorakulmaisessa kolmiossa: sin = vastainen/hypotenuusa, cos = viereinen/hypotenuusa ja tan = vastainen/viereinen.",
       "theory": "<p><strong>Trigonometriset funktiot</strong> määritellään suorakulmaisen kolmion sivujen suhteina:</p>\n<ul class=\"theory-list\">\n  <li>$$\\sin \\alpha = \\frac{\\text{vastainen kateetti}}{\\text{hypotenuusa}}$$</li>\n  <li>$$\\cos \\alpha = \\frac{\\text{viereinen kateetti}}{\\text{hypotenuusa}}$$</li>\n  <li>$$\\tan \\alpha = \\frac{\\text{vastainen kateetti}}{\\text{viereinen kateetti}}$$</li>\n</ul>\n<p>Muistisääntö: Sini katsoo <em>vastapäätä</em>, kosini kulkee <em>viertä</em> ja tangentti jättää <em>hypotenuusan huomiotta</em>!</p>",
       "tasks": {
@@ -44,7 +44,7 @@
       "lesson": 3,
       "topic": "Laskimen käyttö",
       "title": "Trigonometria ja laskimen oikea käyttö",
-      "content": "KS aihe 3. Trigonometristen funktioiden arvojen laskeminen laskimella (DEG-asetus) ja kulman selvittäminen käänteistoiminnoilla (SHIFT/ALT: sin⁻¹, cos⁻¹, tan⁻¹).",
+      "content": "Trigonometristen funktioiden arvojen laskeminen laskimella (DEG-asetus) ja kulman selvittäminen käänteistoiminnoilla (SHIFT/ALT: sin⁻¹, cos⁻¹, tan⁻¹).",
       "summary": "Laskimen DEG/RAD-asetuksen tarkistus, suhteiden laskeminen suorilla funktioilla ja kulman selvittäminen käänteistoiminnoilla sin⁻¹, cos⁻¹, tan⁻¹.",
       "theory": "<p><strong>Laskimen käyttö trigonometriassa:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kulmayksikkö:</strong> Varmista aina, että laskimen näytössä lukee <strong>DEG</strong> (asteet), ei RAD eikä GRA!</li>\n  <li><strong>Kulman suhde:</strong> Näppäile esim. <code>sin 45</code> $\\implies 0{,}707$.</li>\n  <li><strong>Kulman ratkaisu suhteesta:</strong> Käytä käänteisfunktioita $\\sin^{-1}$, $\\cos^{-1}$, $\\tan^{-1}$ näppäimellä <code>SHIFT</code> / <code>2nd</code> (esim. $\\sin \\alpha = 0{,}707 \\implies \\alpha = \\sin^{-1}(0{,}707) \\approx 45^\\circ$).</li>\n</ul>",
       "tasks": {
@@ -63,7 +63,7 @@
       "lesson": 4,
       "topic": "Sivun pituuden ratkaiseminen",
       "title": "Sivun pituuden ratkaiseminen trigonometrialla",
-      "content": "KS aihe 4. Kateetin ja hypotenuusan ratkaiseminen trigonometrisen yhtälön avulla.",
+      "content": "Kateetin ja hypotenuusan ratkaiseminen trigonometrisen yhtälön avulla.",
       "summary": "Tuntemattoman sivun ratkaiseminen kulman ja yhden sivun avulla: muuttuja osoittajassa (kertolasku) ja muuttuja nimittäjässä (jako).",
       "theory": "<p><strong>Tuntemattoman sivun ratkaiseminen yhtälöllä:</strong></p>\n<ol class=\"theory-list\">\n  <li>Valitse oikea funktio sen mukaan, mitkä kaksi sivua ovat mukana (tunnettu ja tuntematon).</li>\n  <li>Muodosta yhtälö: esim. $\\sin 37^\\circ = \\frac{g}{5}$.</li>\n  <li>Poista jakaja kertomalla: $g = 5 \\cdot \\sin 37^\\circ \\approx 3{,}01$.</li>\n  <li>Jos tuntematon on nimittäjässä: $\\cos 37^\\circ = \\frac{4}{h} \\implies h = \\frac{4}{\\cos 37^\\circ} \\approx 5{,}01$.</li>\n</ol>",
       "tasks": {
@@ -82,7 +82,7 @@
       "lesson": 5,
       "topic": "Kulman ratkaiseminen",
       "title": "Terävän kulman ratkaiseminen käänteisfunktioilla",
-      "content": "KS aihe 5. Terävän kulman suuruuden ratkaiseminen kahden tunnetun sivun ja käänteisfunktioiden (arkussini, arkuskosini, arkustangentti) avulla.",
+      "content": "Terävän kulman suuruuden ratkaiseminen kahden tunnetun sivun ja käänteisfunktioiden (arkussini, arkuskosini, arkustangentti) avulla.",
       "summary": "Kulman suuruuden selvittäminen kahdesta tunnetusta sivusta, käänteisfunktiot arkussini, arkuskosini ja arkustangentti (sin⁻¹, cos⁻¹, tan⁻¹).",
       "theory": "<p><strong>Terävän kulman ratkaiseminen käänteisfunktiolla:</strong></p>\n<ol class=\"theory-list\">\n  <li>Laske kahden tunnetun sivun suhde suorakulmaisessa kolmiossa.</li>\n  <li>\"Vapauta\" kulma käyttämällä vastaavaa käänteisfunktiota:\n    $$\\sin \\beta = \\frac{3}{5} \\implies \\beta = \\sin^{-1}\\left(\\frac{3}{5}\\right) \\approx 36{,}9^\\circ$$\n  </li>\n  <li>Laskimessa käänteisfunktio saadaan näppäimellä <code>SHIFT</code> tai <code>2nd</code>.</li>\n</ol>",
       "tasks": {
@@ -101,7 +101,7 @@
       "lesson": 6,
       "topic": "Taitojen soveltamista",
       "title": "Trigonometrian ja geometrian yhdistäminen",
-      "content": "KS aihe 6. Pythagoraan lauseen ja trigonometrian soveltaminen, tasasivuiset ja tasakylkiset kolmiot.",
+      "content": "Pythagoraan lauseen ja trigonometrian soveltaminen, tasasivuiset ja tasakylkiset kolmiot.",
       "summary": "Kokonaisvaltainen päätöksentekomalli suorakulmaisen kolmion ratkaisemiseen, tasakylkisen kolmion puolittaminen ja monivaiheiset geometriset sovellukset.",
       "theory": "<p><strong>Trigonometrian sovellukset geometrisissa kuvioissa:</strong></p>\n<ul class=\"theory-list\">\n  <li>Tasakylkinen kolmio, suunnikas ja puolisuunnikas eivät ole suorakulmaisia.</li>\n  <li>Ne jaetaan <strong>suorakulmaisiksi apukolmioiksi</strong> piirtämällä korkeusjana $h$!</li>\n  <li>Tasakylkisessä kolmiossa korkeusjana puolittaa kannan ja huippukulman.</li>\n</ul>",
       "tasks": {

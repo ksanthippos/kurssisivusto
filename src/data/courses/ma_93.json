@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Koordinaatiston kertaus",
       "title": "Koordinaatiston perusteiden kertaus",
-      "content": "KS aihe 1. Koordinaatiston perusteiden ja pisteiden merkitsemisen kertausta (Avoin matematiikka 7. lk osio 2).",
+      "content": "Koordinaatiston perusteiden ja pisteiden merkitsemisen kertausta (Avoin matematiikka 7. lk osio 2).",
       "summary": "(x, y) -koordinaatisto, vaaka- ja pystyakselit, origo (0, 0), neljännekset I–IV ja pisteiden lukeminen ja merkitseminen.",
       "theory": "<p><strong>$(x, y)$-koordinaatisto</strong> muodostuu kahdesta toisiaan vastaan kohtisuorasta lukusuorasta:</p>\n<ul class=\"theory-list\">\n  <li><strong>$x$-akseli:</strong> Vaakasuora akseli (ensimmäinen koordinaatti). Positiivinen oikealle, negatiivinen vasemmalle.</li>\n  <li><strong>$y$-akseli:</strong> Pystysuora akseli (toinen koordinaatti). Positiivinen ylös, negatiivinen alas.</li>\n  <li><strong>Origo:</strong> Akselien leikkauspiste $(0, 0)$.</li>\n  <li>Pisteen merkitseminen: aina aakkosjärjestyksessä $(x, y)$.</li>\n</ul>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Funktion käsite",
       "title": "Funktion käsite, syöte ja tuloste",
-      "content": "KS aihe 2. Funktion käsite: kone, syöte ja tuloste, sääntö ja kuvaaja. Funktiomerkinnät f(x) ja funktion arvon laskeminen.",
+      "content": "Funktion käsite: kone, syöte ja tuloste, sääntö ja kuvaaja. Funktiomerkinnät f(x) ja funktion arvon laskeminen.",
       "summary": "Funktio koneena ja sääntönä, syöte x ja tuloste f(x), funktiomerkintä f(x) = lauseke sekä funktion arvon laskeminen.",
       "theory": "<p><strong>Funktio</strong> on matemaattinen sääntö, joka liittää jokaiseen syötteeseen $x$ täsmälleen yhden tulosteen $f(x)$:</p>\n<ul class=\"theory-list\">\n  <li><strong>Funktiomerkintä:</strong> $f(x)$ luetaan \"f arvolla x\". Se tarkoittaa funktion saamaa arvoa kohdassa $x$.</li>\n  <li><strong>Laskusääntö:</strong> Esim. $f(x) = 2x + 1$.</li>\n  <li><strong>Funktion arvo tietyssä kohdassa:</strong> Sijoitetaan luku $x$:n paikalle: esim. $f(3) = 2 \\cdot 3 + 1 = 7$.</li>\n</ul>",
       "tasks": {
@@ -48,7 +48,7 @@
       "lesson": 3,
       "topic": "Funktiot ja koordinaatisto",
       "title": "Funktion kuvaaja ja sopimus f(x) = y",
-      "content": "KS aihe 3. Funktion kuvaaja koordinaatistossa f(x) = y, kuvaajan pisteet ja arvojen tulkitseminen kuvaajalta sekä laskemalla.",
+      "content": "Funktion kuvaaja koordinaatistossa f(x) = y, kuvaajan pisteet ja arvojen tulkitseminen kuvaajalta sekä laskemalla.",
       "summary": "Sopimus f(x) = y koordinaatistossa, pisteet (x, y), funktion arvon ja muuttujan lukeminen kuvaajalta sekä funktioiden leikkauspisteet f(x) = g(x).",
       "theory": "<p>Kun funktion arvot piirretään koordinaatistoon, noudatetaan perussopimusta:</p>\n<p class=\"math-callout\">$$y = f(x)$$</p>\n<ul class=\"theory-list\">\n  <li>Vaaka-akselin koordinaatti $x$ edustaa funktion <strong>muuttujaa</strong> (syötettä).</li>\n  <li>Pystyakselin koordinaatti $y$ edustaa funktion <strong>arvoa</strong> $f(x)$ (tulostetta).</li>\n  <li>Jokainen kuvaajan piste on muotoa $(x, y) = (x, f(x))$.</li>\n</ul>",
       "tasks": {
@@ -67,7 +67,7 @@
       "lesson": 4,
       "topic": "Funktion kuvaajan piirtäminen",
       "title": "Lineaarisen funktion kuvaajan piirtäminen",
-      "content": "KS aihe 4. Lineaarinen funktio ja suoran piirtäminen arvomääritysten ja pisteiden (vähintään 3 pistettä) avulla.",
+      "content": "Lineaarinen funktio ja suoran piirtäminen arvomääritysten ja pisteiden (vähintään 3 pistettä) avulla.",
       "summary": "Lineaarinen funktio (1. asteen funktio), arvojen taulukointi, miksi tarvitaan vähintään 3 pistettä suoran tarkkaan piirtämiseen.",
       "theory": "<p><strong>Lineaarisen funktion</strong> yhtälö on 1. astetta ja sen kuvaaja on aina <strong>suora</strong>:</p>\n<ul class=\"theory-list\">\n  <li>Kuvaajan piirtäminen arvotaulukolla:\n    <ol>\n      <li>Valitse muuttujalle muutama helppo arvo (esim. $x = -1, 0, 1, 2$).</li>\n      <li>Laske kutakin $x$:ää vastaava $y$-koordinaatti yhtälöllä $y = f(x)$.</li>\n      <li>Merkitse pisteet $(x, y)$ koordinaatistoon ja yhdistä ne viivottimella suoraksi.</li>\n    </ol>\n  </li>\n</ul>",
       "tasks": {
@@ -86,7 +86,7 @@
       "lesson": 5,
       "topic": "Suoran yhtälö",
       "title": "Suoran yhtälö y = kx + b",
-      "content": "KS aihe 5. Suoran yhtälö y = kx + b. Kulmakerroin k (nouseva/laskeva) ja vakiotermi b (y-akselin leikkauspiste).",
+      "content": "Suoran yhtälö y = kx + b. Kulmakerroin k (nouseva/laskeva) ja vakiotermi b (y-akselin leikkauspiste).",
       "summary": "Suoran ratkaistu muoto y = kx + b, kulmakerroin k suunnan ja jyrkkyyden määrääjänä, vakiotermi b y-leikkauksena ja suorien yhdensuuntaisuus.",
       "theory": "<p>Jokaisen ei-pystysuoran suoran yhtälö voidaan kirjoittaa ratkaistussa muodossa:</p>\n<p class=\"math-callout\">$$y = kx + b$$</p>\n<ul class=\"theory-list\">\n  <li><strong>$k$ = kulmakerroin:</strong> Määrää suoran suunnan ja jyrkkyyden. ($k > 0$ nouseva, $k < 0$ laskeva, $k = 0$ vaakasuora).</li>\n  <li><strong>$b$ = vakiotermi:</strong> Suoran ja $y$-akselin leikkauspiste on aina $(0, b)$.</li>\n</ul>",
       "tasks": {
@@ -105,7 +105,7 @@
       "lesson": 6,
       "topic": "Suoran yhtälö kuvaajan avulla, osa 1",
       "title": "Kulmakertoimen ja vakiotermin määritys kuvaajalta",
-      "content": "KS aihe 6. Kulmakertoimen ja vakiotermin määrittäminen kuvaajalta suorakulmaisen kolmion avulla.",
+      "content": "Kulmakertoimen ja vakiotermin määrittäminen kuvaajalta suorakulmaisen kolmion avulla.",
       "summary": "Suoran yhtälön lukeminen suoraan piirretystä kuvaajasta suorakulmaisen kolmion menetelmällä (k = korkeus / kanta) ja vakiotermi b y-leikkauksesta.",
       "theory": "<p>Suoran yhtälön lukeminen suoraan kuvaajasta:</p>\n<ul class=\"theory-list\">\n  <li><strong>Vakiotermi $b$:</strong> Katsotaan kohta, jossa suora leikkaa $y$-akselin: piste $(0, b)$.</li>\n  <li><strong>Kulmakerroin $k$:</strong> Siirrytään suoran pisteestä <strong>1 askel oikealle</strong>; $k$ kertoo montako ruutua siirrytään pystysuunnassa (ylös $+$, alas $-$).</li>\n</ul>",
       "tasks": {
@@ -124,7 +124,7 @@
       "lesson": 7,
       "topic": "Suoran yhtälö kuvaajan avulla, osa 2: Erikoistapaukset",
       "title": "Vaakasuorat ja pystysuorat suorat",
-      "content": "KS aihe 6. Vaakasuorat (y = b) ja pystysuorat (x = a) suorat koordinaatistossa.",
+      "content": "Vaakasuorat (y = b) ja pystysuorat (x = a) suorat koordinaatistossa.",
       "summary": "Erikoissuorat koordinaatistossa: vaakasuorat suorat y = vakio ja pystysuorat suorat x = vakio, sekä pystysuoratestin merkitys.",
       "theory": "<p>Erikoissuorat koordinaatistossa:</p>\n<ul class=\"theory-list\">\n  <li><strong>Vaakasuora suora:</strong> $y = c$ (kulmakerroin $k = 0$, kulkee vaakasuoraan $x$-akselin suuntaisesti).</li>\n  <li><strong>Pystysuora suora:</strong> $x = c$ (ei ole funktio, kulmakerrointa ei ole määritelty).</li>\n  <li><strong>Murtolukukulmakerroin:</strong> Jos $k = \\frac{\\Delta y}{\\Delta x} = \\frac{2}{3}$, siirrytään 3 askelta oikealle ja 2 ylös.</li>\n</ul>",
       "tasks": {
@@ -143,7 +143,7 @@
       "lesson": 8,
       "topic": "Suoran yhtälö ilman kuvaajaa",
       "title": "Suoran yhtälön ratkaiseminen laskennallisesti",
-      "content": "KS aihe 7. Suoran yhtälön y = kx + b määrittäminen pisteen ja kulmakertoimen avulla laskennallisesti.",
+      "content": "Suoran yhtälön y = kx + b määrittäminen pisteen ja kulmakertoimen avulla laskennallisesti.",
       "summary": "Suoran yhtälön muodostaminen algebrallisesti tuntematta kuvaajaa: kulmakertoimen k tunnistaminen ja vakiotermin b ratkaiseminen pisteen koordinaattien sijoituksella.",
       "theory": "<p>Suoran yhtälön muodostaminen laskennallisesti kahdesta pisteestä $(x_1, y_1)$ ja $(x_2, y_2)$:</p>\n<ol class=\"theory-list\">\n  <li>Lasketaan kulmakerroin: $$k = \\frac{y_2 - y_1}{x_2 - x_1}$$</li>\n  <li>Sijoitetaan saatu $k$ ja toinen piste yhtälöön $y = kx + b$ ja ratkaistaan vakiotermi $b$.</li>\n  <li>Yhdensuuntaisilla suorilla on sama kulmakerroin: $k_1 = k_2$.</li>\n</ol>",
       "tasks": {
@@ -162,7 +162,7 @@
       "lesson": 9,
       "topic": "Toisen asteen käyrät, osa 1: Paraabeli",
       "title": "Toisen asteen käyrät ja perusparaabeli",
-      "content": "KS aihe 8. Epälineaariset funktiot, perusparaabeli f(x) = x², paraabelin huippu ja symmetria-akseli.",
+      "content": "Epälineaariset funktiot, perusparaabeli f(x) = x², paraabelin huippu ja symmetria-akseli.",
       "summary": "Toisen asteen epälineaarinen funktio, perusparaabeli f(x) = x², 7 pisteen taulukointi negatiivisilla luvuilla, symmetria-akseli ja huippu.",
       "theory": "<p><strong>Toisen asteen funktio:</strong> Muuttuja $x$ esiintyy toiseen potenssiin ($f(x) = x^2$):</p>\n<ul class=\"theory-list\">\n  <li>Kuvaaja on kaareva symmetrinen käyrä nimeltä <strong>paraabeli</strong>.</li>\n  <li>Perusparaabelin $y = x^2$ huippu on origossa $(0, 0)$ ja se aukeaa ylöspäin.</li>\n  <li>Symmetria-akseli on $y$-akseli ($x = 0$).</li>\n</ul>",
       "tasks": {
@@ -181,7 +181,7 @@
       "lesson": 10,
       "topic": "Toisen asteen käyrät, osa 2: Yleinen paraabeli",
       "title": "Yleinen paraabeli y = ax² + c",
-      "content": "KS aihe 8. Yleinen paraabeli y = ax² + c, aukeamissuunta ja kertoimen vaikutus jyrkkyyteen.",
+      "content": "Yleinen paraabeli y = ax² + c, aukeamissuunta ja kertoimen vaikutus jyrkkyyteen.",
       "summary": "Toisen asteen kertoimen a vaikutus (aukeamissuunta ylös/alas ja jyrkkyys) sekä vakiotermin c vaikutus paraabelin huipun pystysijaintiin.",
       "theory": "<p>Yleisen toisen asteen paraabelin yhtälö: $$y = ax^2 + bx + c$$</p>\n<ul class=\"theory-list\">\n  <li><strong>$a$:</strong> Määrää aukeamissuunnan ja jyrkkyyden ($a > 0$ aukeaa ylös, $a < 0$ aukeaa alas).</li>\n  <li><strong>$b$:</strong> Siirtää paraabelin huippua ja symmetria-akselia sivusuunnassa.</li>\n  <li><strong>$c$:</strong> Vakiotermi määrää aina $y$-akselin leikkauspisteen $(0, c)$ (ja huipun, jos $b = 0$).</li>\n</ul>",
       "tasks": {
@@ -200,7 +200,7 @@
       "lesson": 11,
       "topic": "Funktion nollakohdat",
       "title": "Funktion nollakohdat ja merkkikaavio",
-      "content": "KS aihe 9. Funktion kuvaajan ja x-akselin leikkauspisteet eli nollakohdat f(x) = 0 sekä funktion positiivisuus ja negatiivisuus.",
+      "content": "Funktion kuvaajan ja x-akselin leikkauspisteet eli nollakohdat f(x) = 0 sekä funktion positiivisuus ja negatiivisuus.",
       "summary": "Nollakohdan määritelmä f(x) = 0 (x-akselin leikkauspiste), funktion positiivisuus f(x) > 0 ja negatiivisuus f(x) < 0 sekä kaksoisepäyhtälöt.",
       "theory": "<p><strong>Funktion nollakohta</strong> on se muuttujan $x$ arvo, jolla funktion arvo on nolla:</p>\n<p class=\"math-callout\">$$f(x) = 0$$</p>\n<ul class=\"theory-list\">\n  <li>Kuvaajassa nollakohta on $x$-akselin leikkauspiste.</li>\n  <li>Nollakohta jakaa funktion arvoalueen <strong>positiiviseen</strong> ($f(x) > 0$) ja <strong>negatiiviseen</strong> ($f(x) < 0$) osaan.</li>\n</ul>",
       "tasks": {
@@ -219,7 +219,7 @@
       "lesson": 12,
       "topic": "Funktion suurin ja pienin arvo",
       "title": "Funktion suurin ja pienin arvo suljetulla välillä",
-      "content": "KS aihe 10. Suljettu väli, funktion suurin ja pienin arvo annetulla välillä sekä lokaalit ääriarvot.",
+      "content": "Suljettu väli, funktion suurin ja pienin arvo annetulla välillä sekä lokaalit ääriarvot.",
       "summary": "Suljettu väli a ≤ x ≤ b, funktion arvojen käyttäytyminen välillä, huipun ääriarvo vs. välin päätepisteiden arvot.",
       "theory": "<p>Funktion ääriarvot tietyllä <strong>suljetulla välillä $[a, b]$</strong> ($a \\le x \\le b$):</p>\n<ul class=\"theory-list\">\n  <li><strong>Suurin arvo:</strong> Korkein funktion saama $y$-arvo tällä välillä.</li>\n  <li><strong>Pienin arvo:</strong> Matalin funktion saama $y$-arvo tällä välillä.</li>\n  <li>Ääriarvo löytyy joko käyrän huipusta tai tarkasteluvälin päätepisteestä.</li>\n</ul>",
       "tasks": {

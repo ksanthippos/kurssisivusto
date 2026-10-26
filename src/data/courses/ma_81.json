@@ -4,7 +4,7 @@
   "lessons": [
     {
       "lesson": 1,
-      "topic": "Aihe 1 / kirjan kpl 1. Yhtälöiden kertaus, osa 1",
+      "topic": "Yhtälöiden kertaus, osa 1",
       "title": "Yhtälön perusidea ja ratkaiseminen kokeilemalla",
       "content": "Kerrataan yhtälön käsite kurssilta MA_73. Yhtälön vaakamalli, vasen ja oikea puoli sekä ratkaisun päättelemineen ja etsiminen kokeilemalla.",
       "summary": "Yhtälö kahden lausekkeen yhtäsuuruutena, tasapainovaakamalli, vasen puoli (vp) ja oikea puoli (op), ratkaisun tutkiminen sijoittamalla sekä ratkaisun päättelemineen ja arvaaminen.",
@@ -25,7 +25,7 @@
     },
     {
       "lesson": 2,
-      "topic": "Aihe 1 / kirjan kpl 1. Yhtälöiden kertaus, osa 2",
+      "topic": "Yhtälöiden kertaus, osa 2",
       "title": "Yhtälön ratkaiseminen vastaluku- ja siirtämistekniikoilla",
       "content": "Kerrataan yhtälöiden ratkaiseminen vastaluvun lisäämisellä ja termien siirtämistekniikalla. Yhteen- ja vähennyslaskuyhtälöt sekä negatiiviset luvut.",
       "summary": "Vastaluvun lisääminen yhtälön molemmille puolille, termin siirto yhtäsuuruusmerkin toiselle puolelle ('etumerkki vaihtuu vastakkaiseksi') sekä yhteen- ja vähennyslaskuyhtälöt.",
@@ -42,7 +42,7 @@
     },
     {
       "lesson": 3,
-      "topic": "Aihe 2 / kirjan kpl 2. Yhtälöiden kertaus, osa 3",
+      "topic": "Yhtälöiden kertaus, osa 3",
       "title": "Yhtälön ratkaiseminen jako- ja kertolaskulla sekä monivaiheiset yhtälöt",
       "content": "Yhtälön jakaminen muuttujan kertoimella, kertominen jakajalla, kaksivaiheiset yhtälöt, muuttuja molemmilla puolilla sekä sulkujen avaaminen.",
       "summary": "Yhtälön jakaminen puolittain kertoimella, kaksivaiheiset yhtälöt (siirto ensin, jako lopuksi), muuttuja molemmilla puolilla ja sulkeiden poistaminen kertoimella kertomalla.",
@@ -61,7 +61,7 @@
     },
     {
       "lesson": 4,
-      "topic": "Aihe 3 / kirjan kpl 3. Nimittäjien poistaminen, osa 1",
+      "topic": "Nimittäjien poistaminen, osa 1",
       "title": "Nimittäjien poistaminen murtolukuyhtälöistä",
       "content": "Nimittäjien poistamisen perusperiaatteet.",
       "summary": "Murtolukukertoimet yhtälössä, yhtälön kertominen nimittäjällä puolittain ja kokonaislukukertoimiin siirtyminen.",
@@ -80,7 +80,7 @@
     },
     {
       "lesson": 5,
-      "topic": "Aihe 3 / kirjan kpl 3. Nimittäjien poistaminen, osa 2",
+      "topic": "Nimittäjien poistaminen, osa 2",
       "title": "Useamman nimittäjän poistaminen ja yhteinen nimittäjä",
       "content": "Nimittäjien poistamisen jatko ja monimutkaisempien esimerkkien ratkaiseminen.",
       "summary": "Pienimmän yhteisen jaettavan (pyj) löytäminen nimittäjille ja kaikkien nimittäjien kumoaminen yhdellä kertolaskulla.",
@@ -98,7 +98,7 @@
     },
     {
       "lesson": 6,
-      "topic": "Aihe 4 / kirjan kpl 6. Toisen asteen yhtälöt, osa 1",
+      "topic": "Toisen asteen yhtälöt, osa 1",
       "title": "Vaillinainen toisen asteen yhtälö ja neliöjuuri",
       "content": "Toisen asteen yhtälöiden ratkaisemisen perusperiaatteet. Neliöjuuren kertaus, plus-miinus-merkintä.",
       "summary": "Vaillinainen toisen asteen yhtälö muotoa x² = a, neliöjuuren ottaminen puolittain, plus-miinus-ratkaisut (±) ja geometrinen neliö.",
@@ -117,7 +117,7 @@
     },
     {
       "lesson": 7,
-      "topic": "Aihe 4 / kirjan kpl 6. Toisen asteen yhtälöt, osa 2",
+      "topic": "Toisen asteen yhtälöt, osa 2",
       "title": "Toisen asteen yhtälön ratkaisujen lukumäärä ja ratkeamattomat yhtälöt",
       "content": "Toisen asteen yhtälöiden haasteet, kuten pidemmät yhtälöt ja ratkaisemattomat yhtälöt.",
       "summary": "Ratkaisujen lukumäärä yhtälölle x² = a (kaksi, yksi tai ei yhtään reaaliratkaisua) ja pidempien toisen asteen yhtälöiden ratkaiseminen.",
@@ -140,7 +140,7 @@
     },
     {
       "lesson": 8,
-      "topic": "Aihe 5 / kirjan kpl 5. Identtiset yhtälöt",
+      "topic": "Identtiset yhtälöt",
       "title": "Identtisesti tosi ja epätosi yhtälö",
       "content": "Identtisten yhtälöiden tunnistaminen ja ratkaiseminen. Identtisesti tosi ja epätosi yhtälö.",
       "summary": "Erikoistapaukset yhtälönratkaisussa: identtisesti tosi yhtälö (0 = 0, kaikki luvut käyvät) ja epätosi yhtälö (0 = a, ei ratkaisua).",
@@ -159,7 +159,7 @@
     },
     {
       "lesson": 9,
-      "topic": "Aihe 6 / kirjan kpl 10. Ongelmanratkaisu yhtälöillä, osa 1",
+      "topic": "Ongelmanratkaisu yhtälöillä, osa 1",
       "title": "Sanallisten tehtävien ratkaisu yhtälöillä",
       "content": "Sanallisten tehtävien ratkaisua yhtälöillä, perustapauksia.",
       "summary": "Sanallisen ongelman kääntäminen matematiikan kielelle: tuntemattoman valinta x:ksi, yhtälön muodostaminen, ratkaisu ja vastauksen järkevyyden tarkistus.",
@@ -178,7 +178,7 @@
     },
     {
       "lesson": 10,
-      "topic": "Aihe 7 / kirjan kpl 10. Ongelmanratkaisu yhtälöillä, osa 2",
+      "topic": "Ongelmanratkaisu yhtälöillä, osa 2",
       "title": "Geometriset ja taloudelliset yhtälösovellukset",
       "content": "Sanallisten tehtävien ratkaisua yhtälöillä, haastavampia tapauksia.",
       "summary": "Piiriin, pinta-alaan, ikäongelmiin ja lippuhintoihin liittyvien monivaiheisten yhtälöiden ratkaiseminen.",
@@ -197,7 +197,7 @@
     },
     {
       "lesson": 11,
-      "topic": "Aihe 8 / kirjan kpl 12. Suhde ja verranto, osa 1",
+      "topic": "Suhde ja verranto, osa 1",
       "title": "Suhteen käsite ja jakaminen suhteessa",
       "content": "Suhteen käsitteen ymmärtäminen ja sen soveltaminen erilaisissa tehtävissä.",
       "summary": "Suureiden suhde a : b jakolaskuna ja murtolukuna, suhteen supistaminen perusmuotoon ja kokonaisuuden jakaminen annetussa suhteessa.",
@@ -216,7 +216,7 @@
     },
     {
       "lesson": 12,
-      "topic": "Aihe 8 / kirjan kpl 13. Suhde ja verranto, osa 2",
+      "topic": "Suhde ja verranto, osa 2",
       "title": "Verranto ja ristiinkertolasku",
       "content": "Verrannon käsite, yhtälön ratkaiseminen ristiinkertolaskulla.",
       "summary": "Verranto kahden suhteen yhtäsuuruutena a/b = c/d, ristiinkertominen a·d = b·c ja tuntemattoman ratkaiseminen.",
@@ -239,7 +239,7 @@
     },
     {
       "lesson": 13,
-      "topic": "Aihe 9 / kirjan kpl 14. Suoraan ja kääntäen verrannollisuus",
+      "topic": "Suoraan ja kääntäen verrannollisuus",
       "title": "Suoraan ja kääntäen verrannollisuus",
       "content": "Suoraan ja kääntäen verrannollisuuden käsitteet sekä taulukkona että kuvaajana, verrantoyhtälön hyödyntäminen ongelmanratkaisussa.",
       "summary": "Suoraan verrannollisuus y = kx (origon kautta kulkeva suora, suhde vakio) vs. kääntäen verrannollisuus y = k/x (hyperbeli, tulo vakio).",
@@ -262,7 +262,7 @@
     },
     {
       "lesson": 14,
-      "topic": "Aihe 10 / kirjan kpl 11. Epäyhtälöt",
+      "topic": "Epäyhtälöt",
       "title": "Epäyhtälön ratkaiseminen ja merkin kääntösääntö",
       "content": "Epäyhtälön käsite, esittäminen lukusuoralla ja huomiot ratkaisutekniikassa (suunnan kääntö).",
       "summary": "Epäyhtälömerkit (<, >, <=, >=), ratkaisujoukko lukusuoralla ja kriittinen sääntö: epäyhtälömerkin suunta kääntyy aina jaettaessa tai kerrottaessa negatiivisella luvulla.",

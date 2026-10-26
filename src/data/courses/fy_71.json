@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Johdatus fysiikan maailmaan",
       "title": "Mitä fysiikka tutkii? Suureet ja mittaaminen",
-      "content": "KS aihe 0 / kirjan kpl 0. Mitä fysiikka tutkii, miksi sitä opiskellaan ja millaista on fysiikan kieli.",
+      "content": "Mitä fysiikka tutkii, miksi sitä opiskellaan ja millaista on fysiikan kieli.",
       "summary": "Fysiikan tutkimusalueet luonnontieteenä, mittaukset, suureet ja yksiköt, SI-järjestelmän perussuureet sekä tieteellinen tutkimusmenetelmä.",
       "theory": "<p><strong>Mitä fysiikka tutkii? Suureet ja mittaaminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Fysiikka tutkii elotonta luontoa, ainetta, energiaa ja perusvuorovaikutuksia havaintojen ja mittausten avulla.</li>\n  <li><strong>Suure:</strong> Mitattava ominaisuus (esim. pituus $s$, massa $m$, aika $t$).</li>\n  <li><strong>Mittaustulos:</strong> Koostuu aina <em>lukuarvosta ja yksiköstä</em>:\n    $$\\text{suure} = \\text{lukuarvo} \\cdot \\text{yksikkö} \\qquad (\\text{esim. } m = 5{,}2\\text{ kg})$$</li>\n  <li>SI-järjestelmän perusyksiköt: metri ($\\text{m}$), kilogramma ($\\text{kg}$), sekunti ($\\text{s}$).</li>\n</ul>",
       "tasks": {
@@ -35,7 +35,7 @@
       "lesson": 2,
       "topic": "Lämpötila ja lämpölaajeneminen, osa 1",
       "title": "Lämpötila ja kiinteiden aineiden lämpölaajeneminen",
-      "content": "KS aihe 1 / kirjan kpl 1. Tutustutaan lämpölaajenemisen käsitteeseen ja käytännön sovelluksiin.",
+      "content": "Tutustutaan lämpölaajenemisen käsitteeseen ja käytännön sovelluksiin.",
       "summary": "Lämpötila fysikaalisena suureena, Celsius- ja Kelvin-asteikot, lämpölaajenemisen ilmiö kiinteissä aineissa ja bimetalliliuskan toiminta.",
       "theory": "<p><strong>Lämpötila ja kiinteiden lämpölaajeneminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Lämpötila kuvaa aineen rakenneosasten (atomien ja molekyylien) <strong>lämpöliikkeen voimakkuutta</strong>.</li>\n  <li>Lämmetessään aineen rakenneosaset värähtelevät voimakkaammin ja vievät enemmän tilaa $\\implies$ <strong>aine laajenee</strong>.</li>\n  <li>Jäähtyessään aine kutistuu.</li>\n  <li><strong>Sovelluksia ja haittoja:</strong> Sillanrakennuksen liikuntasaumat, rautatiekiskojen raot, kaksoismetallit (bimetalli) termostaateissa.</li>\n</ul>",
       "tasks": {
@@ -64,7 +64,7 @@
       "lesson": 3,
       "topic": "Lämpötila ja lämpölaajeneminen, osa 2",
       "title": "Nesteiden ja kaasujen lämpölaajeneminen ja veden anomalia",
-      "content": "KS aihe 1 / kirjan kpl 1. Jatketaan aiheen käsittely, harjoitustehtävien lisäksi myös eri aineiden lämpölaajenemisen tutkiminen.",
+      "content": "Jatketaan aiheen käsittelyä, harjoitustehtävien lisäksi myös eri aineiden lämpölaajenemisen tutkiminen.",
       "summary": "Nesteiden ja kaasujen tilavuuden lämpölaajeneminen, kaasujen yleinen tilanyhtälö sekä veden poikkeuksellinen tiheysmaksimi +4 °C lämpötilassa.",
       "theory": "<p><strong>Nesteiden ja kaasujen laajeneminen sekä veden anomalia:</strong></p>\n<ul class=\"theory-list\">\n  <li>Nesteet laajenevat lämmetessään enemmän kuin kiinteät aineet, ja kaasut laajenevat kaikista eniten.</li>\n  <li><strong>VEDEN ANOMALIA (poikkeuskäyttäytyminen):</strong>\n    <ul>\n      <li>Vesi on <strong>tiheimmillään $+4^\\circ\\text{C}$ lämpötilassa</strong> ($\\rho \\approx 1{,}00\\text{ kg/dm}^3$).</li>\n      <li>Jäähtyessään $+4^\\circ\\text{C} \\to 0^\\circ\\text{C}$ vesi alkaakin yllättäen <em>laajentua</em> ja sen tiheys pienenee!</li>\n      <li>Jää on vettä harvempaa ja kelluu. Järvet jäätyvät pinnalta, ja pohjalla vesi säilyy $+4^\\circ\\text{C}$:ssa mahdollistaen vesieliöiden talvehtimisen.</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -89,7 +89,7 @@
       "lesson": 4,
       "topic": "Lämpöenergia, osa 1",
       "title": "Lämpötila vastaan lämpöenergia ja absoluuttinen nollapiste",
-      "content": "KS aihe 2 / kirjan kpl 2. Lämpötilan ja lämpöenergian ero. Rakenneosasten liike lämpötilan kuvaajana.",
+      "content": "Lämpötilan ja lämpöenergian ero. Rakenneosasten liike lämpötilan kuvaajana.",
       "summary": "Lämpötilan ja lämpöenergian käsitteellinen ero, sisäenergia, rakenneosasten mikroskooppinen lämpöliike ja absoluuttinen nollapiste (0 K = -273,15 °C).",
       "theory": "<p><strong>Lämpötila vs. lämpöenergia ja absoluuttinen nolla:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Lämpötila ($T$):</strong> Kuvaa keskimääräistä liike-energiaa rakenneosaa kohti (asteina $^\\circ\\text{C}$ tai Kelvineinä $\\text{K}$).</li>\n  <li><strong>Lämpöenergia ($E$):</strong> Koko kappaleen rakenneosien yhteenlaskettu lämpöliikkeen energia (esim. iso järvi $+10^\\circ\\text{C}$:ssa sisältää valtavasti enemmän lämpöenergiaa kuin kiehuva vesikupillinen $+100^\\circ\\text{C}$:ssa).</li>\n  <li><strong>Absoluuttinen nollapiste ($0\\text{ K} = -273{,}15^\\circ\\text{C}$):</strong> Alin mahdollinen lämpötila, jossa kaikki lämpöliike lakkaa.</li>\n</ul>",
       "tasks": {
@@ -118,7 +118,7 @@
       "lesson": 5,
       "topic": "Lämpöenergia, osa 2",
       "title": "Ominaislämpökapasiteetti ja lämpöenergian laskeminen",
-      "content": "KS aihe 2 / kirjan kpl 2. Jatketaan lämpöenergian käsittelyä, harjoitustehtävien lisäksi myös käytännön sovelluksia.",
+      "content": "Jatketaan lämpöenergian käsittelyä, harjoitustehtävien lisäksi myös käytännön sovelluksia.",
       "summary": "Ominaislämpökapasiteetti c, kaava Q = c·m·Δt lämmön sitoutumiselle/vapautumiselle ja veden korkean lämpökapasiteetin ilmastovaikutukset.",
       "theory": "<p><strong>Ominaislämpökapasiteetti ja lämpöenergia:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Ominaislämpökapasiteetti ($c$):</strong> Kertoo, kuinka paljon energiaa tarvitaan yhden kilogramman lämmittämiseen yhdellä asteella.</li>\n  <li><strong>Lämpöenergian laskukaava:</strong>\n    $$Q = c \\cdot m \\cdot \\Delta t$$</li>\n  <li>Vedellä on poikkeuksellisen suuri ominaislämpökapasiteetti ($c_{\\text{vesi}} \\approx 4{,}19\\text{ kJ/(kg}\\cdot^\\circ\\text{C)}$). Vesi sitoo ja luovuttaa valtavasti lämpöä (lauhkea meri-ilmasto, keskuslämmitys).</li>\n</ul>",
       "tasks": {
@@ -147,7 +147,7 @@
       "lesson": 6,
       "topic": "Olomuodon muutokset",
       "title": "Aineen kolme olomuotoa ja faasimuutokset",
-      "content": "KS aihe 3 / kirjan kpl 3. Tutustutaan olomuodon muutoksiin, sulamis- ja höyrystymislämpötiloihin ja energiaan olomuodon muutoksissa.",
+      "content": "Tutustutaan olomuodon muutoksiin, sulamis- ja höyrystymislämpötiloihin ja energiaan olomuodon muutoksissa.",
       "summary": "Kiinteä, neste, kaasu, sulaminen ja jähmettyminen, höyrystyminen ja tiivistyminen, sublimoituminen ja härmistyminen sekä ominaissulamis- ja höyrystymislämpö.",
       "theory": "<p><strong>Aineen kolme olomuotoa ja faasimuutokset:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kolme olomuotoa:</strong> Kiinteä, neste ja kaasu.</li>\n  <li><strong>Faasimuutokset:</strong>\n    <ul>\n      <li>Kiinteä $\\leftrightarrow$ Neste: Sulaminen ja jähmettyminen (sulamispisteessä).</li>\n      <li>Neste $\\leftrightarrow$ Kaasu: Höyrystyminen ja tiivistyminen (kiehumispisteessä).</li>\n      <li>Kiinteä $\\leftrightarrow$ Kaasu: Sublimoituminen ja härmistyminen.</li>\n    </ul>\n  </li>\n  <li>Olomuodon muutoksen aikana <strong>lämpötila pysyy vakiona</strong>, koska kaikki lisätty lämpö kuluu rakenneosien sidosten katkomiseen (sulamis- tai höyrystymislämpö).</li>\n</ul>",
       "tasks": {
@@ -177,7 +177,7 @@
       "lesson": 7,
       "topic": "Lämmön siirtyminen",
       "title": "Lämmön siirtymistavat: Johtuminen, kulkeutuminen ja säteily",
-      "content": "KS aihe 4 / kirjan kpl 4. Tutustutaan lämmön siirtymisen mekanismeihin: johtuminen, konvektio ja säteily.",
+      "content": "Tutustutaan lämmön siirtymisen mekanismeihin: johtuminen, konvektio ja säteily.",
       "summary": "Lämpöopin nollas pääsääntö, johtuminen kiinteissä aineissa (johteet vs. eristeet), konvektio nesteissä ja kaasuissa sekä lämpösäteily tyhjiössä (termospullo).",
       "theory": "<p><strong>Lämmön siirtymistavat:</strong></p>\n<ul class=\"theory-list\">\n  <li>Lämpö siirtyy itsestään aina <strong>korkeammasta lämpötilasta matalampaan</strong>.</li>\n  <li><strong>1. Johtuminen:</strong> Siirtyy aineen sisällä osaselta toiselle ilman aineen siirtymistä (metallit johtavat hyvin, puu ja ilma ovat eristeitä).</li>\n  <li><strong>2. Kulkeutuminen (konvektio):</strong> Lämpö liikkuu virtaavan nesteen tai kaasun mukana (lämmin ilma nousee ylös, Golf-virta).</li>\n  <li><strong>3. Säteily:</strong> Siirtyy sähkömagneettisina aaltoina (lämpösäteily) <em>ilman väliainetta tyhjiössäkin</em> (Auringon lämpö Maahan).</li>\n</ul>",
       "tasks": {
@@ -206,7 +206,7 @@
       "lesson": 8,
       "topic": "Värähdysliike",
       "title": "Värähdysliike, jaksonaika ja heiluri",
-      "content": "KS aihe 5 / kirjan kpl 6. Tutustutaan värähdysliikkeen peruskäsitteisiin ja esimerkkeihin. Värähdysaika ja sen mittaaminen.",
+      "content": "Tutustutaan värähdysliikkeen peruskäsitteisiin ja esimerkkeihin. Värähdysaika ja sen mittaaminen.",
       "summary": "Jaksollinen liike, tasapainoasema, poikkeama, amplitudi A, värähdysaika T, taajuus f = 1/T (Hertsi Hz) ja lankaheilurin heilahdusaika.",
       "theory": "<p><strong>Värähdysliike ja heiluri:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Värähdysliike:</strong> Jaksollisesti tasapainoaseman ympärillä toistuva liike.</li>\n  <li><strong>Käsitteet:</strong>\n    <ul>\n      <li><strong>Jaksonaika ($T$):</strong> Yhteen täyteen edestakaiseen heilahdukseen kuluva aika sekunteina ($\\text{s}$).</li>\n      <li><strong>Taajuus ($f$):</strong> Värähdysten määrä sekunnissa: $f = \\frac{1}{T}$, yksikkö Hertsi ($\\text{Hz} = 1/\\text{s}$).</li>\n      <li><strong>Amplitudi ($A$):</strong> Suurin poikkeama tasapainoasemasta.</li>\n    </ul>\n  </li>\n  <li>Lankaheilurin jaksonaika riippuu vain langan pituudesta ja painovoimasta, ei punuksen massasta!</li>\n</ul>",
       "tasks": {
@@ -235,7 +235,7 @@
       "lesson": 9,
       "topic": "Aaltoliike",
       "title": "Mekaaninen aaltoliike ja aallon perusyhtälö",
-      "content": "KS aihe 6 / kirjan kpl 6. Tutustutaan aaltoliikkeen peruskäsitteisiin, pitkittäinen ja poikittainen aaltoliike. Amplitudi, aallonpituus ja taajuus.",
+      "content": "Tutustutaan aaltoliikkeen peruskäsitteisiin, pitkittäinen ja poikittainen aaltoliike. Amplitudi, aallonpituus ja taajuus.",
       "summary": "Poikittainen aaltoliike vs. pitkittäinen aaltoliike, aallonpituus lambda, aallonnopeus v ja aallon perusyhtälö v = f · lambda.",
       "theory": "<p><strong>Mekaaninen aaltoliike ja perusyhtälö:</strong></p>\n<ul class=\"theory-list\">\n  <li>Aaltoliike kuljettaa <strong>energiaa, mutta ei ainetta</strong>.</li>\n  <li><strong>Aaltotyypit:</strong>\n    <ul>\n      <li><strong>Poikittainen aalto:</strong> Värähtely on kohtisuorassa etenemissuuntaa vastaan (valoaallot, aallot narussa).</li>\n      <li><strong>Pitkittäinen aalto:</strong> Värähtely tapahtuu etenemissuunnassa (ääni ilmassa, tihentymät ja harventumat).</li>\n    </ul>\n  </li>\n  <li><strong>Aallon perusyhtälö:</strong>\n    $$v = f \\cdot \\lambda$$</li>\n  <li>missä $v$ = aallon etenemisnopeus ($\\text{m/s}$), $f$ = taajuus ($\\text{Hz}$) ja $\\lambda$ = aallonpituus ($\\text{m}$).</li>\n</ul>",
       "tasks": {
@@ -265,7 +265,7 @@
       "lesson": 10,
       "topic": "Ääni",
       "title": "Äänen fysiikka, kuuloalue ja äänenvoimakkuus",
-      "content": "KS aihe 7 / kirjan kpl 7. Äänen eteneminen, nopeus ja aaltoliiketyyppi. Äänen taajuus ja korkeus sekä voimakkuus desibeliasteikolla.",
+      "content": "Äänen eteneminen, nopeus ja aaltoliiketyyppi. Äänen taajuus ja korkeus sekä voimakkuus desibeliasteikolla.",
       "summary": "Ääni pitkittäisenä paineaaltona, äänennopeus ilmassa 340 m/s ja eri väliaineissa, taajuus ja äänenkorkeus, ihmisen kuuloalue (20 Hz - 20 kHz), ultraääni ja desibeliasteikko dB.",
       "theory": "<p><strong>Äänen fysiikka ja kuulo:</strong></p>\n<ul class=\"theory-list\">\n  <li>Ääni on mekaanista pitkittäistä aaltoliikettä, joka <strong>tarvitsee aina väliaineen</strong> (tyhjiössä ääni ei kuulu!).</li>\n  <li><strong>Äänennopeus:</strong> Ilmassa noin $340\\text{ m/s}$, vedessä noin $1500\\text{ m/s}$ ja teräksessä noin $5000\\text{ m/s}$.</li>\n  <li><strong>Kuuloalue:</strong> Ihmiskorva kuulee taajuudet $20\\text{ Hz} - 20\\,000\\text{ Hz}$.\n    <ul>\n      <li>Infraääni: $< 20\\text{ Hz}$ (valaat, maanjäristykset)</li>\n      <li>Ultraääni: $> 20\\,000\\text{ Hz}$ (lepakot, kaikututkain, lääketiede)</li>\n    </ul>\n  </li>\n  <li>Äänenvoimakkuus mitataan <strong>desibeleinä</strong> ($\\text{dB}$, kuulokynnys $0\\text{ dB}$, kipukynnys $120-130\\text{ dB}$).</li>\n</ul>",
       "tasks": {
@@ -295,7 +295,7 @@
       "lesson": 11,
       "topic": "Valon heijastuminen ja peilit",
       "title": "Valon suoraviivainen kulku, heijastuslaki ja peilit",
-      "content": "KS aihe 9 / kirjan kpl 8. Tutustutaan valon heijastumiseen ja erilaisten peilien toimintaan.",
+      "content": "Tutustutaan valon heijastumiseen ja erilaisten peilien toimintaan.",
       "summary": "Valon suoraviivainen eteneminen ja varjojen muodostuminen, heijastuslaki i = r, tasopeili ja valekuvan muodostuminen sekä koverat ja kuperat peilit (polttopiste F ja polttoväli f).",
       "theory": "<p><strong>Valon suoraviivainen kulku ja heijastus:</strong></p>\n<ul class=\"theory-list\">\n  <li>Valo etenee tasakoosteisessa aineessa suoraviivaisesti valonsäteinä. Valonnopeus tyhjiössä on $c \\approx 300\\,000\\text{ km/s}$.</li>\n  <li><strong>Heijastuslaki:</strong> Valon tulokulma pinnan normaaliin nähden on aina yhtä suuri kuin heijastuskulma:\n    $$\\alpha = \\beta$$</li>\n  <li><strong>Peilit:</strong>\n    <ul>\n      <li>Tasopeili: muodostaa samankokoisen valekuvan saman etäisyyden päähän peilin taakse.</li>\n      <li>Kovera peili: kokoaa valonsäteet polttopisteeseen ($F$).</li>\n      <li>Kupera peili: hajottaa säteet, laaja näkökenttä (valvontapeilit, auton sivupeilit).</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -321,7 +321,7 @@
       "lesson": 12,
       "topic": "Valon taittuminen",
       "title": "Valon taittuminen rajapinnassa ja kokonaisheijastus",
-      "content": "KS aihe 10 / kirjan kpl 9. Valon taittuminen eri aineiden rajapinnassa.",
+      "content": "Valon taittuminen eri aineiden rajapinnassa.",
       "summary": "Valon nopeuden muuttuminen optisessa tiheydessä, taittumislaki kohti normaalia ja poispäin normaalista, taitekerroin n, kokonaisheijastuksen rajakulma ja valokuituteknologia.",
       "theory": "<p><strong>Valon taittuminen ja kokonaisheijastus:</strong></p>\n<ul class=\"theory-list\">\n  <li>Valo taittuu kahden aineen rajapinnassa, koska valonnopeus muuttuu eri aineissa:\n    <ul>\n      <li>Harvemmasta tiheämpään (ilma $\\to$ vesi): <strong>taittuu normaaliin päin</strong> ($\\alpha > \\beta$).</li>\n      <li>Tiheämmästä harvempaan (vesi $\\to$ ilma): <strong>taittuu normaalista poispäin</strong> ($\\alpha < \\beta$).</li>\n    </ul>\n  </li>\n  <li><strong>Kokonaisheijastus:</strong> Kun valo tulee tiheämmästä aineesta riittävän suuressa tulokulmassa ($\\alpha > \\text{rajakulma}$), valo ei pääse lainkaan toiseen aineeseen vaan heijastuu kokonaan takaisin! Sovellus: <strong>valokuitukaapelit</strong>.</li>\n</ul>",
       "tasks": {
@@ -351,7 +351,7 @@
       "lesson": 13,
       "topic": "Linssit",
       "title": "Kokoavat ja hajottavat linssit ja ihmissilmä",
-      "content": "KS aihe 11 / kirjan kpl 10. Tutustutaan erilaisten linssien toimintaan ja valon taittumiseen linssien läpi.",
+      "content": "Tutustutaan erilaisten linssien toimintaan ja valon taittumiseen linssien läpi.",
       "summary": "Kokoava linssi (kupera, pluslinssi), hajottava linssi (kovera, miinuslinssi), polttoväli f ja taittovoimakkuus D dioptrioina, todellinen kuva vs. valekuva, silmän toiminta ja liki- vs. kaukotaittoisuus.",
       "theory": "<p><strong>Linssit ja ihmissilmä:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kokoava linssi (kupera, keskeltä paksu):</strong> Kokoaa yhdensuuntaiset säteet polttopisteeseen ($F$). Käytetään plus-laseina kaukotaittoisuuden korjaamiseen ja suurennuslasina.</li>\n  <li><strong>Hajottava linssi (kovera, keskeltä ohut):</strong> Hajottaa säteet. Käytetään miinus-laseina likitaittoisuuden korjaamiseen.</li>\n  <li><strong>Ihmissilmä:</strong> Sarveiskalvo ja mukautuva mykiö toimivat kokoavana linssisysteeminä, joka muodostaa ylösalaisen todellisen kuvan silmän verkkokalvolle.</li>\n</ul>",
       "tasks": {

@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Muuttujat",
       "title": "Muuttujat ja lausekkeet",
-      "content": "KS aihe 1. Muuttujan käsite, muuttujat ja kertoimet. Lausekkeen sieventämisen perussäännöt (kertomerkkien ja ykkösten piilottaminen). Summa, erotus, tulo ja osamäärä muuttujilla.",
+      "content": "Muuttujan käsite, muuttujat ja kertoimet. Lausekkeen sieventämisen perussäännöt (kertomerkkien ja ykkösten piilottaminen). Summa, erotus, tulo ja osamäärä muuttujilla.",
       "summary": "Muuttujan käsite, sieventämisen perussäännöt (kertomerkkien ja ykkösten piilottaminen) sekä peruslaskutoimitukset muuttujilla.",
       "theory": "<p><strong>Muuttujat ja lausekkeet:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Muuttuja:</strong> Kirjain (kuten $x$ tai $a$), joka edustaa tuntematonta tai vaihtelevaa lukua.</li>\n  <li><strong>Kertomerkin poisjättö:</strong> Numeron ja kirjaimen välistä kertomerkkiä ei kirjoiteta:\n    $$4 \\cdot a = 4a \\qquad \\text{ja} \\qquad 1 \\cdot c = c, \\quad -1 \\cdot d = -d$$</li>\n  <li>Lauseke on matemaattinen ilmaus, joka koostuu luvuista, muuttujista ja laskutoimituksista (esim. $3x + 5$).</li>\n</ul>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Lausekkeen arvo",
       "title": "Lausekkeen arvo ja sijoittaminen",
-      "content": "KS aihe 2. Lukuarvon sijoittaminen muuttujan paikalle ja lausekkeen arvon laskeminen välivaiheittain. Negatiiviset luvut ja sulut sijoituksessa.",
+      "content": "Lukuarvon sijoittaminen muuttujan paikalle ja lausekkeen arvon laskeminen välivaiheittain. Negatiiviset luvut ja sulut sijoituksessa.",
       "summary": "Muuttujan lukuarvon sijoittaminen lausekkeeseen välivaiheittain, piilotettujen kertomerkkien palauttaminen sekä negatiiviset luvut ja sulut.",
       "theory": "<p><strong>Lausekkeen arvo ja sijoittaminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Lausekkeen arvo saadaan <strong>sijoittamalla muuttujan paikalle annettu luku</strong> ja laskemalla tulos.</li>\n  <li>Muista palauttaa näkymätön kertomerkki numeron ja muuttujan väliin ($5a = 5 \\cdot a$).</li>\n  <li><strong>Negatiivinen luku sijoitetaan AINA suluissa:</strong>\n    $$-3a + 5 \\quad (\\text{kun } a = -2) \\implies -3 \\cdot (-2) + 5 = 6 + 5 = 11$$</li>\n</ul>",
       "tasks": {
@@ -44,7 +44,7 @@
       "lesson": 3,
       "topic": "Termi",
       "title": "Termit, kerroin ja muuttujaosa",
-      "content": "KS aihe 3. Summalausekkeen termit: muuttujatermit ja vakiotermit. Termin kerroin ja muuttujaosa.",
+      "content": "Summalausekkeen termit: muuttujatermit ja vakiotermit. Termin kerroin ja muuttujaosa.",
       "summary": "Summalausekkeen rakenne, muuttujatermit ja vakiotermit, kertoimen ja muuttujaosan tunnistaminen sekä piilotetut kertoimet.",
       "theory": "<p><strong>Termit, kerroin ja muuttujaosa:</strong></p>\n<ul class=\"theory-list\">\n  <li>Lausekkeen yhteen- ja vähennyslaskut jakavat sen <strong>termeihin</strong>.</li>\n  <li><em>Tärkeää:</em> <strong>Etumerkki kuuluu aina sitä seuraavaan termiin!</strong>\n    Lausekkeen $2x - 5y + 7$ termit ovat $+2x$, $-5y$ ja $+7$.</li>\n  <li>Termin osat: <strong>kerroin</strong> (etumerkillinen numero) ja <strong>muuttujaosa</strong> (kirjainosa potensseineen). Pelkkä luku on <em>vakiotermi</em>.</li>\n</ul>",
       "tasks": {
@@ -63,7 +63,7 @@
       "lesson": 4,
       "topic": "Termien yhteen- ja vähennyslasku, osa 1",
       "title": "Samanmuotoisten termien yhdistäminen",
-      "content": "KS aihe 4. Samanmuotoisten termien yhdistäminen ja sieventäminen.",
+      "content": "Samanmuotoisten termien yhdistäminen ja sieventäminen.",
       "summary": "Samanmuotoisten termien tunnistaminen (sama muuttujaosa), kertoimien laskeminen yhteen ja erotuksen muodostaminen.",
       "theory": "<p><strong>Samanmuotoisten termien yhdistäminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Termit ovat <strong>samanmuotoisia</strong>, kun niillä on <em>täsmälleen sama muuttujaosa</em> ($3x$ ja $5x$ tai $2a^2$ ja $-7a^2$).</li>\n  <li><strong>Vain samanmuotoiset termit voidaan laskea yhteen tai vähentää:</strong>\n    $$3x + 5x = (3 + 5)x = 8x$$</li>\n  <li>Erimuotoisia termejä ei voi yhdistää ($3a + 4b$ on jo sievennetty!).</li>\n</ul>",
       "tasks": {
@@ -86,7 +86,7 @@
       "lesson": 5,
       "topic": "Termien yhteen- ja vähennyslasku, osa 2",
       "title": "Monitermiset lausekkeet ja sulkujen poisto",
-      "content": "KS aihe 4. Useamman termin ja sulkujen sieventäminen etumerkkisääntöjä noudattaen.",
+      "content": "Useamman termin ja sulkujen sieventäminen etumerkkisääntöjä noudattaen.",
       "summary": "Monitermisten lausekkeiden sieventäminen, etumerkkien kuljettaminen mukana, sulkujen poisto ja vastaluvut.",
       "theory": "<p><strong>Monitermiset lausekkeet ja sulkujen poisto:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Plus sulkujen edessä:</strong> Sulkeet voidaan poistaa suoraan merkkejä muuttamatta.</li>\n  <li><strong>Miinus sulkujen edessä:</strong> Vaihtaa <em>kaikki</em> sulkujen sisällä olevien termien etumerkit:\n    $$-(2x - 5) = -2x + 5$$</li>\n  <li><strong>Kertoimella kertominen:</strong> Kerro sulkujen jokainen termi erikseen:\n    $$3(2x - 4) = 6x - 12$$</li>\n</ul>",
       "tasks": {
@@ -105,7 +105,7 @@
       "lesson": 6,
       "topic": "Yhtälö, osa 1",
       "title": "Yhtälön käsite ja vaakamalli",
-      "content": "KS aihe 5. Yhtälön käsite, vaakamalli, yhtälön vasen ja oikea puoli sekä ratkaiseminen päättelemällä.",
+      "content": "Yhtälön käsite, vaakamalli, yhtälön vasen ja oikea puoli sekä ratkaiseminen päättelemällä.",
       "summary": "Yhtälön käsite, yhtälön puolet, vaakamalli ja tasapaino sekä yhtälön ratkaiseminen päättelemällä ja merkintätapa.",
       "theory": "<p><strong>Yhtälön käsite ja vaakamalli:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Yhtälö:</strong> Kahden lausekkeen välinen yhtäsuuruus ($2x + 3 = 11$).</li>\n  <li><strong>Vaakamalli:</strong> Yhtäsuuruusmerkki on tasapainopiste. Vasemman puolen (vp) ja oikean puolen (op) on painettava yhtä paljon ($\\text{vp} = \\text{op}$).</li>\n  <li>Yhtälön ratkaisu on se muuttujan arvo, jolla vaaka asettuu tasapainoon.</li>\n</ul>",
       "tasks": {
@@ -128,7 +128,7 @@
       "lesson": 7,
       "topic": "Yhtälö, osa 2",
       "title": "Yhtälön juuri ja ratkaisun tarkistaminen",
-      "content": "KS aihe 5. Yhtälön ratkaisun eli juuren tarkistaminen sijoittamalla.",
+      "content": "Yhtälön ratkaisun eli juuren tarkistaminen sijoittamalla.",
       "summary": "Yhtälön juuren käsite, ehdotetun ratkaisun tarkistaminen sijoittamalla vasemmalle ja oikealle puolelle sekä yhtäsuuruuden toteaminen.",
       "theory": "<p><strong>Yhtälön juuri ja ratkaisun tarkistus:</strong></p>\n<ul class=\"theory-list\">\n  <li>Yhtälön ratkaisua kutsutaan yhtälön <strong>juureksi</strong>.</li>\n  <li><strong>Sijoituskoe:</strong> Tarkista ratkaisu sijoittamalla saatu luku alkuperäiseen yhtälöön:\n    $$3x + 2 = 17 \\quad (\\text{kokeillaan } x = 5) \\implies 3 \\cdot 5 + 2 = 15 + 2 = 17 \\quad (\\text{Tosi!})$$</li>\n  <li>Jos $\\text{vp} = \\text{op}$, ratkaisu on oikein. Jos $\\text{vp} \\neq \\text{op}$, luku ei kelpaa.</li>\n</ul>",
       "tasks": {
@@ -151,7 +151,7 @@
       "lesson": 8,
       "topic": "Vastalukutekniikka",
       "title": "Vastalukutekniikka yhtälönratkaisussa",
-      "content": "KS aihe 6. Yhtälön ratkaiseminen vastalukutekniikalla, kaksoisviivamerkinnät (//) ja yhtälön tasapaino.",
+      "content": "Yhtälön ratkaiseminen vastalukutekniikalla, kaksoisviivamerkinnät (//) ja yhtälön tasapaino.",
       "summary": "Yhtälönratkaisun periaate vastaluvun lisäämisellä kummallekin puolelle, yhtälön tasapainon säilyttäminen ja kaksoisviivamerkinnät.",
       "theory": "<p><strong>Vastalukutekniikka yhtälöissä:</strong></p>\n<ul class=\"theory-list\">\n  <li>Vaaka pysyy tasapainossa, kun <strong>molemmille puolille lisätään tai vähennetään sama luku</strong>.</li>\n  <li>Termi kumotaan lisäämällä sen <strong>vastaluku</strong> yhtälön molemmille puolille:\n    $$x + 5 = 12 \\quad \\| - 5 \\iff x + 5 - 5 = 12 - 5 \\iff x = 7$$</li>\n  <li>Merkitään pystyviivoilla yhtälön oikeaan reunaan ($\\| - 5$).</li>\n</ul>",
       "tasks": {
@@ -170,7 +170,7 @@
       "lesson": 9,
       "topic": "Kerto- ja jakolaskutekniikka",
       "title": "Kerto- ja jakolaskutekniikka yhtälöissä",
-      "content": "KS aihe 7. Kertoimen ja jakajan kumoaminen käänteistoimituksilla (jakolasku ja kertolasku) sekä monivaiheiset yhtälöt.",
+      "content": "Kertoimen ja jakajan kumoaminen käänteistoimituksilla (jakolasku ja kertolasku) sekä monivaiheiset yhtälöt.",
       "summary": "Muuttujan kertoimen kumoaminen jakolaskulla, jakajan kumoaminen kertolaskulla ja tekniikoiden oikea suoritusjärjestys.",
       "theory": "<p><strong>Kerto- ja jakolaskutekniikka yhtälöissä:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kerroin poistetaan jakolaskulla:</strong>\n    $$4x = 28 \\quad \\| : 4 \\iff x = \\frac{28}{4} = 7$$</li>\n  <li><strong>Nimittäjä poistetaan kertolaskulla:</strong>\n    $$\\frac{x}{5} = 4 \\quad \\| \\cdot 5 \\iff x = 4 \\cdot 5 = 20$$</li>\n  <li><em>Muista:</em> Yhtälön molemmat puolet jaetaan tai kerrotaan kokonaisuudessaan!</li>\n</ul>",
       "tasks": {
@@ -189,7 +189,7 @@
       "lesson": 10,
       "topic": "Termien siirtämistekniikka",
       "title": "Termien siirtäminen ja etumerkin vaihto",
-      "content": "KS aihe 8. Termien siirtäminen yhtälön puolelta toiselle etumerkin vaihdolla.",
+      "content": "Termien siirtäminen yhtälön puolelta toiselle etumerkin vaihdolla.",
       "summary": "Termien nopea siirtäminen yhtälön puolelta toiselle, etumerkin vaihtuminen siirrossa ja välivaiheiden selkeys.",
       "theory": "<p><strong>Termien siirtosääntö:</strong></p>\n<ul class=\"theory-list\">\n  <li>Vastalukutekniikka tiivistetään käytännössä <strong>siirtosäännöksi</strong>:</li>\n  <li>Termi voidaan siirtää yhtäsuuruusmerkin toiselle puolelle, kun sen <strong>etumerkki vaihdetaan vastakkaiseksi</strong>:\n    $$5x - 8 = 12 \\iff 5x = 12 + 8 \\iff 5x = 20$$</li>\n  <li>Kokoa muuttujatermit vasemmalle ja vakioluvut oikealle.</li>\n</ul>",
       "tasks": {
@@ -208,7 +208,7 @@
       "lesson": 11,
       "topic": "Tekniikoiden soveltaminen",
       "title": "Yhtälönratkaisun yleinen strategia",
-      "content": "KS aihe 9. Yhtälönratkaisutekniikoiden yhdistäminen ja soveltaminen monimutkaisempiin yhtälöihin.",
+      "content": "Yhtälönratkaisutekniikoiden yhdistäminen ja soveltaminen monimutkaisempiin yhtälöihin.",
       "summary": "Kaikkien yhtälönratkaisutekniikoiden yhdistäminen, murtolukumuotoiset yhtälöt ja järjestelmällinen eteneminen kohti ratkaisua.",
       "theory": "<p><strong>Yhtälönratkaisun yleisstrategia:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Ratkaisun 4 askelta:</strong>\n    <ol>\n      <li>Poista sulkeet kertomalla kerroin sisään.</li>\n      <li>Siirrä muuttujat vasemmalle ja luvut oikealle (etumerkit vaihtuvat!).</li>\n      <li>Yhdistä samanmuotoiset termit kummallakin puolella.</li>\n      <li>Jaa muuttujan kertoimella puolittain ($x$:n arvo).</li>\n    </ol>\n  </li>\n</ul>",
       "tasks": {
@@ -227,7 +227,7 @@
       "lesson": 12,
       "topic": "Yhtälöt sanallisissa tehtävissä",
       "title": "Sanalliset tehtävät ja yhtälön muodostaminen",
-      "content": "KS aihe 10. Sanallisten tehtävien muuttaminen yhtälömuotoon ja ratkaiseminen.",
+      "content": "Sanallisten tehtävien muuttaminen yhtälömuotoon ja ratkaiseminen.",
       "summary": "Arkikielisten ongelmien muuntaminen algebralliseksi yhtälöksi, muuttujan valinta, ratkaiseminen ja tuloksen sanallinen tulkinta.",
       "theory": "<p><strong>Sanalliset tehtävät ja yhtälön muodostaminen:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Ongelmanratkaisun vaiheet:</strong>\n    <ol>\n      <li>Valitse kysytty asia ja merkitse sitä muuttujalla $x$.</li>\n      <li>Ilmaise muut määrät $x$:n avulla (esim. $x + 3$ tai $4x$).</li>\n      <li>Muodosta yhtälö annetusta kokonaissummasta.</li>\n      <li>Ratkaise yhtälö ja kirjoita sanallinen vastaus yksiköineen.</li>\n    </ol>\n  </li>\n</ul>",
       "tasks": {

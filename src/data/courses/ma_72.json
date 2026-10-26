@@ -6,7 +6,7 @@
       "lesson": 1,
       "topic": "Koordinaatisto",
       "title": "Koordinaatisto",
-      "content": "KS aihe 1. (x, y) -koordinaatisto, koordinaattiakselit, origo, pisteet ja murtoviivat. Desimaalikoordinaatit ja ilmansuunnat.",
+      "content": "(x, y) -koordinaatisto, koordinaattiakselit, origo, pisteet ja murtoviivat. Desimaalikoordinaatit ja ilmansuunnat.",
       "summary": "(x, y) -koordinaatisto, koordinaattiakselit, origo, pisteiden merkitseminen, koordinaatiston neljännekset ja murtoviivat.",
       "theory": "<p><strong>Koordinaatisto $(x, y)$:</strong></p>\n<ul class=\"theory-list\">\n  <li>Vaaka-akseli on <strong>$x$-akseli</strong> ja pystyakseli on <strong>$y$-akseli</strong>. Akselit leikkaavat <strong>origossa $(0, 0)$</strong>.</li>\n  <li>Pisteen koordinaatit merkitään muodossa $(x, y)$. Ensimmäinen luku kertoo sijainnin vaaka- ja toinen pystysuunnassa.</li>\n  <li>Akselit jakavat tason <strong>neljään neljännekseen</strong> (I: $+/+$, II: $-/+$, III: $-/-$, IV: $+/-$).</li>\n</ul>",
       "tasks": {
@@ -25,7 +25,7 @@
       "lesson": 2,
       "topic": "Geometriset objektit",
       "title": "Geometriset objektit",
-      "content": "KS aihe 2. 0-, 1- ja 2-ulotteiset objektit: piste, jana, suora, puolisuora, murtoviiva, avoin ja suljettu viiva sekä tasokuviot.",
+      "content": "0-, 1- ja 2-ulotteiset objektit: piste, jana, suora, puolisuora, murtoviiva, avoin ja suljettu viiva sekä tasokuviot.",
       "summary": "0-, 1- ja 2-ulotteiset geometriset objektit: piste, jana, suora, puolisuora, murtoviiva, avoin ja suljettu viiva sekä tasokuviot.",
       "theory": "<p><strong>Geometriset perusobjektit:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Piste:</strong> Päätepiste tai sijainti tasossa, merkitään isolla kirjaimella ($A$). Ei pituutta tai leveyttä.</li>\n  <li><strong>Suora:</strong> Molempiin suuntiin äärettömästi jatkuva viiva (suora $s$ tai $AB$).</li>\n  <li><strong>Puolisuora:</strong> Alkaa alkupisteestä ja jatkuu yhteen suuntaan äärettömästi.</li>\n  <li><strong>Jana:</strong> Kahden pisteen välinen rajattu suoran osa (jana $AB$). Pituudella on mitta.</li>\n</ul>",
       "tasks": {
@@ -48,7 +48,7 @@
       "lesson": 3,
       "topic": "Kulma, osa 1",
       "title": "Kulma, osa 1",
-      "content": "KS aihe 3. Kulman käsite, kärki ja kyljet. Kulman nimeäminen (kreikkalaiset aakkoset) ja kulmien luokittelu (nolla-, terävä, suora, tylppä, oiko-, kupera ja täysi kulma).",
+      "content": "Kulman käsite, kärki ja kyljet. Kulman nimeäminen (kreikkalaiset aakkoset) ja kulmien luokittelu (nolla-, terävä, suora, tylppä, oiko-, kupera ja täysi kulma).",
       "summary": "Kulman käsite, kärki ja kyljet, nimeäminen kreikkalaisilla aakkosilla ja pisteillä sekä kulmien luokittelu.",
       "theory": "<p><strong>Kulman käsite ja nimeäminen:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kulma syntyy kahden samasta pisteestä alkavan puolisuoran väliin. Puolisuorat ovat kulman <strong>kylkiä</strong> ja alkupiste on <strong>kärki</strong>.</li>\n  <li><strong>Nimeäminen:</strong>\n    <ul>\n      <li>Kärkipisteellä: $\\angle B$</li>\n      <li>Kolmella pisteellä (oikea kylki $\\to$ kärki $\\to$ vasen kylki): $\\angle DEF$</li>\n      <li>Kreikkalaisella kirjaimella: $\\alpha$ (alfa), $\\beta$ (beeta), $\\gamma$ (gamma), $\\delta$ (delta).</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -67,7 +67,7 @@
       "lesson": 4,
       "topic": "Kulma, osa 2",
       "title": "Kulma, osa 2",
-      "content": "KS aihe 3. Kulman mittaaminen ja piirtäminen astelevyllä. Eksplementtikulma.",
+      "content": "Kulman mittaaminen ja piirtäminen astelevyllä. Eksplementtikulma.",
       "summary": "Kulman mittaaminen ja piirtäminen astelevyllä, apuviivojen käyttö ja eksplementtikulma.",
       "theory": "<p><strong>Kulmien luokittelu suuruuden mukaan:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Nollakulma:</strong> $\\alpha = 0^\\circ$</li>\n  <li><strong>Terävä kulma:</strong> $0^\\circ < \\alpha < 90^\\circ$</li>\n  <li><strong>Suora kulma:</strong> $\\alpha = 90^\\circ$ (merkitään kulmaruudulla)</li>\n  <li><strong>Tylppä kulma:</strong> $90^\\circ < \\alpha < 180^\\circ$</li>\n  <li><strong>Oikokulma:</strong> $\\alpha = 180^\\circ$ (suora linja)</li>\n  <li><strong>Kupera kulma:</strong> $180^\\circ < \\alpha < 360^\\circ$</li>\n  <li><strong>Täysi kulma:</strong> $\\alpha = 360^\\circ$ (koko kierros)</li>\n</ul>",
       "tasks": {
@@ -86,7 +86,7 @@
       "lesson": 5,
       "topic": "Vieruskulma ja ristikulma",
       "title": "Vieruskulma ja ristikulma",
-      "content": "KS aihe 4. Kahden suoran leikkauspisteeseen muodostuvat ristikulmat (yhtä suuret) ja vieruskulmat (summa 180°).",
+      "content": "Kahden suoran leikkauspisteeseen muodostuvat ristikulmat (yhtä suuret) ja vieruskulmat (summa 180°).",
       "summary": "Kahden suoran leikkauspisteeseen muodostuvat ristikulmat (yhtä suuret) ja vieruskulmat (summa 180°).",
       "theory": "<p><strong>Vieruskulmat ja ristikulmat:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kun kaksi suoraa leikkaa, syntyy 4 kulmaa:\n    <ul>\n      <li><strong>Ristikulmat:</strong> Vastakkaiset kulmat leikkauspisteessä. Ovat <strong>aina yhtä suuret</strong> ($\\alpha = \\gamma$ ja $\\beta = \\delta$).</li>\n      <li><strong>Vieruskulmat:</strong> Vierekkäiset kulmat, jotka muodostavat oikokulman ($180^\\circ$). Niiden <strong>summa on aina $180^\\circ$</strong>:\n        $$\\alpha + \\beta = 180^\\circ$$</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -105,7 +105,7 @@
       "lesson": 6,
       "topic": "Normaali ja keskinormaali",
       "title": "Normaali ja keskinormaali",
-      "content": "KS aihe 5. Suoran normaali (90° kulma), janan keskinormaali ja pisteen lyhin etäisyys suorasta.",
+      "content": "Suoran normaali (90° kulma), janan keskinormaali ja pisteen lyhin etäisyys suorasta.",
       "summary": "Suoran normaali (90° kulma), janan keskinormaali ja pisteen lyhin etäisyys suorasta.",
       "theory": "<p><strong>Normaali ja keskinormaali:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Normaali:</strong> Suora, joka leikkaa toisen suoran <strong>$90^\\circ$ suorassa kulmassa</strong> ($s \\perp t$). Pisteen lyhin etäisyys suorasta mitataan aina normaalia pitkin!</li>\n  <li><strong>Keskinormaali:</strong> Suora, joka kulkee <strong>janan keskipisteen kautta</strong> kohtisuorasti sitä vastaan. Keskinormaalin kaikki pisteet ovat yhtä kaukana janan päätepisteistä.</li>\n</ul>",
       "tasks": {
@@ -124,7 +124,7 @@
       "lesson": 7,
       "topic": "Samankohtaisuus ja yhdensuuntaisuus",
       "title": "Samankohtaisuus ja yhdensuuntaisuus",
-      "content": "KS aihe 6. Samankohtaiset kulmat ja yhdensuuntaisten suorien leikkaaminen. Kulmalaskut ja geometriset sovellukset.",
+      "content": "Samankohtaiset kulmat ja yhdensuuntaisten suorien leikkaaminen. Kulmalaskut ja geometriset sovellukset.",
       "summary": "Samankohtaiset kulmat, yhdensuuntaisten suorien leikkaaminen kolmannella suoralla ja kulmalaskut.",
       "theory": "<p><strong>Samankohtaisuus ja yhdensuuntaisuus:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kun leikkaava suora kulkee kahden suoran yli, muodostuvat kulmat ovat <strong>samankohtaisia</strong>.</li>\n  <li><strong>Yhdensuuntaisuuden ehto:</strong> Kaksi suoraa ovat yhdensuuntaiset ($s \\parallel t$) <strong>jos ja vain jos samankohtaiset kulmat ovat yhtä suuret</strong>:\n    $$\\alpha = \\beta \\iff s \\parallel t$$</li>\n  <li>Yhdessä risti- ja vieruskulmasääntöjen kanssa saadaan kaikki leikkauskulmat ratkaistua.</li>\n</ul>",
       "tasks": {
@@ -143,7 +143,7 @@
       "lesson": 8,
       "topic": "Ympyrä",
       "title": "Ympyrä",
-      "content": "KS aihe 7. Ympyrän osat: keskipiste, säde r, halkaisija d, jänne, segmentti, sektori ja kaari. Ympyrän piirtäminen harpilla ja Geogebralla.",
+      "content": "Ympyrän osat: keskipiste, säde r, halkaisija d, jänne, segmentti, sektori ja kaari. Ympyrän piirtäminen harpilla ja Geogebralla.",
       "summary": "Ympyrän osat: keskipiste, säde r, halkaisija d, jänne, segmentti, sektori ja kaari sekä piirtäminen harpilla.",
       "theory": "<p><strong>Ympyrän perusosat:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Keskipiste ($O$):</strong> Määrää ympyrän sijainnin.</li>\n  <li><strong>Säde ($r$, radius):</strong> Etäisyys keskipisteestä kehälle.</li>\n  <li><strong>Halkaisija ($d$, diameter):</strong> Keskipisteen kautta kulkeva jana kehältä kehälle ($d = 2r$).</li>\n  <li><strong>Jänne:</strong> Kahden kehäpisteen välinen jana.</li>\n  <li><strong>Sektori:</strong> Kahden säteen ja kaaren rajaama \"piirakkapala\".</li>\n  <li><strong>Segmentti:</strong> Jänteen ja kaaren rajaama alue.</li>\n</ul>",
       "tasks": {
@@ -162,7 +162,7 @@
       "lesson": 9,
       "topic": "Tangentti, keskuskulma ja kehäkulma",
       "title": "Tangentti, keskuskulma ja kehäkulma",
-      "content": "KS aihe 8. Ympyrän tangentti ja sekantti, tangenttikulma ja keskuskulma. Kehäkulmalause (kehäkulma puolet keskuskulmasta) ja Thaleen lause.",
+      "content": "Ympyrän tangentti ja sekantti, tangenttikulma ja keskuskulma. Kehäkulmalause (kehäkulma puolet keskuskulmasta) ja Thaleen lause.",
       "summary": "Ympyrän tangentti ja sekantti, tangenttikulma ja keskuskulma, kehäkulmalause sekä Thaleen lause.",
       "theory": "<p><strong>Tangentti, keskuskulma ja kehäkulma:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Tangentti:</strong> Suora, joka sivuaa ympyrää <em>tasan yhdessä pisteessä</em> ja on kohtisuorassa sädettä vastaan ($90^\\circ$).</li>\n  <li><strong>Tangenttikulma ja keskuskulma:</strong> Niiden summa on aina $180^\\circ$ ($\\beta + \\gamma = 180^\\circ$).</li>\n  <li><strong>Kehäkulmalause:</strong> Samaa kaarta vastaava kehäkulma ($\\alpha$) on <strong>tasan puolet keskuskulmasta ($\\beta$)</strong>:\n    $$\\alpha = \\frac{\\beta}{2}$$</li>\n</ul>",
       "tasks": {
@@ -181,7 +181,7 @@
       "lesson": 10,
       "topic": "Kolmio, osa 1",
       "title": "Kolmio, osa 1",
-      "content": "KS aihe 9. Kolmion käsite, nimeäminen ja kolmion kulmien summa (180°).",
+      "content": "Kolmion käsite, nimeäminen ja kolmion kulmien summa (180°).",
       "summary": "Kolmion käsite, kärkien ja sivujen nimeäminen sekä kolmion kulmien summa 180°.",
       "theory": "<p><strong>Kolmion kulmat ja ominaisuudet:</strong></p>\n<ul class=\"theory-list\">\n  <li>Kolmiossa on 3 kärkeä, 3 sivua ja 3 kulmaa.</li>\n  <li><strong>Kulmien summa:</strong> Kolmion sisäkulmien summa on aina tasan $180^\\circ$:\n    $$\\alpha + \\beta + \\gamma = 180^\\circ$$</li>\n  <li><strong>Kolmioepäyhtälö:</strong> Kahden sivun pituuksien summa on aina oltava suurempi kuin kolmas sivu ($a + b > c$).</li>\n</ul>",
       "tasks": {
@@ -200,7 +200,7 @@
       "lesson": 11,
       "topic": "Kolmio, osa 2",
       "title": "Kolmio, osa 2",
-      "content": "KS aihe 9. Kolmioiden luokittelu (tasasivuinen, tasakylkinen, suorakulmainen) ja kulmalaskut.",
+      "content": "Kolmioiden luokittelu (tasasivuinen, tasakylkinen, suorakulmainen) ja kulmalaskut.",
       "summary": "Kolmioiden luokittelu sivujen ja kulmien mukaan (tasasivuinen, tasakylkinen, suorakulmainen) sekä kulmalaskut.",
       "theory": "<p><strong>Kolmioiden luokittelu:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Kulmien mukaan:</strong>\n    <ul>\n      <li>Teräväkulmainen: Kaikki kulmat $< 90^\\circ$.</li>\n      <li>Suorakulmainen: Yksi kulma on $90^\\circ$.</li>\n      <li>Tylppäkulmainen: Yksi kulma on $> 90^\\circ$.</li>\n    </ul>\n  </li>\n  <li><strong>Sivujen mukaan:</strong>\n    <ul>\n      <li>Epäsäännöllinen: Kaikki sivut eripituisia.</li>\n      <li>Tasakylkinen: Kaksi yhtä pitkää kylkeä ja niiden <em>kantakulmat ovat yhtä suuret</em>.</li>\n      <li>Tasasivuinen: Kaikki sivut yhtä pitkiä ja <em>kaikki kulmat $60^\\circ$</em>.</li>\n    </ul>\n  </li>\n</ul>",
       "tasks": {
@@ -219,7 +219,7 @@
       "lesson": 12,
       "topic": "Yhtenevyys",
       "title": "Yhtenevyys",
-      "content": "KS aihe 10. Yhtenevät kuviot, vastinpisteet ja vastinsivut.",
+      "content": "Yhtenevät kuviot, vastinpisteet ja vastinsivut.",
       "summary": "Yhtenevät kuviot (koko ja muoto identtiset), vastinpisteet, vastinsivut ja vastinkulmat.",
       "theory": "<p><strong>Yhtenevyys ($\\cong$):</strong></p>\n<ul class=\"theory-list\">\n  <li>Kaksi kuviota ovat <strong>yhteneviä</strong>, jos ne ovat täsmälleen saman kokoisia ja saman muotoisia (voidaan asettaa päällekkäin).</li>\n  <li>Yhtenevien kuvioiden <strong>vastinsivut ovat yhtä pitkät</strong> ja <strong>vastinkulmat yhtä suuret</strong>.</li>\n  <li>Kolmioiden yhtenevyyslauseet: SSS (sivu-sivu-sivu), SKS (sivu-kulma-sivu), KSK (kulma-sivu-kulma).</li>\n</ul>",
       "tasks": {
@@ -238,7 +238,7 @@
       "lesson": 13,
       "topic": "Peilaaminen, osa 1: Suoran suhteen",
       "title": "Peilaaminen, osa 1: Suoran suhteen",
-      "content": "KS aihe 11. Peilaaminen suoran suhteen, peilikuvapisteet ja kuvion symmetria-akseli.",
+      "content": "Peilaaminen suoran suhteen, peilikuvapisteet ja kuvion symmetria-akseli.",
       "summary": "Peilaaminen suoran suhteen, peilikuvapisteiden määrittäminen ja kuvion symmetria-akselit.",
       "theory": "<p><strong>Peilaaminen suoran suhteen (Aksiaalisymmetria):</strong></p>\n<ul class=\"theory-list\">\n  <li>Peilauksessa kuvion jokaisesta pisteestä piirretään normaali peilaussuoralle ja jatketaan yhtä pitkä matka suoran toiselle puolelle.</li>\n  <li>Alkuperäinen kuvio ja sen peilikuva ovat <strong>yhteneviä</strong>, mutta kuva kääntyy peilikuvaksi.</li>\n  <li>Vastaa fysiikassa <strong>tasopeiliä</strong> (oikea käsi näkyy peilikuvassa vasempana).</li>\n  <li>Jos kuvio voidaan jakaa suoralla kahteen yhtenevään puolikkaaseen, suora on sen <strong>symmetria-akseli</strong>.</li>\n</ul>",
       "tasks": {
@@ -257,7 +257,7 @@
       "lesson": 14,
       "topic": "Peilaaminen, osa 2: Pisteen suhteen",
       "title": "Peilaaminen, osa 2: Pisteen suhteen",
-      "content": "KS aihe 11. Peilaaminen pisteen (esim. origon) suhteen ja peilikuvakuvion muodostaminen.",
+      "content": "Peilaaminen pisteen (esim. origon) suhteen ja peilikuvakuvion muodostaminen.",
       "summary": "Peilaaminen pisteen (kuten origon) suhteen, 180° kierto, pistesymmetria ja koordinaattimuutokset.",
       "theory": "<p><strong>Peilaaminen pisteen suhteen (Pistesymmetria):</strong></p>\n<ul class=\"theory-list\">\n  <li>Kuvion jokaisesta pisteestä piirretään jana peilauspisteen (kuten origon) kautta ja jatketaan yhtä pitkä matka linjassa eteenpäin.</li>\n  <li>Pistepeilauksessa kuvio <strong>kääntyy $180^\\circ$ ylösalaisin</strong>.</li>\n  <li>Vastaa fysiikassa kameran aukon tai ihmissilmän toimintaa (valonsäteet risteävät aukossa muodostaen ylösalaisen kuvan verkkokalvolle).</li>\n</ul>",
       "tasks": {
