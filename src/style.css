@@ -4410,6 +4410,88 @@ a:hover {
   font-size: 0.95rem;
 }
 
+/* Jatkotunnit (Continuations) */
+.lesson-card.continuation-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid #0284c7;
+}
+
+[data-theme="dark"] .lesson-card.continuation-card {
+  border-left-color: #38bdf8;
+}
+
+.continuation-number {
+  color: #0284c7 !important;
+}
+
+[data-theme="dark"] .continuation-number {
+  color: #38bdf8 !important;
+}
+
+.continuation-parent-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px 0;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.continuation-parent-note strong {
+  color: var(--color-heading);
+}
+
+.continuation-tasks-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+}
+
+.continuation-tasks-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.continuation-tasks-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.continuation-tasks-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.continuation-tasks-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.task-sheet-hint {
+  margin: 8px 0 0 0;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
 .substitute-box {
   margin-top: 14px;
   padding: 12px 14px;

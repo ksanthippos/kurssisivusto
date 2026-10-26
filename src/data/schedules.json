@@ -22,7 +22,8 @@
             "type": "*** KOE ***",
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
-        ]
+        ],
+        "continuations": []
       }
     }
   },
@@ -64,7 +65,8 @@
             "type": "*** KOE ***",
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
-        ]
+        ],
+        "continuations": []
       }
     }
   },
@@ -96,7 +98,8 @@
             "type": "*** KOE ***",
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
-        ]
+        ],
+        "continuations": []
       },
       "MA_72.2": {
         "startDate": "2026-10-19",
@@ -113,7 +116,8 @@
             "type": "*** KOE ***",
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
-        ]
+        ],
+        "continuations": []
       }
     }
   },
@@ -142,7 +146,8 @@
             "type": "*** KOE ***",
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
-        ]
+        ],
+        "continuations": []
       }
     }
   },
@@ -180,7 +185,8 @@
             "type": "*** KOE ***",
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
-        ]
+        ],
+        "continuations": []
       }
     }
   },
@@ -207,7 +213,8 @@
             "type": "TET-HARJOITTELU",
             "description": "9. luokkien TET-viikko. 8. luokkalaisilla poikkeusohjelmaa."
           }
-        ]
+        ],
+        "continuations": []
       }
     }
   }

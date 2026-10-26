@@ -429,7 +429,8 @@ function setupEventListeners() {
           if (autoInfo && autoInfo.lesson) {
             navigateTo(code, autoInfo.lesson);
             const dateStr = autoInfo.date ? ` (${formatDisplayDate(autoInfo.date)})` : "";
-            showToast(`📅 Päivämääräohjaus: ryhmän ${autoInfo.groupCode} oppitunti #${autoInfo.lesson}${dateStr}`);
+            const contStr = autoInfo.isContinuation ? " (jatkotunti)" : "";
+            showToast(`📅 Päivämääräohjaus: ryhmän ${autoInfo.groupCode} oppitunti #${autoInfo.lesson}${contStr}${dateStr}`);
             return;
           }
         }
@@ -724,7 +725,8 @@ function parseRoute() {
           if (autoInfo && autoInfo.lesson) {
             lessonNum = autoInfo.lesson;
             const dateStr = autoInfo.date ? ` (${formatDisplayDate(autoInfo.date)})` : "";
-            showToast(`📅 Päivämääräohjaus: ryhmän ${autoInfo.groupCode} oppitunti #${lessonNum}${dateStr}`);
+            const contStr = autoInfo.isContinuation ? " (jatkotunti)" : "";
+            showToast(`📅 Päivämääräohjaus: ryhmän ${autoInfo.groupCode} oppitunti #${lessonNum}${contStr}${dateStr}`);
           } else {
             lessonNum = 1;
           }
@@ -2056,6 +2058,24 @@ function getHomeWeekData(offset = 0) {
         } else {
           rawExceptions.push(item);
         }
+      }
+    });
+
+    const conts = g.schedule?.continuations || g.schedule?.jatkotunnit || [];
+    conts.forEach((c) => {
+      if (c.date >= startIso && c.date <= endIso) {
+        let desc = c.description || "";
+        if (c.tasks) {
+          const taskStr = Array.isArray(c.tasks) ? c.tasks.join(", ") : c.tasks;
+          desc = desc ? `${desc} (${taskStr})` : taskStr;
+        }
+        rawExceptions.push({
+          groupCode: g.groupCode,
+          courseCode: g.courseCode,
+          date: c.date,
+          type: "🔁 JATKOTUNTI",
+          description: desc || "Jatketaan edellisen oppitunnin aihetta."
+        });
       }
     });
   });
@@ -3982,7 +4002,8 @@ function getLessonDate(lessonNumber, schedule) {
     const isoDate = formatDate(current);
     if (schedule.weekdays.includes(current.getDay())) {
       const isException = (schedule.exceptions || []).some((item) => item.date === isoDate);
-      if (!isException) {
+      const isContinuation = (schedule.continuations || schedule.jatkotunnit || []).some((item) => item.date === isoDate);
+      if (!isException && !isContinuation) {
         lessonsFound++;
         if (lessonsFound === lessonNumber) {
           return isoDate;
@@ -3996,7 +4017,7 @@ function getLessonDate(lessonNumber, schedule) {
 
 function getLessonNumberForDate(schedule, targetDate = new Date()) {
   if (!schedule || !schedule.startDate || !schedule.endDate || !Array.isArray(schedule.weekdays)) {
-    return { lesson: 1, exact: false, date: null };
+    return { lesson: 1, exact: false, date: null, isContinuation: false };
   }
   const startDate = new Date(`${schedule.startDate}T12:00:00`);
   const endDate = new Date(`${schedule.endDate}T12:00:00`);
@@ -4008,9 +4029,13 @@ function getLessonNumberForDate(schedule, targetDate = new Date()) {
     const isoDate = formatDate(current);
     if (schedule.weekdays.includes(current.getDay())) {
       const isException = (schedule.exceptions || []).some((item) => item.date === isoDate);
-      if (!isException) {
+      const isContinuation = (schedule.continuations || schedule.jatkotunnit || []).some((item) => item.date === isoDate);
+      if (!isException && !isContinuation) {
         lessonsFound++;
-        lessons.push({ lesson: lessonsFound, date: isoDate });
+        lessons.push({ lesson: lessonsFound, date: isoDate, isContinuation: false });
+      } else if (isContinuation) {
+        // Jatkotunti viittaa viimeisimpään käytyyn oppituntiin
+        lessons.push({ lesson: Math.max(1, lessonsFound), date: isoDate, isContinuation: true });
       }
     }
     current.setDate(current.getDate() + 1);
@@ -4019,19 +4044,20 @@ function getLessonNumberForDate(schedule, targetDate = new Date()) {
   const targetIso = formatDate(targetDate);
   const exact = lessons.find((l) => l.date === targetIso);
   if (exact) {
-    return { lesson: exact.lesson, exact: true, date: exact.date };
+    return { lesson: exact.lesson, exact: true, date: exact.date, isContinuation: exact.isContinuation };
   }
 
   const upcoming = lessons.find((l) => l.date > targetIso);
   if (upcoming) {
-    return { lesson: upcoming.lesson, exact: false, date: upcoming.date };
+    return { lesson: upcoming.lesson, exact: false, date: upcoming.date, isContinuation: upcoming.isContinuation };
   }
 
   if (lessons.length > 0) {
-    return { lesson: lessons[lessons.length - 1].lesson, exact: false, date: lessons[lessons.length - 1].date };
+    const last = lessons[lessons.length - 1];
+    return { lesson: last.lesson, exact: false, date: last.date, isContinuation: last.isContinuation };
   }
 
-  return { lesson: 1, exact: false, date: null };
+  return { lesson: 1, exact: false, date: null, isContinuation: false };
 }
 
 function getAutoLessonForCourse(courseCode) {
@@ -4064,7 +4090,8 @@ function getAutoLessonForCourse(courseCode) {
     groupCode: targetGroup,
     lesson: dateResult.lesson,
     date: dateResult.date,
-    exact: dateResult.exact
+    exact: dateResult.exact,
+    isContinuation: dateResult.isContinuation
   };
 }
 
@@ -4269,6 +4296,121 @@ async function selectScheduleGroup(groupCode) {
   await renderAikataulu();
 }
 
+function calculateGroupScheduleEvents(courseData, schedule) {
+  if (!schedule || !schedule.startDate || !schedule.endDate || !Array.isArray(schedule.weekdays)) {
+    return [];
+  }
+  const lessons = courseData?.lessons || [];
+  const exceptions = schedule.exceptions || [];
+  const continuations = schedule.continuations || schedule.jatkotunnit || [];
+
+  const startDate = new Date(`${schedule.startDate}T12:00:00`);
+  const endDate = new Date(`${schedule.endDate}T12:00:00`);
+  let current = new Date(startDate);
+
+  let normalLessonCount = 0;
+  let lastNormalLesson = null;
+  let continuationCountForLastLesson = 0;
+
+  const events = [];
+
+  while (current <= endDate) {
+    const isoDate = formatDate(current);
+    if (schedule.weekdays.includes(current.getDay())) {
+      const exception = exceptions.find((ex) => ex.date === isoDate);
+      const continuation = continuations.find((c) => c.date === isoDate);
+
+      if (exception) {
+        events.push({
+          type: "exception",
+          date: isoDate,
+          exception,
+          lesson: null,
+          continuation: null
+        });
+      } else if (continuation) {
+        continuationCountForLastLesson++;
+        const index = continuationCountForLastLesson;
+        const baseTitle = lastNormalLesson
+          ? (lastNormalLesson.topic || lastNormalLesson.title || `Oppitunti #${lastNormalLesson.lesson}`)
+          : "Oppitunti";
+        const titleSuffix = index > 1 ? ` – jatkotunti ${index}` : ` – jatkotunti`;
+        const title = continuation.title || `${baseTitle}${titleSuffix}`;
+        const label = index > 1 ? `Jatkotunti ${index}` : `Jatkotunti`;
+
+        events.push({
+          type: "continuation",
+          date: isoDate,
+          continuation: {
+            ...continuation,
+            title,
+            label,
+            index
+          },
+          continuedLesson: lastNormalLesson,
+          lesson: null,
+          exception: null
+        });
+      } else {
+        normalLessonCount++;
+        const lesson = lessons.find((l) => l.lesson === normalLessonCount) || null;
+        if (lesson) {
+          lastNormalLesson = lesson;
+          continuationCountForLastLesson = 0;
+          events.push({
+            type: "lesson",
+            date: isoDate,
+            lesson,
+            exception: null,
+            continuation: null
+          });
+        }
+      }
+    }
+    current.setDate(current.getDate() + 1);
+  }
+
+  // Tarkistetaan poikkeukset ja jatkotunnit kalenterin ulkopuolelta
+  exceptions.forEach((ex) => {
+    if (!events.some((ev) => ev.date === ex.date && ev.type === "exception")) {
+      events.push({
+        type: "exception",
+        date: ex.date,
+        exception: ex,
+        lesson: null,
+        continuation: null
+      });
+    }
+  });
+
+  continuations.forEach((c) => {
+    if (!events.some((ev) => ev.date === c.date && ev.type === "continuation")) {
+      const priorLessons = events.filter((ev) => ev.type === "lesson" && ev.date < c.date);
+      const continuedLesson = priorLessons.length ? priorLessons[priorLessons.length - 1].lesson : null;
+      const sameConts = events.filter(
+        (ev) => ev.type === "continuation" && ev.continuedLesson === continuedLesson && ev.date < c.date
+      );
+      const index = sameConts.length + 1;
+      const baseTitle = continuedLesson ? (continuedLesson.topic || continuedLesson.title) : "Oppitunti";
+      const titleSuffix = index > 1 ? ` – jatkotunti ${index}` : ` – jatkotunti`;
+      const title = c.title || `${baseTitle}${titleSuffix}`;
+      const label = index > 1 ? `Jatkotunti ${index}` : `Jatkotunti`;
+
+      events.push({
+        type: "continuation",
+        date: c.date,
+        continuation: { ...c, title, label, index },
+        continuedLesson,
+        lesson: null,
+        exception: null
+      });
+    }
+  });
+
+  events.sort((a, b) => a.date.localeCompare(b.date));
+  return events;
+}
+
 async function renderAikataulu() {
   const groups = getAllScheduleGroups();
   if (!groups.length) {
@@ -4327,30 +4469,7 @@ async function renderAikataulu() {
 
   try {
     const courseData = await getCourseData(courseCode);
-    const lessons = courseData.lessons || [];
-    const exceptions = schedule.exceptions || [];
-    const events = [];
-
-    lessons.forEach((lesson) => {
-      const date = getLessonDate(lesson.lesson, schedule);
-      if (date) {
-        events.push({
-          date,
-          lesson,
-          exception: null
-        });
-      }
-    });
-
-    exceptions.forEach((exception) => {
-      events.push({
-        date: exception.date,
-        lesson: null,
-        exception
-      });
-    });
-
-    events.sort((a, b) => a.date.localeCompare(b.date));
+    const events = calculateGroupScheduleEvents(courseData, schedule);
 
     if (!events.length) {
       aikatauluLessonsList.innerHTML = '<div class="empty">Tälle ryhmälle ei löytynyt aikataulutettuja oppitunteja.</div>';
@@ -4359,7 +4478,7 @@ async function renderAikataulu() {
 
     aikatauluLessonsList.innerHTML = events
       .map((event) => {
-        if (event.exception) {
+        if (event.type === "exception") {
           return `
             <article class="lesson-card exception-card" data-date="${event.date}">
               <div class="lesson-header">
@@ -4372,6 +4491,73 @@ async function renderAikataulu() {
                   <p class="lesson-card-body-text">${escapeHtml(event.exception.description)}</p>
                 </div>
               </div>
+            </article>
+          `;
+        }
+
+        if (event.type === "continuation") {
+          const cont = event.continuation;
+          let continuationTasksHtml = "";
+          if (cont.tasks) {
+            let content = "";
+            if (Array.isArray(cont.tasks)) {
+              content = `<ul class="continuation-tasks-list">${cont.tasks.map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>`;
+            } else if (typeof cont.tasks === "string" && cont.tasks.trim()) {
+              content = `<p class="continuation-tasks-text">${escapeHtml(cont.tasks)}</p>`;
+            }
+            if (content) {
+              continuationTasksHtml = `
+                <div class="continuation-tasks-box">
+                  <div class="continuation-tasks-header">
+                    <span class="continuation-tasks-icon" aria-hidden="true">📋</span>
+                    <h4 class="continuation-tasks-title">Tehtävät</h4>
+                  </div>
+                  ${content}
+                </div>
+              `;
+            }
+          }
+
+          return `
+            <article class="lesson-card continuation-card" data-date="${event.date}">
+              <div class="lesson-header">
+                <div class="lesson-card-header-row">
+                  <div>
+                    <p class="lesson-number continuation-number">🔁 ${escapeHtml(cont.label || "Jatkotunti")}</p>
+                    <p class="lesson-date">${formatDisplayDate(event.date)}</p>
+                  </div>
+                  ${
+                    event.continuedLesson
+                      ? `
+                        <a href="#/${courseCode}/${event.continuedLesson.lesson}" class="lesson-open-link-btn" title="Siirry oppitunnin #${event.continuedLesson.lesson} materiaaleihin">
+                          <span>Oppitunnille #${event.continuedLesson.lesson}</span>
+                          <span>→</span>
+                        </a>
+                      `
+                      : ""
+                  }
+                </div>
+                <h3 class="lesson-card-title">${escapeHtml(cont.title)}</h3>
+              </div>
+
+              ${
+                event.continuedLesson
+                  ? `
+                    <div class="continuation-parent-note">
+                      <span class="continuation-parent-icon" aria-hidden="true">ℹ️</span>
+                      <span>Jatkoa oppitunnille #${event.continuedLesson.lesson}: <strong>${escapeHtml(event.continuedLesson.topic || event.continuedLesson.title)}</strong></span>
+                    </div>
+                  `
+                  : ""
+              }
+
+              ${
+                cont.description
+                  ? `<div class="lesson-card-body-text continuation-description">${escapeHtml(cont.description)}</div>`
+                  : ""
+              }
+
+              ${continuationTasksHtml}
             </article>
           `;
         }
@@ -4419,14 +4605,15 @@ async function renderAikataulu() {
                         ${sheet.description ? `<p class="task-sheet-desc">${escapeHtml(sheet.description)}</p>` : ""}
                       </div>
                       <div class="task-sheet-btns">
-                        <button type="button" class="rev-btn rev-btn-tasks aikataulu-task-pdf-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}">
-                          Avaa tehtävänanto (PDF) 📄
-                        </button>
+                        <a href="#/${courseCode}/${lessonNum}" class="rev-btn rev-btn-tasks aikataulu-task-lesson-link" title="Siirry oppitunnille #${lessonNum} avaamaan tehtävämoniste">
+                          Avaa oppitunnilla 📄 →
+                        </a>
                       </div>
                     </div>
                   `
                 )
                 .join("")}
+              <p class="task-sheet-hint">💡 Tehtävämonisteen PDF-esikatselu avataan oppitunnin sivulta.</p>
             </div>
           `;
         }
@@ -4475,13 +4662,6 @@ async function renderAikataulu() {
         `;
       })
       .join("");
-
-    // Kytketään PDF-napit avaamaan modaali
-    aikatauluLessonsList.querySelectorAll(".aikataulu-task-pdf-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openLessonTaskViewer(btn.dataset.title, btn.dataset.url);
-      });
-    });
 
     highlightCurrentLesson(true);
   } catch (err) {
@@ -4634,36 +4814,23 @@ async function getLessonForDate(course, schedule, isoDate) {
   if (!course || !schedule) return null;
 
   const courseData = await getCourseData(course.code);
-  const lessons = courseData.lessons || [];
-  const date = new Date(`${isoDate}T12:00:00`);
-  const startDate = new Date(`${schedule.startDate}T12:00:00`);
-  const endDate = new Date(`${schedule.endDate}T12:00:00`);
+  const events = calculateGroupScheduleEvents(courseData, schedule);
+  const match = events.find((ev) => ev.date === isoDate);
+  if (!match) return null;
 
-  if (date < startDate || date > endDate || !schedule.weekdays.includes(date.getDay())) {
-    return null;
+  if (match.type === "exception") {
+    return { exception: match.exception };
   }
-
-  const exception = (schedule.exceptions || []).find((item) => item.date === isoDate);
-  if (exception) {
-    return { exception };
+  if (match.type === "continuation") {
+    return {
+      continuation: match.continuation,
+      continuedLesson: match.continuedLesson
+    };
   }
-
-  let lessonNumber = 0;
-  const currentDate = new Date(startDate);
-
-  while (currentDate <= date) {
-    const currentIso = formatDate(currentDate);
-    if (schedule.weekdays.includes(currentDate.getDay())) {
-      const isException = (schedule.exceptions || []).some((item) => item.date === currentIso);
-      if (!isException) {
-        lessonNumber++;
-      }
-    }
-    currentDate.setDate(currentDate.getDate() + 1);
+  if (match.type === "lesson") {
+    return { lesson: match.lesson };
   }
-
-  const lesson = lessons.find((item) => item.lesson === lessonNumber);
-  return lesson ? { lesson } : null;
+  return null;
 }
 
 async function handleInstructionsSubmit(e) {
@@ -4735,6 +4902,20 @@ function buildSubstituteInstructions(events, start, end) {
         if (event.exception) {
           lines.push(`    ${event.exception.type}`);
           lines.push(`    ${event.exception.description}`);
+        } else if (event.continuation) {
+          const c = event.continuation;
+          lines.push(`    Aihe: ${c.title || "Jatkotunti"}`);
+          if (c.description) {
+            lines.push(`    Kuvaus: ${c.description}`);
+          }
+          if (c.tasks) {
+            const taskStr = Array.isArray(c.tasks) ? c.tasks.join(", ") : c.tasks;
+            lines.push(`    Tehtävät: ${taskStr}`);
+          }
+          if (event.continuedLesson) {
+            const cl = event.continuedLesson;
+            lines.push(`    (Jatkoa oppitunnille #${cl.lesson}: ${cl.topic || cl.title})`);
+          }
         } else if (event.lesson) {
           lines.push(`    Aihe: ${event.lesson.topic || event.lesson.title || ""}`);
 
