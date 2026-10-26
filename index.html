@@ -41,11 +41,17 @@
       </div>
 
       <nav id="main-navigation" class="main-nav" aria-label="Päävalikko">
-        <button type="button" class="nav-tab active" data-nav="view" data-view="koti">🏠 Koti</button>
+        <button type="button" class="nav-tab active" data-nav="view" data-view="koti" title="Koti">
+          <span class="nav-tab-icon" aria-hidden="true">🏠</span>
+          <span class="nav-tab-text">Koti</span>
+        </button>
         
         <div class="nav-grade-group" data-grade-group="7">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="7">
-            <span class="nav-tab-label">🟢 7.&nbsp;lk</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="7" title="7. luokka">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">🟢</span>
+              <span class="nav-tab-text">7.&nbsp;lk</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-grade-courses-7" hidden>
@@ -78,8 +84,11 @@
         </div>
 
         <div class="nav-grade-group" data-grade-group="8">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="8">
-            <span class="nav-tab-label">🔵 8.&nbsp;lk</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="8" title="8. luokka">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">🔵</span>
+              <span class="nav-tab-text">8.&nbsp;lk</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-grade-courses-8" hidden>
@@ -107,8 +116,11 @@
         </div>
 
         <div class="nav-grade-group" data-grade-group="9">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="9">
-            <span class="nav-tab-label">🟣 9.&nbsp;lk</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="9" title="9. luokka">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">🟣</span>
+              <span class="nav-tab-text">9.&nbsp;lk</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-grade-courses-9" hidden>
@@ -146,8 +158,11 @@
         </div>
 
         <div class="nav-grade-group" data-grade-group="valinnainen">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="valinnainen">
-            <span class="nav-tab-label">🟠 Muut</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="grade" data-grade="valinnainen" title="Muut kurssit">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">🟠</span>
+              <span class="nav-tab-text">Muut</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-grade-courses-valinnainen" hidden>
@@ -163,8 +178,11 @@
 
         <!-- Kirjat pudotusvalikko -->
         <div class="nav-grade-group" data-dropdown-group="kirjat">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="kirjat">
-            <span class="nav-tab-label">📚 Kirjat</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="kirjat" title="Oppikirjat">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">📚</span>
+              <span class="nav-tab-text">Kirjat</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-dropdown-kirjat" hidden>
@@ -263,8 +281,11 @@
 
         <!-- Kertaus pudotusvalikko -->
         <div class="nav-grade-group" data-dropdown-group="kertaus">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="kertaus">
-            <span class="nav-tab-label">📝 Kertaus</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="kertaus" title="Kertaustehtävät">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">📝</span>
+              <span class="nav-tab-text">Kertaus</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-dropdown-kertaus" hidden>
@@ -359,8 +380,12 @@
 
         <!-- Arviointi pudotusvalikko -->
         <div class="nav-grade-group" data-dropdown-group="arviointi">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="arviointi">
-            <span class="nav-tab-label">ℹ️ Arviointi</span>
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="arviointi" title="Arviointi">
+            <span class="nav-tab-label">
+              <span class="nav-tab-icon" aria-hidden="true">ℹ️</span>
+              <span class="nav-tab-text nav-text-full">Arviointi</span>
+              <span class="nav-tab-text nav-text-short">Info</span>
+            </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-dropdown-arviointi" hidden>
@@ -394,8 +419,15 @@
 
         <span class="nav-divider" aria-hidden="true"></span>
 
-        <button type="button" class="nav-tab" data-nav="view" data-view="lukujarjestys">📅 Lukujärjestys</button>
-        <button type="button" class="nav-tab" data-nav="view" data-view="aikataulu">👥 Ryhmät</button>
+        <button type="button" class="nav-tab" data-nav="view" data-view="lukujarjestys" title="Lukujärjestys">
+          <span class="nav-tab-icon" aria-hidden="true">📅</span>
+          <span class="nav-tab-text nav-text-full">Lukujärjestys</span>
+          <span class="nav-tab-text nav-text-short">Lukujärj.</span>
+        </button>
+        <button type="button" class="nav-tab" data-nav="view" data-view="aikataulu" title="Ryhmät">
+          <span class="nav-tab-icon" aria-hidden="true">👥</span>
+          <span class="nav-tab-text">Ryhmät</span>
+        </button>
 
         <span class="nav-divider nav-divider-mobile-only" aria-hidden="true"></span>
         <button type="button" class="nav-tab nav-tab-mobile-settings" id="nav-btn-mobile-settings">⚙️ Sivuston asetukset</button>

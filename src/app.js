@@ -1413,7 +1413,7 @@ function renderMobileNavCourseLists() {
         const code = btn.dataset.courseCode;
         if (!code) return;
 
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 920 || (mainNav && mainNav.classList.contains("is-open"));
         const isChevron = !!e.target.closest(".nav-course-chevron");
 
         if (isMobile || isChevron) {

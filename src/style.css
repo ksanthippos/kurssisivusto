@@ -184,19 +184,30 @@ a:hover {
   box-shadow: var(--shadow-md);
 }
 
+.site-header .container {
+  width: min(1520px, calc(100% - 32px));
+}
+
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 0;
+  padding: 12px 0;
   position: relative;
+  min-width: 0;
+}
+
+.brand-group {
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .header-settings-btn {
@@ -262,22 +273,36 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .nav-tab {
   background: transparent;
   color: #cbd5e1;
   border: 1px solid transparent;
-  padding: 6px 12px;
+  padding: 6px 11px;
   border-radius: var(--radius-sm);
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+}
+
+.nav-tab-icon {
+  display: inline-block;
+  line-height: 1;
+}
+
+.nav-text-short {
+  display: none;
+}
+.nav-text-full {
+  display: inline;
 }
 
 .nav-tab:hover {
@@ -305,7 +330,7 @@ a:hover {
 }
 
 /* Luokkatasojen ryhmittely ja alasvetovalikot (Työpöytä) */
-@media (min-width: 901px) {
+@media (min-width: 921px) {
   .nav-grade-group {
     position: relative;
     display: inline-flex;
@@ -336,6 +361,7 @@ a:hover {
     top: calc(100% + 8px);
     left: 0;
     min-width: 270px;
+    max-width: calc(100vw - 24px);
     background: var(--color-surface);
     color: var(--color-text);
     border: 1px solid var(--color-border);
@@ -347,6 +373,14 @@ a:hover {
     gap: 4px;
     z-index: 1200;
     animation: submenuFadeDown 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Oikean puolen alasvetovalikot aukeavat vasemmalle estäen leikkautumisen näytön reunan yli */
+  .nav-grade-group[data-dropdown-group="kirjat"] .nav-grade-courses,
+  .nav-grade-group[data-dropdown-group="kertaus"] .nav-grade-courses,
+  .nav-grade-group[data-dropdown-group="arviointi"] .nav-grade-courses {
+    left: auto;
+    right: 0;
   }
 
   .nav-grade-courses[hidden] {
@@ -491,6 +525,136 @@ a:hover {
   [data-theme="dark"] .nav-grade-courses .nav-course-btn.active {
     color: #93c5fd;
     border-color: #3b82f6;
+  }
+}
+
+/* ==========================================================================
+   Yläpalkin responsiivinen tiivistys läppäreille ja selaimen zoomaukselle
+   ========================================================================== */
+
+/* 1. Läppäri / kevyt zoomaus (1181px - 1360px) */
+@media (min-width: 921px) and (max-width: 1360px) {
+  .site-header .container {
+    width: min(1500px, calc(100% - 24px));
+  }
+
+  .header-inner {
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .brand-group .site-title {
+    font-size: 1.15rem;
+  }
+
+  .brand-group .eyebrow {
+    font-size: 0.68rem;
+  }
+
+  .main-nav {
+    gap: 4px;
+  }
+
+  .nav-tab {
+    padding: 5px 8px;
+    font-size: 0.83rem;
+    gap: 4px;
+  }
+
+  .nav-text-full {
+    display: none !important;
+  }
+
+  .nav-text-short {
+    display: inline !important;
+  }
+
+  .nav-divider {
+    margin: 0 2px;
+  }
+}
+
+/* 2. Kapeampi läppäri / voimakkaampi zoomaus (921px - 1180px) */
+@media (min-width: 921px) and (max-width: 1180px) {
+  .site-header .container {
+    width: calc(100% - 16px);
+  }
+
+  .header-inner {
+    gap: 6px;
+    padding: 8px 0;
+  }
+
+  .brand-group .site-title {
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-group .eyebrow {
+    font-size: 0.62rem;
+    margin-bottom: 0;
+  }
+
+  .main-nav {
+    gap: 2px;
+  }
+
+  .nav-tab {
+    padding: 5px 6px;
+    font-size: 0.80rem;
+    gap: 3px;
+  }
+
+  /* Korvataan Koti, Lukujärjestys ja Ryhmät pelkillä selkeillä kuvakkeilla */
+  .nav-tab[data-view="koti"] .nav-tab-text,
+  .nav-tab[data-view="lukujarjestys"] .nav-tab-text,
+  .nav-tab[data-view="aikataulu"] .nav-tab-text {
+    display: none !important;
+  }
+
+  .nav-tab[data-view="koti"],
+  .nav-tab[data-view="lukujarjestys"],
+  .nav-tab[data-view="aikataulu"] {
+    padding: 5px 8px;
+    font-size: 0.95rem;
+  }
+
+  /* Arviointi kuvakkeeksi + Info-tekstiksi */
+  .nav-grade-group[data-dropdown-group="arviointi"] .nav-text-full {
+    display: none !important;
+  }
+
+  .nav-grade-group[data-dropdown-group="arviointi"] .nav-text-short {
+    display: inline !important;
+  }
+
+  .nav-divider {
+    margin: 0 1px;
+    opacity: 0.2;
+  }
+
+  .header-settings-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+}
+
+/* 3. Erittäin kapea työpöytänäkymä ennen mobiilia (921px - 1020px) */
+@media (min-width: 921px) and (max-width: 1020px) {
+  .brand-group .eyebrow {
+    display: none;
+  }
+
+  .nav-tab {
+    padding: 4px 5px;
+    font-size: 0.77rem;
+    gap: 2px;
+  }
+
+  /* Arviointi kuvakkeeksi */
+  .nav-grade-group[data-dropdown-group="arviointi"] .nav-text-short {
+    display: none !important;
   }
 }
 
@@ -1343,7 +1507,7 @@ a:hover {
 }
 
 /* Mobiiliresponsiivisuus */
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   .app-layout {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -1384,6 +1548,25 @@ a:hover {
   }
   .main-nav.is-open {
     display: flex;
+  }
+
+  .main-nav .nav-tab {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    padding: 10px 12px !important;
+    font-size: 0.95rem !important;
+    gap: 8px !important;
+  }
+
+  .main-nav .nav-tab-text,
+  .main-nav .nav-text-full {
+    display: inline !important;
+  }
+
+  .main-nav .nav-text-short {
+    display: none !important;
   }
 
   [data-theme="dark"] .main-nav {
@@ -2499,9 +2682,9 @@ a:hover {
 }
 
 /* ========================================================
-   Kattavat mobiiliresponsiivisuus-korjaukset (< 900px, < 600px)
+   Kattavat mobiiliresponsiivisuus-korjaukset (< 920px, < 600px)
    ======================================================== */
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   .nav-divider {
     width: 100%;
     height: 1px;
@@ -4510,7 +4693,7 @@ a:hover {
 }
 
 /* Responsiivisuus lukujärjestykselle ja lomakkeille */
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   .schedule-grid {
     grid-template-columns: 1fr;
   }
