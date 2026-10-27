@@ -10,7 +10,7 @@
       "summary": "Yhtälö kahden lausekkeen yhtäsuuruutena, tasapainovaakamalli, vasen puoli (vp) ja oikea puoli (op), ratkaisun tutkiminen sijoittamalla sekä ratkaisun päättelemineen ja arvaaminen.",
       "theory": "<p><strong>Yhtälön perusidea ja vaakamalli:</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>Yhtälö:</strong> Kahden lausekkeen välinen yhtäsuuruus ($2x + 5 = 17$).</li>\n  <li><strong>Vaakamalli:</strong> Yhtäsuuruusmerkki on tasapainopiste. Vasemman puolen (vp) ja oikean puolen (op) arvojen on oltava täsmälleen samat.</li>\n  <li><strong>Ratkaisun testaaminen:</strong> Sijoitetaan luku muuttujan paikalle. Jos $\\text{vp} = \\text{op}$, luku on yhtälön ratkaisu.</li>\n</ul>",
       "tasks": {
-        "theory": "Kertausmoniste (MA_73 yhtälöt): Osat 1 ja 2"
+        "warmup": "Kertausmoniste (MA_73 yhtälöt): Osat 1 ja 2"
       },
       "substituteNote": "",
       "deepDive": {
@@ -31,7 +31,7 @@
       "summary": "Vastaluvun lisääminen yhtälön molemmille puolille, termin siirto yhtäsuuruusmerkin toiselle puolelle ('etumerkki vaihtuu vastakkaiseksi') sekä yhteen- ja vähennyslaskuyhtälöt.",
       "theory": "<p><strong>Vastaluku- ja siirtotekniikat:</strong></p>\n<ul class=\"theory-list\">\n  <li>Yhtälön molemmille puolille voidaan lisätä tai vähentää sama luku ilman, että tasapaino järkkyy.</li>\n  <li><strong>Siirtosääntö:</strong> Kun termi siirretään yhtäsuuruusmerkin toiselle puolelle, sen <strong>etumerkki vaihtuu vastakkaiseksi</strong>:\n    $$x + 7 = 12 \\iff x = 12 - 7 \\iff x = 5$$</li>\n  <li>Muuttujatermit kootaan vasemmalle ja vakioluvut oikealle.</li>\n</ul>",
       "tasks": {
-        "blue": "s. 9: T5, 7 ja yhtälöiden kertausmoniste (osa 3)"
+        "warmup": "s. 9: T5, 7 ja yhtälöiden kertausmoniste (osa 3)"
       },
       "substituteNote": "",
       "deepDive": {
