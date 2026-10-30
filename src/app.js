@@ -143,6 +143,14 @@ const lessonTaskPdfFrame = document.querySelector("#lesson-task-pdf-frame");
 
 // Info-näkymän elementit
 const infoSectionsContainer = document.querySelector("#info-sections-container");
+const infoMainTitle = document.querySelector("#info-main-title");
+const infoSubtitle = document.querySelector("#info-subtitle");
+const infoPdfViewer = document.querySelector("#info-pdf-viewer");
+const infoViewerTag = document.querySelector("#info-viewer-tag");
+const infoViewerTitle = document.querySelector("#info-viewer-title");
+const infoViewerExternalLink = document.querySelector("#info-viewer-external-link");
+const infoViewerCloseBtn = document.querySelector("#info-viewer-close-btn");
+const infoPdfFrame = document.querySelector("#info-pdf-frame");
 
 // Lukuvuoden ja versionumeron automaattinen päivitys
 function getSchoolYear(date = new Date()) {
@@ -270,14 +278,14 @@ function setupEventListeners() {
         if (state.activeView === "arviointi") {
           window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
-          window.location.hash = "#/arviointi";
+          window.location.hash = "#/info";
         }
       } else {
         if (state.activeView === "arviointi") {
           const el = document.querySelector(`#info-${sec}`);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         } else {
-          window.location.hash = `#/arviointi/${sec}`;
+          window.location.hash = `#/info/${sec}`;
         }
       }
       updateNavTabsUI();
@@ -578,8 +586,14 @@ function setupEventListeners() {
       closeMobileMenu();
       closeSettingsPopover();
       closeMobileFavoritesSheet();
+      closeInfoPdfViewer();
     }
   });
+
+  // Info PDF-lukijan sulkemispainike
+  if (infoViewerCloseBtn) {
+    infoViewerCloseBtn.addEventListener("click", closeInfoPdfViewer);
+  }
 
   // Mobiilin suosikkipaneelin tapahtumat
   const sheetCloseBtn = document.querySelector("#mobile-sheet-close-btn");
@@ -929,9 +943,9 @@ function getFavoriteMeta(key) {
     return {
       key: "arviointi",
       type: "section",
-      title: "Arviointiperusteet & info",
-      label: "ℹ️ Arviointiperusteet & info",
-      hash: "#/arviointi",
+      title: "Info & Hyvä tietää",
+      label: "ℹ️ Info (Hyvä tietää)",
+      hash: "#/info",
       icon: "ℹ️"
     };
   }
@@ -2549,7 +2563,7 @@ function renderSettingsPopover() {
       <optgroup label="📌 Osio-sivut">
         <option value="kirjat">📚 Avoin matematiikka -kirjat</option>
         <option value="kertaus">📝 Kertaustehtävät & mallit</option>
-        <option value="arviointi">ℹ️ Arviointiperusteet & info</option>
+        <option value="arviointi">ℹ️ Info (Hyvä tietää)</option>
       </optgroup>
     `);
 
@@ -3431,8 +3445,8 @@ function renderLessonContextLinks() {
   }
 
   html += `
-    <a href="#/arviointi" class="context-pill-link">
-      ℹ️ Arviointiperusteet
+    <a href="#/info" class="context-pill-link">
+      ℹ️ Hyvä tietää & arviointi
     </a>
   `;
 
@@ -3765,27 +3779,150 @@ function closeRevisionViewer() {
 }
 
 // --------------------------------------------------------------------------
-// 4. ARVIOINTI- JA INFONÄKYMÄ
+// 4. ARVIOINTI- JA INFONÄKYMÄ (HYVÄ TIETÄÄ)
 // --------------------------------------------------------------------------
+
+function openInfoPdfViewer(title, pdfUrl, tag = "Dokumentti") {
+  if (!infoPdfViewer || !infoPdfFrame) return;
+  if (infoViewerTitle) infoViewerTitle.textContent = title;
+  if (infoViewerTag) infoViewerTag.textContent = tag;
+  if (infoViewerExternalLink) infoViewerExternalLink.href = pdfUrl;
+  infoPdfFrame.src = pdfUrl;
+  infoPdfViewer.hidden = false;
+  infoPdfViewer.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeInfoPdfViewer() {
+  if (!infoPdfViewer) return;
+  infoPdfViewer.hidden = true;
+  if (infoPdfFrame) infoPdfFrame.src = "";
+}
 
 function renderInfo() {
   if (!infoSectionsContainer || !state.info) return;
 
-  infoSectionsContainer.innerHTML = (state.info.sections || [])
-    .map(
-      (sec) => `
-      <div class="info-card" id="info-${sec.id}">
+  if (infoMainTitle && state.info.title) {
+    infoMainTitle.textContent = state.info.title;
+  }
+  if (infoSubtitle && state.info.subtitle) {
+    infoSubtitle.textContent = `${state.info.subtitle} · ${state.info.period || ""}`;
+  }
+
+  // 1. Dokumentit ja PDF-oppaat
+  let docsHtml = "";
+  if (Array.isArray(state.info.documents) && state.info.documents.length > 0) {
+    docsHtml = `
+      <div class="info-card" id="info-dokumentit">
         <div class="info-card-header">
-          <h3 class="info-card-heading">${escapeHtml(sec.heading)}</h3>
-          ${sec.badge ? `<span class="info-badge">${escapeHtml(sec.badge)}</span>` : ""}
+          <h3 class="info-card-heading">📄 Dokumentit ja oppaat</h3>
+          <span class="info-badge">PDF-materiaalit</span>
         </div>
-        <ul class="info-list">
-          ${(sec.points || []).map((pt) => `<li>${escapeHtml(pt)}</li>`).join("")}
-        </ul>
+        <p class="info-intro-text">
+          Tästä löydät koulun viralliset arviointitiedotteet ja opinto-oppaat. Voit avata dokumentit suoraan selaimeen esikatseluun tai avata ne omalle välilehdelle.
+        </p>
+        <div class="lesson-task-sheets-container" style="margin-top: 14px;">
+          ${state.info.documents
+            .map(
+              (doc) => `
+                <div class="task-sheet-box">
+                  <div class="task-sheet-info">
+                    <div class="task-sheet-badge-group">
+                      <span class="task-badge task-sheet-badge">${escapeHtml(doc.badge || "PDF")}</span>
+                      <h4 class="task-sheet-title">${escapeHtml(doc.title)}</h4>
+                    </div>
+                    ${doc.description ? `<p class="task-sheet-desc">${escapeHtml(doc.description)}</p>` : ""}
+                  </div>
+                  <div class="task-sheet-btns">
+                    <button type="button" class="rev-btn rev-btn-tasks info-doc-open-btn" data-url="${escapeHtml(doc.pdf)}" data-title="${escapeHtml(doc.title)}" data-badge="${escapeHtml(doc.badge || 'Dokumentti')}">
+                      Avaa esikatselu (PDF) 📄
+                    </button>
+                    <a href="${escapeHtml(doc.pdf)}" target="_blank" rel="noopener noreferrer" class="rev-btn rev-btn-preview" style="text-decoration: none;">
+                      Avaa erilliseen välilehteen ↗
+                    </a>
+                  </div>
+                </div>
+              `
+            )
+            .join("")}
+        </div>
       </div>
-    `
-    )
+    `;
+  }
+
+  // 2. Osiot (arviointikriteerit + valinnaisaineet)
+  const sectionsHtml = (state.info.sections || [])
+    .map((sec) => {
+      // Valinnaisaineet -osio (categories)
+      if (sec.categories) {
+        return `
+          <div class="info-card info-valinnaiset-card" id="info-${sec.id}">
+            <div class="info-card-header">
+              <h3 class="info-card-heading">${escapeHtml(sec.heading)}</h3>
+              ${sec.badge ? `<span class="info-badge">${escapeHtml(sec.badge)}</span>` : ""}
+            </div>
+            ${sec.intro ? `<p class="info-intro-text">${escapeHtml(sec.intro)}</p>` : ""}
+            ${sec.note ? `
+              <div class="info-callout-box">
+                <span class="info-callout-icon" aria-hidden="true">💡</span>
+                <p class="info-callout-text">${escapeHtml(sec.note)}</p>
+              </div>
+            ` : ""}
+            
+            <div class="valinnaiset-categories-list">
+              ${sec.categories
+                .map(
+                  (cat) => `
+                    <div class="valinnaiset-category-group">
+                      <h4 class="valinnaiset-category-title">
+                        <span class="valinnaiset-cat-icon">${cat.icon || "📌"}</span> ${escapeHtml(cat.name)}
+                      </h4>
+                      <div class="valinnaiset-courses-grid">
+                        ${(cat.courses || [])
+                          .map(
+                            (c) => `
+                              <div class="valinnais-course-item">
+                                <div class="valinnais-course-top">
+                                  <span class="valinnais-course-code">${escapeHtml(c.code)}</span>
+                                  <strong class="valinnais-course-name">${escapeHtml(c.title)}</strong>
+                                </div>
+                                <p class="valinnais-course-desc">${escapeHtml(c.desc)}</p>
+                              </div>
+                            `
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                  `
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      // Perinteinen tekstilistaus
+      return `
+        <div class="info-card" id="info-${sec.id}">
+          <div class="info-card-header">
+            <h3 class="info-card-heading">${escapeHtml(sec.heading)}</h3>
+            ${sec.badge ? `<span class="info-badge">${escapeHtml(sec.badge)}</span>` : ""}
+          </div>
+          <ul class="info-list">
+            ${(sec.points || []).map((pt) => `<li>${escapeHtml(pt)}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    })
     .join("");
+
+  infoSectionsContainer.innerHTML = docsHtml + sectionsHtml;
+
+  // Kuuntelijat PDF-dokumenttien avaamiseen
+  infoSectionsContainer.querySelectorAll(".info-doc-open-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openInfoPdfViewer(btn.dataset.title, btn.dataset.url, btn.dataset.badge || "Dokumentti");
+    });
+  });
 }
 
 // Apufunktiot

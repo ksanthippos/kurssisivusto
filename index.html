@@ -378,20 +378,25 @@
           </div>
         </div>
 
-        <!-- Arviointi pudotusvalikko -->
+        <!-- Info pudotusvalikko -->
         <div class="nav-grade-group" data-dropdown-group="arviointi">
-          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="arviointi" title="Arviointi">
+          <button type="button" class="nav-tab nav-tab-grade" data-nav="dropdown" data-dropdown="arviointi" title="Info">
             <span class="nav-tab-label">
               <span class="nav-tab-icon" aria-hidden="true">ℹ️</span>
-              <span class="nav-tab-text nav-text-full">Arviointi</span>
+              <span class="nav-tab-text nav-text-full">Info</span>
               <span class="nav-tab-text nav-text-short">Info</span>
             </span>
             <span class="nav-tab-chevron" aria-hidden="true">▾</span>
           </button>
           <div class="nav-grade-courses" id="nav-dropdown-arviointi" hidden>
             <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="all">
-              <span class="nav-course-badge grade-other">ℹ️ Kaikki</span>
-              <span class="nav-course-title">Arviointitiedote koteihin</span>
+              <span class="nav-course-badge grade-other">ℹ️ Hyvä tietää</span>
+              <span class="nav-course-title">Info ja ohjeistus</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="dokumentit">
+              <span class="nav-course-badge grade-other">📄 PDF:t</span>
+              <span class="nav-course-title">Dokumentit & oppaat</span>
               <span class="nav-course-arrow" aria-hidden="true">→</span>
             </button>
             <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="koe">
@@ -410,8 +415,13 @@
               <span class="nav-course-arrow" aria-hidden="true">→</span>
             </button>
             <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="muistilista">
-              <span class="nav-course-badge grade-9">💡 Info</span>
+              <span class="nav-course-badge grade-9">💡 Muistilista</span>
               <span class="nav-course-title">4. Oppilaan muistilista</span>
+              <span class="nav-course-arrow" aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-course-btn" data-action="info-scroll" data-section="valinnaiset">
+              <span class="nav-course-badge grade-8">📚 7.–9. lk</span>
+              <span class="nav-course-title">5. Valinnaisaineet</span>
               <span class="nav-course-arrow" aria-hidden="true">→</span>
             </button>
           </div>
@@ -1031,7 +1041,7 @@
         <div class="revision-cards-list" id="revision-cards-list"></div>
       </article>
 
-      <!-- 4. ARVIOINTI JA INFO -NÄKYMÄ -->
+      <!-- 4. INFO -NÄKYMÄ (HYVÄ TIETÄÄ) -->
       <article class="view-panel" id="view-arviointi" hidden>
         <header class="view-header">
           <div class="view-header-top-row">
@@ -1041,11 +1051,30 @@
               <span class="star-label">Lisää suosikkeihin</span>
             </button>
           </div>
-          <h2 class="view-title" id="info-main-title">Tiedote koteihin MAFYKE-arvioinnista</h2>
+          <h2 class="view-title" id="info-main-title">Hyvä tietää -osio</h2>
           <p class="view-description" id="info-subtitle">
             Pasilan peruskoulu · Versio RAUH · 2. jakso (19.10.2026 - 18.12.2026)
           </p>
         </header>
+
+        <!-- Upotettu PDF-lukija infodokumenteille -->
+        <section class="pdf-viewer-container" id="info-pdf-viewer" hidden>
+          <div class="pdf-viewer-header">
+            <div class="pdf-viewer-info">
+              <span class="viewer-tag" id="info-viewer-tag">Dokumentti</span>
+              <h3 id="info-viewer-title">PDF Esikatselu</h3>
+            </div>
+            <div class="pdf-viewer-actions">
+              <a href="#" id="info-viewer-external-link" target="_blank" rel="noopener noreferrer" class="viewer-action-btn">
+                Avaa erilliseen ikkunaan ↗
+              </a>
+              <button type="button" id="info-viewer-close-btn" class="viewer-close-btn" aria-label="Sulje lukutila">
+                ✕ Sulje lukutila
+              </button>
+            </div>
+          </div>
+          <iframe id="info-pdf-frame" src="" title="Info PDF" loading="lazy"></iframe>
+        </section>
 
         <div class="info-sections-container" id="info-sections-container"></div>
       </article>

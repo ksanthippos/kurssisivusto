@@ -1,0 +1,163 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[finnish]{babel}
+\usepackage{lmodern}
+\usepackage[margin=1.3cm,top=1.4cm,bottom=1.4cm]{geometry}
+\usepackage{xcolor}
+
+% Väripaletti (Kurssisivuston mukainen moderni ilme)
+\definecolor{brandblue}{RGB}{30, 58, 138}
+\definecolor{brandblueLight}{RGB}{239, 246, 255}
+\definecolor{accentteal}{RGB}{13, 148, 136}
+\definecolor{textdark}{RGB}{30, 41, 59}
+\definecolor{textgray}{RGB}{100, 116, 139}
+\definecolor{badgecode}{RGB}{15, 23, 42}
+
+% Sivun ylä- ja alatunnisteet vakio-LaTeXilla
+\makeatletter
+\def\@oddhead{\footnotesize\color{textgray}\textbf{Pasilan peruskoulu} $\cdot$ Opetussuunnitelma\hfill\color{brandblue}\textbf{Valinnaiset opinnot 7.--9. lk}}
+\def\@evenhead{\@oddhead}
+\def\@oddfoot{\footnotesize\color{textgray}Versio RAUH $\cdot$ Päivitetty lukuvuodelle 2026--2027\hfill\footnotesize Sivu \thepage\ / 2}
+\def\@evenfoot{\@oddfoot}
+\makeatother
+\pagestyle{myheadings}
+
+\newcommand{\mysection}[1]{%
+  \vspace{6pt}%
+  {\noindent\large\bfseries\color{brandblue} #1}\par
+  \vspace{1pt}%
+  {\color{brandblue}\hrule height 0.8pt}%
+  \vspace{3pt}%
+}
+
+\newcommand{\mysubsection}[1]{%
+  \vspace{3pt}%
+  {\noindent\normalsize\bfseries\color{accentteal} #1}\par
+  \vspace{1pt}%
+}
+
+\newcommand{\courseitem}[3]{%
+  \noindent\textbf{\color{badgecode}[#1]} \textbf{#2} \textendash\ {\color{textdark}#3}\par\vspace{1.5pt}%
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+
+% Pääotsikko
+\begin{center}
+  {\footnotesize\bfseries\color{accentteal}PASILAN PERUSKOULU $\cdot$ OPETUSSUUNNITELMA}\\[2pt]
+  {\Large\bfseries\color{brandblue} Valinnaiset opinnot vuosiluokille 7--9}\\[2pt]
+  {\footnotesize\color{textgray}\textit{Tiivis opinto-opas valinnaisainetarjottimeen ja opintopolun suunnitteluun $\cdot$ Lv 2026--2027}}
+\end{center}
+\vspace{2pt}
+
+\noindent
+\setlength{\fboxsep}{5pt}%
+\setlength{\fboxrule}{0.6pt}%
+\fcolorbox{brandblue}{brandblueLight}{%
+  \begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+  \textbf{\color{brandblue}Tietoa valinnoista ja opintopolusta:}
+  \begin{itemize}
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parskip}{0pt}%
+    \setlength{\topsep}{1pt}%
+    \setlength{\partopsep}{0pt}%
+    \item \textbf{Oma koulupolku:} Yhteisten aineiden lisäksi oppilas pääsee syventämään osaamistaan ja valitsemaan opintoja kiinnostustensa mukaan.
+    \item \textbf{Yläkoulun valinnat:} Valitaan viisi (5) taito- ja taideaineiden syventävää opintokokonaisuutta sekä vapaasti valittavia aineita tarjonnasta.
+    \item \textbf{Arviointi:} Pääsääntöisesti hyväksytty-merkintä (S). Taito- ja taideaineiden syventävät kokonaisuudet vaikuttavat aineen päättöarvosanaan.
+  \end{itemize}
+  \end{minipage}
+}
+
+\vspace{3pt}
+
+\mysection{1. Kielet ja viestintä}
+
+\mysubsection{Suomen kieli ja kirjallisuus}
+\courseitem{VSU1}{Minustako kirjailija / Toimittaja työssään}{Luovan kirjoittamisen työpaja (runot, novellit ja antologia) tai tutkiva journalismi: tiedonhankinta, haastattelut ja artikkeleiden julkaisu.}
+
+\mysubsection{Englanti (A1)}
+\courseitem{VENA1}{Back to the basics}{Englannin perusrakenteiden ja aikamuotojen kertaus sekä sanaston vahvistaminen kannustavassa ilmapiirissä.}
+\courseitem{VENA2}{Let's speak English!}{Suullisen kielitaidon harjoittelua ja arjen keskustelufraaseja. Tavoitteena rohkeus käyttää kieltä luovasti ja sujuvasti.}
+
+\mysubsection{Ruotsi}
+\courseitem{VKK1}{Film}{Elokuvataiteeseen tutustuminen ruotsin kielellä: käsikirjoittaminen, näytteleminen, ohjaus ja oman lyhytelokuvan tai trailerin toteuttaminen.}
+
+\mysubsection{B2-Espanja}
+\courseitem{VESB2 1--2}{Hola, ¿qué tal?}{Espanjan alkeet, ääntäminen, itsestä ja perheestä kertominen sekä keskeiset arkitilanteet suullisesti.}
+\courseitem{VESB2 3--4}{Me gusta el español}{Kielitaidon laajentaminen: ostokset, ravintolassa asiointi, matkustaminen ja monipuoliset kuullunymmärtämisharjoitukset.}
+\courseitem{VESB2 5--6}{El mundo hispanohablante}{Syventävät opinnot: vaativampia tekstejä, aitoja materiaaleja ja tutustuminen espanjankielisten maiden kulttuuriin.}
+
+\mysubsection{Pohjoissaame (B2 ja valinnaiskurssit)}
+\courseitem{B2SAK 1--2}{Bures!}{Euroopan ainoan alkuperäiskansan kielen alkeet: ääntäminen, helppo sanasto ja itsestä kertominen.}
+\courseitem{B2SAK 3--4}{Hálidan oahppat sámegiela!}{Vuorovaikutustilanteet, asiointi ja kielen perusrakenteiden vahvistaminen.}
+\courseitem{VSAK1}{Mii du namma lea?}{Pohjoissaamen alkeet, musiikki, saamelaiseen kulttuuriin ja tarinaperinteeseen tutustuminen.}
+\courseitem{VSAK2}{Mo manná?}{Vapaa-aika, matkustaminen, sanaston laajentaminen ja tekstien tulkinta.}
+
+\mysection{2. Matemaattis-luonnontieteelliset aineet}
+
+\mysubsection{Matematiikka}
+\courseitem{VMA1}{Matematiikan valinnaiskurssi}{Tutustutaan valikoimaan lukio- ja yliopistotason matemaattisia ilmiöitä. Peruskoulumatematiikalla kuitenkin pärjää eli tekninen taso pidetään maltillisena.}
+\courseitem{VMA2}{Ohjelmoinnin perusteita}{Mitä koodaaminen on ja miten laitteita ohjataan? Tutustutaan muuttujiin, ehto- ja toistolauseisiin sekä logiikkaan.}
+
+\mysubsection{Biologia, fysiikka ja kemia}
+\courseitem{VBI}{Biologian työ}{Laboratoriotöitä, mikroskopointia, vesitutkimusta sekä maastotöitä sisällä ja ulkona. Mahdollisia tutustumiskäyntejä.}
+\courseitem{VFY1}{Fysiikan työ}{Kokeellista fysiikkaa tutkimuksesta kiinnostuneille: syventymistä ilmiöihin, mittauslaitteiden käyttöä ja omia tutkimusprojekteja.}
+\courseitem{VKE1}{Kemia käytännössä}{Käytännön laboratoriotyöskentelyä, kiehtovia kemiallisia reaktioita, aineiden tutkimista ja tulosten raportointia.}
+
+\mysection{3. Yhteiskunta, filosofia ja tulevaisuus}
+
+\mysubsection{Historia, yhteiskuntaoppi ja OPO}
+\courseitem{VHI1}{Jos, niin -- filosofian oivalluksia}{Filosofian peruskysymyksiä historian suurten ajattelijoiden kautta: havainnot, tieto, etiikka ja kriittinen argumentointi.}
+\courseitem{VYH1}{Laki ja oikeus}{Tutustuminen oikeusperiaatteisiin, sopimuksiin, kuluttajansuojaan, rikos- ja siviilioikeuteen sekä tuomioistuinten käytäntöihin.}
+\courseitem{VOPO1}{Työelämässä tarvittavia tietoja ja taitoja}{Yrittäjyyskasvatusta, liiketoimintasuunnitelman laatiminen, työelämäviestintä (sähköpostit, esitykset) ja hakemustaidot.}
+
+\mysection{4. Taito- ja taideaineet}
+
+\mysubsection{Musiikki}
+\courseitem{SMU1}{Soitto -- bändisoitto ja instrumenttitaidot}{Bändityöskentelyä, soittotekniikoita, luokan instrumenttien haltuunottoa ja monipuolista eri tyylien soittoa.}
+\courseitem{SMU2}{Laulu -- äänenkäyttö ja ilmaisu}{Yksin- ja moniäänistä laulua, äänenmuodostuksen perusteet, mikrofonityöskentelyä ja esiintymisvarmuuden kehittämistä.}
+\courseitem{SMU3}{Akustinen kitara ja kosketinsoittimet}{Sointujen luku ja muodostus kitaralla ja pianolla, säestystaidot, soittimen viritys ja perushuolto.}
+
+\mysubsection{Kuvataide}
+\courseitem{SKU1}{Taiteen tekemistä perinteisin menetelmin}{Syventävää piirtämistä, maalausta ja klassisia tekniikoita intensiivisellä otteella.}
+\courseitem{SKU2}{Visuaalisen maailman dokumentaatio}{Kaupungin, tilojen ja ihmisten havainnointia ja dokumentointia valokuvauksen ja luonnostelun keinoin.}
+\courseitem{SKU3}{Valokuvaus, kuvankäsittely ja digitaide}{Digitaalinen valokuvaus, kuvankäsittely, julisteet, taidepelit, animaatiot ja graafinen viestintä.}
+\courseitem{SKU4}{Piirustus ja maalaus}{Monipuoliset materiaalit: lyijykynä, hiili, sivellintussit, pastellit, vesivärit ja akryylit sisällä sekä ulkona.}
+\courseitem{SKU5}{Kuvanveisto, muotoilu ja pienoismallit}{Kolmiulotteinen rakentelu: savi, kipsi, kierrätysmateriaalit ja pienoismallit.}
+
+\mysubsection{Käsityö}
+\courseitem{SKS1}{Tekemisen meininki 1 -- pehmeät materiaalit}{Kankaiden ja lankojen työstö, värjäys, painanta, huovutus sekä saamelaiset perinteiset käsityöt.}
+\courseitem{SKS2}{Tekemisen meininki 2 -- kovat materiaalit}{Puun, metallin ja muovien työstäminen omissa vapaavalintaisissa luovissa projekteissa.}
+\courseitem{SKS3}{Tekemisen meininki 3 -- sähköiset kojeet ja laitteet}{Elektroniikan perusteet, kierrätyselektroniikka, älyvaatteet ja ohjelmoitavat mikroprosessorit.}
+
+\mysubsection{Liikunta}
+\courseitem{SLI1}{Hiki virtaa sisällä}{Sisäliikuntalajit: permanto, trampoliini, sulkapallo, pöytätennis ja salibandyn perusteet.}
+\courseitem{SLI2}{Kroppa kuntoon}{Kuntosaliharjoittelu, lihaskunnon kartoitus, kehonhuolto, venyttely ja oikeaoppinen ravinto.}
+\courseitem{SLI3}{Joukkuepelit}{Lentopallo, koripallo, jalkapallo, pesäpallo ja salibandy: pelitaktiikka ja joukkuehenki.}
+\courseitem{SLI4}{Salibandyä -- reikäpallolla ylämummoon}{Laukaus- ja syöttötekniikka, mailataidot, pelisilmä ja vauhdikas turnauspelaaminen.}
+\courseitem{SLI5}{Jalkapallo -- saksipotku}{Pallonhallinta, syöttökuviot, erikoistilanteet (kulmat ja vapaapotkut) ja sääntöjen kertaaminen.}
+\courseitem{SLI6}{Oma valinta -- yhdessä tuumaten ja liikkuen}{Ryhmän ja opettajan yhdessä suunnittelema kokonaisuus lähialueen liikuntamahdollisuuksia hyödyntäen.}
+\courseitem{SLI7}{Jääliikuntaa -- luistellen ja lätkien}{Taitoradat, luistelutekniikka, jääkiekko, jääpallo ja ringette talvisilla jäillä.}
+
+\mysubsection{Kotitalous}
+\courseitem{SKO1}{Taitoja arkipäivän haasteisiin}{Ateriasuunnittelu, erityisruokavaliot (kasvis, keliakia), kodinkoneet ja energiatalous.}
+\courseitem{SKO2}{Ruokamatka Suomessa}{Suomalaiset perinneruoat sekä ruokakulttuurin alueelliset erot idässä, lännessä ja pohjoisessa.}
+\courseitem{SKO3}{Omaan kämppään}{Ensimmäisen oman kodin asuntoprojekti: asuminen, siivous, hankinnat, talous ja tupaantuliaiset.}
+\courseitem{SKO4}{Leivonta 1}{Leivonnan alkeet: taikinatyypit, kohoaminen, leivät ja suolaiset sekä makeat leivonnaiset.}
+\courseitem{SKO5}{Leivonta 2}{Vaativammat leivonnaiset, kansainväliset erikoisuudet ja omien leivontareseptien suunnittelu.}
+\courseitem{SKO6}{Ruokamatka Eurooppaan}{Eurooppalaiset keittiöt: tutustutaan mm. italialaiseen pastaan ja espanjalaiseen paellaan.}
+\courseitem{SKO7}{Ruokamatka kaukomaille}{Aasian, Afrikan, Amerikan ja Lähi-idän maut ja ruoanvalmistustavat.}
+\courseitem{SKO8}{Kulinaristi keittiössä}{Gastronomia, esteettisyys, makujen yhdistely, erikoishedelmät, juustot ja mausteet.}
+
+\vspace{6pt}
+\begin{center}
+  \footnotesize\color{textgray}
+  Valinnat tehdään Wilmassa annettujen ohjeiden mukaisesti yhteistyössä oppilaan, huoltajan ja opinto-ohjaajan kanssa.\\[1pt]
+  Lisätietoja aineenopettajilta ja opinto-ohjaajalta $\cdot$ \textbf{Pasilan peruskoulu}
+\end{center}
+
+\end{document}

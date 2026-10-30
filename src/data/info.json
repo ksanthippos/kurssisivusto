@@ -1,7 +1,23 @@
 {
-  "title": "Tiedote koteihin MAFYKE-arvioinnista",
-  "subtitle": "Pasilan peruskoulu · Versio RAUH",
-  "period": "2. jakso (19.10.2026 - 18.12.2026)",
+  "title": "Hyvä tietää -osio",
+  "subtitle": "Pasilan peruskoulu · Info ja ohjeistus",
+  "period": "Lukuvuosi 2026–2027 · 2. jakso (19.10.2026 - 18.12.2026)",
+  "documents": [
+    {
+      "id": "mafyke-arviointi",
+      "badge": "Tiedote koteihin",
+      "title": "Tiedote koteihin MAFYKE-arvioinnista (PDF)",
+      "description": "Perusopetuksen päättöarviointi 9. vuosiluokalla: arvosanojen määräytyminen (50 % kurssikoe, 50 % oppilaan tuntityöskentely), arviointikriteerit sekä oppiainekohtaiset painokertoimet matematiikassa, fysiikassa ja kemiassa.",
+      "pdf": "ohjeet/mafyke_arviointi_tiedote.pdf"
+    },
+    {
+      "id": "valinnaiset-opas",
+      "badge": "Opinto-opas",
+      "title": "Pasilan peruskoulun valinnaiset opinnot 7.–9. lk (PDF)",
+      "description": "Tiivistetty ja selkeä opinto-opas yläkoulun valinnaisainetarjottimesta: kielet, matemaattis-luonnontieteelliset aineet, taito- ja taideaineet sekä yhteiskunnalliset aineet ja OPO.",
+      "pdf": "ohjeet/valinnaiset_opinnot_opas.pdf"
+    }
+  ],
   "sections": [
     {
       "id": "koe",
@@ -47,7 +63,84 @@
         "Valmistaudu kokeisiin ajoissa: kertaa, tee muistiinpanoja ja harjoittele yhdessä kaverin kanssa.",
         "Toisten opettaminen ja auttaminen on yksi parhaista tavoista oppia asia itsekin."
       ]
+    },
+    {
+      "id": "valinnaiset",
+      "heading": "5. Pasilan peruskoulun valinnaisaineet",
+      "badge": "7.–9. luokat",
+      "intro": "Tässä on lista Pasilan peruskoulun valinnaisaineista ja opintokokonaisuuksista vuosiluokille 7–9. Valinnaisten opintojen avulla voit syventää osaamistasi ja suunnata koulupolkua omien kiinnostuksenkohteidesi mukaan.",
+      "note": "Yläkoulussa valitaan viisi (5) taito- ja taideaineiden syventävää opintokokonaisuutta sekä lisäksi vapaasti valittavia aineita koulun laajasta tarjonnasta. Arviointi suoritetaan pääsääntöisesti suoritusmerkinnällä (S), ja taito- ja taideaineiden syventävät kokonaisuudet vaikuttavat oppiaineen numeroarvosanaan.",
+      "categories": [
+        {
+          "name": "Kielet ja viestintä",
+          "icon": "🌐",
+          "courses": [
+            { "code": "VSU1", "title": "Minustako kirjailija / Toimittaja työssään", "desc": "Luovan kirjoittamisen työpaja (runot, novellit, antologia) tai tutkiva journalismi ja juttujen julkaiseminen." },
+            { "code": "VENA1", "title": "Back to the basics (Englanti)", "desc": "Englannin perusrakenteiden ja aikamuotojen kertaus sekä sanaston vahvistaminen kannustavassa ilmapiirissä." },
+            { "code": "VENA2", "title": "Let's speak English! (Englanti)", "desc": "Suullisen kielitaidon harjoittelua ja arjen keskustelufraaseja. Tavoitteena rohkeus käyttää kieltä luovasti." },
+            { "code": "VKK1", "title": "Film (Ruotsi)", "desc": "Elokuvataiteeseen tutustuminen ruotsiksi: käsikirjoitus, näytteleminen, ohjaus ja oman trailerin/lyhytelokuvan teko." },
+            { "code": "VESB2 1–2", "title": "Hola, ¿qué tal? (Espanja)", "desc": "Espanjan kielen alkeet, ääntäminen, itsestä ja perheestä kertominen sekä keskeiset arkitilanteet suullisesti." },
+            { "code": "VESB2 3–4", "title": "Me gusta el español (Espanja)", "desc": "Ostokset, ravintolassa asiointi, matkustaminen ja monipuoliset kuullunymmärtämisharjoitukset." },
+            { "code": "VESB2 5–6", "title": "El mundo hispanohablante (Espanja)", "desc": "Syventävät opinnot: vaativampia tekstejä, aitoja materiaaleja ja tutustuminen espanjankieliseen maailmaan." },
+            { "code": "B2SAK 1–2", "title": "Bures! (Pohjoissaame)", "desc": "Euroopan ainoan alkuperäiskansan kielen alkeet: ääntäminen, helppo sanasto ja itsestä kertominen." },
+            { "code": "B2SAK 3–4", "title": "Hálidan oahppat sámegiela! (Pohjoissaame)", "desc": "Vuorovaikutustilanteet, asiointi ja pohjoissaamen perusrakenteiden vahvistaminen." },
+            { "code": "VSAK1", "title": "Mii du namma lea? (Saamen kulttuuri)", "desc": "Pohjoissaamen alkeet, musiikki, saamelaiseen kulttuuriin ja tarinaperinteeseen tutustuminen." },
+            { "code": "VSAK2", "title": "Mo manná? (Saamen valinnainen)", "desc": "Vapaa-aika, matkustaminen, sanaston laajentaminen ja tekstien tulkinta." }
+          ]
+        },
+        {
+          "name": "Matemaattis-luonnontieteelliset aineet",
+          "icon": "📐",
+          "courses": [
+            { "code": "VMA1", "title": "Matematiikan valinnaiskurssi", "desc": "Tutustutaan valikoimaan lukio- ja yliopistotason matemaattisia ilmiöitä. Peruskoulumatematiikalla kuitenkin pärjää eli tekninen taso pidetään maltillisena." },
+            { "code": "VMA2", "title": "Ohjelmoinnin perusteita (Matematiikka)", "desc": "Mitä koodaaminen on? Muuttujat, ehto- ja toistolauseet sekä logiikka ohjelmointikielillä kokeillen." },
+            { "code": "VBI", "title": "Biologian työ", "desc": "Laboratoriotöitä, mikroskopointia, vesitutkimusta sekä maastotutkimuksia sisällä ja ulkona." },
+            { "code": "VFY1", "title": "Fysiikan työ", "desc": "Kokeellista fysiikkaa tutkimuksesta kiinnostuneille: ilmiöiden mittaamista ja omia tutkimusprojekteja." },
+            { "code": "VKE1", "title": "Kemia käytännössä", "desc": "Käytännön laboratoriotyöskentelyä, kiehtovia kemiallisia reaktioita ja tutkimusten raportointia." }
+          ]
+        },
+        {
+          "name": "Yhteiskunta, filosofia ja OPO",
+          "icon": "🏛️",
+          "courses": [
+            { "code": "VHI1", "title": "Jos, niin – filosofian oivalluksia (Historia)", "desc": "Filosofian peruskysymyksiä historian suurten ajattelijoiden kautta: havainnot, tieto, etiikka ja argumentointi." },
+            { "code": "VYH1", "title": "Laki ja oikeus (Yhteiskuntaoppi)", "desc": "Oikeusperiaatteet, sopimukset, kuluttajansuoja, rikos- ja siviilioikeus sekä tuomioistuinten käytännöt." },
+            { "code": "VOPO1", "title": "Työelämässä tarvittavia tietoja ja taitoja", "desc": "Yrittäjyyskasvatus, liiketoimintasuunnitelma, työelämäviestintä ja työnhakutaidot." }
+          ]
+        },
+        {
+          "name": "Taito- ja taideaineet",
+          "icon": "🎨",
+          "courses": [
+            { "code": "SMU1", "title": "Soitto – bändisoitto ja instrumentit", "desc": "Bändityöskentelyä, soittotekniikoita, luokan instrumenttien haltuunottoa ja eri tyylien soittoa." },
+            { "code": "SMU2", "title": "Laulu – äänenkäyttö ja ilmaisu", "desc": "Yksin- ja moniäänistä laulua, äänenmuodostuksen perusteet, mikrofonityöskentelyä ja esiintymisvarmuutta." },
+            { "code": "SMU3", "title": "Akustinen kitara ja koskettimet", "desc": "Sointujen luku ja muodostus kitaralla ja pianolla, säestystaidot, soittimen viritys ja perushuolto." },
+            { "code": "SKU1", "title": "Taiteen tekemistä perinteisin menetelmin", "desc": "Syventävää piirtämistä, maalausta ja klassisia tekniikoita intensiivisellä otteella." },
+            { "code": "SKU2", "title": "Visuaalisen maailman dokumentaatio", "desc": "Kaupungin, tilojen ja ihmisten havainnointia ja dokumentointia valokuvauksen ja luonnostelun keinoin." },
+            { "code": "SKU3", "title": "Valokuvaus, kuvankäsittely ja digitaide", "desc": "Digitaalinen kuvaus, kuvankäsittely, julisteet, taidepelit, animaatiot ja graafinen viestintä." },
+            { "code": "SKU4", "title": "Piirustus ja maalaus", "desc": "Monipuoliset materiaalit: lyijykynä, hiili, tussit, pastellit, vesivärit ja akryylit sisällä sekä ulkona." },
+            { "code": "SKU5", "title": "Kuvanveisto, muotoilu ja pienoismallit", "desc": "Kolmiulotteinen rakentelu: savi, kipsi, kierrätysmateriaalit ja pienoismallit." },
+            { "code": "SKS1", "title": "Tekemisen meininki 1 – pehmeät materiaalit", "desc": "Kankaiden ja lankojen työstö, värjäys, painanta, huovutus sekä perinteiset käsityöt." },
+            { "code": "SKS2", "title": "Tekemisen meininki 2 – kovat materiaalit", "desc": "Puun, metallin ja muovien työstäminen omissa vapaavalintaisissa luovissa projekteissa." },
+            { "code": "SKS3", "title": "Tekemisen meininki 3 – sähköiset kojeet", "desc": "Elektroniikan perusteet, kierrätyselektroniikka, älyvaatteet ja ohjelmoitavat mikroprosessorit." },
+            { "code": "SLI1", "title": "Hiki virtaa sisällä (Liikunta)", "desc": "Sisäliikuntalajit: permanto, trampoliini, sulkapallo, pöytätennis ja salibandyn perusteet." },
+            { "code": "SLI2", "title": "Kroppa kuntoon (Liikunta)", "desc": "Kuntosaliharjoittelu, lihaskunnon kartoitus, kehonhuolto, venyttely ja oikeaoppinen ravinto." },
+            { "code": "SLI3", "title": "Joukkuepelit (Liikunta)", "desc": "Lentopallo, koripallo, jalkapallo, pesäpallo ja salibandy: pelitaktiikka ja joukkuehenki." },
+            { "code": "SLI4", "title": "Salibandyä – reikäpallolla ylämummoon", "desc": "Laukaus- ja syöttötekniikka, mailataidot, pelisilmä ja vauhdikas turnauspelaaminen." },
+            { "code": "SLI5", "title": "Jalkapallo – saksipotku", "desc": "Pallonhallinta, syöttökuviot, erikoistilanteet (kulmat ja vapaapotkut) ja sääntöjen kertaaminen." },
+            { "code": "SLI6", "title": "Oma valinta – yhdessä tuumaten ja liikkuen", "desc": "Ryhmän ja opettajan yhdessä suunnittelema kokonaisuus lähialueen liikuntamahdollisuuksia hyödyntäen." },
+            { "code": "SLI7", "title": "Jääliikuntaa – luistellen ja lätkien", "desc": "Taitoradat, luistelutekniikka, jääkiekko, jääpallo ja ringette talvisilla jäillä." },
+            { "code": "SKO1", "title": "Taitoja arkipäivän haasteisiin (Kotitalous)", "desc": "Ateriasuunnittelu, erityisruokavaliot (kasvis, keliakia), kodinkoneet ja energiatalous." },
+            { "code": "SKO2", "title": "Ruokamatka Suomessa (Kotitalous)", "desc": "Suomalaiset perinneruoat sekä ruokakulttuurin alueelliset erot idässä, lännessä ja pohjoisessa." },
+            { "code": "SKO3", "title": "Omaan kämppään (Kotitalous)", "desc": "Ensimmäisen oman kodin asuntoprojekti: asuminen, siivous, hankinnat, talous ja tupaantuliaiset." },
+            { "code": "SKO4", "title": "Leivonta 1 (Kotitalous)", "desc": "Leivonnan alkeet: taikinatyypit, kohoaminen, leivät ja suolaiset sekä makeat leivonnaiset." },
+            { "code": "SKO5", "title": "Leivonta 2 (Kotitalous)", "desc": "Vaativammat leivonnaiset, kansainväliset erikoisuudet ja omien leivontareseptien suunnittelu." },
+            { "code": "SKO6", "title": "Ruokamatka Eurooppaan (Kotitalous)", "desc": "Eurooppalaiset keittiöt: tutustutaan mm. italialaiseen pastaan ja espanjalaiseen paellaan." },
+            { "code": "SKO7", "title": "Ruokamatka kaukomaille (Kotitalous)", "desc": "Aasian, Afrikan, Amerikan ja Lähi-idän maut ja ruoanvalmistustavat." },
+            { "code": "SKO8", "title": "Kulinaristi keittiössä (Kotitalous)", "desc": "Gastronomia, esteettisyys, makujen yhdistely, erikoishedelmät, juustot ja mausteet." }
+          ]
+        }
+      ]
     }
   ]
 }
-
