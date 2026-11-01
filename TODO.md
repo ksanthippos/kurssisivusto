@@ -13,15 +13,15 @@ c) Kertausmateriaalien laajennus:
     Nyt kun pohjat ja synkronointi ovat valmiina, aina kun laadit uusia kertaustehtäviä vaikkapa kursseille MA_72, MA_73, MA_92 tai FY_91, riittää että käännät ne nimellä [KURSSI]_kertaus_v1.pdf ja [KURSSI]_kertaus_mallit_v1.pdf. Ne siirtyvät suoraan sivuston käyttöön!
 
 
-3. Luokkahuoneen esitys- ja valkotaulutyökalut:
-a) Integroitu valkotaulu (Whiteboard Canvas):
-    - Aktivointi leijuvasta painikkeesta (esim. "Alkuun"-napin vieressä tai yläpalkissa).
-    - Näyttötilat: Koko ruutu, puoli ruutua (split view rinnakkain teorian/tehtävien kanssa!), 1/4 ruutua / siirrettävä ikkuna.
-    - Työkalut: Perustussit (musta, punainen, sininen, vihreä), pyyhekumi, kynän paksuus, tyhjennys, kumoa (undo).
-    - Taustapohjat: Puhdas valkoinen, ruutupaperi (matematiikka/geometria) ja valmis koordinaatistopohja (akselit x ja y).
-    - Toteutus: Natiivi HTML5 <canvas> ja Pointer Events (toimii heti hiirellä, sormella ja älytaulun/stylus-kynällä) ilman ulkoisia kirjastoja. Erittäin kevyt (n. 200–300 riviä koodia) ja nopea (60 fps).
-b) Esitys- / Älytaulutila (Smartboard & Clicker):
-    - Koko näytön esitysnäkymä: piilottaa yläpalkin ja ylimääräiset valikot, suurentaa leipätekstin ja KaTeX-kaavat kauempaa luettavaksi.
+3. Luokkahuoneen esitys- ja valkotaulutyökalut: [TEHTY v1.26]
+a) Integroitu valkotaulu (Whiteboard Canvas): [TEHTY]
+    - Aktivointi leijuvasta painikkeesta ("Alkuun"-napin vieressä) ja yläpalkissa (🖊️). Pikanäppäin Alt+W / W.
+    - Näyttötilat: Koko ruutu (fullscreen), puoli ruutua (split view rinnakkain teorian/tehtävien kanssa!), 1/4 ruutua / siirrettävä kelluva ikkuna.
+    - Työkalut: Perustussit (musta, sininen, punainen, vihreä, keltainen korostus), pyyhekumi (destination-out: pyyhkii vain kynää eikä taustaruudukkoa), kynän paksuudet (2px, 4px, 8px), kumoa (undo), tee uudelleen (redo), tyhjennys (clear) ja kuvan tallennus PNG-tiedostoksi.
+    - Taustapohjat: Valmis koordinaatisto (akselit x ja y asteikkoineen), ruutupaperi (matematiikka/geometria), puhdas valkoinen ja viivoitus.
+    - Toteutus: Natiivi HTML5 <canvas> ja Pointer Events (toimii hiirellä, kosketuksella ja älytaulun kynällä) ilman ulkoisia kirjastoja. Retina/HiDPI -terävyystuki.
+b) Esitys- / Älytaulutila (Smartboard & Clicker): [TEHTY]
+    - Koko näytön esitysnäkymä: piilottaa yläpalkin ja ylimääräiset valikot, suurentaa leipätekstin (säädettävä 100% / 125% / 150%) ja KaTeX-kaavat kauempaa luettavaksi. Pikanäppäin F / Alt+P.
     - Langattoman esityskauko-ohjaimen (clicker) ja näppäimistön tuki: siirtyminen edelliseen/seuraavaan tuntiin nuolinäppäimillä (ArrowLeft / ArrowRight) tai PageUp / PageDown -näppäimillä.
 
 

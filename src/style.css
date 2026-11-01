@@ -6194,3 +6194,529 @@ a:hover {
     z-index: 1250 !important;
   }
 }
+
+/* ========================================================
+   Luokkahuoneen esitys- ja valkotaulutyökalut (TODO.md kohta 3)
+   ======================================================== */
+
+/* 1. Leijuva valkotaulun avauspainike (Floating trigger) */
+.whiteboard-trigger-btn {
+  position: fixed;
+  right: 124px;
+  bottom: 20px;
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  background: var(--color-primary-light);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid var(--color-primary-light);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  z-index: 998;
+  transition: all 0.2s ease;
+}
+
+.whiteboard-trigger-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+.whiteboard-trigger-btn.is-active {
+  background: #0f172a;
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .whiteboard-trigger-btn {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .whiteboard-trigger-btn:hover {
+  background: #0369a1;
+}
+
+/* 2. Yläpalkin ja oppitunnin pikanapit */
+.header-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.header-action-btn:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+}
+
+.header-action-btn.is-active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+  font-weight: 700;
+}
+
+.lesson-header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.classroom-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.classroom-tool-btn:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+}
+
+.classroom-tool-btn.is-active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+  font-weight: 700;
+}
+
+/* 3. Valkotaulupaneeli (Whiteboard Panel) */
+.whiteboard-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.whiteboard-panel[hidden] {
+  display: none !important;
+}
+
+/* Split-tila (puoli ruutua rinnakkain) */
+.whiteboard-panel.mode-split {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50vw;
+  height: 100vh;
+  z-index: 1500;
+  border-left: 2px solid var(--color-border);
+  box-shadow: -6px 0 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Fullscreen-tila (koko ruutu) */
+.whiteboard-panel.mode-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  border: none;
+}
+
+/* Floating-tila (1/4 ruutua kelluva siirrettävä ikkuna) */
+.whiteboard-panel.mode-floating {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 560px;
+  height: 420px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 48px);
+  border-radius: var(--radius-md);
+  z-index: 1500;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Split-tilan vaikutus pääsisältöön desktopilla */
+@media (min-width: 900px) {
+  body.whiteboard-split-active .main-content {
+    margin-right: 50vw !important;
+    transition: margin-right 0.2s ease;
+  }
+}
+
+@media (max-width: 899px) {
+  .whiteboard-panel.mode-split {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 50vh !important;
+    border-top: 2px solid var(--color-border);
+    border-left: none;
+  }
+
+  body.whiteboard-split-active .main-content {
+    padding-bottom: calc(50vh + 30px) !important;
+  }
+}
+
+/* Valkotaulun otsikkopalkki & työkalut */
+.whiteboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  user-select: none;
+  -webkit-user-select: none;
+  flex-wrap: wrap;
+}
+
+.mode-floating .whiteboard-header {
+  cursor: grab;
+}
+
+.whiteboard-title-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-heading);
+}
+
+.whiteboard-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wb-control-group {
+  display: flex;
+  align-items: center;
+}
+
+.wb-select {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wb-color-palette {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wb-color-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--c);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, outline 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wb-color-btn:hover {
+  transform: scale(1.15);
+}
+
+.wb-color-btn.active {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 1px;
+  transform: scale(1.2);
+}
+
+.wb-size-palette,
+.wb-tool-group,
+.wb-action-group,
+.wb-window-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wb-size-btn,
+.wb-tool-btn,
+.wb-action-btn,
+.wb-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wb-size-btn:hover,
+.wb-tool-btn:hover,
+.wb-action-btn:hover:not(:disabled),
+.wb-mode-btn:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+}
+
+.wb-size-btn.active,
+.wb-tool-btn.active,
+.wb-mode-btn.active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+  font-weight: 700;
+}
+
+.wb-action-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.wb-size-dot {
+  display: block;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.dot-sm { width: 3px; height: 3px; }
+.dot-md { width: 6px; height: 6px; }
+.dot-lg { width: 10px; height: 10px; }
+
+.wb-close-btn {
+  color: #ef4444 !important;
+}
+
+.wb-close-btn:hover {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+}
+
+[data-theme="dark"] .wb-close-btn:hover {
+  background: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+/* Valkotaulun canvas-kääre ja tasot */
+.whiteboard-canvas-wrapper {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: calc(100% - 46px);
+  overflow: hidden;
+  touch-action: none;
+  background: #ffffff;
+}
+
+.whiteboard-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+.whiteboard-canvas.bg-canvas {
+  z-index: 1;
+}
+
+.whiteboard-canvas.draw-canvas {
+  z-index: 2;
+  cursor: crosshair;
+}
+
+/* 4. Älytaulun esitystila (Smartboard Presentation Mode, TODO.md kohta 3b) */
+body.is-presentation-mode .site-header,
+body.is-presentation-mode .sidebar,
+body.is-presentation-mode .site-footer,
+body.is-presentation-mode .mobile-bottom-bar,
+body.is-presentation-mode .breadcrumbs,
+body.is-presentation-mode .back-to-top,
+body.is-presentation-mode .whiteboard-trigger-btn {
+  display: none !important;
+}
+
+body.is-presentation-mode .main-content {
+  margin: 0 auto !important;
+  max-width: 1100px !important;
+  padding: 36px 36px 130px 36px !important;
+  font-size: var(--presentation-font-scale, 125%) !important;
+}
+
+body.is-presentation-mode .lesson-heading {
+  font-size: 2.4rem !important;
+  margin-bottom: 24px !important;
+}
+
+body.is-presentation-mode .katex-display {
+  font-size: 1.35em !important;
+  margin: 1.5rem 0 !important;
+}
+
+body.is-presentation-mode .lesson-figure img {
+  max-height: 480px !important;
+}
+
+/* Esitystilan leijuva ohjauspalkki */
+.presentation-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1900;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  padding: 8px 18px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+  color: #f8fafc;
+  max-width: calc(100vw - 32px);
+  width: auto;
+}
+
+.presentation-bar[hidden] {
+  display: none !important;
+}
+
+.pres-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.pres-nav-group,
+.pres-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pres-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.pres-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.pres-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pres-exit-btn {
+  background: rgba(239, 68, 68, 0.85);
+  border-color: rgba(239, 68, 68, 0.9);
+}
+
+.pres-exit-btn:hover {
+  background: #dc2626;
+}
+
+.pres-lesson-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 140px;
+  max-width: 280px;
+  text-align: center;
+}
+
+.pres-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+}
+
+.pres-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .whiteboard-trigger-btn {
+    right: 14px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .back-to-top {
+    right: 14px;
+    bottom: calc(126px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .pres-bar-inner {
+    gap: 8px;
+  }
+
+  .pres-btn-label {
+    display: none;
+  }
+
+  .pres-lesson-indicator {
+    max-width: 140px;
+  }
+}

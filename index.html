@@ -445,6 +445,26 @@
 
       <div class="header-actions">
         <button 
+          id="header-whiteboard-btn" 
+          class="header-action-btn header-whiteboard-btn" 
+          type="button" 
+          aria-label="Avaa valkotaulu" 
+          title="Avaa valkotaulu (Alt+W tai W)"
+        >
+          <span aria-hidden="true">🖊️</span>
+        </button>
+
+        <button 
+          id="header-presentation-btn" 
+          class="header-action-btn header-presentation-btn" 
+          type="button" 
+          aria-label="Esitystila älytaululle" 
+          title="Esitystila älytaululle (F)"
+        >
+          <span aria-hidden="true">📺</span>
+        </button>
+
+        <button 
           id="header-settings-btn" 
           class="header-settings-btn" 
           type="button" 
@@ -873,10 +893,20 @@
                 </button>
               </div>
             </div>
-            <button type="button" class="favorite-star-btn" id="favorite-toggle-btn" aria-label="Lisää kurssi suosikkeihin" title="Lisää suosikkeihin">
-              <span class="star-icon" id="star-icon">☆</span>
-              <span class="star-label" id="star-label">Lisää suosikkeihin</span>
-            </button>
+            <div class="lesson-header-actions-group">
+              <button type="button" class="classroom-tool-btn" id="btn-lesson-presentation" title="Avaa esitystila älytaululle (F)">
+                <span aria-hidden="true">📺</span>
+                <span>Esitystila</span>
+              </button>
+              <button type="button" class="classroom-tool-btn" id="btn-lesson-whiteboard" title="Avaa valkotaulu rinnakkain (Alt+W)">
+                <span aria-hidden="true">🖊️</span>
+                <span>Valkotaulu</span>
+              </button>
+              <button type="button" class="favorite-star-btn" id="favorite-toggle-btn" aria-label="Lisää kurssi suosikkeihin" title="Lisää suosikkeihin">
+                <span class="star-icon" id="star-icon">☆</span>
+                <span class="star-label" id="star-label">Lisää suosikkeihin</span>
+              </button>
+            </div>
           </div>
           <h2 class="lesson-heading" id="lesson-heading">Ladataan oppituntia…</h2>
           <div class="lesson-summary-box" id="lesson-summary-box"></div>
@@ -1191,8 +1221,118 @@
     ↑ Alkuun
   </button>
 
+  <!-- Valkotaulun leijuva avauspainike (TODO.md kohta 3a) -->
+  <button id="whiteboard-trigger-btn" class="whiteboard-trigger-btn" type="button" aria-label="Avaa valkotaulu" title="Avaa valkotaulu (Alt+W / W)">
+    <span class="wb-trigger-icon" aria-hidden="true">🖊️</span>
+    <span class="wb-trigger-text">Valkotaulu</span>
+  </button>
+
   <!-- Toast-ilmoitus -->
   <div id="toast" class="toast" role="alert" aria-live="polite" hidden></div>
+
+  <!-- Interaktiivinen valkotaulu (HTML5 Canvas & Pointer Events, TODO.md kohta 3a) -->
+  <aside id="whiteboard-panel" class="whiteboard-panel mode-split" hidden aria-label="Interaktiivinen valkotaulu">
+    <div class="whiteboard-header" id="whiteboard-drag-handle">
+      <div class="whiteboard-title-group">
+        <span class="whiteboard-icon" aria-hidden="true">🖊️</span>
+        <span class="whiteboard-title">Valkotaulu</span>
+      </div>
+
+      <div class="whiteboard-controls">
+        <!-- Taustapohja -->
+        <div class="wb-control-group" title="Taustapohja">
+          <label for="wb-bg-select" class="wb-label sr-only">Tausta:</label>
+          <select id="wb-bg-select" class="wb-select" aria-label="Valkotaulun taustapohja">
+            <option value="coords">📈 Koordinaatisto (x, y)</option>
+            <option value="grid">▦ Ruutupaperi</option>
+            <option value="blank">⬜ Puhdas tausta</option>
+            <option value="lines">☰ Viivoitus</option>
+          </select>
+        </div>
+
+        <!-- Tussin värit -->
+        <div class="wb-color-palette" role="radiogroup" aria-label="Tussin väri">
+          <button type="button" class="wb-color-btn active" data-color="#1e293b" title="Musta / Tumma" style="--c: #1e293b;" aria-checked="true"></button>
+          <button type="button" class="wb-color-btn" data-color="#2563eb" title="Sininen" style="--c: #2563eb;" aria-checked="false"></button>
+          <button type="button" class="wb-color-btn" data-color="#dc2626" title="Punainen" style="--c: #dc2626;" aria-checked="false"></button>
+          <button type="button" class="wb-color-btn" data-color="#16a34a" title="Vihreä" style="--c: #16a34a;" aria-checked="false"></button>
+          <button type="button" class="wb-color-btn" data-color="#f59e0b" title="Keltainen korostustussi" style="--c: #f59e0b;" aria-checked="false"></button>
+        </div>
+
+        <!-- Kynän paksuus -->
+        <div class="wb-size-palette" role="radiogroup" aria-label="Kynän paksuus">
+          <button type="button" class="wb-size-btn" data-size="2" title="Ohut (2 px)" aria-checked="false"><span class="wb-size-dot dot-sm"></span></button>
+          <button type="button" class="wb-size-btn active" data-size="4" title="Normaali (4 px)" aria-checked="true"><span class="wb-size-dot dot-md"></span></button>
+          <button type="button" class="wb-size-btn" data-size="8" title="Paksu (8 px)" aria-checked="false"><span class="wb-size-dot dot-lg"></span></button>
+        </div>
+
+        <!-- Kynä ja Pyyhekumi -->
+        <div class="wb-tool-group">
+          <button type="button" class="wb-tool-btn active" id="wb-tool-pen" title="Tussi / Kynä">✏️</button>
+          <button type="button" class="wb-tool-btn" id="wb-tool-eraser" title="Pyyhekumi">🧹</button>
+        </div>
+
+        <!-- Kumoa / Uudelleen / Tyhjennä / Tallenna -->
+        <div class="wb-action-group">
+          <button type="button" class="wb-action-btn" id="wb-btn-undo" title="Kumoa (Ctrl+Z)" disabled>↶</button>
+          <button type="button" class="wb-action-btn" id="wb-btn-redo" title="Tee uudelleen (Ctrl+Y)" disabled>↷</button>
+          <button type="button" class="wb-action-btn" id="wb-btn-clear" title="Tyhjennä taulu">🗑️</button>
+          <button type="button" class="wb-action-btn" id="wb-btn-export" title="Tallenna kuva (PNG)">💾</button>
+        </div>
+
+        <!-- Ikkunatilat: Split / Fullscreen / Floating / Close -->
+        <div class="wb-window-group">
+          <button type="button" class="wb-mode-btn active" data-mode="split" title="Puoli ruutua rinnakkain">◫</button>
+          <button type="button" class="wb-mode-btn" data-mode="fullscreen" title="Koko ruutu">⛶</button>
+          <button type="button" class="wb-mode-btn" data-mode="floating" title="Kelluva ikkuna">❐</button>
+          <button type="button" class="wb-mode-btn wb-close-btn" id="wb-btn-close" title="Sulje valkotaulu (Esc)">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="whiteboard-canvas-wrapper" id="whiteboard-canvas-wrapper">
+      <canvas id="whiteboard-bg-canvas" class="whiteboard-canvas bg-canvas"></canvas>
+      <canvas id="whiteboard-draw-canvas" class="whiteboard-canvas draw-canvas"></canvas>
+    </div>
+  </aside>
+
+  <!-- Älytaulun esitystilan ohjauspalkki (TODO.md kohta 3b) -->
+  <aside id="presentation-bar" class="presentation-bar" hidden aria-label="Esitystilan ohjauspalkki">
+    <div class="pres-bar-inner">
+      <div class="pres-nav-group">
+        <button type="button" class="pres-btn" id="pres-prev-btn" title="Edellinen tunti (Nuoli vasemmalle / PageUp)">
+          <span aria-hidden="true">◀</span>
+          <span class="pres-btn-label">Edellinen</span>
+        </button>
+        <div class="pres-lesson-indicator">
+          <span class="pres-badge" id="pres-lesson-badge">Oppitunti #1</span>
+          <span class="pres-title" id="pres-lesson-title">Aihe</span>
+        </div>
+        <button type="button" class="pres-btn" id="pres-next-btn" title="Seuraava tunti (Nuoli oikealle / PageDown)">
+          <span class="pres-btn-label">Seuraava</span>
+          <span aria-hidden="true">▶</span>
+        </button>
+      </div>
+
+      <div class="pres-actions-group">
+        <button type="button" class="pres-btn" id="pres-wb-btn" title="Valkotaulu rinnakkain (Alt+W / W)">
+          <span aria-hidden="true">🖊️</span>
+          <span>Valkotaulu</span>
+        </button>
+        <button type="button" class="pres-btn" id="pres-font-btn" title="Tekstin koko (100% / 125% / 150%)">
+          <span aria-hidden="true">🔍</span>
+          <span id="pres-font-label">125%</span>
+        </button>
+        <button type="button" class="pres-btn" id="pres-fullscreen-btn" title="Koko näyttö">
+          <span aria-hidden="true">⛶</span>
+        </button>
+        <button type="button" class="pres-btn pres-exit-btn" id="pres-exit-btn" title="Poistu esitystilasta (Esc)">
+          <span aria-hidden="true">✕</span>
+          <span>Poistu</span>
+        </button>
+      </div>
+    </div>
+  </aside>
 
   <!-- Mobiilin Suosikit-paneeli (Kelluva popover kuten Asetukset) -->
   <div 

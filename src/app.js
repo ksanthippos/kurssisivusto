@@ -1,3 +1,5 @@
+import { initWhiteboard, openWhiteboard, closeWhiteboard, toggleWhiteboard, isWhiteboardOpen } from "./whiteboard.js";
+
 // Tila ja mallit
 const state = {
   courses: [],
@@ -22,6 +24,8 @@ const state = {
   theme: "system", // "system" | "light" | "dark"
   autoDateLesson: false, // boolean
   lessonScope: "extended", // "compact" | "extended"
+  isPresentationMode: false, // Älytaulun esitystila (TODO.md kohta 3b)
+  presentationFontSize: 125, // 100 | 125 | 150 (%)
   homeConfig: {
     blocks: [
       { id: "welcome", title: "Tervetuloteksti", enabled: true },
@@ -204,6 +208,7 @@ async function init() {
     if (factsRes && factsRes.ok) state.scienceFacts = await factsRes.json();
 
     setupEventListeners();
+    initWhiteboard();
     renderMobileNavCourseLists();
     renderMobileNavBooksList();
     renderMobileNavRevisionsList();
@@ -621,9 +626,220 @@ function setupEventListeners() {
     });
   }
 
+  // Alustetaan älytaulun esitystila ja kaukosäädintuki (TODO.md kohta 3b)
+  initPresentationMode();
+
   // Reititys hashchange- ja popstate-tapahtumilla
   window.addEventListener("hashchange", parseRoute);
   window.addEventListener("popstate", parseRoute);
+}
+
+// ========================================================
+// Älytaulun esitystila & Clicker-kaukosäädin (TODO.md kohta 3b)
+// ========================================================
+function initPresentationMode() {
+  const presPrevBtn = document.querySelector("#pres-prev-btn");
+  const presNextBtn = document.querySelector("#pres-next-btn");
+  const presWbBtn = document.querySelector("#pres-wb-btn");
+  const presFontBtn = document.querySelector("#pres-font-btn");
+  const presFsBtn = document.querySelector("#pres-fullscreen-btn");
+  const presExitBtn = document.querySelector("#pres-exit-btn");
+  const headerPresBtn = document.querySelector("#header-presentation-btn");
+  const lessonPresBtn = document.querySelector("#btn-lesson-presentation");
+
+  if (headerPresBtn) {
+    headerPresBtn.addEventListener("click", () => togglePresentationMode());
+  }
+  if (lessonPresBtn) {
+    lessonPresBtn.addEventListener("click", () => togglePresentationMode());
+  }
+
+  if (presPrevBtn) {
+    presPrevBtn.addEventListener("click", goToPrevLesson);
+  }
+  if (presNextBtn) {
+    presNextBtn.addEventListener("click", goToNextLesson);
+  }
+  if (presWbBtn) {
+    presWbBtn.addEventListener("click", () => toggleWhiteboard("split"));
+  }
+  if (presFontBtn) {
+    presFontBtn.addEventListener("click", cyclePresentationFont);
+  }
+  if (presFsBtn) {
+    presFsBtn.addEventListener("click", toggleNativeFullscreen);
+  }
+  if (presExitBtn) {
+    presExitBtn.addEventListener("click", exitPresentationMode);
+  }
+
+  // Näppäimistön ja langattoman esityskauko-ohjaimen (clicker) tuki
+  document.addEventListener("keydown", (e) => {
+    // Älä kaappaa näppäimiä syötekentissä tai modaaleissa
+    const tag = e.target.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.target.isContentEditable) {
+      return;
+    }
+
+    // 1. Valkotaulun pikanäppäin: Alt+W tai W
+    if ((e.altKey && e.key.toLowerCase() === "w") || (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.toLowerCase() === "w")) {
+      toggleWhiteboard();
+      e.preventDefault();
+      return;
+    }
+
+    // 2. Esitystilan pikanäppäin: Alt+P tai F (oppitunnilla)
+    if ((e.altKey && e.key.toLowerCase() === "p") || (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.toLowerCase() === "f" && state.activeView === "lesson")) {
+      togglePresentationMode();
+      e.preventDefault();
+      return;
+    }
+
+    // 3. Nuolinäppäimet ja PageUp / PageDown (clicker-kaukosäädintuki)
+    if (state.isPresentationMode || state.activeView === "lesson") {
+      if (e.key === "ArrowRight" || e.key === "PageDown") {
+        goToNextLesson();
+        e.preventDefault();
+        return;
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        goToPrevLesson();
+        e.preventDefault();
+        return;
+      }
+    }
+
+    // 4. Escape: sulje valkotaulu tai poistu esitystilasta
+    if (e.key === "Escape") {
+      if (isWhiteboardOpen()) {
+        closeWhiteboard();
+        e.preventDefault();
+        return;
+      }
+      if (state.isPresentationMode) {
+        exitPresentationMode();
+        e.preventDefault();
+        return;
+      }
+    }
+  });
+}
+
+function goToPrevLesson() {
+  if (state.activeLessonNumber > 1 && state.activeCourse) {
+    navigateTo(state.activeCourse.code, state.activeLessonNumber - 1);
+  }
+}
+
+function goToNextLesson() {
+  const max = state.activeCourseData?.lessons?.length || 1;
+  if (state.activeLessonNumber < max && state.activeCourse) {
+    navigateTo(state.activeCourse.code, state.activeLessonNumber + 1);
+  }
+}
+
+function togglePresentationMode() {
+  if (state.isPresentationMode) {
+    exitPresentationMode();
+  } else {
+    enterPresentationMode();
+  }
+}
+
+function enterPresentationMode() {
+  if (state.activeView !== "lesson") {
+    if (state.activeCourse) {
+      navigateTo(state.activeCourse.code, state.activeLessonNumber || 1);
+    } else {
+      navigateTo("FY_71", 1);
+    }
+  }
+
+  state.isPresentationMode = true;
+  document.body.classList.add("is-presentation-mode");
+  applyPresentationFontScale();
+
+  const presBar = document.querySelector("#presentation-bar");
+  if (presBar) presBar.hidden = false;
+
+  const headerBtn = document.querySelector("#header-presentation-btn");
+  if (headerBtn) headerBtn.classList.add("is-active");
+
+  const lessonBtn = document.querySelector("#btn-lesson-presentation");
+  if (lessonBtn) lessonBtn.classList.add("is-active");
+
+  updatePresentationBar();
+  showToast("📺 Älytaulun esitystila aktivoitu. Käytä nuolia tai clickeriä. Poistu painamalla Esc.");
+}
+
+function exitPresentationMode() {
+  state.isPresentationMode = false;
+  document.body.classList.remove("is-presentation-mode");
+  document.body.style.removeProperty("--presentation-font-scale");
+
+  const presBar = document.querySelector("#presentation-bar");
+  if (presBar) presBar.hidden = true;
+
+  const headerBtn = document.querySelector("#header-presentation-btn");
+  if (headerBtn) headerBtn.classList.remove("is-active");
+
+  const lessonBtn = document.querySelector("#btn-lesson-presentation");
+  if (lessonBtn) lessonBtn.classList.remove("is-active");
+
+  if (document.fullscreenElement) {
+    try {
+      document.exitFullscreen();
+    } catch (err) {}
+  }
+}
+
+function updatePresentationBar() {
+  const presBar = document.querySelector("#presentation-bar");
+  if (!presBar) return;
+
+  const currentLesson = state.activeLessonNumber;
+  const lessons = state.activeCourseData?.lessons || [];
+  const current = lessons.find((l) => l.lesson === currentLesson) || lessons[0];
+  const max = lessons.length || 1;
+
+  const badgeEl = document.querySelector("#pres-lesson-badge");
+  const titleEl = document.querySelector("#pres-lesson-title");
+  const prevBtn = document.querySelector("#pres-prev-btn");
+  const nextBtn = document.querySelector("#pres-next-btn");
+
+  if (badgeEl) badgeEl.textContent = `Oppitunti #${currentLesson}`;
+  if (titleEl) titleEl.textContent = current ? (current.title || current.topic || "") : "";
+
+  if (prevBtn) {
+    prevBtn.disabled = currentLesson <= 1;
+  }
+  if (nextBtn) {
+    nextBtn.disabled = currentLesson >= max;
+  }
+}
+
+function cyclePresentationFont() {
+  if (state.presentationFontSize === 100) {
+    state.presentationFontSize = 125;
+  } else if (state.presentationFontSize === 125) {
+    state.presentationFontSize = 150;
+  } else {
+    state.presentationFontSize = 100;
+  }
+  applyPresentationFontScale();
+}
+
+function applyPresentationFontScale() {
+  document.body.style.setProperty("--presentation-font-scale", `${state.presentationFontSize}%`);
+  const fontLabel = document.querySelector("#pres-font-label");
+  if (fontLabel) fontLabel.textContent = `${state.presentationFontSize}%`;
+}
+
+function toggleNativeFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
 }
 
 // Lipuke, jolla tunnistetaan sivuston ensiavaus (uusi välilehti, kirjanmerkki tai sivun päivitys)
@@ -762,6 +978,9 @@ function parseRoute() {
 
 // Näkymän vaihto
 function switchView(viewName) {
+  if (state.isPresentationMode && viewName !== "lesson") {
+    exitPresentationMode();
+  }
   state.activeView = viewName;
   updateNavTabsUI();
 
@@ -3316,6 +3535,9 @@ function renderActiveLesson() {
 
   // Edellinen / Seuraava -painikkeet
   if (prevLessonBtn) prevLessonBtn.disabled = current.lesson <= 1;
+  if (state.isPresentationMode) {
+    updatePresentationBar();
+  }
   // Vieritys oppitunnin alkuun (huomioiden kiinnitetty yläpalkki)
   const contentTarget = document.querySelector("#main-content");
   if (contentTarget) {
