@@ -1280,12 +1280,13 @@
           <button type="button" class="wb-action-btn" id="wb-btn-export" title="Tallenna kuva (PNG)">💾</button>
         </div>
 
-        <!-- Ikkunatilat: Split / Fullscreen / Floating / Close -->
+        <!-- Ikkunatilat: Split ja Kelluva yhdistettynä toggle-nappiin, Koko ruutu ja Sulje -->
         <div class="wb-window-group">
-          <button type="button" class="wb-mode-btn active" data-mode="split" title="Puoli ruutua rinnakkain">◫</button>
-          <button type="button" class="wb-mode-btn" data-mode="fullscreen" title="Koko ruutu">⛶</button>
-          <button type="button" class="wb-mode-btn" data-mode="floating" title="Kelluva ikkuna">❐</button>
-          <button type="button" class="wb-mode-btn wb-close-btn" id="wb-btn-close" title="Sulje valkotaulu (Esc)">✕</button>
+          <button type="button" class="wb-mode-btn wb-mode-toggle-btn" id="wb-btn-mode-toggle" title="Vaihda kelluvaan ikkunaan (❐)" aria-label="Vaihda kelluvaan ikkunaan">
+            <span class="wb-mode-icon" id="wb-mode-icon">❐</span>
+          </button>
+          <button type="button" class="wb-mode-btn" id="wb-btn-fullscreen" data-mode="fullscreen" title="Koko ruutu (⛶)" aria-label="Koko ruutu">⛶</button>
+          <button type="button" class="wb-mode-btn wb-close-btn" id="wb-btn-close" title="Sulje valkotaulu (Esc)" aria-label="Sulje valkotaulu">✕</button>
         </div>
       </div>
     </div>
@@ -1294,6 +1295,7 @@
       <canvas id="whiteboard-bg-canvas" class="whiteboard-canvas bg-canvas"></canvas>
       <canvas id="whiteboard-draw-canvas" class="whiteboard-canvas draw-canvas"></canvas>
     </div>
+    <div class="whiteboard-resize-handle" id="whiteboard-resize-handle" title="Muuta kokoa vetämällä (alanurkka)" aria-hidden="true">⋰</div>
   </aside>
 
   <!-- Älytaulun esitystilan ohjauspalkki (TODO.md kohta 3b) -->

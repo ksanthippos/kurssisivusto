@@ -661,7 +661,7 @@ function initPresentationMode() {
     presNextBtn.addEventListener("click", goToNextLesson);
   }
   if (presWbBtn) {
-    presWbBtn.addEventListener("click", () => toggleWhiteboard("split"));
+    presWbBtn.addEventListener("click", () => toggleWhiteboard());
   }
   if (presFontBtn) {
     presFontBtn.addEventListener("click", cyclePresentationFont);

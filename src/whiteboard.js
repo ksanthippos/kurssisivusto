@@ -24,6 +24,7 @@ let drawCtx = null;
 // Tila
 let isOpen = false;
 let currentMode = "split"; // "split" | "fullscreen" | "floating"
+let previousMode = "split"; // "split" | "floating"
 let activeTool = "pen"; // "pen" | "eraser"
 let activeColor = "#1e293b";
 let activeSize = 4;
@@ -62,6 +63,7 @@ export function initWhiteboard() {
   setupToolbarEvents();
   setupPointerEvents();
   setupDragEvents();
+  setupResizeEvents();
   setupThemeObserver();
 
   // ResizeObserver tarkkailee canvas-wrapperin todellista kokoa lennossa
@@ -84,6 +86,12 @@ export function initWhiteboard() {
     activeBackground = savedBg;
     const bgSelect = document.querySelector("#wb-bg-select");
     if (bgSelect) bgSelect.value = savedBg;
+  }
+
+  const savedMode = localStorage.getItem("rauh_wb_mode");
+  if (savedMode && (savedMode === "split" || savedMode === "floating")) {
+    currentMode = savedMode;
+    previousMode = savedMode;
   }
 }
 
@@ -149,7 +157,17 @@ function setupToolbarEvents() {
   if (clearBtn) clearBtn.addEventListener("click", clearBoard);
   if (exportBtn) exportBtn.addEventListener("click", exportPNG);
 
-  // 6. Ikkunatilan vaihtonapit
+  // 6. Ikkunatilan vaihtonapit (Split / Kelluva yhdistetty toggle, Koko ruutu, Sulje)
+  const modeToggleBtn = document.querySelector("#wb-btn-mode-toggle");
+  if (modeToggleBtn) {
+    modeToggleBtn.addEventListener("click", toggleWhiteboardMode);
+  }
+
+  const fullscreenBtn = document.querySelector("#wb-btn-fullscreen");
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener("click", toggleFullscreenMode);
+  }
+
   document.querySelectorAll(".wb-mode-btn[data-mode]").forEach((btn) => {
     btn.addEventListener("click", () => {
       setMode(btn.dataset.mode);
@@ -162,7 +180,7 @@ function setupToolbarEvents() {
     closeBtn.addEventListener("click", () => closeWhiteboard());
   }
 
-  // 8. Ulkoiset herätepainikkeet
+  // 8. Ulkoiset herätepainikkeet (kaikki toimivat aktivoi/deaktivoi -kytkiminä)
   const triggerBtn = document.querySelector("#whiteboard-trigger-btn");
   if (triggerBtn) {
     triggerBtn.addEventListener("click", () => toggleWhiteboard());
@@ -173,7 +191,7 @@ function setupToolbarEvents() {
   }
   const lessonWbBtn = document.querySelector("#btn-lesson-whiteboard");
   if (lessonWbBtn) {
-    lessonWbBtn.addEventListener("click", () => openWhiteboard("split"));
+    lessonWbBtn.addEventListener("click", () => toggleWhiteboard());
   }
 }
 
@@ -636,6 +654,10 @@ function exportPNG() {
  */
 export function setMode(mode) {
   if (!panel) return;
+
+  if (currentMode !== "fullscreen") {
+    previousMode = currentMode;
+  }
   currentMode = mode;
 
   panel.classList.remove("mode-split", "mode-fullscreen", "mode-floating");
@@ -648,21 +670,108 @@ export function setMode(mode) {
     document.body.classList.remove("whiteboard-split-active");
   }
 
-  // Päivitä napit
+  // Nollataan AINA kaikki inline-sijainti ja mittatyylit konfliktien ja katoamisen estämiseksi
+  panel.style.removeProperty("left");
+  panel.style.removeProperty("top");
+  panel.style.removeProperty("right");
+  panel.style.removeProperty("bottom");
+  panel.style.removeProperty("width");
+  panel.style.removeProperty("height");
+
+  if (mode === "floating") {
+    const savedW = localStorage.getItem("rauh_wb_w");
+    const savedH = localStorage.getItem("rauh_wb_h");
+    const w = savedW ? Math.max(380, Math.min(window.innerWidth - 30, parseInt(savedW, 10))) : 580;
+    const h = savedH ? Math.max(280, Math.min(window.innerHeight - 30, parseInt(savedH, 10))) : 440;
+    panel.style.width = `${w}px`;
+    panel.style.height = `${h}px`;
+
+    const savedLeft = localStorage.getItem("rauh_wb_x");
+    const savedTop = localStorage.getItem("rauh_wb_y");
+    if (savedLeft !== null && savedTop !== null) {
+      const left = parseInt(savedLeft, 10);
+      const top = parseInt(savedTop, 10);
+      const maxLeft = Math.max(10, window.innerWidth - w - 10);
+      const maxTop = Math.max(10, window.innerHeight - h - 10);
+      if (!isNaN(left) && !isNaN(top) && left >= 10 && left <= maxLeft && top >= 10 && top <= maxTop) {
+        panel.style.left = `${left}px`;
+        panel.style.top = `${top}px`;
+        panel.style.right = "auto";
+        panel.style.bottom = "auto";
+      } else {
+        panel.style.right = "24px";
+        panel.style.bottom = "24px";
+      }
+    } else {
+      panel.style.right = "24px";
+      panel.style.bottom = "24px";
+    }
+  }
+
+  // Päivitä yhdistetty näkymänvaihtopainike (Split <-> Kelluva)
+  const modeToggleBtn = document.querySelector("#wb-btn-mode-toggle");
+  const modeToggleIcon = document.querySelector("#wb-mode-icon");
+  if (modeToggleBtn && modeToggleIcon) {
+    if (mode === "split") {
+      modeToggleIcon.textContent = "❐";
+      modeToggleBtn.title = "Vaihda kelluvaan ikkunaan (❐)";
+      modeToggleBtn.setAttribute("aria-label", "Vaihda kelluvaan ikkunaan");
+    } else if (mode === "floating") {
+      modeToggleIcon.textContent = "◫";
+      modeToggleBtn.title = "Vaihda jaettuun ruutuun (◫)";
+      modeToggleBtn.setAttribute("aria-label", "Vaihda jaettuun ruutuun");
+    } else {
+      modeToggleIcon.textContent = "◫";
+      modeToggleBtn.title = "Poistu koko ruudun tilasta jaettuun ruutuun (◫)";
+      modeToggleBtn.setAttribute("aria-label", "Poistu koko ruudun tilasta jaettuun ruutuun");
+    }
+  }
+
+  // Päivitä fullscreen-nappi
+  const fsBtn = document.querySelector("#wb-btn-fullscreen");
+  if (fsBtn) {
+    fsBtn.classList.toggle("active", mode === "fullscreen");
+    fsBtn.title = mode === "fullscreen" ? "Poistu koko ruudun tilasta (⛶)" : "Koko ruutu (⛶)";
+  }
+
+  // Päivitä vanhat moodinapit jos DOMissa
   document.querySelectorAll(".wb-mode-btn[data-mode]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.mode === mode);
   });
 
-  // Jos siirrytään floating-tilaan, nollataan raahatut sijainnit
-  if (mode !== "floating") {
-    panel.style.left = "";
-    panel.style.top = "";
+  // Tallenna tila
+  if (mode === "split" || mode === "floating") {
+    localStorage.setItem("rauh_wb_mode", mode);
   }
 
   // Päivitä resoluutiot seuraavassa animaatiofreimissä
   requestAnimationFrame(() => {
     resizeCanvases();
   });
+}
+
+/**
+ * Vaihtaa jaetun ruudun (split) ja kelluvan ikkunan (floating) välillä
+ */
+export function toggleWhiteboardMode() {
+  if (currentMode === "split") {
+    setMode("floating");
+  } else if (currentMode === "floating") {
+    setMode("split");
+  } else {
+    setMode(previousMode === "floating" ? "floating" : "split");
+  }
+}
+
+/**
+ * Vaihtaa koko ruudun (fullscreen) ja edellisen tilan välillä
+ */
+export function toggleFullscreenMode() {
+  if (currentMode === "fullscreen") {
+    setMode(previousMode === "floating" ? "floating" : "split");
+  } else {
+    setMode("fullscreen");
+  }
 }
 
 /**
@@ -677,11 +786,10 @@ export function openWhiteboard(mode = null) {
 
   setMode(currentMode);
 
-  const triggerBtn = document.querySelector("#whiteboard-trigger-btn");
-  if (triggerBtn) triggerBtn.classList.add("is-active");
-
-  const headerBtn = document.querySelector("#header-whiteboard-btn");
-  if (headerBtn) headerBtn.classList.add("is-active");
+  // Synkronoi aktiiviset tilat kaikkiin herätenappeihin
+  document.querySelectorAll("#whiteboard-trigger-btn, #header-whiteboard-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
+    btn.classList.add("is-active");
+  });
 
   requestAnimationFrame(() => {
     resizeCanvases();
@@ -698,15 +806,14 @@ export function closeWhiteboard() {
   isOpen = false;
   document.body.classList.remove("whiteboard-split-active");
 
-  const triggerBtn = document.querySelector("#whiteboard-trigger-btn");
-  if (triggerBtn) triggerBtn.classList.remove("is-active");
-
-  const headerBtn = document.querySelector("#header-whiteboard-btn");
-  if (headerBtn) headerBtn.classList.remove("is-active");
+  // Poista aktiivinen tila herätenapeista
+  document.querySelectorAll("#whiteboard-trigger-btn, #header-whiteboard-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
+    btn.classList.remove("is-active");
+  });
 }
 
 /**
- * Avaa tai sulkee valkotaulun
+ * Avaa tai sulkee valkotaulun (aktivoi/deaktivoi)
  */
 export function toggleWhiteboard(mode = null) {
   if (isOpen) {
@@ -757,8 +864,8 @@ function setupDragEvents() {
     let newTop = panelStartTop + dy;
 
     // Rajoitukset ruudun sisälle
-    const maxLeft = window.innerWidth - panel.offsetWidth - 10;
-    const maxTop = window.innerHeight - panel.offsetHeight - 10;
+    const maxLeft = Math.max(10, window.innerWidth - panel.offsetWidth - 10);
+    const maxTop = Math.max(10, window.innerHeight - panel.offsetHeight - 10);
 
     newLeft = Math.max(10, Math.min(newLeft, maxLeft));
     newTop = Math.max(10, Math.min(newTop, maxTop));
@@ -776,10 +883,91 @@ function setupDragEvents() {
       handle.releasePointerCapture(e.pointerId);
     } catch (err) {}
     handle.style.cursor = "";
+
+    if (currentMode === "floating" && panel.style.left) {
+      localStorage.setItem("rauh_wb_x", parseInt(panel.style.left, 10));
+      localStorage.setItem("rauh_wb_y", parseInt(panel.style.top, 10));
+    }
   };
 
   handle.addEventListener("pointerup", stopDrag);
   handle.addEventListener("pointercancel", stopDrag);
+}
+
+/**
+ * Kelluvan ikkunan oikean alanurkan koonmuutos (vetämällä isommaksi / pienemmäksi)
+ */
+function setupResizeEvents() {
+  const handle = document.querySelector("#whiteboard-resize-handle");
+  if (!handle) return;
+
+  let isResizing = false;
+  let startX = 0;
+  let startY = 0;
+  let startW = 0;
+  let startH = 0;
+
+  handle.addEventListener("pointerdown", (e) => {
+    if (currentMode !== "floating") return;
+    isResizing = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    startW = panel.offsetWidth;
+    startH = panel.offsetHeight;
+
+    // Jos paneelin sijainti määrittyy right/bottom:lla, lukitaan se suoriksi left/top-arvoiksi,
+    // jotta oikean alanurkan veto laajentaa ikkunaa luonnollisesti hiiren/sormen mukana
+    const rect = panel.getBoundingClientRect();
+    panel.style.left = `${rect.left}px`;
+    panel.style.top = `${rect.top}px`;
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+
+    try {
+      handle.setPointerCapture(e.pointerId);
+    } catch (err) {}
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+  handle.addEventListener("pointermove", (e) => {
+    if (!isResizing) return;
+    e.preventDefault();
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    const minW = 380;
+    const minH = 280;
+    const maxW = Math.max(minW, window.innerWidth - panel.offsetLeft - 10);
+    const maxH = Math.max(minH, window.innerHeight - panel.offsetTop - 10);
+
+    const newW = Math.max(minW, Math.min(maxW, Math.round(startW + dx)));
+    const newH = Math.max(minH, Math.min(maxH, Math.round(startH + dy)));
+
+    panel.style.width = `${newW}px`;
+    panel.style.height = `${newH}px`;
+  });
+
+  const stopResize = (e) => {
+    if (!isResizing) return;
+    isResizing = false;
+    try {
+      handle.releasePointerCapture(e.pointerId);
+    } catch (err) {}
+
+    if (panel.offsetWidth && panel.offsetHeight) {
+      localStorage.setItem("rauh_wb_w", panel.offsetWidth);
+      localStorage.setItem("rauh_wb_h", panel.offsetHeight);
+      if (panel.style.left) {
+        localStorage.setItem("rauh_wb_x", parseInt(panel.style.left, 10));
+        localStorage.setItem("rauh_wb_y", parseInt(panel.style.top, 10));
+      }
+    }
+  };
+
+  handle.addEventListener("pointerup", stopResize);
+  handle.addEventListener("pointercancel", stopResize);
 }
 
 /**

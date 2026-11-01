@@ -6206,42 +6206,51 @@ a:hover {
   bottom: 20px;
   padding: 0.65rem 1rem;
   border-radius: 9999px;
-  background: var(--color-primary-light);
-  color: #ffffff;
+  background: var(--color-surface);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: 0.85rem;
-  font-weight: 700;
-  border: 1px solid var(--color-primary-light);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  box-shadow: var(--shadow-lg);
   z-index: 998;
   transition: all 0.2s ease;
 }
 
 .whiteboard-trigger-btn:hover {
-  background: #1d4ed8;
+  background: var(--color-surface-subtle);
+  color: var(--color-primary-light);
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+  box-shadow: var(--shadow-xl);
 }
 
 .whiteboard-trigger-btn.is-active {
-  background: #0f172a;
-  border-color: #38bdf8;
-  color: #38bdf8;
+  background: var(--color-primary-light, #2563eb) !important;
+  border-color: var(--color-primary-light, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45) !important;
 }
 
 [data-theme="dark"] .whiteboard-trigger-btn {
-  background: #0284c7;
-  border-color: #38bdf8;
-  color: #ffffff;
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
 
 [data-theme="dark"] .whiteboard-trigger-btn:hover {
-  background: #0369a1;
+  background: #334155;
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .whiteboard-trigger-btn.is-active {
+  background: #0284c7 !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
 }
 
 /* 2. Yläpalkin ja oppitunnin pikanapit */
@@ -6249,27 +6258,28 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
   font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .header-action-btn:hover {
-  background: var(--color-primary-soft);
-  border-color: var(--color-primary-light);
-  color: var(--color-primary-light);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
 }
 
 .header-action-btn.is-active {
-  background: var(--color-primary-soft);
-  border-color: var(--color-primary-light);
-  color: var(--color-primary-light);
+  background: #ffffff !important;
+  color: var(--color-header-bg, #0f172a) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
   font-weight: 700;
 }
 
@@ -6323,13 +6333,15 @@ a:hover {
   display: none !important;
 }
 
-/* Split-tila (puoli ruutua rinnakkain) */
+/* Split-tila (puoli ruutua rinnakkain: AINA oikealla puolella) */
 .whiteboard-panel.mode-split {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 50vw;
-  height: 100vh;
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  bottom: 0 !important;
+  width: 50vw !important;
+  height: 100vh !important;
   z-index: 1500;
   border-left: 2px solid var(--color-border);
   box-shadow: -6px 0 24px rgba(0, 0, 0, 0.25);
@@ -6337,33 +6349,79 @@ a:hover {
 
 /* Fullscreen-tila (koko ruutu) */
 .whiteboard-panel.mode-fullscreen {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   z-index: 2000;
   border: none;
 }
 
-/* Floating-tila (1/4 ruutua kelluva siirrettävä ikkuna) */
+/* Floating-tila (kelluva siirrettävä ja laajennettava ikkuna) */
 .whiteboard-panel.mode-floating {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 560px;
-  height: 420px;
-  max-width: calc(100vw - 32px);
-  max-height: calc(100vh - 48px);
+  width: 580px;
+  height: 440px;
+  min-width: 380px;
+  min-height: 280px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
   border-radius: var(--radius-md);
   z-index: 1500;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  resize: both;
+  overflow: hidden;
+}
+
+/* Alanurkan vetokahva kelluvassa ikkunassa */
+.whiteboard-resize-handle {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nwse-resize;
+  z-index: 20;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 3px 2px 0;
+  color: var(--color-text-muted);
+  font-size: 15px;
+  line-height: 1;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.whiteboard-panel.mode-floating .whiteboard-resize-handle {
+  display: flex;
+}
+
+.whiteboard-resize-handle:hover {
+  color: var(--color-primary-light);
 }
 
 /* Split-tilan vaikutus pääsisältöön desktopilla */
 @media (min-width: 900px) {
+  body.whiteboard-split-active .container.app-layout {
+    width: 50vw !important;
+    max-width: 50vw !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+  }
+
   body.whiteboard-split-active .main-content {
-    margin-right: 50vw !important;
-    transition: margin-right 0.2s ease;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    transition: none;
   }
 }
 
@@ -6577,11 +6635,34 @@ body.is-presentation-mode .whiteboard-trigger-btn {
   display: none !important;
 }
 
-body.is-presentation-mode .main-content {
+body.is-presentation-mode .container.app-layout {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.is-presentation-mode:not(.whiteboard-split-active) .main-content {
   margin: 0 auto !important;
-  max-width: 1100px !important;
-  padding: 36px 36px 130px 36px !important;
+  max-width: 1250px !important;
+  width: min(1250px, calc(100% - 64px)) !important;
+  padding: 36px 44px 140px 44px !important;
   font-size: var(--presentation-font-scale, 125%) !important;
+}
+
+@media (min-width: 900px) {
+  body.is-presentation-mode.whiteboard-split-active .main-content {
+    padding: 24px 28px 140px 28px !important;
+    font-size: var(--presentation-font-scale, 120%) !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  body.is-presentation-mode.whiteboard-split-active .presentation-bar {
+    left: 25vw !important;
+    transform: translateX(-50%) !important;
+    max-width: calc(50vw - 32px) !important;
+  }
 }
 
 body.is-presentation-mode .lesson-heading {
