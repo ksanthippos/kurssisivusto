@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad9" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="shadow9" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+    <marker id="rayYellow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <rect width="840" height="400" rx="14" fill="url(#bgGrad9)" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <text x="420" y="32" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="800" fill="#0f172a">Valon heijastuminen: Tasainen heijastus vs. Hajaheijastus</text>
+  <text x="420" y="52" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#64748b">Tasainen pinta heijastaa peilikuvan, epätasainen pinta sirottaa valon kaikkiin suuntiin</text>
+
+  <!-- Left Side: Tasainen heijastus (Specular) -->
+  <g transform="translate(60, 75)" filter="url(#shadow9)">
+    <rect width="340" height="300" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+    <text x="170" y="26" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#0369a1">1. Tasainen peiliheijastus (säännöllinen)</text>
+    
+    <!-- Flat mirror surface -->
+    <rect x="30" y="210" width="280" height="14" fill="#0284c7" stroke="#0369a1" stroke-width="1"/>
+    <text x="170" y="240" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#0369a1">Sileä peilipinta tai tyyni vesi</text>
+
+    <!-- Normal line (dashed) -->
+    <line x1="170" y1="90" x2="170" y2="210" stroke="#64748b" stroke-dasharray="3 3" stroke-width="1.5"/>
+    <text x="170" y="80" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b">Pinnan normaali (90°)</text>
+
+    <!-- Parallel incident rays (Yellow) -->
+    <!-- Ray 1 -->
+    <line x1="70" y1="110" x2="130" y2="210" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="130" y1="210" x2="190" y2="110" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+
+    <!-- Ray 2 (center) -->
+    <line x1="110" y1="110" x2="170" y2="210" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="170" y1="210" x2="230" y2="110" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+
+    <!-- Ray 3 -->
+    <line x1="150" y1="110" x2="210" y2="210" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="210" y1="210" x2="270" y2="110" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+
+    <!-- Angle arc on center ray -->
+    <text x="148" y="185" font-family="sans-serif" font-size="11" font-weight="700" fill="#0284c7">i</text>
+    <text x="186" y="185" font-family="sans-serif" font-size="11" font-weight="700" fill="#0284c7">r</text>
+
+    <!-- Description -->
+    <text x="170" y="265" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#334155">Tulokulma = Heijastuskulma (i = r)</text>
+    <text x="170" y="282" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#16a34a">✓ Muodostaa terävän peilikuvan</text>
+  </g>
+
+  <!-- Right Side: Hajaheijastus (Diffuse) -->
+  <g transform="translate(440, 75)" filter="url(#shadow9)">
+    <rect width="340" height="300" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+    <text x="170" y="26" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#b45309">2. Hajaheijastus eli diffuusi heijastus</text>
+    
+    <!-- Rough bumpy surface -->
+    <path d="M 30 215 Q 45 205 60 218 Q 75 225 90 210 Q 110 200 130 218 Q 150 225 170 210 Q 190 202 210 218 Q 230 226 250 208 Q 275 204 310 215 L 310 225 L 30 225 Z" fill="#94a3b8" stroke="#64748b" stroke-width="1.5"/>
+    <text x="170" y="240" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#475569">Karhea pinta: paperi, puu, vaate, seinä</text>
+
+    <!-- Parallel incoming rays -->
+    <line x1="70" y1="110" x2="110" y2="210" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="130" y1="110" x2="170" y2="210" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="190" y1="110" x2="230" y2="215" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+
+    <!-- Scattered outgoing rays going in totally different directions -->
+    <line x1="110" y1="210" x2="60" y2="120" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="170" y1="210" x2="210" y2="120" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+    <line x1="230" y1="215" x2="295" y2="140" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#rayYellow)"/>
+
+    <!-- Description -->
+    <text x="170" y="265" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#334155">Pinnan normaali osoittaa joka kohdassa eri suuntaan</text>
+    <text x="170" y="282" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#d97706">✓ Esine näkyy joka suunnasta ilman peilikuvaa</text>
+  </g>
+</svg>

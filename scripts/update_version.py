@@ -16,8 +16,8 @@ ROOT_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_NAME = os.path.basename(ROOT_DIR)
 
 # Pohjakommittien määrä version 1.0 (100 sadasosaa) julkaisusta alkaen:
-# Commit #46 on versio 1.0
-BASE_COMMIT_COUNT = 46
+# Commit #50 on versio 1.0
+BASE_COMMIT_COUNT = 50
 BASE_HUNDREDTHS = 100
 
 def get_commit_count():
@@ -57,10 +57,14 @@ def write_version(version):
     return version
 
 if __name__ == "__main__":
-    # Oletus: pre-commit hookissa offset_commit=1 (uusi commit on tekeillä)
-    # Jos kutsutaan lipukkeella --current: offset_commit=0
-    offset = 0 if "--current" in sys.argv else 1
-    v = compute_version(offset)
+    if "--set" in sys.argv:
+        idx = sys.argv.index("--set")
+        v = sys.argv[idx + 1]
+    else:
+        # Oletus: pre-commit hookissa offset_commit=1 (uusi commit on tekeillä)
+        # Jos kutsutaan lipukkeella --current: offset_commit=0
+        offset = 0 if "--current" in sys.argv else 1
+        v = compute_version(offset)
     write_version(v)
     print(f"[{REPO_NAME}] Versio asetettu: {v}")
 

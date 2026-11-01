@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="shadow5" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="840" height="400" rx="14" fill="url(#bgGrad5)" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <text x="420" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="800" fill="#0f172a">Kiinteiden aineiden pituuden lämpölaajeneminen</text>
+  <text x="420" y="54" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#64748b">Lämmetessään metallitankojen pituus kasvaa kaavalla: Δl = α · l₀ · Δt</text>
+
+  <!-- Rod 1: Kylmässä -->
+  <g transform="translate(60, 85)" filter="url(#shadow5)">
+    <rect width="720" height="85" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="20" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#0284c7">Kylmässä (t₀ = 0 °C): Alkuperäinen pituus l₀</text>
+    
+    <!-- Rod graphic -->
+    <rect x="20" y="42" width="500" height="26" rx="4" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+    <!-- Dimension line -->
+    <line x1="20" y1="78" x2="520" y2="78" stroke="#0284c7" stroke-width="1.5"/>
+    <line x1="20" y1="74" x2="20" y2="82" stroke="#0284c7" stroke-width="1.5"/>
+    <line x1="520" y1="74" x2="520" y2="82" stroke="#0284c7" stroke-width="1.5"/>
+    <text x="270" y="74" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#0284c7">l₀ = 10,000 m</text>
+  </g>
+
+  <!-- Rod 2: Kuumassa -->
+  <g transform="translate(60, 185)" filter="url(#shadow5)">
+    <rect width="720" height="85" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="20" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#dc2626">Lämmitettynä (t = +40 °C): Pituus kasvaa määrällä Δl</text>
+    
+    <!-- Base rod + expanded part -->
+    <rect x="20" y="42" width="500" height="26" rx="4" fill="#f87171" stroke="#dc2626" stroke-width="1"/>
+    <rect x="520" y="42" width="60" height="26" rx="4" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"/>
+    <text x="550" y="59" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#ffffff">+Δl</text>
+
+    <!-- Expanded dimension line -->
+    <line x1="20" y1="78" x2="580" y2="78" stroke="#dc2626" stroke-width="1.5"/>
+    <line x1="20" y1="74" x2="20" y2="82" stroke="#dc2626" stroke-width="1.5"/>
+    <line x1="580" y1="74" x2="580" y2="82" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="300" y="74" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#dc2626">l = l₀ + Δl</text>
+  </g>
+
+  <!-- Arjen esimerkit: Kiskot ja sillat -->
+  <g transform="translate(60, 285)">
+    <!-- Rail joint -->
+    <g transform="translate(0, 0)">
+      <rect width="350" height="95" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow5)"/>
+      <text x="16" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#0f172a">🚆 Rautatiekiskon rako</text>
+      <text x="16" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#475569">Kiskojen väliin jätetään pieni rako. Jos rakoa</text>
+      <text x="16" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#475569">ei olisi, kesähelteellä laajenevat kiskot vääntyisivät</text>
+      <text x="16" y="76" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#dc2626" font-weight="700">mutkalle ja suistaisivat junan raiteilta!</text>
+    </g>
+
+    <!-- Bridge joint -->
+    <g transform="translate(370, 0)">
+      <rect width="350" height="95" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" filter="url(#shadow5)"/>
+      <text x="16" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#0f172a">🌉 Sillan liikuntasauma</text>
+      <text x="16" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#475569">Sadan metrin terässilta pitenee helteellä useita</text>
+      <text x="16" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#475569">senttimetrejä. Sillan päiden kampasaumat antavat</text>
+      <text x="16" y="76" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#15803d" font-weight="700">rakenteille tilaa elää ilman murtumia.</text>
+    </g>
+  </g>
+</svg>

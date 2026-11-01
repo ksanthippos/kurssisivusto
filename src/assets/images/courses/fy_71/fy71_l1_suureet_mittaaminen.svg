@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="840" height="400" rx="14" fill="url(#bgGrad2)" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <text x="420" y="38" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#0f172a">Fysiikan suure ja mittaustulos</text>
+  <text x="420" y="60" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#64748b">Mittaustulos muodostuu aina lukuarvosta ja mittayksiköstä</text>
+
+  <!-- Formula Callout -->
+  <g transform="translate(140, 80)" filter="url(#shadow2)">
+    <rect width="560" height="65" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+    <text x="280" y="34" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="800" fill="#1e3a8a">
+      Suure = Lukuarvo × Mittayksikkö
+    </text>
+    <text x="280" y="52" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#2563eb">
+      Esimerkki: Massa m = 5,2 kg   |   Pituus s = 100 m   |   Lämpötila T = 20 °C
+    </text>
+  </g>
+
+  <!-- 5 SI Base Units Boxes -->
+  <!-- Box 1: Pituus -->
+  <g transform="translate(40, 170)" filter="url(#shadow2)">
+    <rect width="140" height="190" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect width="140" height="32" rx="8" fill="#eff6ff"/>
+    <rect y="20" width="140" height="12" fill="#eff6ff"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#1d4ed8">PITUUS (s, l)</text>
+    <text x="70" y="70" text-anchor="middle" font-size="30">📏</text>
+    <text x="70" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#0f172a">metri (m)</text>
+    <text x="70" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Välineet:</text>
+    <text x="70" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">Mittanauha,</text>
+    <text x="70" y="164" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">työntömitta, laser</text>
+  </g>
+
+  <!-- Box 2: Massa -->
+  <g transform="translate(195, 170)" filter="url(#shadow2)">
+    <rect width="140" height="190" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect width="140" height="32" rx="8" fill="#f0fdf4"/>
+    <rect y="20" width="140" height="12" fill="#f0fdf4"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#15803d">MASSA (m)</text>
+    <text x="70" y="70" text-anchor="middle" font-size="30">⚖️</text>
+    <text x="70" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#0f172a">kilogramma (kg)</text>
+    <text x="70" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Välineet:</text>
+    <text x="70" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">Tarkkuusvaaka,</text>
+    <text x="70" y="164" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">keittiövaaka</text>
+  </g>
+
+  <!-- Box 3: Aika -->
+  <g transform="translate(350, 170)" filter="url(#shadow2)">
+    <rect width="140" height="190" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect width="140" height="32" rx="8" fill="#fefce8"/>
+    <rect y="20" width="140" height="12" fill="#fefce8"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#a16207">AIKA (t)</text>
+    <text x="70" y="70" text-anchor="middle" font-size="30">⏱️</text>
+    <text x="70" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#0f172a">sekunti (s)</text>
+    <text x="70" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Välineet:</text>
+    <text x="70" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">Sekuntikello,</text>
+    <text x="70" y="164" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">atomikello, valokenno</text>
+  </g>
+
+  <!-- Box 4: Lämpötila -->
+  <g transform="translate(505, 170)" filter="url(#shadow2)">
+    <rect width="140" height="190" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect width="140" height="32" rx="8" fill="#fff1f2"/>
+    <rect y="20" width="140" height="12" fill="#fff1f2"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#be123c">LÄMPÖTILA (T)</text>
+    <text x="70" y="70" text-anchor="middle" font-size="30">🌡️</text>
+    <text x="70" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#0f172a">kelvin (K) / °C</text>
+    <text x="70" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Välineet:</text>
+    <text x="70" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">Nestelämpömittari,</text>
+    <text x="70" y="164" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">digitaalianturi, IR</text>
+  </g>
+
+  <!-- Box 5: Sähkövirta -->
+  <g transform="translate(660, 170)" filter="url(#shadow2)">
+    <rect width="140" height="190" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect width="140" height="32" rx="8" fill="#faf5ff"/>
+    <rect y="20" width="140" height="12" fill="#faf5ff"/>
+    <text x="70" y="22" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#7e22ce">SÄHKÖVIRTA (I)</text>
+    <text x="70" y="70" text-anchor="middle" font-size="30">⚡</text>
+    <text x="70" y="105" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#0f172a">ampeeri (A)</text>
+    <text x="70" y="130" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Välineet:</text>
+    <text x="70" y="148" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">Yleismittari,</text>
+    <text x="70" y="164" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#334155">virtamittari</text>
+  </g>
+</svg>
