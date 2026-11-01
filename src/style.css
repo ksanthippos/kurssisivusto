@@ -6406,21 +6406,34 @@ a:hover {
 
 /* Split-tilan vaikutus pääsisältöön desktopilla */
 @media (min-width: 900px) {
-  body.whiteboard-split-active .container.app-layout {
+  body.whiteboard-split-active .sidebar {
+    display: none !important;
+  }
+
+  body.whiteboard-split-active .container.app-layout,
+  body.is-presentation-mode.whiteboard-split-active .container.app-layout {
+    display: block !important;
     width: 50vw !important;
     max-width: 50vw !important;
+    min-width: 0 !important;
     margin-left: 0 !important;
     margin-right: auto !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
     box-sizing: border-box !important;
   }
 
-  body.whiteboard-split-active .main-content {
+  body.whiteboard-split-active .main-content,
+  body.is-presentation-mode.whiteboard-split-active .main-content {
+    display: block !important;
     margin: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
     transition: none;
   }
 }
@@ -6635,7 +6648,8 @@ body.is-presentation-mode .whiteboard-trigger-btn {
   display: none !important;
 }
 
-body.is-presentation-mode .container.app-layout {
+/* Esitystila ilman jaettua valkotaulua: leveä keskitetty lukunäkymä */
+body.is-presentation-mode:not(.whiteboard-split-active) .container.app-layout {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
@@ -6651,11 +6665,53 @@ body.is-presentation-mode:not(.whiteboard-split-active) .main-content {
   font-size: var(--presentation-font-scale, 125%) !important;
 }
 
+/* Esitystila JA jaettu valkotaulu (teksti vasemmalla 50vw, taulu oikealla 50vw) */
 @media (min-width: 900px) {
+  body.is-presentation-mode.whiteboard-split-active .container.app-layout {
+    display: block !important;
+    width: 50vw !important;
+    max-width: 50vw !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+
   body.is-presentation-mode.whiteboard-split-active .main-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
     padding: 24px 28px 140px 28px !important;
-    font-size: var(--presentation-font-scale, 120%) !important;
+    font-size: var(--presentation-font-scale, 115%) !important;
     border-radius: var(--radius-md) !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  body.is-presentation-mode.whiteboard-split-active .lesson-heading {
+    font-size: 1.85rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  body.is-presentation-mode.whiteboard-split-active .lesson-figure,
+  body.is-presentation-mode.whiteboard-split-active .theory-figure {
+    margin: 1rem 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  body.is-presentation-mode.whiteboard-split-active .lesson-figure img,
+  body.is-presentation-mode.whiteboard-split-active .theory-figure img {
+    max-width: 100% !important;
+    max-height: 380px !important;
+    height: auto !important;
+    object-fit: contain !important;
   }
 
   body.is-presentation-mode.whiteboard-split-active .presentation-bar {

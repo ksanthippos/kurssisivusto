@@ -80,7 +80,7 @@ export function initWhiteboard() {
     });
   }
 
-  // Aseta oletustila
+  // Aseta ja palauta aiemmat valkotaulun asetukset välimuistista (localStorage)
   const savedBg = localStorage.getItem("rauh_wb_bg");
   if (savedBg && ["blank", "grid", "coords", "lines"].includes(savedBg)) {
     activeBackground = savedBg;
@@ -88,10 +88,55 @@ export function initWhiteboard() {
     if (bgSelect) bgSelect.value = savedBg;
   }
 
+  const savedColor = localStorage.getItem("rauh_wb_color");
+  if (savedColor) {
+    activeColor = savedColor;
+    document.querySelectorAll(".wb-color-btn").forEach((btn) => {
+      const match = btn.dataset.color === savedColor;
+      btn.classList.toggle("active", match);
+      btn.setAttribute("aria-checked", match ? "true" : "false");
+    });
+  }
+
+  const savedSize = localStorage.getItem("rauh_wb_size");
+  if (savedSize) {
+    activeSize = parseInt(savedSize, 10) || 4;
+    document.querySelectorAll(".wb-size-btn").forEach((btn) => {
+      const match = parseInt(btn.dataset.size, 10) === activeSize;
+      btn.classList.toggle("active", match);
+      btn.setAttribute("aria-checked", match ? "true" : "false");
+    });
+  }
+
+  const savedTool = localStorage.getItem("rauh_wb_tool");
+  if (savedTool && (savedTool === "pen" || savedTool === "eraser")) {
+    setTool(savedTool);
+  }
+
   const savedMode = localStorage.getItem("rauh_wb_mode");
   if (savedMode && (savedMode === "split" || savedMode === "floating")) {
     currentMode = savedMode;
     previousMode = savedMode;
+  }
+
+  // Palauta piirretyt muistiinpanot välimuistista
+  try {
+    const savedStrokes = localStorage.getItem("rauh_wb_strokes");
+    if (savedStrokes) {
+      const parsed = JSON.parse(savedStrokes);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        strokes = parsed;
+        updateUndoRedoUI();
+      }
+    }
+  } catch (err) {
+    console.warn("Valkotaulun piirrosten palautus epäonnistui:", err);
+  }
+
+  // Palauta aukiolotila (jos valkotaulu oli avattuna ennen sivun päivitystä)
+  const wasOpen = localStorage.getItem("rauh_wb_open") === "1";
+  if (wasOpen) {
+    openWhiteboard(currentMode);
   }
 }
 
@@ -119,6 +164,7 @@ function setupToolbarEvents() {
       btn.classList.add("active");
       btn.setAttribute("aria-checked", "true");
       activeColor = btn.dataset.color || "#1e293b";
+      localStorage.setItem("rauh_wb_color", activeColor);
 
       // Jos pyyhekumi oli valittuna, vaihda takaisin kynään
       if (activeTool === "eraser") {
@@ -137,6 +183,7 @@ function setupToolbarEvents() {
       btn.classList.add("active");
       btn.setAttribute("aria-checked", "true");
       activeSize = parseInt(btn.dataset.size, 10) || 4;
+      localStorage.setItem("rauh_wb_size", String(activeSize));
     });
   });
 
@@ -257,6 +304,7 @@ function handlePointerUp(e) {
     strokes.push(currentStroke);
     redoStack = []; // Uusi veto tyhjentää redo-pinon
     updateUndoRedoUI();
+    saveStrokesToStorage();
   }
 
   currentStroke = null;
@@ -567,10 +615,30 @@ function resizeCanvases() {
 }
 
 /**
+ * Tallentaa piirretyt vektorivedot selaimeen (localStorage)
+ */
+function saveStrokesToStorage() {
+  try {
+    if (strokes.length === 0) {
+      localStorage.removeItem("rauh_wb_strokes");
+    } else {
+      // Rajoitetaan enintään 250 viimeisimpään vetoon, jotta pysyy nopeana
+      localStorage.setItem("rauh_wb_strokes", JSON.stringify(strokes.slice(-250)));
+    }
+  } catch (err) {
+    console.warn("Valkotaulun piirrosten tallennus epäonnistui:", err);
+  }
+}
+
+/**
  * Työkalun vaihto (kynä / pyyhekumi)
  */
 function setTool(tool) {
   activeTool = tool;
+  try {
+    localStorage.setItem("rauh_wb_tool", tool);
+  } catch (err) {}
+
   const penBtn = document.querySelector("#wb-tool-pen");
   const eraserBtn = document.querySelector("#wb-tool-eraser");
 
@@ -591,6 +659,7 @@ function undo() {
   redoStack.push(last);
   redrawAllStrokes();
   updateUndoRedoUI();
+  saveStrokesToStorage();
 }
 
 /**
@@ -602,6 +671,7 @@ function redo() {
   strokes.push(restored);
   redrawAllStrokes();
   updateUndoRedoUI();
+  saveStrokesToStorage();
 }
 
 /**
@@ -614,6 +684,7 @@ function clearBoard() {
   strokes = [];
   redrawAllStrokes();
   updateUndoRedoUI();
+  saveStrokesToStorage();
 }
 
 /**
@@ -783,6 +854,9 @@ export function openWhiteboard(mode = null) {
 
   panel.hidden = false;
   isOpen = true;
+  try {
+    localStorage.setItem("rauh_wb_open", "1");
+  } catch (err) {}
 
   setMode(currentMode);
 
@@ -804,6 +878,9 @@ export function closeWhiteboard() {
 
   panel.hidden = true;
   isOpen = false;
+  try {
+    localStorage.setItem("rauh_wb_open", "0");
+  } catch (err) {}
   document.body.classList.remove("whiteboard-split-active");
 
   // Poista aktiivinen tila herätenapeista
