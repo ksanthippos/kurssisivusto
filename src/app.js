@@ -23,6 +23,7 @@ const state = {
   activeRevisionFilter: "all",
   theme: "system", // "system" | "light" | "dark"
   autoDateLesson: false, // boolean
+  keepAwakeMode: "active", // "active" | "always" | "off" (TV ja työkone)
   lessonScope: "extended", // "compact" | "extended"
   isPresentationMode: false, // Älytaulun esitystila (TODO.md kohta 3b)
   presentationFontSize: 125, // 100 | 125 | 150 (%)
@@ -208,7 +209,10 @@ async function init() {
     if (factsRes && factsRes.ok) state.scienceFacts = await factsRes.json();
 
     setupEventListeners();
+    window.isWhiteboardOpen = isWhiteboardOpen;
+    window.updateAppKeepAwake = updateKeepAwakeState;
     initWhiteboard();
+    updateKeepAwakeState();
     renderMobileNavCourseLists();
     renderMobileNavBooksList();
     renderMobileNavRevisionsList();
@@ -383,6 +387,24 @@ function setupEventListeners() {
       });
     });
   }
+
+  // Näytön hereilläpito (TV ja työkone)
+  const keepAwakeGroup = document.querySelector("#keepawake-selector-group");
+  if (keepAwakeGroup) {
+    keepAwakeGroup.querySelectorAll(".theme-opt-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const choice = btn.dataset.keepawake;
+        if (choice) setKeepAwakeMode(choice);
+      });
+    });
+  }
+
+  // Tarkista ja herätä näytön hereilläpito kun selainikkuna tulee takaisin näkyviin
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      updateKeepAwakeState();
+    }
+  });
 
   // Aikataulunäkymän opetusryhmän suosikkitähti
   const favBtnCurrentGroup = document.querySelector("#fav-btn-current-group");
@@ -768,6 +790,7 @@ function enterPresentationMode() {
   if (lessonBtn) lessonBtn.classList.add("is-active");
 
   updatePresentationBar();
+  updateKeepAwakeState();
   showToast("📺 Älytaulun esitystila aktivoitu. Käytä nuolia tai clickeriä. Poistu painamalla Esc.");
 }
 
@@ -790,6 +813,7 @@ function exitPresentationMode() {
       document.exitFullscreen();
     } catch (err) {}
   }
+  updateKeepAwakeState();
 }
 
 function updatePresentationBar() {
@@ -1349,7 +1373,16 @@ function loadPreferences() {
     }
   } catch (err) {}
 
+  try {
+    const savedKeepAwake = localStorage.getItem("rauh_keep_awake");
+    if (savedKeepAwake && ["active", "always", "off"].includes(savedKeepAwake)) {
+      state.keepAwakeMode = savedKeepAwake;
+    }
+  } catch (err) {}
+
   applyTheme(state.theme, false);
+  updateKeepAwakeUI();
+  updateKeepAwakeState();
 }
 
 function savePreferences() {
@@ -1410,6 +1443,124 @@ function updateThemeSelectorButtons() {
   themeSelectorGroup.querySelectorAll(".theme-opt-btn").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.themeChoice === state.theme);
   });
+}
+
+// --- Näytön hereilläpito (Screen Wake Lock & TV HDMI keep-alive) ---
+let wakeLockSentinel = null;
+let keepAliveTimer = null;
+
+function shouldKeepAwake() {
+  const mode = state.keepAwakeMode || "active";
+  if (mode === "off") return false;
+  if (mode === "always") return true;
+  if (mode === "active") {
+    const isPres = Boolean(state.isPresentationMode);
+    const isWb = Boolean(window.isWhiteboardOpen ? window.isWhiteboardOpen() : false);
+    return isPres || isWb;
+  }
+  return false;
+}
+
+async function requestWakeLock() {
+  if ("wakeLock" in navigator && document.visibilityState === "visible") {
+    try {
+      if (!wakeLockSentinel) {
+        wakeLockSentinel = await navigator.wakeLock.request("screen");
+        wakeLockSentinel.addEventListener("release", () => {
+          wakeLockSentinel = null;
+          if (shouldKeepAwake() && document.visibilityState === "visible") {
+            setTimeout(requestWakeLock, 1500);
+          }
+        });
+      }
+    } catch (err) {}
+  }
+}
+
+function releaseWakeLock() {
+  if (wakeLockSentinel) {
+    wakeLockSentinel.release().catch(() => {});
+    wakeLockSentinel = null;
+  }
+}
+
+function startKeepAliveHeartbeat() {
+  if (keepAliveTimer) return;
+  keepAliveTimer = setInterval(() => {
+    if (!shouldKeepAwake()) {
+      stopKeepAliveHeartbeat();
+      return;
+    }
+    if (!wakeLockSentinel && "wakeLock" in navigator && document.visibilityState === "visible") {
+      requestWakeLock();
+    }
+    try {
+      const pulse = document.querySelector("#screen-keepawake-pulse");
+      if (pulse) {
+        pulse.style.opacity = pulse.style.opacity === "0.001" ? "0.002" : "0.001";
+      }
+    } catch (e) {}
+  }, 150000); // 2.5 min
+}
+
+function stopKeepAliveHeartbeat() {
+  if (keepAliveTimer) {
+    clearInterval(keepAliveTimer);
+    keepAliveTimer = null;
+  }
+}
+
+function updateKeepAwakeState() {
+  const keep = shouldKeepAwake();
+  if (keep) {
+    requestWakeLock();
+    startKeepAliveHeartbeat();
+  } else {
+    releaseWakeLock();
+    stopKeepAliveHeartbeat();
+  }
+
+  const awakeInd = document.querySelector("#pres-awake-indicator");
+  if (awakeInd) {
+    awakeInd.hidden = !keep;
+  }
+}
+
+function setKeepAwakeMode(mode) {
+  if (!["active", "always", "off"].includes(mode)) mode = "active";
+  state.keepAwakeMode = mode;
+  try {
+    localStorage.setItem("rauh_keep_awake", mode);
+  } catch (err) {}
+  updateKeepAwakeUI();
+  updateKeepAwakeState();
+
+  const labels = {
+    active: "Päällä kun valkotaulu tai esitystila on auki",
+    always: "Aina päällä kun kurssisivusto on avoinna",
+    off: "Pois päältä"
+  };
+  showToast(`🖥️ Näytön hereilläpito: ${labels[mode] || mode}`);
+}
+
+function updateKeepAwakeUI() {
+  const group = document.querySelector("#keepawake-selector-group");
+  if (group) {
+    group.querySelectorAll(".theme-opt-btn").forEach((btn) => {
+      const match = btn.dataset.keepawake === (state.keepAwakeMode || "active");
+      btn.classList.toggle("active", match);
+    });
+  }
+
+  const badge = document.querySelector("#summary-badge-keepawake");
+  if (badge) {
+    const labels = {
+      active: "Valkotaulu & esitystila",
+      always: "Aina päällä",
+      off: "Pois päältä"
+    };
+    badge.textContent = labels[state.keepAwakeMode || "active"] || "Valkotaulu & esitystila";
+  }
 }
 
 function setLessonScope(scope) {

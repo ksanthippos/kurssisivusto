@@ -13,17 +13,22 @@ c) Kertausmateriaalien laajennus:
     Nyt kun pohjat ja synkronointi ovat valmiina, aina kun laadit uusia kertaustehtäviä vaikkapa kursseille MA_72, MA_73, MA_92 tai FY_91, riittää että käännät ne nimellä [KURSSI]_kertaus_v1.pdf ja [KURSSI]_kertaus_mallit_v1.pdf. Ne siirtyvät suoraan sivuston käyttöön!
 
 
-3. Luokkahuoneen esitys- ja valkotaulutyökalut: [TEHTY v1.26–v1.27]
+3. Luokkahuoneen esitys- ja valkotaulutyökalut: [TEHTY v1.26–v1.29]
 a) Integroitu valkotaulu (Whiteboard Canvas): [TEHTY]
     - Aktivointi leijuvasta painikkeesta ("Alkuun"-napin vieressä) ja yläpalkissa (🖊️). Pikanäppäin Alt+W / W.
-    - Näyttötilat: Koko ruutu (fullscreen), puoli ruutua (split view rinnakkain teorian/tehtävien kanssa: AINA teksti vasemmalla ja taulu oikealla!), siirrettävä ja laajennettava kelluva ikkuna (oikeasta alanurkasta vedettävä resize-kahva). Yhdistetty toggle-nappi ja näkymämuisti.
-    - Työkalut: Perustussit (musta, sininen, punainen, vihreä, keltainen korostus), pyyhekumi (destination-out: pyyhkii vain kynää eikä taustaruudukkoa), kynän paksuudet (2px, 4px, 8px), kumoa (undo), tee uudelleen (redo), tyhjennys (clear) ja kuvan tallennus PNG-tiedostoksi.
-    - Taustapohjat: Valmis koordinaatisto (akselit x ja y asteikkoineen), ruutupaperi (matematiikka/geometria), puhdas valkoinen ja viivoitus.
+    - Näyttötilat: Koko ruutu (fullscreen) yhden klikkauksen paluulla edelliseen näkymään, puoli ruutua (split view rinnakkain teorian/tehtävien kanssa: AINA teksti vasemmalla ja taulu oikealla!), siirrettävä ja laajennettava kelluva ikkuna (oikeasta alanurkasta ja reunoista vedettävä, automaattinen koon ja sijainnin tallennus välimuistiin).
+    - Työkalut: Perustussit tumman tilan automaattisella invertoinnilla (musta tussi kääntyy valkoiseksi tummassa teemassa ja päinvastoin, sininen, punainen, vihreä, keltainen korostus), pyyhekumi (destination-out: pyyhkii vain kynää eikä taustaruudukkoa), kynän paksuudet (2px, 4px, 8px), kumoa (undo), tee uudelleen (redo), tyhjennys (clear) ja kuvan tallennus PNG-tiedostoksi.
+    - Panorointi ja zoomaus: Panorointityökalu (käsi-ikoni ✋ valikosta), zoomauspainikkeet (+, -, 100% nollaus), hiiren rullan tuki sekä kahden sormen nipistys-zoomaus ja siirto kosketusnäytöllä/älytaululla.
+    - Taustapohjat: Tiivistetty yhden napin valitsin (📈, ▦, ⬜, ☰): valmis koordinaatisto (akselit x ja y asteikkoineen), ruutupaperi (matematiikka/geometria), puhdas valkoinen ja viivoitus.
     - Toteutus: Natiivi HTML5 <canvas> ja Pointer Events (toimii hiirellä, kosketuksella ja älytaulun kynällä) ilman ulkoisia kirjastoja. Retina/HiDPI -terävyystuki.
 b) Esitys- / Älytaulutila (Smartboard & Clicker): [TEHTY]
     - Koko näytön esitysnäkymä: piilottaa yläpalkin ja ylimääräiset valikot, suurentaa leipätekstin (säädettävä 100% / 125% / 150%) ja KaTeX-kaavat kauempaa luettavaksi. Pikanäppäin F / Alt+P.
     - Täysleveä tekstitila myös rinnakkaisnäkymässä (50vw vasemmalla ilman kapeita marginaaleja) ja leijuvan ohjauspalkin keskitys vasemmalle puolikkaalle.
     - Langattoman esityskauko-ohjaimen (clicker) ja näppäimistön tuki: siirtyminen edelliseen/seuraavaan tuntiin nuolinäppäimillä (ArrowLeft / ArrowRight) tai PageUp / PageDown -näppäimillä.
+c) Näytön hereilläpito (Screen Wake Lock & TV HDMI standby -esto): [TEHTY]
+    - Estää kosketusnäyttö-TV:n nukahtamisen (esim. 10 min aikaraja) ja työkoneen automaattisen lukittumisen (esim. 15 min) oppitunnin aikana.
+    - Asetettavissa asetuksista: "Päällä kun valkotaulu tai esitystila aktiivinen", "Aina kun kurssisivusto avoinna", tai "Pois päältä".
+    - Huomaamaton Screen Wake Lock API sekä mikroskooppinen render-heräte (TV HDMI standby -esto). Kahvikuppi-indikaattori esityspalkissa.
 
 
 4. Haku ja navigointi:

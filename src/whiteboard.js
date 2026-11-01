@@ -4,12 +4,15 @@
  *
  * Ominaisuudet:
  * - Näyttötilat: split (puoli ruutua rinnakkain teorian kanssa), fullscreen (koko ruutu), floating (kelluva siirrettävä ikkuna)
- * - Tussit ja värit: musta, sininen, punainen, vihreä, keltainen korostus
+ * - Kokoruututilan kytkentä: paluu edelliseen näkymään (split/floating) yhdellä klikkauksella
+ * - Tussit ja värit: tumma/valkoinen (automaattinen tumman tilan invertointi), sininen, punainen, vihreä, keltainen korostus
  * - Kynän paksuudet: ohut (2px), normaali (4px), paksu (8px)
- * - Pyyhekumi (destination-out: pyyhkii vain kynänjälkiä, ei taustaa)
- * - Taustapohjat: valkoinen, ruutupaperi (matematiikka), koordinaatisto (x, y -akselit & asteikko), viivoitus
+ * - Työkalut: Tussi, pyyhekumi (destination-out) ja Panorointi (✋)
+ * - Zoomaus ja panorointi: (+, -, 100% nollaus, hiiren rulla ja kahden sormen nipistys-zoomaus älytaululla)
+ * - Taustapohjat: tiivistetty yhden napin valikko: ruutupaperi (matematiikka), koordinaatisto (x, y -akselit & asteikko), viivoitus, valkoinen
  * - Kumoa / Tee uudelleen (Undo / Redo) ja Tyhjennys
  * - Kuvan vienti PNG-tiedostoksi (Export)
+ * - Kelluvan ikkunan koon ja sijainnin automaattinen muistaminen välimuistissa (localStorage)
  * - Natiivit Pointer Events (hiiri, kosketus, älytaulun kynä / stylus)
  * - Retina / HiDPI -terävyys (devicePixelRatio)
  */
@@ -25,17 +28,34 @@ let drawCtx = null;
 let isOpen = false;
 let currentMode = "split"; // "split" | "fullscreen" | "floating"
 let previousMode = "split"; // "split" | "floating"
-let activeTool = "pen"; // "pen" | "eraser"
+let activeTool = "pen"; // "pen" | "eraser" | "pan"
 let activeColor = "#1e293b";
 let activeSize = 4;
 let activeBackground = "coords"; // "blank" | "grid" | "coords" | "lines"
 
-// Piirroksen historia (vektoripohjainen terävä tallennus)
+// Zoomaus ja panorointi
+let zoom = 1.0;
+let panX = 0;
+let panY = 0;
+let isPanning = false;
+let panStartPointer = { x: 0, y: 0 };
+let panStartOffset = { x: 0, y: 0 };
+
+// Monikosketus (kahden sormen nipistys-zoomaus älytaululle & kosketusnäytölle)
+const activePointers = new Map();
+let pinchStartDistance = 0;
+let pinchStartZoom = 1.0;
+let pinchStartCenter = { x: 0, y: 0 };
+let pinchStartPan = { x: 0, y: 0 };
+let isPinching = false;
+
+// Piirroksen historia (vektoripohjainen terävä tallennus maailmankoordinaateissa)
 let strokes = []; // { tool, color, size, points: [{x, y}, ...] }
 let redoStack = [];
 let currentStroke = null;
 let isDrawing = false;
 let resizeObserver = null;
+let panelResizeObserver = null;
 
 // Kelluvan ikkunan raahaustila
 let isDraggingWindow = false;
@@ -43,6 +63,139 @@ let dragStartX = 0;
 let dragStartY = 0;
 let panelStartLeft = 0;
 let panelStartTop = 0;
+
+// Taustapohjien konfiguraatio
+const BG_INFO = {
+  coords: { icon: "📈", label: "Koordinaatisto (x, y)" },
+  grid: { icon: "▦", label: "Ruutupaperi" },
+  blank: { icon: "⬜", label: "Puhdas tausta" },
+  lines: { icon: "☰", label: "Viivoitus" }
+};
+
+/**
+ * Muuntaa mustan tussin valkoiseksi tummassa teemassa ja päinvastoin
+ */
+function getEffectiveStrokeColor(rawColor) {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    if (rawColor === "#1e293b" || rawColor === "#000000" || rawColor === "#0f172a" || !rawColor) {
+      return "#f8fafc";
+    }
+  } else {
+    if (rawColor === "#f8fafc" || rawColor === "#ffffff") {
+      return "#1e293b";
+    }
+  }
+  return rawColor;
+}
+
+/**
+ * Päivittää tussipaletin ensimmäisen napin värin vastaamaan teemaa
+ */
+function updatePrimaryColorForTheme() {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const primaryBtn = document.querySelector("#wb-color-primary");
+  if (primaryBtn) {
+    const colorVal = isDark ? "#f8fafc" : "#1e293b";
+    primaryBtn.style.setProperty("--c", colorVal);
+    primaryBtn.title = isDark ? "Valkoinen / Kirkas tussi (tumma tila)" : "Musta / Tumma tussi";
+  }
+}
+
+/**
+ * Asettaa ja tallentaa valkotaulun taustapohjan
+ */
+export function setWhiteboardBackground(bgKey) {
+  if (!BG_INFO[bgKey]) bgKey = "coords";
+  activeBackground = bgKey;
+  try {
+    localStorage.setItem("rauh_wb_bg", bgKey);
+  } catch (err) {}
+
+  const bgBtn = document.querySelector("#wb-btn-bg");
+  const bgIcon = document.querySelector("#wb-bg-btn-icon");
+  if (bgBtn && bgIcon) {
+    bgIcon.textContent = BG_INFO[bgKey].icon;
+    bgBtn.title = `Taustapohja: ${BG_INFO[bgKey].label} (klikkaa vaihtaaksesi)`;
+  }
+
+  document.querySelectorAll(".wb-bg-option").forEach((opt) => {
+    const isMatch = opt.dataset.bg === bgKey;
+    opt.classList.toggle("active", isMatch);
+  });
+
+  if (isOpen) {
+    drawBackground();
+  }
+}
+
+/**
+ * Asettaa kankaalle zoomaus-, panorointi- ja HiDPI-skaalauksen
+ */
+function applyCanvasTransform(ctx) {
+  const dpr = window.devicePixelRatio || 1;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+  ctx.translate(panX, panY);
+  ctx.scale(zoom, zoom);
+}
+
+/**
+ * Muuntaa ruutukoordinaatit virtuaalimaailman koordinaateiksi
+ */
+function getScreenPos(e) {
+  const rect = drawCanvas.getBoundingClientRect();
+  return {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
+  };
+}
+
+function screenToWorld(pos) {
+  return {
+    x: (pos.x - panX) / zoom,
+    y: (pos.y - panY) / zoom
+  };
+}
+
+/**
+ * Zoomaa tietyn pisteen (screenX, screenY) ympäri
+ */
+function zoomAtPoint(factor, screenX, screenY) {
+  const newZoom = Math.min(3.0, Math.max(0.4, zoom * factor));
+  panX = screenX - ((screenX - panX) / zoom) * newZoom;
+  panY = screenY - ((screenY - panY) / zoom) * newZoom;
+  zoom = newZoom;
+  updateZoomUI();
+  drawBackground();
+  redrawAllStrokes();
+}
+
+/**
+ * Nollaa zoomauksen ja panoroinnin oletukseen (100%)
+ */
+function resetZoomAndPan() {
+  zoom = 1.0;
+  panX = 0;
+  panY = 0;
+  updateZoomUI();
+  drawBackground();
+  redrawAllStrokes();
+}
+
+/**
+ * Päivittää zoomausprosentin työkalupalkkiin
+ */
+function updateZoomUI() {
+  const zoomText = document.querySelector("#wb-zoom-text");
+  if (zoomText) {
+    zoomText.textContent = `${Math.round(zoom * 100)}%`;
+  }
+  const zoomResetBtn = document.querySelector("#wb-btn-zoom-reset");
+  if (zoomResetBtn) {
+    zoomResetBtn.title = `Nollaa zoomaus (nykyinen: ${Math.round(zoom * 100)}%)`;
+  }
+}
 
 /**
  * Alustaa valkotaulun DOM-elementit ja tapahtumankuuntelijat
@@ -66,7 +219,7 @@ export function initWhiteboard() {
   setupResizeEvents();
   setupThemeObserver();
 
-  // ResizeObserver tarkkailee canvas-wrapperin todellista kokoa lennossa
+  // ResizeObserver tarkkailee canvas-wrapperin kokoa ja päivittää resoluution
   if (window.ResizeObserver) {
     resizeObserver = new ResizeObserver(() => {
       if (isOpen) {
@@ -74,6 +227,21 @@ export function initWhiteboard() {
       }
     });
     resizeObserver.observe(canvasWrapper);
+
+    // Tarkkailee kelluvan paneelin kokoa lennossa ja tallentaa sen välimuistiin
+    panelResizeObserver = new ResizeObserver(() => {
+      if (currentMode === "floating" && isOpen) {
+        const w = panel.offsetWidth;
+        const h = panel.offsetHeight;
+        if (w >= 300 && h >= 200) {
+          try {
+            localStorage.setItem("rauh_wb_w", String(w));
+            localStorage.setItem("rauh_wb_h", String(h));
+          } catch (err) {}
+        }
+      }
+    });
+    panelResizeObserver.observe(panel);
   } else {
     window.addEventListener("resize", () => {
       if (isOpen) requestAnimationFrame(resizeCanvases);
@@ -81,12 +249,10 @@ export function initWhiteboard() {
   }
 
   // Aseta ja palauta aiemmat valkotaulun asetukset välimuistista (localStorage)
-  const savedBg = localStorage.getItem("rauh_wb_bg");
-  if (savedBg && ["blank", "grid", "coords", "lines"].includes(savedBg)) {
-    activeBackground = savedBg;
-    const bgSelect = document.querySelector("#wb-bg-select");
-    if (bgSelect) bgSelect.value = savedBg;
-  }
+  const savedBg = localStorage.getItem("rauh_wb_bg") || "coords";
+  setWhiteboardBackground(savedBg);
+
+  updatePrimaryColorForTheme();
 
   const savedColor = localStorage.getItem("rauh_wb_color");
   if (savedColor) {
@@ -109,7 +275,7 @@ export function initWhiteboard() {
   }
 
   const savedTool = localStorage.getItem("rauh_wb_tool");
-  if (savedTool && (savedTool === "pen" || savedTool === "eraser")) {
+  if (savedTool && ["pen", "eraser", "pan"].includes(savedTool)) {
     setTool(savedTool);
   }
 
@@ -144,13 +310,39 @@ export function initWhiteboard() {
  * Työkalupalkin painikkeet ja toiminnot
  */
 function setupToolbarEvents() {
-  // 1. Taustapohjan valitsin
-  const bgSelect = document.querySelector("#wb-bg-select");
-  if (bgSelect) {
-    bgSelect.addEventListener("change", (e) => {
-      activeBackground = e.target.value;
-      localStorage.setItem("rauh_wb_bg", activeBackground);
-      drawBackground();
+  // 1. Tiivistetty taustapohjan valitsin ja ponnahdusvalikko
+  const bgBtn = document.querySelector("#wb-btn-bg");
+  const bgMenu = document.querySelector("#wb-bg-menu");
+
+  if (bgBtn && bgMenu) {
+    bgBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isHidden = bgMenu.hasAttribute("hidden");
+      if (isHidden) {
+        bgMenu.removeAttribute("hidden");
+        bgBtn.setAttribute("aria-expanded", "true");
+      } else {
+        bgMenu.setAttribute("hidden", "");
+        bgBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.querySelectorAll(".wb-bg-option").forEach((opt) => {
+      opt.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const chosenBg = opt.dataset.bg;
+        setWhiteboardBackground(chosenBg);
+        bgMenu.setAttribute("hidden", "");
+        bgBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    // Sulje valikko klikattaessa sen ulkopuolelle
+    document.addEventListener("click", (e) => {
+      if (!bgMenu.hasAttribute("hidden") && !e.target.closest("#wb-bg-dropdown-container")) {
+        bgMenu.setAttribute("hidden", "");
+        bgBtn.setAttribute("aria-expanded", "false");
+      }
     });
   }
 
@@ -166,8 +358,8 @@ function setupToolbarEvents() {
       activeColor = btn.dataset.color || "#1e293b";
       localStorage.setItem("rauh_wb_color", activeColor);
 
-      // Jos pyyhekumi oli valittuna, vaihda takaisin kynään
-      if (activeTool === "eraser") {
+      // Jos pyyhekumi tai panorointi oli valittuna, vaihda automaattisesti takaisin kynään
+      if (activeTool === "eraser" || activeTool === "pan") {
         setTool("pen");
       }
     });
@@ -187,13 +379,39 @@ function setupToolbarEvents() {
     });
   });
 
-  // 4. Työkalut: Kynä ja pyyhekumi
+  // 4. Työkalut: Kynä, Pyyhekumi ja Panorointi (✋)
   const penBtn = document.querySelector("#wb-tool-pen");
   const eraserBtn = document.querySelector("#wb-tool-eraser");
+  const panBtn = document.querySelector("#wb-tool-pan");
+
   if (penBtn) penBtn.addEventListener("click", () => setTool("pen"));
   if (eraserBtn) eraserBtn.addEventListener("click", () => setTool("eraser"));
+  if (panBtn) panBtn.addEventListener("click", () => setTool("pan"));
 
-  // 5. Toiminnot: Kumoa, Uudelleen, Tyhjennä, Tallenna
+  // 5. Zoomauspainikkeet: Loitonna, Nollaa 100%, Lähennä
+  const zoomInBtn = document.querySelector("#wb-btn-zoom-in");
+  const zoomOutBtn = document.querySelector("#wb-btn-zoom-out");
+  const zoomResetBtn = document.querySelector("#wb-btn-zoom-reset");
+
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener("click", () => {
+      const rect = canvasWrapper.getBoundingClientRect();
+      zoomAtPoint(1.25, rect.width / 2, rect.height / 2);
+    });
+  }
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener("click", () => {
+      const rect = canvasWrapper.getBoundingClientRect();
+      zoomAtPoint(1 / 1.25, rect.width / 2, rect.height / 2);
+    });
+  }
+  if (zoomResetBtn) {
+    zoomResetBtn.addEventListener("click", () => {
+      resetZoomAndPan();
+    });
+  }
+
+  // 6. Toiminnot: Kumoa, Uudelleen, Tyhjennä, Tallenna
   const undoBtn = document.querySelector("#wb-btn-undo");
   const redoBtn = document.querySelector("#wb-btn-redo");
   const clearBtn = document.querySelector("#wb-btn-clear");
@@ -204,7 +422,7 @@ function setupToolbarEvents() {
   if (clearBtn) clearBtn.addEventListener("click", clearBoard);
   if (exportBtn) exportBtn.addEventListener("click", exportPNG);
 
-  // 6. Ikkunatilan vaihtonapit (Split / Kelluva yhdistetty toggle, Koko ruutu, Sulje)
+  // 7. Ikkunatilan vaihtonapit (Split / Kelluva yhdistetty toggle, Koko ruutu, Sulje)
   const modeToggleBtn = document.querySelector("#wb-btn-mode-toggle");
   if (modeToggleBtn) {
     modeToggleBtn.addEventListener("click", toggleWhiteboardMode);
@@ -215,19 +433,13 @@ function setupToolbarEvents() {
     fullscreenBtn.addEventListener("click", toggleFullscreenMode);
   }
 
-  document.querySelectorAll(".wb-mode-btn[data-mode]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      setMode(btn.dataset.mode);
-    });
-  });
-
-  // 7. Sulkunappi
+  // 8. Sulkunappi
   const closeBtn = document.querySelector("#wb-btn-close");
   if (closeBtn) {
     closeBtn.addEventListener("click", () => closeWhiteboard());
   }
 
-  // 8. Ulkoiset herätepainikkeet (kaikki toimivat aktivoi/deaktivoi -kytkiminä)
+  // 9. Ulkoiset herätepainikkeet (kaikki toimivat aktivoi/deaktivoi -kytkiminä)
   const triggerBtn = document.querySelector("#whiteboard-trigger-btn");
   if (triggerBtn) {
     triggerBtn.addEventListener("click", () => toggleWhiteboard());
@@ -243,21 +455,16 @@ function setupToolbarEvents() {
 }
 
 /**
- * Pointer Events -piirtologiikka (tukee hiirtä, kosketusta ja kynää)
+ * Pointer Events -piirto ja monikosketuslogiikka (tukee hiirtä, kynää ja monikosketusta)
  */
 function setupPointerEvents() {
   drawCanvas.addEventListener("pointerdown", handlePointerDown, { passive: false });
   drawCanvas.addEventListener("pointermove", handlePointerMove, { passive: false });
   drawCanvas.addEventListener("pointerup", handlePointerUp, { passive: false });
   drawCanvas.addEventListener("pointercancel", handlePointerUp, { passive: false });
-}
 
-function getCanvasPos(e) {
-  const rect = drawCanvas.getBoundingClientRect();
-  return {
-    x: e.clientX - rect.left,
-    y: e.clientY - rect.top
-  };
+  // Hiiren rullan zoomaus ja vieritys
+  drawCanvas.addEventListener("wheel", handleWheel, { passive: false });
 }
 
 function handlePointerDown(e) {
@@ -268,41 +475,138 @@ function handlePointerDown(e) {
     drawCanvas.setPointerCapture(e.pointerId);
   } catch (err) {}
 
-  const pos = getCanvasPos(e);
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  // Jos kaksi sormea koskettaa näyttöä: käynnistetään monikosketus (nipistys-zoomaus ja kahden sormen panorointi)
+  if (activePointers.size === 2) {
+    if (isDrawing && currentStroke) {
+      isDrawing = false;
+      currentStroke = null;
+      redrawAllStrokes(); // Peruutetaan mahdollinen ensimmäisen sormen aloituspiste
+    }
+    isPinching = true;
+    const pts = Array.from(activePointers.values());
+    pinchStartDistance = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y) || 1;
+    pinchStartZoom = zoom;
+    pinchStartCenter = {
+      x: (pts[0].x + pts[1].x) / 2,
+      y: (pts[0].y + pts[1].y) / 2
+    };
+    pinchStartPan = { x: panX, y: panY };
+    return;
+  }
+
+  // Jos panorointityökalu (käsi) on aktiivinen
+  if (activeTool === "pan") {
+    isPanning = true;
+    panStartPointer = { x: e.clientX, y: e.clientY };
+    panStartOffset = { x: panX, y: panY };
+    drawCanvas.style.cursor = "grabbing";
+    return;
+  }
+
+  // Kynä tai pyyhekumi
+  const screenPos = getScreenPos(e);
+  const worldPos = screenToWorld(screenPos);
   isDrawing = true;
 
   currentStroke = {
     tool: activeTool,
     color: activeTool === "eraser" ? "rgba(0,0,0,1)" : activeColor,
     size: activeSize,
-    points: [pos]
+    points: [worldPos]
   };
 
-  // Piirrä aloituspiste heti näkyviin (piste tai kumin klikkaus)
-  drawDot(pos.x, pos.y, currentStroke);
+  // Piirrä aloituspiste heti
+  drawDot(worldPos.x, worldPos.y, currentStroke);
 }
 
 function handlePointerMove(e) {
+  if (!activePointers.has(e.pointerId)) return;
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  // 1. Kahden sormen nipistys-zoomaus ja siirto
+  if (isPinching && activePointers.size >= 2) {
+    e.preventDefault();
+    const pts = Array.from(activePointers.values());
+    const currentDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+    const currentCenter = {
+      x: (pts[0].x + pts[1].x) / 2,
+      y: (pts[0].y + pts[1].y) / 2
+    };
+
+    const scaleFactor = currentDist / pinchStartDistance;
+    const newZoom = Math.min(3.0, Math.max(0.4, pinchStartZoom * scaleFactor));
+
+    const rect = drawCanvas.getBoundingClientRect();
+    const focalX = pinchStartCenter.x - rect.left;
+    const focalY = pinchStartCenter.y - rect.top;
+
+    const dx = currentCenter.x - pinchStartCenter.x;
+    const dy = currentCenter.y - pinchStartCenter.y;
+
+    panX = focalX - ((focalX - pinchStartPan.x) / pinchStartZoom) * newZoom + dx;
+    panY = focalY - ((focalY - pinchStartPan.y) / pinchStartZoom) * newZoom + dy;
+    zoom = newZoom;
+
+    updateZoomUI();
+    drawBackground();
+    redrawAllStrokes();
+    return;
+  }
+
+  // 2. Panorointityökalu (käsi)
+  if (isPanning && activeTool === "pan") {
+    e.preventDefault();
+    const dx = e.clientX - panStartPointer.x;
+    const dy = e.clientY - panStartPointer.y;
+    panX = panStartOffset.x + dx;
+    panY = panStartOffset.y + dy;
+    drawBackground();
+    redrawAllStrokes();
+    return;
+  }
+
+  // 3. Kynä / Pyyhekumi
   if (!isDrawing || !currentStroke) return;
   e.preventDefault();
 
-  const pos = getCanvasPos(e);
+  const screenPos = getScreenPos(e);
+  const worldPos = screenToWorld(screenPos);
   const pts = currentStroke.points;
-  const prevPos = pts[pts.length - 1];
+  const prevWorldPos = pts[pts.length - 1];
 
-  pts.push(pos);
-  drawSegment(prevPos, pos, currentStroke);
+  pts.push(worldPos);
+  drawSegment(prevWorldPos, worldPos, currentStroke);
 }
 
 function handlePointerUp(e) {
-  if (!isDrawing || !currentStroke) return;
   try {
     drawCanvas.releasePointerCapture(e.pointerId);
   } catch (err) {}
 
+  activePointers.delete(e.pointerId);
+
+  if (isPinching) {
+    if (activePointers.size < 2) {
+      isPinching = false;
+    }
+    return;
+  }
+
+  if (isPanning) {
+    isPanning = false;
+    if (activeTool === "pan") {
+      drawCanvas.style.cursor = "grab";
+    }
+    return;
+  }
+
+  if (!isDrawing || !currentStroke) return;
+
   if (currentStroke.points.length > 0) {
     strokes.push(currentStroke);
-    redoStack = []; // Uusi veto tyhjentää redo-pinon
+    redoStack = [];
     updateUndoRedoUI();
     saveStrokesToStorage();
   }
@@ -311,12 +615,32 @@ function handlePointerUp(e) {
   isDrawing = false;
 }
 
+function handleWheel(e) {
+  e.preventDefault();
+  const rect = drawCanvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  if (e.ctrlKey || e.metaKey || activeTool === "pan") {
+    // Zoomaus hiiren rullalla
+    const factor = e.deltaY < 0 ? 1.15 : 0.85;
+    zoomAtPoint(factor, mouseX, mouseY);
+  } else {
+    // Panorointi kahden suunnan rullauksella
+    panX -= e.deltaX;
+    panY -= e.deltaY;
+    drawBackground();
+    redrawAllStrokes();
+  }
+}
+
 /**
- * Yhden pisteen piirto (kun klikataan ilman liikettä)
+ * Yhden pisteen piirto
  */
 function drawDot(x, y, stroke) {
   drawCtx.save();
   const radius = stroke.tool === "eraser" ? stroke.size * 2 : stroke.size / 2;
+  const effectiveColor = getEffectiveStrokeColor(stroke.color);
 
   if (stroke.tool === "eraser") {
     drawCtx.globalCompositeOperation = "destination-out";
@@ -325,7 +649,7 @@ function drawDot(x, y, stroke) {
     drawCtx.fill();
   } else {
     drawCtx.globalCompositeOperation = "source-over";
-    drawCtx.fillStyle = stroke.color;
+    drawCtx.fillStyle = effectiveColor;
     drawCtx.beginPath();
     drawCtx.arc(x, y, radius, 0, Math.PI * 2);
     drawCtx.fill();
@@ -340,14 +664,15 @@ function drawSegment(p1, p2, stroke) {
   drawCtx.save();
   drawCtx.lineCap = "round";
   drawCtx.lineJoin = "round";
+  const effectiveColor = getEffectiveStrokeColor(stroke.color);
 
   if (stroke.tool === "eraser") {
     drawCtx.globalCompositeOperation = "destination-out";
     drawCtx.strokeStyle = "rgba(0,0,0,1)";
-    drawCtx.lineWidth = stroke.size * 4; // Kumi on hieman paksumpi kätevyyden vuoksi
+    drawCtx.lineWidth = stroke.size * 4;
   } else {
     drawCtx.globalCompositeOperation = "source-over";
-    drawCtx.strokeStyle = stroke.color;
+    drawCtx.strokeStyle = effectiveColor;
     drawCtx.lineWidth = stroke.size;
   }
 
@@ -359,11 +684,15 @@ function drawSegment(p1, p2, stroke) {
 }
 
 /**
- * Piirtää koko vetohistorian uudelleen puhtaalle kankaalle (vektoriterävyys)
+ * Piirtää koko vetohistorian uudelleen puhtaalle kankaalle
  */
 function redrawAllStrokes() {
-  const rect = drawCanvas.getBoundingClientRect();
-  drawCtx.clearRect(0, 0, rect.width, rect.height);
+  if (!drawCanvas || !drawCtx) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  drawCtx.setTransform(1, 0, 0, 1, 0, 0);
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  applyCanvasTransform(drawCtx);
 
   for (const s of strokes) {
     if (!s.points || s.points.length === 0) continue;
@@ -375,6 +704,7 @@ function redrawAllStrokes() {
     drawCtx.save();
     drawCtx.lineCap = "round";
     drawCtx.lineJoin = "round";
+    const effectiveColor = getEffectiveStrokeColor(s.color);
 
     if (s.tool === "eraser") {
       drawCtx.globalCompositeOperation = "destination-out";
@@ -382,7 +712,7 @@ function redrawAllStrokes() {
       drawCtx.lineWidth = s.size * 4;
     } else {
       drawCtx.globalCompositeOperation = "source-over";
-      drawCtx.strokeStyle = s.color;
+      drawCtx.strokeStyle = effectiveColor;
       drawCtx.lineWidth = s.size;
     }
 
@@ -397,15 +727,15 @@ function redrawAllStrokes() {
 }
 
 /**
- * Taustapohjien piirto (ruutupaperi, koordinaatisto, viivat, tyhjä)
+ * Taustapohjien piirto (ruutupaperi, koordinaatisto, viivat, tyhjä) huomioiden zoomaus ja siirto
  */
 function drawBackground() {
-  if (!bgCanvas || !bgCtx) return;
-  const rect = bgCanvas.getBoundingClientRect();
-  const w = rect.width;
-  const h = rect.height;
+  if (!bgCanvas || !bgCtx || !canvasWrapper) return;
+  const rect = canvasWrapper.getBoundingClientRect();
+  const screenW = rect.width;
+  const screenH = rect.height;
 
-  bgCtx.clearRect(0, 0, w, h);
+  if (screenW <= 0 || screenH <= 0) return;
 
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
   const bgColor = isDark ? "#0f172a" : "#ffffff";
@@ -414,31 +744,48 @@ function drawBackground() {
   const axisColor = isDark ? "#94a3b8" : "#475569";
   const textColor = isDark ? "#94a3b8" : "#64748b";
 
-  // 1. Taustaväri
+  // 1. Tyhjennä koko taustakangas ja täytä pohjavärillä
+  bgCtx.setTransform(1, 0, 0, 1, 0, 0);
+  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
   bgCtx.fillStyle = bgColor;
-  bgCtx.fillRect(0, 0, w, h);
+  bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
 
   if (activeBackground === "blank") {
     return;
   }
 
+  // Aseta virtuaalitilan siirrot ja skaalaus
+  applyCanvasTransform(bgCtx);
+
+  const left = -panX / zoom;
+  const top = -panY / zoom;
+  const right = (screenW - panX) / zoom;
+  const bottom = (screenH - panY) / zoom;
+
   // 2. Ruutupaperi (matematiikka / geometria)
   if (activeBackground === "grid") {
     const step = 28;
-    bgCtx.lineWidth = 1;
+    bgCtx.lineWidth = 1 / zoom;
 
-    for (let x = 0; x <= w; x += step) {
-      bgCtx.strokeStyle = (Math.round(x / step) % 5 === 0) ? gridLine : gridFaint;
+    const startX = Math.floor(left / step) * step;
+    const endX = Math.ceil(right / step) * step;
+    const startY = Math.floor(top / step) * step;
+    const endY = Math.ceil(bottom / step) * step;
+
+    for (let x = startX; x <= endX; x += step) {
+      const idx = Math.round(x / step);
+      bgCtx.strokeStyle = (idx % 5 === 0) ? gridLine : gridFaint;
       bgCtx.beginPath();
-      bgCtx.moveTo(x + 0.5, 0);
-      bgCtx.lineTo(x + 0.5, h);
+      bgCtx.moveTo(x + 0.5, top);
+      bgCtx.lineTo(x + 0.5, bottom);
       bgCtx.stroke();
     }
-    for (let y = 0; y <= h; y += step) {
-      bgCtx.strokeStyle = (Math.round(y / step) % 5 === 0) ? gridLine : gridFaint;
+    for (let y = startY; y <= endY; y += step) {
+      const idx = Math.round(y / step);
+      bgCtx.strokeStyle = (idx % 5 === 0) ? gridLine : gridFaint;
       bgCtx.beginPath();
-      bgCtx.moveTo(0, y + 0.5);
-      bgCtx.lineTo(w, y + 0.5);
+      bgCtx.moveTo(left, y + 0.5);
+      bgCtx.lineTo(right, y + 0.5);
       bgCtx.stroke();
     }
     return;
@@ -447,134 +794,140 @@ function drawBackground() {
   // 3. Koordinaatisto (x, y -akselit nuolineen ja numeroineen)
   if (activeBackground === "coords") {
     const step = 34; // Ruutukoko
-    const cx = Math.round(w / 2);
-    const cy = Math.round(h / 2);
+    const cx = Math.round(screenW / 2);
+    const cy = Math.round(screenH / 2);
 
     // Taustaruudukko
-    bgCtx.lineWidth = 1;
+    bgCtx.lineWidth = 1 / zoom;
     bgCtx.strokeStyle = gridFaint;
-    for (let x = cx % step; x <= w; x += step) {
+    const startX = Math.floor((left - cx) / step) * step + cx;
+    const endX = Math.ceil((right - cx) / step) * step + cx;
+    const startY = Math.floor((top - cy) / step) * step + cy;
+    const endY = Math.ceil((bottom - cy) / step) * step + cy;
+
+    for (let x = startX; x <= endX; x += step) {
       bgCtx.beginPath();
-      bgCtx.moveTo(x + 0.5, 0);
-      bgCtx.lineTo(x + 0.5, h);
+      bgCtx.moveTo(x + 0.5, top);
+      bgCtx.lineTo(x + 0.5, bottom);
       bgCtx.stroke();
     }
-    for (let y = cy % step; y <= h; y += step) {
+    for (let y = startY; y <= endY; y += step) {
       bgCtx.beginPath();
-      bgCtx.moveTo(0, y + 0.5);
-      bgCtx.lineTo(w, y + 0.5);
+      bgCtx.moveTo(left, y + 0.5);
+      bgCtx.lineTo(right, y + 0.5);
       bgCtx.stroke();
     }
 
     // Pääakselit: X ja Y
-    bgCtx.lineWidth = 2;
+    bgCtx.lineWidth = 2 / zoom;
     bgCtx.strokeStyle = axisColor;
 
     // X-akseli
     bgCtx.beginPath();
-    bgCtx.moveTo(0, cy + 0.5);
-    bgCtx.lineTo(w, cy + 0.5);
+    bgCtx.moveTo(left, cy + 0.5);
+    bgCtx.lineTo(right, cy + 0.5);
     bgCtx.stroke();
 
     // Y-akseli
     bgCtx.beginPath();
-    bgCtx.moveTo(cx + 0.5, 0);
-    bgCtx.lineTo(cx + 0.5, h);
+    bgCtx.moveTo(cx + 0.5, top);
+    bgCtx.lineTo(cx + 0.5, bottom);
     bgCtx.stroke();
 
     // Nuolet akselien päihin
     bgCtx.fillStyle = axisColor;
+    const arrowSize = 10 / zoom;
+
     // Nuoli X oikealle
     bgCtx.beginPath();
-    bgCtx.moveTo(w - 2, cy + 0.5);
-    bgCtx.lineTo(w - 12, cy - 5);
-    bgCtx.lineTo(w - 12, cy + 5);
+    bgCtx.moveTo(right - 2, cy + 0.5);
+    bgCtx.lineTo(right - 2 - arrowSize, cy - arrowSize / 2);
+    bgCtx.lineTo(right - 2 - arrowSize, cy + arrowSize / 2);
     bgCtx.closePath();
     bgCtx.fill();
 
     // Nuoli Y ylös
     bgCtx.beginPath();
-    bgCtx.moveTo(cx + 0.5, 2);
-    bgCtx.lineTo(cx - 5, 12);
-    bgCtx.lineTo(cx + 5, 12);
+    bgCtx.moveTo(cx + 0.5, top + 2);
+    bgCtx.lineTo(cx - arrowSize / 2, top + 2 + arrowSize);
+    bgCtx.lineTo(cx + arrowSize / 2, top + 2 + arrowSize);
     bgCtx.closePath();
     bgCtx.fill();
 
     // Asteikkomerkit ja numerot
-    bgCtx.font = "11px system-ui, -apple-system, sans-serif";
+    const fontSize = Math.max(9, Math.min(16, Math.round(11 / zoom)));
+    bgCtx.font = `${fontSize}px system-ui, -apple-system, sans-serif`;
     bgCtx.fillStyle = textColor;
     bgCtx.textAlign = "center";
     bgCtx.textBaseline = "top";
 
     // X-akselin merkit
-    let valX = 1;
-    for (let x = cx + step; x < w - 20; x += step) {
+    for (let x = cx + step; x < right - 20; x += step) {
+      const val = Math.round((x - cx) / step);
       bgCtx.beginPath();
-      bgCtx.moveTo(x + 0.5, cy - 4);
-      bgCtx.lineTo(x + 0.5, cy + 4);
+      bgCtx.moveTo(x + 0.5, cy - 4 / zoom);
+      bgCtx.lineTo(x + 0.5, cy + 4 / zoom);
       bgCtx.stroke();
-      bgCtx.fillText(valX, x, cy + 6);
-      valX++;
+      bgCtx.fillText(val, x, cy + 6 / zoom);
     }
-    valX = -1;
-    for (let x = cx - step; x > 20; x -= step) {
+    for (let x = cx - step; x > left + 20; x -= step) {
+      const val = Math.round((x - cx) / step);
       bgCtx.beginPath();
-      bgCtx.moveTo(x + 0.5, cy - 4);
-      bgCtx.lineTo(x + 0.5, cy + 4);
+      bgCtx.moveTo(x + 0.5, cy - 4 / zoom);
+      bgCtx.lineTo(x + 0.5, cy + 4 / zoom);
       bgCtx.stroke();
-      bgCtx.fillText(valX, x, cy + 6);
-      valX--;
+      bgCtx.fillText(val, x, cy + 6 / zoom);
     }
 
     // Y-akselin merkit
     bgCtx.textAlign = "right";
     bgCtx.textBaseline = "middle";
-    let valY = 1;
-    for (let y = cy - step; y > 20; y -= step) {
+    for (let y = cy - step; y > top + 20; y -= step) {
+      const val = Math.round((cy - y) / step);
       bgCtx.beginPath();
-      bgCtx.moveTo(cx - 4, y + 0.5);
-      bgCtx.lineTo(cx + 4, y + 0.5);
+      bgCtx.moveTo(cx - 4 / zoom, y + 0.5);
+      bgCtx.lineTo(cx + 4 / zoom, y + 0.5);
       bgCtx.stroke();
-      bgCtx.fillText(valY, cx - 6, y);
-      valY++;
+      bgCtx.fillText(val, cx - 6 / zoom, y);
     }
-    valY = -1;
-    for (let y = cy + step; y < h - 20; y += step) {
+    for (let y = cy + step; y < bottom - 20; y += step) {
+      const val = Math.round((cy - y) / step);
       bgCtx.beginPath();
-      bgCtx.moveTo(cx - 4, y + 0.5);
-      bgCtx.lineTo(cx + 4, y + 0.5);
+      bgCtx.moveTo(cx - 4 / zoom, y + 0.5);
+      bgCtx.lineTo(cx + 4 / zoom, y + 0.5);
       bgCtx.stroke();
-      bgCtx.fillText(valY, cx - 6, y);
-      valY--;
+      bgCtx.fillText(val, cx - 6 / zoom, y);
     }
 
     // Akselien kirjaimet x ja y ja origo 0
-    bgCtx.font = "italic 700 13px system-ui, sans-serif";
-    bgCtx.fillText("x", w - 16, cy - 14);
+    bgCtx.font = `italic 700 ${fontSize + 2}px system-ui, sans-serif`;
+    bgCtx.fillText("x", right - 16 / zoom, cy - 14 / zoom);
     bgCtx.textAlign = "left";
-    bgCtx.fillText("y", cx + 10, 16);
-    bgCtx.font = "11px system-ui, sans-serif";
+    bgCtx.fillText("y", cx + 10 / zoom, top + 16 / zoom);
+    bgCtx.font = `${fontSize}px system-ui, sans-serif`;
     bgCtx.textAlign = "right";
-    bgCtx.fillText("0", cx - 6, cy + 12);
+    bgCtx.fillText("0", cx - 6 / zoom, cy + 12 / zoom);
     return;
   }
 
   // 4. Viivoitus (muistiinpanot)
   if (activeBackground === "lines") {
     const step = 32;
-    bgCtx.lineWidth = 1;
+    bgCtx.lineWidth = 1 / zoom;
     bgCtx.strokeStyle = gridLine;
-    for (let y = 50; y < h; y += step) {
+    const startY = Math.floor((top - 50) / step) * step + 50;
+    const endY = Math.ceil((bottom - 50) / step) * step + 50;
+    for (let y = startY; y < endY; y += step) {
       bgCtx.beginPath();
-      bgCtx.moveTo(0, y + 0.5);
-      bgCtx.lineTo(w, y + 0.5);
+      bgCtx.moveTo(left, y + 0.5);
+      bgCtx.lineTo(right, y + 0.5);
       bgCtx.stroke();
     }
     // Punainen marginaaliviiva vasemmalle
     bgCtx.strokeStyle = isDark ? "#7f1d1d" : "#fca5a5";
     bgCtx.beginPath();
-    bgCtx.moveTo(60.5, 0);
-    bgCtx.lineTo(60.5, h);
+    bgCtx.moveTo(60.5, top);
+    bgCtx.lineTo(60.5, bottom);
     bgCtx.stroke();
   }
 }
@@ -604,12 +957,6 @@ function resizeCanvases() {
   drawCanvas.width = Math.floor(w * dpr);
   drawCanvas.height = Math.floor(h * dpr);
 
-  // Skaalaa kontekstit
-  bgCtx.setTransform(1, 0, 0, 1, 0, 0);
-  bgCtx.scale(dpr, dpr);
-  drawCtx.setTransform(1, 0, 0, 1, 0, 0);
-  drawCtx.scale(dpr, dpr);
-
   drawBackground();
   redrawAllStrokes();
 }
@@ -622,8 +969,8 @@ function saveStrokesToStorage() {
     if (strokes.length === 0) {
       localStorage.removeItem("rauh_wb_strokes");
     } else {
-      // Rajoitetaan enintään 250 viimeisimpään vetoon, jotta pysyy nopeana
-      localStorage.setItem("rauh_wb_strokes", JSON.stringify(strokes.slice(-250)));
+      // Rajoitetaan enintään 300 viimeisimpään vetoon suorituskyvyn varmistamiseksi
+      localStorage.setItem("rauh_wb_strokes", JSON.stringify(strokes.slice(-300)));
     }
   } catch (err) {
     console.warn("Valkotaulun piirrosten tallennus epäonnistui:", err);
@@ -631,9 +978,9 @@ function saveStrokesToStorage() {
 }
 
 /**
- * Työkalun vaihto (kynä / pyyhekumi)
+ * Työkalun vaihto (kynä, pyyhekumi tai panorointi ✋)
  */
-function setTool(tool) {
+export function setTool(tool) {
   activeTool = tool;
   try {
     localStorage.setItem("rauh_wb_tool", tool);
@@ -641,12 +988,20 @@ function setTool(tool) {
 
   const penBtn = document.querySelector("#wb-tool-pen");
   const eraserBtn = document.querySelector("#wb-tool-eraser");
+  const panBtn = document.querySelector("#wb-tool-pan");
 
   if (penBtn) penBtn.classList.toggle("active", tool === "pen");
   if (eraserBtn) eraserBtn.classList.toggle("active", tool === "eraser");
+  if (panBtn) panBtn.classList.toggle("active", tool === "pan");
 
   if (drawCanvas) {
-    drawCanvas.style.cursor = tool === "eraser" ? "cell" : "crosshair";
+    if (tool === "pan") {
+      drawCanvas.style.cursor = "grab";
+    } else if (tool === "eraser") {
+      drawCanvas.style.cursor = "cell";
+    } else {
+      drawCanvas.style.cursor = "crosshair";
+    }
   }
 }
 
@@ -679,7 +1034,6 @@ function redo() {
  */
 function clearBoard() {
   if (strokes.length === 0) return;
-  // Mahdollistaa palauttamisen Undo-napilla
   redoStack = [...strokes];
   strokes = [];
   redrawAllStrokes();
@@ -726,7 +1080,19 @@ function exportPNG() {
 export function setMode(mode) {
   if (!panel) return;
 
-  if (currentMode !== "fullscreen") {
+  // Tallennetaan kelluvan ikkunan mitat ja sijainti ennen moodin vaihtoa
+  if (currentMode === "floating" && panel.offsetWidth && panel.offsetHeight) {
+    try {
+      localStorage.setItem("rauh_wb_w", String(panel.offsetWidth));
+      localStorage.setItem("rauh_wb_h", String(panel.offsetHeight));
+      if (panel.style.left) {
+        localStorage.setItem("rauh_wb_x", parseInt(panel.style.left, 10));
+        localStorage.setItem("rauh_wb_y", parseInt(panel.style.top, 10));
+      }
+    } catch (err) {}
+  }
+
+  if (currentMode !== "fullscreen" && mode === "fullscreen") {
     previousMode = currentMode;
   }
   currentMode = mode;
@@ -792,23 +1158,20 @@ export function setMode(mode) {
       modeToggleBtn.title = "Vaihda jaettuun ruutuun (◫)";
       modeToggleBtn.setAttribute("aria-label", "Vaihda jaettuun ruutuun");
     } else {
-      modeToggleIcon.textContent = "◫";
-      modeToggleBtn.title = "Poistu koko ruudun tilasta jaettuun ruutuun (◫)";
-      modeToggleBtn.setAttribute("aria-label", "Poistu koko ruudun tilasta jaettuun ruutuun");
+      modeToggleIcon.textContent = previousMode === "floating" ? "❐" : "◫";
+      modeToggleBtn.title = previousMode === "floating" ? "Vaihda kelluvaan ikkunaan (❐)" : "Vaihda jaettuun ruutuun (◫)";
+      modeToggleBtn.setAttribute("aria-label", modeToggleBtn.title);
     }
   }
 
-  // Päivitä fullscreen-nappi
+  // Päivitä fullscreen-nappi (näyttää selkeästi aktiivisuuden ja edelliseen paluun)
   const fsBtn = document.querySelector("#wb-btn-fullscreen");
   if (fsBtn) {
-    fsBtn.classList.toggle("active", mode === "fullscreen");
-    fsBtn.title = mode === "fullscreen" ? "Poistu koko ruudun tilasta (⛶)" : "Koko ruutu (⛶)";
+    const isFs = mode === "fullscreen";
+    fsBtn.classList.toggle("active", isFs);
+    fsBtn.title = isFs ? "Pienennä edelliseen näkymään (⛶)" : "Koko ruutu (⛶)";
+    fsBtn.setAttribute("aria-label", isFs ? "Pienennä edelliseen näkymään" : "Koko ruutu");
   }
-
-  // Päivitä vanhat moodinapit jos DOMissa
-  document.querySelectorAll(".wb-mode-btn[data-mode]").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.mode === mode);
-  });
 
   // Tallenna tila
   if (mode === "split" || mode === "floating") {
@@ -835,12 +1198,14 @@ export function toggleWhiteboardMode() {
 }
 
 /**
- * Vaihtaa koko ruudun (fullscreen) ja edellisen tilan välillä
+ * Vaihtaa koko ruudun (fullscreen) ja edellisen tilan (split tai floating) välillä
  */
 export function toggleFullscreenMode() {
   if (currentMode === "fullscreen") {
-    setMode(previousMode === "floating" ? "floating" : "split");
+    const targetMode = (previousMode && previousMode !== "fullscreen") ? previousMode : "split";
+    setMode(targetMode);
   } else {
+    previousMode = currentMode;
     setMode("fullscreen");
   }
 }
@@ -865,6 +1230,9 @@ export function openWhiteboard(mode = null) {
     btn.classList.add("is-active");
   });
 
+  // Päivitä näytön hereilläpito
+  window.updateAppKeepAwake?.();
+
   requestAnimationFrame(() => {
     resizeCanvases();
   });
@@ -875,6 +1243,18 @@ export function openWhiteboard(mode = null) {
  */
 export function closeWhiteboard() {
   if (!panel) return;
+
+  // Jos suljetaan kelluva tila, tallennetaan sen mitat talteen
+  if (currentMode === "floating" && panel.offsetWidth && panel.offsetHeight) {
+    try {
+      localStorage.setItem("rauh_wb_w", String(panel.offsetWidth));
+      localStorage.setItem("rauh_wb_h", String(panel.offsetHeight));
+      if (panel.style.left) {
+        localStorage.setItem("rauh_wb_x", parseInt(panel.style.left, 10));
+        localStorage.setItem("rauh_wb_y", parseInt(panel.style.top, 10));
+      }
+    } catch (err) {}
+  }
 
   panel.hidden = true;
   isOpen = false;
@@ -887,6 +1267,9 @@ export function closeWhiteboard() {
   document.querySelectorAll("#whiteboard-trigger-btn, #header-whiteboard-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
     btn.classList.remove("is-active");
   });
+
+  // Päivitä näytön hereilläpito
+  window.updateAppKeepAwake?.();
 }
 
 /**
@@ -917,7 +1300,7 @@ function setupDragEvents() {
   handle.addEventListener("pointerdown", (e) => {
     if (currentMode !== "floating") return;
     // Älä aloita raahausta, jos klikattiin painiketta tai valintalistan alkiota
-    if (e.target.closest("button") || e.target.closest("select")) return;
+    if (e.target.closest("button") || e.target.closest("select") || e.target.closest(".wb-bg-menu")) return;
 
     isDraggingWindow = true;
     dragStartX = e.clientX;
@@ -992,8 +1375,7 @@ function setupResizeEvents() {
     startW = panel.offsetWidth;
     startH = panel.offsetHeight;
 
-    // Jos paneelin sijainti määrittyy right/bottom:lla, lukitaan se suoriksi left/top-arvoiksi,
-    // jotta oikean alanurkan veto laajentaa ikkunaa luonnollisesti hiiren/sormen mukana
+    // Jos paneelin sijainti määrittyy right/bottom:lla, lukitaan se suoriksi left/top-arvoiksi
     const rect = panel.getBoundingClientRect();
     panel.style.left = `${rect.left}px`;
     panel.style.top = `${rect.top}px`;
@@ -1048,14 +1430,16 @@ function setupResizeEvents() {
 }
 
 /**
- * Tarkkailee teeman muutosta (data-theme) ja piirtää taustan uudelleen
+ * Tarkkailee teeman muutosta (data-theme) ja päivittää taustan sekä tussivärin lennossa
  */
 function setupThemeObserver() {
   const observer = new MutationObserver((mutations) => {
     for (const m of mutations) {
       if (m.type === "attributes" && m.attributeName === "data-theme") {
+        updatePrimaryColorForTheme();
         if (isOpen) {
           drawBackground();
+          redrawAllStrokes();
         }
       }
     }

@@ -649,7 +649,43 @@
               </div>
             </details>
 
-            <!-- 5. Opettajan ja sijaisen työkalut -->
+            <!-- 5. Näytön hereilläpito (TV ja työkone) -->
+            <details class="settings-card" id="card-setting-keepawake">
+              <summary class="settings-card-summary">
+                <div class="settings-card-summary-left">
+                  <span class="settings-card-icon" aria-hidden="true">🖥️</span>
+                  <div class="settings-card-title-group">
+                    <h4 class="settings-card-title">Näytön hereilläpito (TV & työkone)</h4>
+                    <span class="settings-card-status-badge" id="summary-badge-keepawake">Valkotaulu & esitystila</span>
+                  </div>
+                </div>
+                <span class="settings-card-chevron" aria-hidden="true">▼</span>
+              </summary>
+              <div class="settings-card-body">
+                <div class="settings-group">
+                  <h4 class="settings-group-title">☕ Automaattisen lukittumisen ja nukahtamisen esto</h4>
+                  <p class="settings-group-desc">
+                    Estää kosketusnäyttö-TV:n nukahtamisen (esim. 10 min aikaraja) ja työkoneen automaattisen lukittumisen (esim. 15 min) oppitunnin aikana huomaamattomalla Screen Wake Lock- ja Keep-Alive -herätteellä:
+                  </p>
+                  <div class="theme-selector-group" id="keepawake-selector-group" role="radiogroup" aria-label="Näytön hereilläpito">
+                    <button type="button" class="theme-opt-btn active" data-keepawake="active">
+                      <span class="theme-opt-icon">🖊️</span>
+                      <span class="theme-opt-label">Valkotaulu & esitystila</span>
+                    </button>
+                    <button type="button" class="theme-opt-btn" data-keepawake="always">
+                      <span class="theme-opt-icon">⚡</span>
+                      <span class="theme-opt-label">Aina kun sivusto avoinna</span>
+                    </button>
+                    <button type="button" class="theme-opt-btn" data-keepawake="off">
+                      <span class="theme-opt-icon">💤</span>
+                      <span class="theme-opt-label">Pois päältä</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <!-- 6. Opettajan ja sijaisen työkalut -->
             <details class="settings-card" id="card-setting-tools">
               <summary class="settings-card-summary">
                 <div class="settings-card-summary-left">
@@ -1239,20 +1275,34 @@
       </div>
 
       <div class="whiteboard-controls">
-        <!-- Taustapohja -->
-        <div class="wb-control-group" title="Taustapohja">
-          <label for="wb-bg-select" class="wb-label sr-only">Tausta:</label>
-          <select id="wb-bg-select" class="wb-select" aria-label="Valkotaulun taustapohja">
-            <option value="coords">📈 Koordinaatisto (x, y)</option>
-            <option value="grid">▦ Ruutupaperi</option>
-            <option value="blank">⬜ Puhdas tausta</option>
-            <option value="lines">☰ Viivoitus</option>
-          </select>
+        <!-- Taustapohja (Tiivistetty yhden nappulan valitsin) -->
+        <div class="wb-bg-dropdown-container" id="wb-bg-dropdown-container">
+          <button type="button" class="wb-mode-btn wb-bg-btn" id="wb-btn-bg" title="Taustapohja: Koordinaatisto (klikkaa vaihtaaksesi)" aria-label="Valitse valkotaulun taustapohja" aria-haspopup="menu" aria-expanded="false">
+            <span id="wb-bg-btn-icon" aria-hidden="true">📈</span>
+          </button>
+          <div class="wb-bg-menu" id="wb-bg-menu" role="menu" hidden>
+            <button type="button" class="wb-bg-option active" data-bg="coords" role="menuitem">
+              <span class="wb-bg-opt-icon">📈</span>
+              <span class="wb-bg-opt-label">Koordinaatisto (x, y)</span>
+            </button>
+            <button type="button" class="wb-bg-option" data-bg="grid" role="menuitem">
+              <span class="wb-bg-opt-icon">▦</span>
+              <span class="wb-bg-opt-label">Ruutupaperi</span>
+            </button>
+            <button type="button" class="wb-bg-option" data-bg="blank" role="menuitem">
+              <span class="wb-bg-opt-icon">⬜</span>
+              <span class="wb-bg-opt-label">Puhdas valkoinen</span>
+            </button>
+            <button type="button" class="wb-bg-option" data-bg="lines" role="menuitem">
+              <span class="wb-bg-opt-icon">☰</span>
+              <span class="wb-bg-opt-label">Viivoitus</span>
+            </button>
+          </div>
         </div>
 
         <!-- Tussin värit -->
         <div class="wb-color-palette" role="radiogroup" aria-label="Tussin väri">
-          <button type="button" class="wb-color-btn active" data-color="#1e293b" title="Musta / Tumma" style="--c: #1e293b;" aria-checked="true"></button>
+          <button type="button" class="wb-color-btn active" id="wb-color-primary" data-color="#1e293b" title="Musta / Tumma" style="--c: #1e293b;" aria-checked="true"></button>
           <button type="button" class="wb-color-btn" data-color="#2563eb" title="Sininen" style="--c: #2563eb;" aria-checked="false"></button>
           <button type="button" class="wb-color-btn" data-color="#dc2626" title="Punainen" style="--c: #dc2626;" aria-checked="false"></button>
           <button type="button" class="wb-color-btn" data-color="#16a34a" title="Vihreä" style="--c: #16a34a;" aria-checked="false"></button>
@@ -1266,10 +1316,20 @@
           <button type="button" class="wb-size-btn" data-size="8" title="Paksu (8 px)" aria-checked="false"><span class="wb-size-dot dot-lg"></span></button>
         </div>
 
-        <!-- Kynä ja Pyyhekumi -->
+        <!-- Kynä, Pyyhekumi ja Panorointi (✋) -->
         <div class="wb-tool-group">
           <button type="button" class="wb-tool-btn active" id="wb-tool-pen" title="Tussi / Kynä">✏️</button>
           <button type="button" class="wb-tool-btn" id="wb-tool-eraser" title="Pyyhekumi">🧹</button>
+          <button type="button" class="wb-tool-btn" id="wb-tool-pan" title="Panoroi näkymää (Käsi / Vieritys)">✋</button>
+        </div>
+
+        <!-- Zoomaus (-, 100%, +) -->
+        <div class="wb-zoom-group" role="group" aria-label="Zoomaus">
+          <button type="button" class="wb-action-btn wb-zoom-btn" id="wb-btn-zoom-out" title="Loitonna (−)">−</button>
+          <button type="button" class="wb-action-btn wb-zoom-level-btn" id="wb-btn-zoom-reset" title="Nollaa zoomaus (100%)">
+            <span id="wb-zoom-text">100%</span>
+          </button>
+          <button type="button" class="wb-action-btn wb-zoom-btn" id="wb-btn-zoom-in" title="Lähennä (+)">+</button>
         </div>
 
         <!-- Kumoa / Uudelleen / Tyhjennä / Tallenna -->
@@ -1285,7 +1345,7 @@
           <button type="button" class="wb-mode-btn wb-mode-toggle-btn" id="wb-btn-mode-toggle" title="Vaihda kelluvaan ikkunaan (❐)" aria-label="Vaihda kelluvaan ikkunaan">
             <span class="wb-mode-icon" id="wb-mode-icon">❐</span>
           </button>
-          <button type="button" class="wb-mode-btn" id="wb-btn-fullscreen" data-mode="fullscreen" title="Koko ruutu (⛶)" aria-label="Koko ruutu">⛶</button>
+          <button type="button" class="wb-mode-btn" id="wb-btn-fullscreen" title="Koko ruutu (⛶)" aria-label="Koko ruutu">⛶</button>
           <button type="button" class="wb-mode-btn wb-close-btn" id="wb-btn-close" title="Sulje valkotaulu (Esc)" aria-label="Sulje valkotaulu">✕</button>
         </div>
       </div>
@@ -1309,6 +1369,7 @@
         <div class="pres-lesson-indicator">
           <span class="pres-badge" id="pres-lesson-badge">Oppitunti #1</span>
           <span class="pres-title" id="pres-lesson-title">Aihe</span>
+          <span class="pres-awake-indicator" id="pres-awake-indicator" title="Näytön hereilläpito aktiivinen (TV ja tietokone pysyvät hereillä)" hidden>☕</span>
         </div>
         <button type="button" class="pres-btn" id="pres-next-btn" title="Seuraava tunti (Nuoli oikealle / PageDown)">
           <span class="pres-btn-label">Seuraava</span>
@@ -1366,6 +1427,9 @@
   <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Mobiilin päävalikko">
     <!-- Renderöidään dynaamisesti JS:ssä järjestettävien slottien mukaan -->
   </nav>
+
+  <!-- Näytön hereilläpito -herätepulssi (TV HDMI & PC standby esto) -->
+  <div id="screen-keepawake-pulse" style="position:fixed;width:1px;height:1px;bottom:0;right:0;pointer-events:none;opacity:0.001;z-index:9999;" aria-hidden="true"></div>
 
   <script src="src/version.js"></script>
   <script type="module" src="src/app.js"></script>
