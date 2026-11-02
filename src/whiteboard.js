@@ -444,10 +444,6 @@ function setupToolbarEvents() {
   if (triggerBtn) {
     triggerBtn.addEventListener("click", () => toggleWhiteboard());
   }
-  const headerBtn = document.querySelector("#header-whiteboard-btn");
-  if (headerBtn) {
-    headerBtn.addEventListener("click", () => toggleWhiteboard());
-  }
   const lessonWbBtn = document.querySelector("#btn-lesson-whiteboard");
   if (lessonWbBtn) {
     lessonWbBtn.addEventListener("click", () => toggleWhiteboard());
@@ -1226,7 +1222,7 @@ export function openWhiteboard(mode = null) {
   setMode(currentMode);
 
   // Synkronoi aktiiviset tilat kaikkiin herätenappeihin
-  document.querySelectorAll("#whiteboard-trigger-btn, #header-whiteboard-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
+  document.querySelectorAll("#whiteboard-trigger-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
     btn.classList.add("is-active");
   });
 
@@ -1264,7 +1260,7 @@ export function closeWhiteboard() {
   document.body.classList.remove("whiteboard-split-active");
 
   // Poista aktiivinen tila herätenapeista
-  document.querySelectorAll("#whiteboard-trigger-btn, #header-whiteboard-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
+  document.querySelectorAll("#whiteboard-trigger-btn, #btn-lesson-whiteboard, #pres-wb-btn").forEach((btn) => {
     btn.classList.remove("is-active");
   });
 
