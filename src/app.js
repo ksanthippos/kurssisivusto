@@ -202,7 +202,16 @@ async function init() {
 
     if (coursesRes.ok) state.courses = await coursesRes.json();
     if (booksRes.ok) state.books = await booksRes.json();
-    if (revisionsRes.ok) state.revisions = await revisionsRes.json();
+    if (revisionsRes.ok) {
+      const revs = await revisionsRes.json();
+      // Järjestetään: ensin fysiikan kurssit (7-9), sitten matematiikan kurssit (7-9)
+      state.revisions = revs.sort((a, b) => {
+        const isFyA = a.subject === "fysiikka" || (a.code && a.code.startsWith("FY"));
+        const isFyB = b.subject === "fysiikka" || (b.code && b.code.startsWith("FY"));
+        if (isFyA !== isFyB) return isFyA ? -1 : 1;
+        return (a.code || "").localeCompare(b.code || "", undefined, { numeric: true });
+      });
+    }
     if (infoRes.ok) state.info = await infoRes.json();
     if (timetableRes && timetableRes.ok) state.timetable = await timetableRes.json();
     if (schedulesRes && schedulesRes.ok) state.schedules = await schedulesRes.json();

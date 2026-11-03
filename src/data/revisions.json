@@ -1,5 +1,49 @@
 [
   {
+    "code": "FY_71",
+    "title": "Lämpöoppi ja aaltoliike",
+    "grade": "7",
+    "subject": "fysiikka",
+    "reminders": [
+      "Muista fysiikan tutkimussykli: havainto → tutkimuskysymys → koejärjestely → mittaus → johtopäätös/laki.",
+      "Käytä fysiikan vakiintuneita suure- ja yksikkömerkintöjä.",
+      "Lämpölaskuissa käytä kaavaa Q = c · m · ΔT ja merkitse aina välivaiheet ja yksiköt näkyviin.",
+      "Aallon perusyhtälössä v = f · λ muista yksiköt (nopeus m/s, taajuus Hz, aallonpituus m).",
+      "Valo-opissa muista heijastuslaki (tulokulma = heijastuskulma mitattuna normaalista!) ja linssityypit (hajottava miinuslasi likinäköisyyteen, kokoava pluslasi kaukonäköisyyteen)."
+    ],
+    "sets": [
+      {
+        "id": "fy71-k1",
+        "title": "Kertaustehtävät 1: Lämpöoppi ja aaltoliike",
+        "description": "Tutkimusmenetelmät, suureet ja mittaaminen, lämpötila ja lämpölaajeneminen, ominaislämpökapasiteetti, faasimuutokset, värähdys- ja aaltoliike, ääni sekä valo-oppi.",
+        "taskPdf": "kertaus_tehtavat/FY_71_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/FY_71_kertaus_mallit_v1.pdf"
+      }
+    ]
+  },
+  {
+    "code": "FY_91",
+    "title": "Sähkömagnetismi",
+    "grade": "9",
+    "subject": "fysiikka",
+    "reminders": [
+      "Käytä laskutehtävissä aina oikeita perusyksiköitä!",
+      "mA → A: jaa 1000:lla (esim. 250 mA = 0,25 A).",
+      "W → kW: jaa 1000:lla (esim. 1500 W = 1,5 kW).",
+      "min → h: jaa 60:llä (esim. 30 min = 0,5 h).",
+      "Energia: E = P · t (esim. kWh = kW · h)."
+    ],
+    "sets": [
+      {
+        "id": "fy91-k1",
+        "title": "Kertaustehtävät 1: Sähkömagnetismi",
+        "description": "Sähkövaraus ja staattinen sähkö, virtapiirit ja mittaukset, Ohmin laki, vastuskytkennät, teho ja sähkölaskut, sähköturvallisuus, magnetismi, induktio sekä muuntajat.",
+        "taskPdf": "kertaus_tehtavat/FY_91_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/FY_91_kertaus_mallit_v1.pdf"
+      }
+    ]
+  },
+  {
     "code": "MA_71",
     "title": "Laskuoppi",
     "grade": "7",
@@ -18,6 +62,38 @@
         "solutionPdf": "kertaus_tehtavat/MA_71_kertaus_mallit_v1.pdf"
       }
     ]
+  },
+  {
+    "code": "MA_72",
+    "title": "Geometria I: Tasogeometria",
+    "grade": "7",
+    "subject": "matematiikka",
+    "reminders": [
+      "Käytä koordinaatistotehtävissä aina viivoitinta ja ruutupaperia.",
+      "Normaali on kohtisuorassa suoraa vastaan (90 asteen kulmassa).",
+      "Muista kolmion kulmien summa 180° ja nelikulmion 360°."
+    ],
+    "sets": [
+      {
+        "id": "ma72-k1",
+        "title": "Kertaustehtävät 1: Tasogeometria",
+        "description": "Koordinaatisto, geometriset objektit, kulmien lajit, vierus- ja ristikulmat, normaali ja keskinormaali, yhdensuuntaiset suorat, ympyräoppi ja kehäkulmalause, kolmiot, yhtenevyys sekä peilaukset ja symmetriat.",
+        "taskPdf": "kertaus_tehtavat/MA_72_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_72_kertaus_mallit_v1.pdf"
+      }
+    ]
+  },
+  {
+    "code": "MA_73",
+    "title": "Lausekkeet ja yhtälöt",
+    "grade": "7",
+    "subject": "matematiikka",
+    "reminders": [
+      "Yhtälössä pyritään saamaan tuntematon x yksin yhtälön toiselle puolelle.",
+      "Poista sulkeet huolellisesti: muista etumerkkisäännöt, jos sulkeiden edessä on miinus.",
+      "Pidemmissä yhtälöissä merkitse selkeästi pystyviivalla tehdyt laskutoimitukset (| - 5)."
+    ],
+    "sets": []
   },
   {
     "code": "MA_74",
@@ -76,38 +152,6 @@
     ]
   },
   {
-    "code": "MA_72",
-    "title": "Geometria I: Tasogeometria",
-    "grade": "7",
-    "subject": "matematiikka",
-    "reminders": [
-      "Käytä koordinaatistotehtävissä aina viivoitinta ja ruutupaperia.",
-      "Normaali on kohtisuorassa suoraa vastaan (90 asteen kulmassa).",
-      "Muista kolmion kulmien summa 180° ja nelikulmion 360°."
-    ],
-    "sets": [
-      {
-        "id": "ma72-k1",
-        "title": "Kertaustehtävät 1: Tasogeometria",
-        "description": "Koordinaatisto, geometriset objektit, kulmien lajit, vierus- ja ristikulmat, normaali ja keskinormaali, yhdensuuntaiset suorat, ympyräoppi ja kehäkulmalause, kolmiot, yhtenevyys sekä peilaukset ja symmetriat.",
-        "taskPdf": "kertaus_tehtavat/MA_72_kertaus_v1.pdf",
-        "solutionPdf": "kertaus_tehtavat/MA_72_kertaus_mallit_v1.pdf"
-      }
-    ]
-  },
-  {
-    "code": "MA_73",
-    "title": "Lausekkeet ja yhtälöt",
-    "grade": "7",
-    "subject": "matematiikka",
-    "reminders": [
-      "Yhtälössä pyritään saamaan tuntematon x yksin yhtälön toiselle puolelle.",
-      "Poista sulkeet huolellisesti: muista etumerkkisäännöt, jos sulkeiden edessä on miinus.",
-      "Pidemmissä yhtälöissä merkitse selkeästi pystyviivalla tehdyt laskutoimitukset (| - 5)."
-    ],
-    "sets": []
-  },
-  {
     "code": "MA_92",
     "title": "Geometria III: Avaruusgeometria",
     "grade": "9",
@@ -137,49 +181,5 @@
       "Yhtälö f(x) = g(x) ratkaisee muuttujan arvon, jolla funktiot saavat saman arvon (kuvaajien leikkauspiste)."
     ],
     "sets": []
-  },
-  {
-    "code": "FY_71",
-    "title": "Lämpöoppi ja aaltoliike",
-    "grade": "7",
-    "subject": "fysiikka",
-    "reminders": [
-      "Muista fysiikan tutkimussykli: havainto → tutkimuskysymys → koejärjestely → mittaus → johtopäätös/laki.",
-      "Käytä fysiikan vakiintuneita suure- ja yksikkömerkintöjä.",
-      "Lämpölaskuissa käytä kaavaa Q = c · m · ΔT ja merkitse aina välivaiheet ja yksiköt näkyviin.",
-      "Aallon perusyhtälössä v = f · λ muista yksiköt (nopeus m/s, taajuus Hz, aallonpituus m).",
-      "Valo-opissa muista heijastuslaki (tulokulma = heijastuskulma mitattuna normaalista!) ja linssityypit (hajottava miinuslasi likinäköisyyteen, kokoava pluslasi kaukonäköisyyteen)."
-    ],
-    "sets": [
-      {
-        "id": "fy71-k1",
-        "title": "Kertaustehtävät 1: Lämpöoppi ja aaltoliike",
-        "description": "Tutkimusmenetelmät, suureet ja mittaaminen, lämpötila ja lämpölaajeneminen, ominaislämpökapasiteetti, faasimuutokset, värähdys- ja aaltoliike, ääni sekä valo-oppi.",
-        "taskPdf": "kertaus_tehtavat/FY_71_kertaus_v1.pdf",
-        "solutionPdf": "kertaus_tehtavat/FY_71_kertaus_mallit_v1.pdf"
-      }
-    ]
-  },
-  {
-    "code": "FY_91",
-    "title": "Sähkömagnetismi",
-    "grade": "9",
-    "subject": "fysiikka",
-    "reminders": [
-      "Käytä laskutehtävissä aina oikeita perusyksiköitä!",
-      "mA → A: jaa 1000:lla (esim. 250 mA = 0,25 A).",
-      "W → kW: jaa 1000:lla (esim. 1500 W = 1,5 kW).",
-      "min → h: jaa 60:llä (esim. 30 min = 0,5 h).",
-      "Energia: E = P · t (esim. kWh = kW · h)."
-    ],
-    "sets": [
-      {
-        "id": "fy91-k1",
-        "title": "Kertaustehtävät 1: Sähkömagnetismi",
-        "description": "Sähkövaraus ja staattinen sähkö, virtapiirit ja mittaukset, Ohmin laki, vastuskytkennät, teho ja sähkölaskut, sähköturvallisuus, magnetismi, induktio sekä muuntajat.",
-        "taskPdf": "kertaus_tehtavat/FY_91_kertaus_v1.pdf",
-        "solutionPdf": "kertaus_tehtavat/FY_91_kertaus_mallit_v1.pdf"
-      }
-    ]
   }
 ]
