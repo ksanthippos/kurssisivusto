@@ -298,6 +298,39 @@
           "pdf": "tuntitehtavat/FY_91/FY_91_tehtava_11_muuntajat_ja_muuntajayhtalo.pdf"
         }
       ]
+    },
+    {
+      "lesson": 12,
+      "topic": "Kurssikertaus",
+      "title": "Kurssikertaus: Kertaustehtävät ja malliratkaisut",
+      "content": "Kurssin FY_91 Sähkömagnetismi (kappaleet 1–11) kokonaiskertaus kurssikoetta varten.",
+      "summary": "Kurssin FY_91 kokonaiskertaus: sähkövaraukset, staattinen sähkö, virtapiirit ja mittaukset, Ohmin laki, vastusten kytkennät, sähköteho ja -energia, sähköturvallisuus, magnetismi, sähkömagneettinen induktio sekä sähkön siirto ja muuntajat. Mukana 12 tehtävän kertaustehtävämoniste (60 p) ja opettajan malliratkaisut pisteytyksineen.",
+      "theory": "<p><strong>FY_91 Sähkömagnetismi – Kertaus kurssikokeeseen (kpl 1–11):</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>1. Sähkövaraukset ja staattinen sähkö:</strong> Positiivinen ($+$) ja negatiivinen ($-$) varaus. Samanmerkkiset hylkivät, erimerkkiset vetävät puoleensa. Hankauksessa elektronit siirtyvät. Johteet (vapaat elektronit) vs. eristeet.</li>\n  <li><strong>2. Virtapiiri ja suureet:</strong> Suljettu virtapiiri (jännitelähde, johdot, kuorma, kytkin). Virta $I$ ($\text{A}$, elektronien suunnattu liike), jännite $U$ ($\text{V}$, potentiaaliero). Virtamittari sarjaan (pieni resistanssi), jännitemittari rinnan (suuri resistanssi).</li>\n  <li><strong>3. Ohmin laki ja resistanssi:</strong>\n    $$U = R \\cdot I \\iff I = \\frac{U}{R} \\iff R = \\frac{U}{I}$$\n    Resistanssiin vaikuttavat johtimen pituus, paksuus, materiaali ja lämpötila.</li>\n  <li><strong>4. Vastusten kytkennät:</strong>\n    Sarjaankytkentä: $R_{\\text{kok}} = R_1 + R_2$, virta sama kaikkialla, jännite jakautuu $U_{\\text{kok}} = U_1 + U_2$.\n    Rinnankytkentä: $\\frac{1}{R_{\\text{kok}}} = \\frac{1}{R_1} + \\frac{1}{R_2}$, jännite sama kaikkialla, virta haaroittuu $I_{\\text{kok}} = I_1 + I_2$.</li>\n  <li><strong>5. Sähköteho ja -energia:</strong>\n    $$P = U \\cdot I = R \\cdot I^2 = \\frac{U^2}{R} \\quad (\\text{W})$$\n    $$E = P \\cdot t \\quad (\\text{J} = \\text{W}\\cdot\\text{s} \\text{ tai } \\text{kWh} = \\text{kW}\\cdot\\text{h})$$</li>\n  <li><strong>6. Sähköturvallisuus:</strong> Sulake suojaa oikosululta ja ylikuormitukselta. Vikavirtasuoja katkaisee virran 30 mA erolla 30 ms ajassa. Suojamaadoitus (keltavihreä johto) johtaa vikavirran maahan.</li>\n  <li><strong>7. Magnetismi ja induktio:</strong> Kestomagneetin navat (N ja S), Maan magneettinen etelänapa maantieteellisellä pohjoisnavalla. Sähkövirta synnyttää magneettikentän (sähkömagneetti). Muuttuva magneettikenttä käämissä indusoi vaihtojännitteen (induktio, Faraday 1831, generaattori).</li>\n  <li><strong>8. Sähkön siirto ja muuntajat:</strong> Muuntaja toimii vain vaihtovirralla: $\\frac{U_1}{U_2} = \\frac{N_1}{N_2}$. Suurjännite (110–400 kV) minimoi lämpöhäviöt $P_{\\text{häviö}} = R \\cdot I^2$ kantaverkossa.</li>\n</ul>",
+      "tasks": {
+        "theory": "Kertaa kpl 1–11 muistiinpanot ja ratkaise kertaustehtävät alla olevasta monisteesta."
+      },
+      "substituteNote": "Oppilaat kertaavat itsenäisesti kurssikokeeseen. Kertaustehtävät ja malliratkaisut ovat avattavissa alla olevista painikkeista.",
+      "deepDive": {
+        "title": "Opiskeluvinkit fysiikan kurssikokeeseen valmistautumiseen",
+        "content": "<h4>1. Laske itse kynällä ja paperilla</h4><p>Passiivinen lukeminen luo helposti illuusion osaamisesta. Laske aina kertaustehtävät ensin itsenäisesti paperille ennen malliratkaisujen avaamista!</p><h4>2. Fysiikan laskukaavan 4 kultaista vaihetta</h4><p>Kokeessa saat täydet pisteet noudattamalla aina neljää vaihetta:</p><ol><li><strong>Lähtöarvot:</strong> Poimi tehtävästä suureet tunnuksineen ja muunna perusyksiköihin (esim. $I = 250\\text{ mA} = 0{,}25\\text{ A}$, $U = 12\\text{ V}$).</li><li><strong>Kaava:</strong> Kirjoita käytettävä peruskaava (esim. $R = \\frac{U}{I}$).</li><li><strong>Sijoitus:</strong> Sijoita lukuarvot yksiköineen kaavaan.</li><li><strong>Vastaus:</strong> Pyöristä vastaus järkevään mittaustarkkuuteen ja muista oikea yksikkö ($\\Omega$, $\\text{W}$, $\\text{kWh}$)!</li></ol><div class=\"deep-dive-callout\"><strong>Tiesitkö?</strong> Sähköopin kokeessa piirretty selkeä kytkentäkaavio (sarjaan- vai rinnankytkentä) auttaa hahmottamaan virtapiirin ja tuo osapisteitä!</div>"
+      },
+      "extendedTheory": "<div class=\"theory-section\">\n  <h3>FY_91: Kertaustehtävät ja malliratkaisut kurssikokeeseen</h3>\n  <p>Kurssikoe kattaa koko fysiikan 9. luokan sähkömagnetismin oppiaineksen (kappaleet 1–11). Alla olevista painikkeista voit avata suoraan selaimeen sekä <strong>kertaustehtävien tehtävänannon</strong> että <strong>opettajan kattavat malliratkaisut</strong> vaiheittaisine pisteytyksineen.</p>\n  <div class=\"theory-box tip\">\n    <h4>📝 Kertausohjeet opiskelijalle:</h4>\n    <ol class=\"theory-list\">\n      <li><strong>Avaa tehtävämoniste</strong> (PDF) alla olevasta painikkeesta esikatseluun tai lataa se omalle laitteellesi.</li>\n      <li><strong>Ratkaise 12 kertaustehtävää</strong> omaan vihkoosi mahdollisimman itsenäisesti.</li>\n      <li><strong>Avaa malliratkaisut</strong> vasta ratkaistuasi tehtävät ja pisteytä oma osaamisesi (maksimi 60 p.).</li>\n      <li><strong>Kysy opettajalta</strong> apua niihin kohtiin, jotka tuntuivat haastavilta!</li>\n    </ol>\n  </div>\n</div>",
+      "taskSheets": [
+        {
+          "title": "FY_91: Kertaustehtävät kurssikokeeseen (kappaleet 1–11)",
+          "badge": "Kertaustehtävät",
+          "description": "Kattava 12 tehtävän kertaustehtävämoniste (60 p): staattinen sähkö, virtapiirit, Ohmin laki, vastuskytkennät, teho ja sähkölaskut, turvallisuus, magnetismi, induktio ja muuntajat.",
+          "pdf": "kertaus_tehtavat/FY_91_kertaus_v1.pdf",
+          "solutionPdf": "kertaus_tehtavat/FY_91_kertaus_mallit_v1.pdf"
+        },
+        {
+          "title": "FY_91: Kertaustehtävien malliratkaisut (kappaleet 1–11)",
+          "badge": "Malliratkaisut",
+          "description": "Opettajan täydelliset ja vaiheittaiset malliratkaisut sekä pisteytysohjeet (60 p).",
+          "pdf": "kertaus_tehtavat/FY_91_kertaus_mallit_v1.pdf",
+          "isSolution": true
+        }
+      ]
     }
   ],
   "subtitle": "Sähkömagnetismin salat",

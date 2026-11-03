@@ -9,8 +9,8 @@ a) LaTeXmk ja .latex-aux:
     Huomasin, että kurssikansioissa käytät kuitenkin alikansioita .latex-aux/. Jos haluat, että LaTeXmk osaa automaattisesti ohjata aux-tiedostot kuhunkin paikalliseen .latex-aux-kansioon myös suoraan kurssikansioista käsin käännettäessä, voimme hioa .latexmkrc-sääntöä.
 b) Yhteiset tyylipaketit ja pohjat (Pohjat/):
     Pohjakansiossa Pohjat/POHJA.tex on hyvä runko. Jos huomaat toistavasi samoja \usepackage-määrittelyjä ja geometrioita eri kokeissa, voisimme tehdä pienen oman tyylitiedoston (esim. rauh-koe.sty), jota kaikki kurssit voivat hyödyntää \usepackage{rauh-koe} -komennolla.
-c) Kertausmateriaalien laajennus:
-    Nyt kun pohjat ja synkronointi ovat valmiina, aina kun laadit uusia kertaustehtäviä vaikkapa kursseille MA_72, MA_73, MA_92 tai FY_91, riittää että käännät ne nimellä [KURSSI]_kertaus_v1.pdf ja [KURSSI]_kertaus_mallit_v1.pdf. Ne siirtyvät suoraan sivuston käyttöön!
+c) Kertausmateriaalien laajennus: [TEHTY v1.31 kursseille FY_71, FY_91, MA_72, MA_81 ja MA_92]
+    Kertaustehtävät ja malliratkaisut (60 p.) laadittu LaTeX-repoon (.tex + .pdf), käännetty, synkronoitu kurssisivuston kertaus_tehtavat/-kansioon ja upotettu sekä kertaustehtävänäkymään että kurssien uusiin Kurssikertaus-oppitunteihin.
 
 
 3. Luokkahuoneen esitys- ja valkotaulutyökalut: [TEHTY v1.26–v1.29]

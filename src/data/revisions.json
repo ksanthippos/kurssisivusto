@@ -61,10 +61,17 @@
     "sets": [
       {
         "id": "ma81-k1",
-        "title": "Kertaustehtävät 1",
-        "description": "Sulkeet yhtälöissä, nimittäjien poisto ja epäyhtälöt.",
+        "title": "Kertaustehtävät 1: Yhtälöt ja epäyhtälöt",
+        "description": "Ensimmäisen ja toisen asteen yhtälöt, sulkeet, nimittäjien poisto, identtiset yhtälöt, sanalliset tehtävät, suhde ja verranto, verrannollisuus sekä epäyhtälöt.",
         "taskPdf": "kertaus_tehtavat/MA_81_kertaus_v1.pdf",
         "solutionPdf": "kertaus_tehtavat/MA_81_kertaus_mallit_v1.pdf"
+      },
+      {
+        "id": "ma81-k2",
+        "title": "Kertaustehtävät 2: Yhtälöiden pohjakertaus (MA_73)",
+        "description": "Yhtälön peruskäsite, vaakamalli, sijoituskokeet ja ratkaiseminen päättelemällä.",
+        "taskPdf": "kertaus_tehtavat/MA_81_kertaus_yhtalot_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_81_kertaus_yhtalot_mallit_v1.pdf"
       }
     ]
   },
@@ -78,7 +85,15 @@
       "Normaali on kohtisuorassa suoraa vastaan (90 asteen kulmassa).",
       "Muista kolmion kulmien summa 180° ja nelikulmion 360°."
     ],
-    "sets": []
+    "sets": [
+      {
+        "id": "ma72-k1",
+        "title": "Kertaustehtävät 1: Tasogeometria",
+        "description": "Koordinaatisto, geometriset objektit, kulmien lajit, vierus- ja ristikulmat, normaali ja keskinormaali, yhdensuuntaiset suorat, ympyräoppi ja kehäkulmalause, kolmiot, yhtenevyys sekä peilaukset ja symmetriat.",
+        "taskPdf": "kertaus_tehtavat/MA_72_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_72_kertaus_mallit_v1.pdf"
+      }
+    ]
   },
   {
     "code": "MA_73",
@@ -102,7 +117,15 @@
       "Avaruuskappaleiden pinta-aloissa tee huolellinen kirjanpito (esim. laatikossa jaa tahkoihin A, B, C).",
       "Ympyrän pinta-alassa muista pii kertaa säde TOISEEN (A = π·r²), älä sekoita kehän pituuteen!"
     ],
-    "sets": []
+    "sets": [
+      {
+        "id": "ma92-k1",
+        "title": "Kertaustehtävät 1: Avaruusgeometria",
+        "description": "Pythagoraan lause, pinta-alan ja tilavuuden yksikkömuunnokset, litrajärjestelmä, suorakulmainen särmiö ja avaruuslävistäjä, lieriö, kartio, pyramidi, pallo sekä 3D-projektiot.",
+        "taskPdf": "kertaus_tehtavat/MA_92_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/MA_92_kertaus_mallit_v1.pdf"
+      }
+    ]
   },
   {
     "code": "MA_93",
@@ -149,6 +172,14 @@
       "min → h: jaa 60:llä (esim. 30 min = 0,5 h).",
       "Energia: E = P · t (esim. kWh = kW · h)."
     ],
-    "sets": []
+    "sets": [
+      {
+        "id": "fy91-k1",
+        "title": "Kertaustehtävät 1: Sähkömagnetismi",
+        "description": "Sähkövaraus ja staattinen sähkö, virtapiirit ja mittaukset, Ohmin laki, vastuskytkennät, teho ja sähkölaskut, sähköturvallisuus, magnetismi, induktio sekä muuntajat.",
+        "taskPdf": "kertaus_tehtavat/FY_91_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/FY_91_kertaus_mallit_v1.pdf"
+      }
+    ]
   }
 ]
