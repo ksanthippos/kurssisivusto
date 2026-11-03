@@ -378,6 +378,39 @@
           "pdf": "tuntitehtavat/FY_71/FY_71_tehtava_13_linssit_ja_ihmissilma.pdf"
         }
       ]
+    },
+    {
+      "lesson": 14,
+      "topic": "Kurssikertaus",
+      "title": "Kurssikertaus: Kertaustehtävät ja malliratkaisut",
+      "content": "Kurssin FY_71 Lämpöoppi ja aaltoliike (kappaleet 1–13) kokonaiskertaus kurssikoetta varten.",
+      "summary": "Kurssin FY_71 kokonaiskertaus: tutkimusmenetelmät, suureet ja mittaaminen, lämpöoppi, aaltoliike, ääni ja valo-oppi. Mukana 13 tehtävän kertaustehtävämoniste ja opettajan yksityiskohtaiset malliratkaisut pisteytyksineen.",
+      "theory": "<p><strong>FY_71 Lämpöoppi ja aaltoliike – Kertaus kurssikokeeseen (kpl 1–13):</strong></p>\n<ul class=\"theory-list\">\n  <li><strong>1. Tutkimusmenetelmät ja mittaaminen:</strong> Havainto → hypoteesi → koejärjestely → mittaus → johtopäätös. Fysikaalinen suure: $\\text{suure} = \\text{mittaluku} \\times \\text{yksikkö}$. SI-perussuureet ja -yksiköt: pituus $s$ ($\\text{m}$), massa $m$ ($\\text{kg}$), aika $t$ ($\\text{s}$), lämpötila $T$ ($\\text{K}$), sähkövirta $I$ ($\\text{A}$).</li>\n  <li><strong>2. Lämpötila ja lämpölaajeneminen:</strong> Lämpötila kuvaa rakenneosasten keskimääräistä liike-energiaa. Absoluuttinen nollapiste $0\\text{ K} = -273{,}15^\\circ\\text{C}$. Pituuden muutos: $\\Delta l = \\alpha \\cdot l_0 \\cdot \\Delta t$. Veden anomalia: vesi on tiheimmillään $+4^\\circ\\text{C}$ (tiheys $1000\\text{ kg/m}^3$), jolloin jää kelluu ja vesistöt jäätyvät pinnalta.</li>\n  <li><strong>3. Lämpöenergia ja laskut:</strong> Lämpömäärän kaava:\n    $$Q = c \\cdot m \\cdot \\Delta t$$\n    Muista: $Q$ = lämpömäärä ($\\text{kJ}$ tai $\\text{J}$), $c$ = ominaislämpökapasiteetti, $m$ = massa, $\\Delta t$ = lämpötilan muutos ($t_2 - t_1$). Veden $c = 4{,}19\\text{ kJ}/(\\text{kg}\\cdot^\\circ\\text{C})$.</li>\n  <li><strong>4. Olomuodot ja lämmön siirtyminen:</strong> Sulamislämpö ($Q = s \\cdot m$) ja höyrystymislämpö ($Q = r \\cdot m$). Lämmön siirtymistavat: johtuminen (kiinteissä aineissa), kulkeutuminen (nesteissä ja kaasuissa virtaamalla) sekä säteily (lämpösäteilynä ilman väliainetta tyhjiössä).</li>\n  <li><strong>5. Värähdysliike, aallot ja ääni:</strong> Taajuus $f = 1/T$ ($\\text{Hz}$), aallon perusyhtälö:\n    $$v = f \\cdot \\lambda$$\n    Äänennopeus ilmassa $v \\approx 340\\text{ m/s}$. Ihmisen kuuloalue $20-20\\,000\\text{ Hz}$. Desibeliasteikko on logaritminen ($+10\\text{ dB}$ kymmenkertaistaa äänen tehon ja $+3\\text{ dB}$ kaksinkertaistaa sen).</li>\n  <li><strong>6. Valo-oppi:</strong> Valon nopeus tyhjiössä $c \\approx 300\\,000\\text{ km/s}$. Heijastuslaki: tulokulma = heijastuskulma ($i = r$, mitattuna pinnan normaalista). Valon taittuminen normaaliin päin harvemmasta tiheämpään ($i > r$) ja normaalista poispäin tiheämmästä harvempaan ($i < r$). Kokonaisheijastus ja valokuitu. Kokoavat pluslinssit ja hajottavat miinuslinssit, taittovoimakkuus $D = 1/f$.</li>\n</ul>",
+      "tasks": {
+        "theory": "Kertaa kpl 1–13 muistiinpanot ja ratkaise kertaustehtävät alla olevasta monisteesta."
+      },
+      "substituteNote": "Oppilaat kertaavat itsenäisesti kurssikokeeseen. Kertaustehtävät ja malliratkaisut ovat avattavissa alla olevista painikkeista.",
+      "deepDive": {
+        "title": "Opiskeluvinkit fysiikan kurssikokeeseen valmistautumiseen",
+        "content": "<h4>1. Laske itse kynällä ja paperilla</h4><p>Passiivinen lukeminen luo helposti illuusion osaamisesta. Laske aina kertaustehtävät ensin itsenäisesti paperille ennen malliratkaisujen avaamista!</p><h4>2. Fysiikan laskukaavan 4 kultaista vaihetta</h4><p>Kokeessa saat täydet pisteet noudattamalla aina neljää vaihetta:</p><ol><li><strong>Lähtöarvot:</strong> Poimi tehtävästä suureet tunnuksineen ja muunna perusyksiköihin (esim. $m = 2{,}5\\text{ kg}$, $\\Delta t = 20^\\circ\\text{C}$).</li><li><strong>Kaava:</strong> Kirjoita käytettävä peruskaava (esim. $Q = c \\cdot m \\cdot \\Delta t$).</li><li><strong>Sijoitus:</strong> Sijoita lukuarvot yksiköineen kaavaan.</li><li><strong>Vastaus:</strong> Pyöristä vastaus järkevään mittaustarkkuuteen ja muista oikea yksikkö ($\\text{kJ}$ tai $\\text{J}$)!</li></ol><div class=\"deep-dive-callout\"><strong>Tiesitkö?</strong> Fysiikan kokeessa piirretty selkeä luonnos (esim. peilin heijastuskulmat, valonsäteen taittuminen tai aallon aallonpituus) auttaa usein hahmottamaan ratkaisun ja tuo osapisteitä, vaikka loppulaskussa tulisi huolimattomuusvirhe!</div>"
+      },
+      "extendedTheory": "<div class=\"theory-section\">\n  <h3>FY_71: Kertaustehtävät ja malliratkaisut kurssikokeeseen</h3>\n  <p>Kurssikoe kattaa koko fysiikan 7. luokan syyskurssin oppiaineksen (kappaleet 1–13). Alla olevista esikatseluruuduista voit avata suoraan selaimeen sekä <strong>kertaustehtävien tehtävänannon</strong> että <strong>opettajan kattavat malliratkaisut</strong> vaiheittaisine pisteytyksineen.</p>\n  <div class=\"theory-box tip\">\n    <h4>📝 Kertausohjeet opiskelijalle:</h4>\n    <ol class=\"theory-list\">\n      <li><strong>Avaa tehtävämoniste</strong> (PDF) alla olevasta painikkeesta esikatseluun tai lataa se omalle laitteellesi.</li>\n      <li><strong>Ratkaise 13 kertaustehtävää</strong> omaan vihkoosi mahdollisimman itsenäisesti.</li>\n      <li><strong>Avaa malliratkaisut</strong> vasta ratkaistuasi tehtävät ja pisteytä oma osaamisesi (maksimi 60 p.).</li>\n      <li><strong>Kysy opettajalta</strong> apua niihin kohtiin, jotka tuntuivat haastavilta!</li>\n    </ol>\n  </div>\n</div>",
+      "taskSheets": [
+        {
+          "title": "FY_71: Kertaustehtävät kurssikokeeseen (kappaleet 1–13)",
+          "badge": "Kertaustehtävät",
+          "description": "Kattava 13 tehtävän kertaustehtävämoniste (60 p): tutkimusmenetelmät, suureet, lämpöoppi, aaltoliike, ääni ja valo-oppi.",
+          "pdf": "kertaus_tehtavat/FY_71_kertaus_v1.pdf",
+          "solutionPdf": "kertaus_tehtavat/FY_71_kertaus_mallit_v1.pdf"
+        },
+        {
+          "title": "FY_71: Kertaustehtävien malliratkaisut (kappaleet 1–13)",
+          "badge": "Malliratkaisut",
+          "description": "Opettajan täydelliset ja vaiheittaiset malliratkaisut sekä pisteytysohjeet (60 p).",
+          "pdf": "kertaus_tehtavat/FY_71_kertaus_mallit_v1.pdf",
+          "isSolution": true
+        }
+      ]
     }
   ]
 }

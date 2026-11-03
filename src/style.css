@@ -1410,6 +1410,13 @@ a:hover {
   letter-spacing: 0.04em;
 }
 
+.task-badge.task-sheet-badge.badge-solutions {
+  background-color: #059669;
+}
+.task-badge.task-sheet-badge.badge-revision {
+  background-color: #6366f1;
+}
+
 .task-sheet-title {
   font-size: 1rem;
   font-weight: 700;
@@ -2068,6 +2075,12 @@ a:hover {
   border-radius: var(--radius-sm);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+.viewer-tag.viewer-tag-solutions {
+  background: #059669;
+}
+.viewer-tag.viewer-tag-tasks {
+  background: #4f46e5;
 }
 
 .pdf-viewer-info h3 {

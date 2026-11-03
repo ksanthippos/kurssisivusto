@@ -122,9 +122,20 @@
     "subject": "fysiikka",
     "reminders": [
       "Muista fysiikan tutkimussykli: havainto → tutkimuskysymys → koejärjestely → mittaus → johtopäätös/laki.",
-      "Käytä fysiikan vakiintuneita suure- ja yksikkömerkintöjä."
+      "Käytä fysiikan vakiintuneita suure- ja yksikkömerkintöjä.",
+      "Lämpölaskuissa käytä kaavaa Q = c · m · ΔT ja merkitse aina välivaiheet ja yksiköt näkyviin.",
+      "Aallon perusyhtälössä v = f · λ muista yksiköt (nopeus m/s, taajuus Hz, aallonpituus m).",
+      "Valo-opissa muista heijastuslaki (tulokulma = heijastuskulma mitattuna normaalista!) ja linssityypit (hajottava miinuslasi likinäköisyyteen, kokoava pluslasi kaukonäköisyyteen)."
     ],
-    "sets": []
+    "sets": [
+      {
+        "id": "fy71-k1",
+        "title": "Kertaustehtävät 1: Lämpöoppi ja aaltoliike",
+        "description": "Tutkimusmenetelmät, suureet ja mittaaminen, lämpötila ja lämpölaajeneminen, ominaislämpökapasiteetti, faasimuutokset, värähdys- ja aaltoliike, ääni sekä valo-oppi.",
+        "taskPdf": "kertaus_tehtavat/FY_71_kertaus_v1.pdf",
+        "solutionPdf": "kertaus_tehtavat/FY_71_kertaus_mallit_v1.pdf"
+      }
+    ]
   },
   {
     "code": "FY_91",

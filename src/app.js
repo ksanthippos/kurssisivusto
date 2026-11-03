@@ -918,6 +918,7 @@ function parseRoute() {
     }
   } else if (firstPart === "kertaus" || firstPart === "kertaustehtavat") {
     const targetCourse = parts[1];
+    const subAction = parts[2];
     if (targetCourse && ["7", "8", "9", "all"].includes(targetCourse.toLowerCase())) {
       state.activeRevisionFilter = targetCourse.toLowerCase();
     }
@@ -934,6 +935,11 @@ function parseRoute() {
         if (card) {
           card.scrollIntoView({ behavior: "smooth", block: "start" });
           highlightCard(card);
+        }
+        if (subAction === "mallit" && rev && rev.sets?.[0]?.solutionPdf) {
+          openRevisionViewer(`${rev.code}: Malliratkaisut`, rev.sets[0].solutionPdf);
+        } else if (subAction === "tehtavat" && rev && rev.sets?.[0]?.taskPdf) {
+          openRevisionViewer(`${rev.code}: ${rev.sets[0].title}`, rev.sets[0].taskPdf);
         }
       }, 100);
     }
@@ -3521,11 +3527,12 @@ function renderLessonNav() {
   const lessons = state.activeCourseData?.lessons || [];
 
   lessons.forEach((l) => {
+    const isReview = l.topic === "Kurssikertaus" || l.lesson === 14;
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = `lesson-nav-btn ${l.lesson === state.activeLessonNumber ? "active" : ""}`;
+    btn.className = `lesson-nav-btn ${l.lesson === state.activeLessonNumber ? "active" : ""} ${isReview ? "lesson-nav-btn-review" : ""}`;
     btn.innerHTML = `
-      <span class="num">#${l.lesson}</span>
+      <span class="num">${isReview ? "📝 #" + l.lesson : "#" + l.lesson}</span>
       <span class="title">${escapeHtml(l.title || l.topic || `Tunti ${l.lesson}`)}</span>
     `;
 
@@ -3737,22 +3744,42 @@ function renderTasks(tasks, taskSheets) {
       <div class="lesson-task-sheets-container">
         ${normalizedSheets
           .map(
-            (sheet) => `
+            (sheet) => {
+              const isSolutionSheet = sheet.isSolution || sheet.badge === "Malliratkaisut" || (sheet.title && sheet.title.toLowerCase().includes("malliratkaisu"));
+              const isRevisionSheet = sheet.badge === "Kertaustehtävät" || (sheet.title && sheet.title.toLowerCase().includes("kertaustehtäv"));
+              const primaryBtnLabel = isSolutionSheet
+                ? "Avaa malliratkaisut (PDF) ✅"
+                : isRevisionSheet
+                ? "Avaa kertaustehtävät (PDF) 📝"
+                : "Avaa tehtävänanto (PDF) 📄";
+              const primaryBtnClass = isSolutionSheet ? "rev-btn-solutions" : "rev-btn-tasks";
+
+              return `
               <div class="task-sheet-box">
                 <div class="task-sheet-info">
                   <div class="task-sheet-badge-group">
-                    <span class="task-badge task-sheet-badge">${escapeHtml(sheet.badge || "Tehtävät")}</span>
+                    <span class="task-badge task-sheet-badge ${isSolutionSheet ? "badge-solutions" : isRevisionSheet ? "badge-revision" : ""}">${escapeHtml(sheet.badge || "Tehtävät")}</span>
                     <h4 class="task-sheet-title">${escapeHtml(sheet.title)}</h4>
                   </div>
                   ${sheet.description ? `<p class="task-sheet-desc">${escapeHtml(sheet.description)}</p>` : ""}
                 </div>
                 <div class="task-sheet-btns">
-                  <button type="button" class="rev-btn rev-btn-tasks task-sheet-open-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}">
-                    Avaa tehtävänanto (PDF) 📄
+                  <button type="button" class="rev-btn ${primaryBtnClass} task-sheet-open-btn" data-url="${escapeHtml(sheet.pdf)}" data-title="${escapeHtml(sheet.title)}">
+                    ${primaryBtnLabel}
                   </button>
+                  ${
+                    sheet.solutionPdf
+                      ? `
+                    <button type="button" class="rev-btn rev-btn-solutions task-sheet-open-btn" data-url="${escapeHtml(sheet.solutionPdf)}" data-title="${escapeHtml(sheet.title)}: Malliratkaisut">
+                      Avaa malliratkaisut (PDF) ✅
+                    </button>
+                  `
+                      : ""
+                  }
                 </div>
               </div>
-            `
+            `;
+            }
           )
           .join("")}
       </div>
@@ -3775,6 +3802,22 @@ function renderTasks(tasks, taskSheets) {
 
 function openLessonTaskViewer(title, pdfUrl) {
   if (!lessonTaskPdfViewer || !lessonTaskPdfFrame) return;
+
+  const isSol = title.toLowerCase().includes("malli") || pdfUrl.toLowerCase().includes("malli");
+  const isRev = title.toLowerCase().includes("kertaus") || pdfUrl.toLowerCase().includes("kertaus");
+
+  if (lessonTaskViewerTag) {
+    if (isSol) {
+      lessonTaskViewerTag.textContent = "Malliratkaisut";
+      lessonTaskViewerTag.className = "viewer-tag viewer-tag-solutions";
+    } else if (isRev) {
+      lessonTaskViewerTag.textContent = "Kertaustehtävät";
+      lessonTaskViewerTag.className = "viewer-tag viewer-tag-tasks";
+    } else {
+      lessonTaskViewerTag.textContent = "Tehtävät";
+      lessonTaskViewerTag.className = "viewer-tag";
+    }
+  }
 
   if (lessonTaskViewerTitle) lessonTaskViewerTitle.textContent = title;
   if (lessonTaskViewerExternalLink) lessonTaskViewerExternalLink.href = pdfUrl;
@@ -3803,6 +3846,15 @@ function renderLessonContextLinks() {
     html += `
       <a href="#/kirjat/${relatedBook.id}" class="context-pill-link">
         📚 Avaa ${relatedBook.part}: ${escapeHtml(relatedBook.title)}
+      </a>
+    `;
+  }
+
+  const reviewLesson = state.activeCourseData?.lessons?.find((l) => l.topic === "Kurssikertaus" || l.lesson === 14);
+  if (reviewLesson && state.activeLessonNumber !== reviewLesson.lesson) {
+    html += `
+      <a href="#/${currentCode}/${reviewLesson.lesson}" class="context-pill-link">
+        🎯 Kurssikertaus ja mallit (#${reviewLesson.lesson})
       </a>
     `;
   }
