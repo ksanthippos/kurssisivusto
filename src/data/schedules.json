@@ -105,7 +105,13 @@
             "description": "Koealue ilmoitettu Wilmassa. Muista tulla ajoissa ja kaikki välineet mukaan."
           }
         ],
-        "continuations": []
+        "continuations": [
+          {
+            "date": "2026-11-12",
+            "description": "Harpit puuttuvat, pidettiin vanhojen aiheiden extra-harjoittelutunti.",
+            "tasks": "Edellisten tuntien tehtävät tai Avoin matikka 7.lk geometria"
+          }
+        ]
       },
       "MA_72.2": {
         "startDate": "2026-10-19",
