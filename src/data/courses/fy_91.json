@@ -96,8 +96,7 @@
       "summary": "Resistanssi R (ohmi), Ohmin laki R = U / I ja suoraan verrannollisuus.",
       "theory": "<p>Komponenttien kykyä vastustaa sähkövirran kulkua kutsutaan <strong>resistanssiksi</strong> ($R$). Sen yksikkö on <strong>ohmi</strong> ($\\Omega$).</p><p>Saksalainen fyysikko Georg Ohm havaitsi, että johtimessa kulkeva virta on suoraan verrannollinen jännitteeseen. Tätä riippuvuutta kutsutaan <strong>Ohmin laiksi</strong>:</p>$$R = \\frac{U}{I} \\iff U = R \\cdot I \\iff I = \\frac{U}{R}$$<p>Jos virtapiirin resistanssi putoaa äkillisesti lähelle nollaa (esim. johtimet osuvat toisiinsa ilman kuormaa), syntyy <strong>oikosulku</strong>. Tällöin virta kasvaa valtavan suureksi ja voi sytyttää tulipalon.</p>",
       "tasks": {
-        "research": "Simulaatiot (kytkentä ja Ohmin laki), virtapiirin mittaukset ja kuvaajan piirtäminen",
-        "theory": "Resistanssilaskumoniste: T17 - 20, T22 - 25, T26 - 28, lisätehtävät 1 - 7 ja kirjoitustehtävät"
+        "research": "Simulaatiot (kytkentä ja Ohmin laki), virtapiirin mittaukset ja kuvaajan piirtäminen"
       },
       "substituteNote": "",
       "deepDive": {
@@ -126,7 +125,7 @@
       "summary": "Vastukset ja EIA-värikoodit. Sarjaankytkentä ja rinnankytkentä käänteisluvuilla.",
       "theory": "<p>Elektroniikassa käytetään erilaisia <strong>vastuksia</strong> (resistor), joiden resistanssi ilmoitetaan usein värirenkailla (EIA-koodi).</p><h4>Vastukset sarjassa:</h4><p>Kokonaisresistanssi on vastusten summa:</p>$$R_k = R_1 + R_2 + \\dots$$<h4>Vastukset rinnan:</h4><p>Rinnankytkettyjen vastusten kokonaisresistanssi lasketaan käänteislukujen avulla:</p>$$\\frac{1}{R_k} = \\frac{1}{R_1} + \\frac{1}{R_2} + \\dots$$<p>Esimerkki: Kaksi $10\\ \\Omega$ vastusta rinnan:</p>$$\\frac{1}{R_k} = \\frac{1}{10} + \\frac{1}{10} = \\frac{2}{10} \\implies R_k = \\frac{10}{2} = 5\\ \\Omega$$",
       "tasks": {
-        "theory": "Vastusten kytkennät -laskumoniste"
+        "theory": "s. 110 - 111: T1 - 5"
       },
       "substituteNote": "",
       "deepDive": {
