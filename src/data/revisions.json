@@ -77,7 +77,7 @@
       {
         "id": "ma72-k1",
         "title": "Kertaustehtävät 1: Tasogeometria",
-        "description": "Koordinaatisto, geometriset objektit, kulmien lajit, vierus- ja ristikulmat, normaali ja keskinormaali, yhdensuuntaiset suorat, ympyräoppi ja kehäkulmalause, kolmiot, yhtenevyys sekä peilaukset ja symmetriat.",
+        "description": "Koordinaatisto, geometriset objektit, kulmien lajit, vierus- ja ristikulmat, normaali ja keskinormaali, yhdensuuntaiset suorat, ympyräoppi ja tangentit, monikulmiot, kolmiot, yhtenevyys sekä peilaukset ja symmetriat.",
         "taskPdf": "kertaus_tehtavat/MA_72_kertaus_v1.pdf",
         "solutionPdf": "kertaus_tehtavat/MA_72_kertaus_mallit_v1.pdf"
       }
