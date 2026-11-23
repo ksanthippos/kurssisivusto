@@ -175,7 +175,7 @@
       "summary": "Kodin sähköturvallisuuden perusteet, vaaratilanteiden ennaltaehkäisy ja Tukesin ohjeet.",
       "theory": "<p>Kodin verkkojännite Suomessa on $230\\text{ V}$, mikä on ihmiselle hengenvaarallinen. Tärkeimmät turvallisuusperiaatteet:</p><ul><li>Älä koskaan käytä vaurioituneita johtoja tai pistokkeita.</li><li>Sähkölaitteita ei saa käyttää märissä tiloissa (kuten kylvyssä), ellei niitä ole siihen erikseen hyväksytty.</li><li>Sulakkeet ja vikavirtasuojakytkimet katkaisevat virran vikatilanteissa.</li></ul>",
       "tasks": {
-        "theory": "Tukesin kodin sähköturvallisuus -sivusto ja opetusvideot"
+        "theory": "Tehtäviin Tukesin materiaali: https://tukes.fi/kodin-sahkoturvallisuus"
       },
       "substituteNote": "",
       "deepDive": {
