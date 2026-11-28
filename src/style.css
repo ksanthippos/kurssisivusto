@@ -6701,6 +6701,7 @@ a:hover {
 }
 
 .dot-sm { width: 3px; height: 3px; }
+.dot-md-sm { width: 4.5px; height: 4.5px; }
 .dot-md { width: 6px; height: 6px; }
 .dot-lg { width: 10px; height: 10px; }
 

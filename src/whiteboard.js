@@ -51,7 +51,8 @@ let isPinching = false;
 
 // Piirroksen historia (vektoripohjainen terävä tallennus maailmankoordinaateissa)
 let strokes = []; // { tool, color, size, points: [{x, y}, ...] }
-let redoStack = [];
+let undoStack = []; // Toimintahistoria kumoamista varten: { type: "stroke", stroke } | { type: "clear", strokes: [...] }
+let redoStack = []; // Toimintahistoria uudelleentekemistä varten
 let currentStroke = null;
 let isDrawing = false;
 let resizeObserver = null;
@@ -275,8 +276,10 @@ export function initWhiteboard() {
   }
 
   const savedTool = localStorage.getItem("rauh_wb_tool");
-  if (savedTool && ["pen", "eraser", "pan"].includes(savedTool)) {
+  if (savedTool && ["pen", "eraser"].includes(savedTool)) {
     setTool(savedTool);
+  } else {
+    setTool("pen");
   }
 
   const savedMode = localStorage.getItem("rauh_wb_mode");
@@ -292,6 +295,8 @@ export function initWhiteboard() {
       const parsed = JSON.parse(savedStrokes);
       if (Array.isArray(parsed) && parsed.length > 0) {
         strokes = parsed;
+        undoStack = parsed.map((s) => ({ type: "stroke", stroke: s }));
+        redoStack = [];
         updateUndoRedoUI();
       }
     }
@@ -421,6 +426,34 @@ function setupToolbarEvents() {
   if (redoBtn) redoBtn.addEventListener("click", redo);
   if (clearBtn) clearBtn.addEventListener("click", clearBoard);
   if (exportBtn) exportBtn.addEventListener("click", exportPNG);
+
+  // Näppäimistötuki valkotaululle (Ctrl+Z / Cmd+Z kumoa, Ctrl+Y / Cmd+Shift+Z tee uudelleen)
+  document.addEventListener("keydown", (e) => {
+    if (!isOpen) return;
+    const tag = e.target?.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.target?.isContentEditable) {
+      return;
+    }
+
+    const isZ = e.key === "z" || e.key === "Z";
+    const isY = e.key === "y" || e.key === "Y";
+
+    // Undo: Ctrl+Z tai Cmd+Z (ilman Shiftiä)
+    if ((e.ctrlKey || e.metaKey) && isZ && !e.shiftKey) {
+      e.preventDefault();
+      undo();
+      return;
+    }
+
+    // Redo: Ctrl+Y, Cmd+Y tai Ctrl+Shift+Z / Cmd+Shift+Z
+    if (((e.ctrlKey || e.metaKey) && isY) || ((e.ctrlKey || e.metaKey) && isZ && e.shiftKey)) {
+      e.preventDefault();
+      redo();
+      return;
+    }
+  });
+
+  updateUndoRedoUI();
 
   // 7. Ikkunatilan vaihtonapit (Split / Kelluva yhdistetty toggle, Koko ruutu, Sulje)
   const modeToggleBtn = document.querySelector("#wb-btn-mode-toggle");
@@ -602,6 +635,10 @@ function handlePointerUp(e) {
 
   if (currentStroke.points.length > 0) {
     strokes.push(currentStroke);
+    undoStack.push({ type: "stroke", stroke: currentStroke });
+    if (undoStack.length > 100) {
+      undoStack.shift();
+    }
     redoStack = [];
     updateUndoRedoUI();
     saveStrokesToStorage();
@@ -1002,12 +1039,26 @@ export function setTool(tool) {
 }
 
 /**
- * Kumoa edellinen veto
+ * Kumoa edellinen toiminto (viimeisin veto tai taulun tyhjennys)
  */
 function undo() {
-  if (strokes.length === 0) return;
-  const last = strokes.pop();
-  redoStack.push(last);
+  if (undoStack.length === 0) return;
+  const action = undoStack.pop();
+
+  if (action.type === "stroke") {
+    const idx = strokes.lastIndexOf(action.stroke);
+    if (idx !== -1) {
+      strokes.splice(idx, 1);
+    } else {
+      strokes.pop();
+    }
+    redoStack.push(action);
+  } else if (action.type === "clear") {
+    // Palautetaan tyhjennystä edeltäneet vedot takaisin taululle
+    strokes = [...action.strokes];
+    redoStack.push(action);
+  }
+
   redrawAllStrokes();
   updateUndoRedoUI();
   saveStrokesToStorage();
@@ -1018,33 +1069,49 @@ function undo() {
  */
 function redo() {
   if (redoStack.length === 0) return;
-  const restored = redoStack.pop();
-  strokes.push(restored);
+  const action = redoStack.pop();
+
+  if (action.type === "stroke") {
+    strokes.push(action.stroke);
+    undoStack.push(action);
+  } else if (action.type === "clear") {
+    // Tehdään tyhjennys uudelleen
+    strokes = [];
+    undoStack.push(action);
+  }
+
   redrawAllStrokes();
   updateUndoRedoUI();
   saveStrokesToStorage();
 }
 
 /**
- * Tyhjennä valkotaulu (vetohistoria tallennetaan redo-pinoon, joten tyhjennys voidaan kumota)
+ * Tyhjennä valkotaulu (vetohistoria tallennetaan undo-pinoon, joten tyhjennys voidaan kumota)
  */
 function clearBoard() {
   if (strokes.length === 0) return;
-  redoStack = [...strokes];
+  const cleared = [...strokes];
   strokes = [];
+  undoStack.push({ type: "clear", strokes: cleared });
+  if (undoStack.length > 100) {
+    undoStack.shift();
+  }
+  redoStack = [];
   redrawAllStrokes();
   updateUndoRedoUI();
   saveStrokesToStorage();
 }
 
 /**
- * Päivittää Undo ja Redo -painikkeiden disabled-tilat
+ * Päivittää Undo-, Redo- ja Tyhjennä-painikkeiden disabled-tilat
  */
 function updateUndoRedoUI() {
   const undoBtn = document.querySelector("#wb-btn-undo");
   const redoBtn = document.querySelector("#wb-btn-redo");
-  if (undoBtn) undoBtn.disabled = strokes.length === 0;
+  const clearBtn = document.querySelector("#wb-btn-clear");
+  if (undoBtn) undoBtn.disabled = undoStack.length === 0;
   if (redoBtn) redoBtn.disabled = redoStack.length === 0;
+  if (clearBtn) clearBtn.disabled = strokes.length === 0;
 }
 
 /**
